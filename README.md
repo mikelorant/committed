@@ -53,6 +53,17 @@ Date:   Mon Jan 2 15:04:05 2006 -0700
 Control + <enter> Commit <c> Cancel <a> Author <e> Emoji <s> Summary <b> Body
 ```
 
+## Shortcuts
+
+| Command       | Key           |
+|:--------------|:--------------|
+| Commit        | control-enter |
+| Cancel        | control-c     |
+| Focus author  | control-a     |
+| Focus emoji   | control-e     |
+| Focus summary | control-s     |
+| Focus body    | control-b     |
+
 ## Authors
 
 - [@mikelorant](https://www.github.com/mikelorant)
