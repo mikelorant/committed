@@ -4,6 +4,17 @@ Committed is a WYSIWYG Git commit editor that helps improve the
 quality of your commits by showing you the layout in the same format
 as `git log`.
 
+## Features
+
+- Built-in editor
+- Emoji support
+- Switch to a different author profile
+- Does not take over the entire screen
+- Subject line counter
+- Appends sign-off
+- Formats body to a maximum of 72 characters
+- Best practises recommendations
+
 ## Interface
 
 ```
