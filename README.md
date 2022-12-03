@@ -53,6 +53,15 @@ Date:   Mon Jan 2 15:04:05 2006 -0700
 Control + <enter> Commit <c> Cancel <a> Author <e> Emoji <s> Summary <b> Body
 ```
 
+## Installation
+
+Install Committed with Homebrew.
+
+```bash
+  brew tap mikelorant/homebrew-custom
+  brew install committed
+```
+
 ## Shortcuts
 
 | Command       | Key           |
