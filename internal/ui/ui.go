@@ -39,7 +39,12 @@ func New() error {
 		defer fh.Close()
 	}
 
-	p := tea.NewProgram(initialModel())
+	im, err := initialModel()
+	if err != nil {
+		return fmt.Errorf("unable to build initial model: %w", err)
+	}
+
+	p := tea.NewProgram(im)
 	if _, err := p.Run(); err != nil {
 		return fmt.Errorf("unable to run program: %w", err)
 	}
@@ -72,7 +77,7 @@ func (m model) View() string {
 	return commit(m)
 }
 
-func initialModel() model {
+func initialModel() (model, error) {
 	return model{
 		commit:  mockCommit,
 		name:    mockName,
@@ -80,5 +85,5 @@ func initialModel() model {
 		emoji:   mockEmoji,
 		summary: mockSummary,
 		body:    message,
-	}
+	}, nil
 }
