@@ -6,6 +6,7 @@ import (
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/mikelorant/committed/internal/repository"
 )
 
 type model struct {
@@ -23,8 +24,6 @@ var message string
 
 const (
 	mockCommit  string = "1234567890abcdef1234567890abcdef1234567890"
-	mockName    string = "John Doe"
-	mockEmail   string = "john.doe@example.com"
 	mockEmoji   string = "🐛"
 	mockSummary string = "Capitalized, short (50 chars or less) summary"
 )
@@ -78,10 +77,15 @@ func (m model) View() string {
 }
 
 func initialModel() (model, error) {
+	r, err := repository.New()
+	if err != nil {
+		return model{}, fmt.Errorf("unable to get repository: %w", err)
+	}
+
 	return model{
 		commit:  mockCommit,
-		name:    mockName,
-		email:   mockEmail,
+		name:    r.User.Name,
+		email:   r.User.Email,
 		emoji:   mockEmoji,
 		summary: mockSummary,
 		body:    message,
