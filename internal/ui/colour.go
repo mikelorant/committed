@@ -1,34 +1,52 @@
 package ui
 
 import (
-	"fmt"
+	"strconv"
 
 	"github.com/charmbracelet/lipgloss"
 )
 
+type Colour struct {
+	bold bool
+}
+
 type ansiColour int
 
 const (
-	black         ansiColour = 0
-	red           ansiColour = 1
-	green         ansiColour = 2
-	yellow        ansiColour = 3
-	blue          ansiColour = 4
-	magenta       ansiColour = 5
-	cyan          ansiColour = 6
-	white         ansiColour = 7
-	brightBlack   ansiColour = 8
-	brightRed     ansiColour = 9
-	brightGreen   ansiColour = 10
-	brightYellow  ansiColour = 11
-	brightBlue    ansiColour = 12
-	brightMagenta ansiColour = 13
-	brightCyan    ansiColour = 14
-	brightWhite   ansiColour = 15
+	black = iota
+	red
+	green
+	yellow
+	blue
+	magenta
+	cyan
+	white
+	brightBlack
+	brightRed
+	brightGreen
+	brightYellow
+	brightBlue
+	brightMagenta
+	brightCyan
+	brightWhite
 )
 
-func colour(str string, c ansiColour) string {
-	clr := lipgloss.Color(fmt.Sprintf("%d", c))
+func colour(str string, clr int, opts ...func(*Colour)) string {
+	c := &Colour{}
 
-	return lipgloss.NewStyle().Foreground(clr).Render(str)
+	for _, o := range opts {
+		o(c)
+	}
+
+	return lipgloss.
+		NewStyle().
+		Foreground(lipgloss.Color(strconv.Itoa(clr))).
+		Bold(c.bold).
+		Render(str)
+}
+
+func WithBold(b bool) func(*Colour) {
+	return func(c *Colour) {
+		c.bold = b
+	}
 }
