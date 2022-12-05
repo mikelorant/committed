@@ -10,13 +10,16 @@ import (
 )
 
 type model struct {
-	commit  string
-	name    string
-	email   string
-	emoji   string
-	summary string
-	body    string
-	err     error
+	commit       string
+	name         string
+	email        string
+	emoji        string
+	summary      string
+	body         string
+	localBranch  string
+	remoteBranch string
+	branchRefs   []string
+	err          error
 }
 
 //go:embed message.txt
@@ -83,11 +86,14 @@ func initialModel() (model, error) {
 	}
 
 	return model{
-		commit:  mockCommit,
-		name:    r.User.Name,
-		email:   r.User.Email,
-		emoji:   mockEmoji,
-		summary: mockSummary,
-		body:    message,
+		commit:       mockCommit,
+		name:         r.User.Name,
+		email:        r.User.Email,
+		emoji:        mockEmoji,
+		summary:      mockSummary,
+		body:         message,
+		localBranch:  r.Branch.Local,
+		remoteBranch: r.Branch.Remote,
+		branchRefs:   r.Branch.Refs,
 	}, nil
 }

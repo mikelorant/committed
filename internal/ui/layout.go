@@ -14,7 +14,14 @@ const (
 func commit(m model) string {
 	blockHeader := lipgloss.NewStyle().
 		MarginBottom(1).
-		Render(headerColumn(m.commit, m.name, m.email))
+		Render(headerColumn(
+			m.commit,
+			m.localBranch,
+			m.remoteBranch,
+			m.branchRefs,
+			m.name,
+			m.email,
+		))
 
 	blockSubject := lipgloss.NewStyle().
 		MarginBottom(1).
@@ -41,10 +48,16 @@ func commit(m model) string {
 	)
 }
 
-func headerColumn(h, n, e string) string {
-	return lipgloss.JoinVertical(
+func headerColumn(h, lb, rb string, brefs []string, n, e string) string {
+	hashBranchRefs := lipgloss.JoinHorizontal(
 		lipgloss.Top,
 		hash(h),
+		branchRefs(lb, rb, brefs),
+	)
+
+	return lipgloss.JoinVertical(
+		lipgloss.Top,
+		hashBranchRefs,
 		author(n, e),
 		date(time.Now().Format(dateTimeFormat)),
 	)

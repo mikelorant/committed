@@ -29,7 +29,29 @@ func hash(str string) string {
 	k := colour("commit", yellow)
 	h := colour(str, yellow)
 
-	return fmt.Sprintf("%s %s", k, h)
+	return lipgloss.NewStyle().
+		MarginRight(1).
+		Render(fmt.Sprintf("%s %s", k, h))
+}
+
+func branchRefs(lb, rb string, brefs []string) string {
+	h := colour("HEAD ->", brightCyan)
+
+	l := colour(lb, brightGreen,
+		WithBold(true),
+	)
+
+	lp := colour("(", yellow)
+	rp := colour(")", yellow)
+	c := colour(",", yellow)
+
+	str := fmt.Sprintf("%s %s", h, l)
+
+	if rb != "" {
+		str += fmt.Sprintf("%s %s", c, colour(rb, red))
+	}
+
+	return fmt.Sprintf("%s%s%s", lp, str, rp)
 }
 
 func author(name, email string) string {
