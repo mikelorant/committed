@@ -19,6 +19,7 @@ type model struct {
 	localBranch  string
 	remoteBranch string
 	branchRefs   []string
+	remotes      []string
 	err          error
 }
 
@@ -95,5 +96,6 @@ func initialModel() (model, error) {
 		localBranch:  r.Branch.Local,
 		remoteBranch: r.Branch.Remote,
 		branchRefs:   r.Branch.Refs,
+		remotes:      r.Remote.Remotes,
 	}, nil
 }

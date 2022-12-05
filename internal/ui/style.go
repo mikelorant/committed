@@ -34,12 +34,10 @@ func hash(str string) string {
 		Render(fmt.Sprintf("%s %s", k, h))
 }
 
-func branchRefs(lb, rb string, brefs []string) string {
+func branchRefs(lb, rb string, brefs, remotes []string) string {
 	h := colour("HEAD ->", brightCyan)
 
-	l := colour(lb, brightGreen,
-		WithBold(true),
-	)
+	l := colour(lb, brightGreen, WithBold(true))
 
 	lp := colour("(", yellow)
 	rp := colour(")", yellow)
@@ -49,6 +47,17 @@ func branchRefs(lb, rb string, brefs []string) string {
 
 	if rb != "" {
 		str += fmt.Sprintf("%s %s", c, colour(rb, red))
+	}
+
+	for _, ref := range brefs {
+		if containsPrefixes(ref, remotes) {
+			rc := colour(ref, red)
+			str += fmt.Sprintf("%s %s", c, rc)
+			continue
+		}
+
+		rc := colour(ref, brightGreen, WithBold(true))
+		str += fmt.Sprintf("%s %s", c, rc)
 	}
 
 	return fmt.Sprintf("%s%s%s", lp, str, rp)
@@ -158,4 +167,14 @@ func command(key, label string) string {
 	l := colour(label, green)
 
 	return fmt.Sprintf("<%s> %s", k, l)
+}
+
+func containsPrefixes(str string, ps []string) bool {
+	for _, p := range ps {
+		if strings.HasPrefix(str, fmt.Sprintf("%s/", p)) {
+			return true
+		}
+	}
+
+	return false
 }

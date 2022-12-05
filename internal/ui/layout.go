@@ -19,6 +19,7 @@ func commit(m model) string {
 			m.localBranch,
 			m.remoteBranch,
 			m.branchRefs,
+			m.remotes,
 			m.name,
 			m.email,
 		))
@@ -48,11 +49,11 @@ func commit(m model) string {
 	)
 }
 
-func headerColumn(h, lb, rb string, brefs []string, n, e string) string {
+func headerColumn(h, lb, rb string, brefs, remotes []string, n, e string) string {
 	hashBranchRefs := lipgloss.JoinHorizontal(
 		lipgloss.Top,
 		hash(h),
-		branchRefs(lb, rb, brefs),
+		branchRefs(lb, rb, brefs, remotes),
 	)
 
 	return lipgloss.JoinVertical(
