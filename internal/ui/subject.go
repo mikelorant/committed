@@ -9,9 +9,13 @@ import (
 )
 
 type SubjectModel struct {
+	config SubjectConfig
+	focus  bool
+}
+
+type SubjectConfig struct {
 	emoji   string
 	summary string
-	focus   bool
 }
 
 const (
@@ -19,9 +23,13 @@ const (
 )
 
 func NewSubject(cfg commit.Config) SubjectModel {
-	return SubjectModel{
+	c := SubjectConfig{
 		emoji:   cfg.Emoji,
 		summary: cfg.Summary,
+	}
+
+	return SubjectModel{
+		config: c,
 	}
 }
 
@@ -49,24 +57,19 @@ func (m SubjectModel) View() string {
 func (m SubjectModel) render() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
-		Render(subjectRow(m.emoji, m.summary, m.focus))
+		Render(m.subjectRow())
 }
 
-func subjectRow(e, s string, focus bool) string {
-	i := len(s)
-	if e != "" {
-		i += 2
-	}
-
+func (m SubjectModel) subjectRow() string {
 	return lipgloss.JoinHorizontal(
 		lipgloss.Top,
-		emoji(e),
-		summary(s, focus),
-		counter(i, subjectLimit),
+		m.emoji(),
+		m.summary(),
+		m.counter(),
 	)
 }
 
-func emoji(str string) string {
+func (m SubjectModel) emoji() string {
 	return lipgloss.NewStyle().
 		Width(4).
 		Height(1).
@@ -74,10 +77,10 @@ func emoji(str string) string {
 		MarginRight(1).
 		Align(lipgloss.Center, lipgloss.Center).
 		BorderStyle(lipgloss.NormalBorder()).
-		Render(str)
+		Render(m.config.emoji)
 }
 
-func summary(str string, focus bool) string {
+func (m SubjectModel) summary() string {
 	return lipgloss.NewStyle().
 		Width(61).
 		Height(1).
@@ -85,13 +88,18 @@ func summary(str string, focus bool) string {
 		Align(lipgloss.Left, lipgloss.Center).
 		Padding(0, 0, 0, 1).
 		BorderStyle(lipgloss.NormalBorder()).
-		Faint(!focus).
-		Render(str)
+		Faint(!m.focus).
+		Render(m.config.summary)
 }
 
-func counter(count, total int) string {
-	c := colour(fmt.Sprintf("%d", count), white)
-	t := colour(fmt.Sprintf("%d", total), white)
+func (m SubjectModel) counter() string {
+	i := len(m.config.summary)
+	if m.config.emoji != "" {
+		i += 2
+	}
+
+	c := colour(fmt.Sprintf("%d", i), white)
+	t := colour(fmt.Sprintf("%d", subjectLimit), white)
 
 	return lipgloss.NewStyle().
 		Width(5).

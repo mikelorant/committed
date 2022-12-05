@@ -11,6 +11,11 @@ import (
 )
 
 type HeaderModel struct {
+	config HeaderConfig
+	focus  bool
+}
+
+type HeaderConfig struct {
 	hash         string
 	localBranch  string
 	remoteBranch string
@@ -18,7 +23,7 @@ type HeaderModel struct {
 	remotes      []string
 	name         string
 	email        string
-	focus        bool
+	date         string
 }
 
 const (
@@ -26,7 +31,7 @@ const (
 )
 
 func NewHeader(cfg commit.Config) HeaderModel {
-	return HeaderModel{
+	c := HeaderConfig{
 		hash:         cfg.Hash,
 		localBranch:  cfg.LocalBranch,
 		remoteBranch: cfg.RemoteBranch,
@@ -34,6 +39,11 @@ func NewHeader(cfg commit.Config) HeaderModel {
 		remotes:      cfg.Remotes,
 		name:         cfg.Name,
 		email:        cfg.Email,
+		date:		  time.Now().Format(dateTimeFormat),
+	}
+
+	return HeaderModel{
+		config: c,
 	}
 }
 
@@ -57,45 +67,37 @@ func (m HeaderModel) Update(msg tea.Msg) (HeaderModel, tea.Cmd) {
 func (m HeaderModel) View() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
-		Render(headerColumn(
-			m.hash,
-			m.localBranch,
-			m.remoteBranch,
-			m.branchRefs,
-			m.remotes,
-			m.name,
-			m.email,
-		))
+		Render(m.headerColumn())
 }
 
-func headerColumn(h, lb, rb string, brefs, remotes []string, n, e string) string {
+func (m HeaderModel) headerColumn() string {
 	hashBranchRefs := lipgloss.JoinHorizontal(
 		lipgloss.Top,
-		hash(h),
-		branchRefs(lb, rb, brefs, remotes),
+		m.hash(),
+		m.branchRefs(),
 	)
 
 	return lipgloss.JoinVertical(
 		lipgloss.Top,
 		hashBranchRefs,
-		author(n, e),
-		date(time.Now().Format(dateTimeFormat)),
+		m.author(),
+		m.date(),
 	)
 }
 
-func hash(str string) string {
+func (m HeaderModel) hash() string {
 	k := colour("commit", yellow)
-	h := colour(str, yellow)
+	h := colour(m.config.hash, yellow)
 
 	return lipgloss.NewStyle().
 		MarginRight(1).
 		Render(fmt.Sprintf("%s %s", k, h))
 }
 
-func branchRefs(lb, rb string, brefs, remotes []string) string {
+func (m HeaderModel) branchRefs() string {
 	h := colour("HEAD ->", brightCyan, WithBold(true))
 
-	l := colour(lb, brightGreen, WithBold(true))
+	l := colour(m.config.localBranch, brightGreen, WithBold(true))
 
 	lp := colour("(", yellow)
 	rp := colour(")", yellow)
@@ -103,12 +105,12 @@ func branchRefs(lb, rb string, brefs, remotes []string) string {
 
 	str := fmt.Sprintf("%s %s", h, l)
 
-	if rb != "" {
-		str += fmt.Sprintf("%s %s", c, colour(rb, red, WithBold(true)))
+	if m.config.remoteBranch != "" {
+		str += fmt.Sprintf("%s %s", c, colour(m.config.remoteBranch, red, WithBold(true)))
 	}
 
-	for _, ref := range brefs {
-		if containsPrefixes(ref, remotes) {
+	for _, ref := range m.config.branchRefs {
+		if containsPrefixes(ref, m.config.remotes) {
 			rc := colour(ref, red, WithBold(true))
 			str += fmt.Sprintf("%s %s", c, rc)
 			continue
@@ -121,17 +123,17 @@ func branchRefs(lb, rb string, brefs, remotes []string) string {
 	return fmt.Sprintf("%s%s%s", lp, str, rp)
 }
 
-func author(name, email string) string {
+func (m HeaderModel) author() string {
 	k := colour("author", white)
-	n := colour(name, white)
-	e := colour(email, white)
+	n := colour(m.config.name, white)
+	e := colour(m.config.email, white)
 
 	return fmt.Sprintf("%s: %s <%s>", k, n, e)
 }
 
-func date(str string) string {
+func (m HeaderModel) date() string {
 	k := colour("date", white)
-	d := colour(str, white)
+	d := colour(m.config.date, white)
 
 	return fmt.Sprintf("%s:   %s", k, d)
 }

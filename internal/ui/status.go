@@ -12,8 +12,11 @@ import (
 )
 
 type StatusModel struct {
-	focus bool
+	config StatusConfig
+	focus  bool
 }
+
+type StatusConfig struct{}
 
 type keys []key
 
@@ -32,7 +35,11 @@ var shortcuts = keys{
 }
 
 func NewStatus(cfg commit.Config) StatusModel {
-	return StatusModel{}
+	c := StatusConfig{}
+
+	return StatusModel{
+		config: c,
+	}
 }
 
 func (m StatusModel) Init() tea.Cmd {
@@ -55,18 +62,18 @@ func (m StatusModel) Update(msg tea.Msg) (StatusModel, tea.Cmd) {
 func (m StatusModel) View() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
-		Render(statusRow())
+		Render(m.statusRow())
 }
 
-func statusRow() string {
+func (m StatusModel) statusRow() string {
 	return lipgloss.JoinHorizontal(
 		lipgloss.Top,
-		modifier(),
-		commands(shortcuts),
+		m.modifier(),
+		m.commands(shortcuts),
 	)
 }
 
-func modifier() string {
+func (m StatusModel) modifier() string {
 	c := colour("Control +", cyan)
 
 	return lipgloss.NewStyle().
@@ -76,7 +83,7 @@ func modifier() string {
 		Render(c)
 }
 
-func commands(k keys) string {
+func (m StatusModel) commands(k keys) string {
 	var str strings.Builder
 	for _, v := range k {
 		fmt.Fprintf(&str, "%s ", command(v.key, v.label))

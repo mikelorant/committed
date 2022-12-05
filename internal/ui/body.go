@@ -9,13 +9,21 @@ import (
 )
 
 type BodyModel struct {
-	body  string
-	focus bool
+	config	BodyConfig
+	focus   bool
+}
+
+type BodyConfig struct {
+	message string
 }
 
 func NewBody(cfg commit.Config) BodyModel {
+	c := BodyConfig{
+		message: cfg.Body,
+	}
+
 	return BodyModel{
-		body: cfg.Body,
+		config: c,
 	}
 }
 
@@ -39,10 +47,10 @@ func (m BodyModel) Update(msg tea.Msg) (BodyModel, tea.Cmd) {
 func (m BodyModel) View() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
-		Render(body(m.body, m.focus))
+		Render(m.body())
 }
 
-func body(str string, focus bool) string {
+func (m *BodyModel) body() string {
 	return lipgloss.NewStyle().
 		Width(74).
 		Height(19).
@@ -50,6 +58,6 @@ func body(str string, focus bool) string {
 		Align(lipgloss.Left, lipgloss.Top).
 		BorderStyle(lipgloss.NormalBorder()).
 		Padding(0, 1, 0, 1).
-		Faint(!focus).
-		Render(strings.TrimSpace(str))
+		Faint(!m.focus).
+		Render(strings.TrimSpace(m.config.message))
 }

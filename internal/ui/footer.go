@@ -9,15 +9,23 @@ import (
 )
 
 type FooterModel struct {
+	config FooterConfig
+	focus  bool
+}
+
+type FooterConfig struct {
 	name  string
 	email string
-	focus bool
 }
 
 func NewFooter(cfg commit.Config) FooterModel {
-	return FooterModel{
+	c := FooterConfig{
 		name:  cfg.Name,
 		email: cfg.Email,
+	}
+
+	return FooterModel{
+		config: c,
 	}
 }
 
@@ -41,20 +49,20 @@ func (m FooterModel) Update(msg tea.Msg) (FooterModel, tea.Cmd) {
 func (m FooterModel) View() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
-		Render(footerRow(m.name, m.email))
+		Render(m.footerRow())
 }
 
-func footerRow(n, e string) string {
+func (m FooterModel) footerRow() string {
 	return lipgloss.JoinHorizontal(
 		lipgloss.Top,
-		signoff(n, e),
+		m.signoff(),
 	)
 }
 
-func signoff(name, email string) string {
+func (m FooterModel) signoff() string {
 	s := colour("Signed-off-by", white)
-	n := colour(name, white)
-	e := colour(email, white)
+	n := colour(m.config.name, white)
+	e := colour(m.config.email, white)
 
 	str := fmt.Sprintf("%s: %s <%s>", s, n, e)
 
