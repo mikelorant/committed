@@ -5,6 +5,7 @@ import (
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
 )
 
@@ -57,5 +58,11 @@ func (m model) View() string {
 		return fmt.Sprintf("unable to render view: %s", m.err)
 	}
 
-	return commitBlock(m)
+	return lipgloss.JoinVertical(lipgloss.Top,
+		headerBlock(m),
+		subjectBlock(m),
+		bodyBlock(m),
+		footerBlock(m),
+		statusBlock(m),
+	)
 }
