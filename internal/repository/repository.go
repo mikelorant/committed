@@ -9,6 +9,7 @@ import (
 type Repository struct {
 	gitRepository *git.Repository
 	User          User
+	Branch        Branch
 }
 
 const repositoryPath string = "."
@@ -28,8 +29,14 @@ func New() (*Repository, error) {
 		return nil, fmt.Errorf("unable to initialise user: %w", err)
 	}
 
+	branch, err := NewBranch(repo)
+	if err != nil {
+		return nil, fmt.Errorf("unable to initialise branch: %w", err)
+	}
+
 	return &Repository{
 		gitRepository: repo,
 		User:          user,
+		Branch:        branch,
 	}, nil
 }
