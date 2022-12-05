@@ -4,12 +4,25 @@ import (
 	"fmt"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mikelorant/committed/internal/commit"
 )
 
-func footerBlock(m model) string {
+type FooterModel struct {
+	name  string
+	email string
+}
+
+func NewFooter(cfg commit.Config) FooterModel {
+	return FooterModel{
+		name:  cfg.Name,
+		email: cfg.Email,
+	}
+}
+
+func (m FooterModel) render() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
-		Render(footerRow(m.config.Name, m.config.Email))
+		Render(footerRow(m.name, m.email))
 }
 
 func footerRow(n, e string) string {

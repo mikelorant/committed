@@ -6,23 +6,46 @@ import (
 	"time"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mikelorant/committed/internal/commit"
 )
+
+type HeaderModel struct {
+	hash         string
+	localBranch  string
+	remoteBranch string
+	branchRefs   []string
+	remotes      []string
+	name         string
+	email        string
+}
 
 const (
 	dateTimeFormat string = "Mon Jan 2 15:04:05 2006 -0700"
 )
 
-func headerBlock(m model) string {
+func NewHeader(cfg commit.Config) HeaderModel {
+	return HeaderModel{
+		hash:         cfg.Hash,
+		localBranch:  cfg.LocalBranch,
+		remoteBranch: cfg.RemoteBranch,
+		branchRefs:   cfg.BranchRefs,
+		remotes:      cfg.Remotes,
+		name:         cfg.Name,
+		email:        cfg.Email,
+	}
+}
+
+func (m HeaderModel) render() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
 		Render(headerColumn(
-			m.config.Hash,
-			m.config.LocalBranch,
-			m.config.RemoteBranch,
-			m.config.BranchRefs,
-			m.config.Remotes,
-			m.config.Name,
-			m.config.Email,
+			m.hash,
+			m.localBranch,
+			m.remoteBranch,
+			m.branchRefs,
+			m.remotes,
+			m.name,
+			m.email,
 		))
 }
 

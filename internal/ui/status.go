@@ -8,7 +8,11 @@ import (
 
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
+
+	"github.com/mikelorant/committed/internal/commit"
 )
+
+type StatusModel struct{}
 
 type keys []key
 
@@ -26,7 +30,11 @@ var shortcuts = keys{
 	{key: "b", label: "body"},
 }
 
-func statusBlock(m model) string {
+func NewStatus(cfg commit.Config) StatusModel {
+	return StatusModel{}
+}
+
+func (m StatusModel) render() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
 		Render(statusRow())

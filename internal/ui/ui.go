@@ -9,9 +9,14 @@ import (
 	"github.com/mikelorant/committed/internal/commit"
 )
 
-type model struct {
-	config commit.Config
-	err    error
+type MainModel struct {
+	header  HeaderModel
+	subject SubjectModel
+	body    BodyModel
+	footer  FooterModel
+	status  StatusModel
+	config  commit.Config
+	err     error
 }
 
 func New(cfg commit.Config) error {
@@ -24,8 +29,13 @@ func New(cfg commit.Config) error {
 		defer fh.Close()
 	}
 
-	im := model{
-		config: cfg,
+	im := MainModel{
+		config:  cfg,
+		header:  NewHeader(cfg),
+		subject: NewSubject(cfg),
+		body:    NewBody(cfg),
+		footer:  NewFooter(cfg),
+		status:  NewStatus(cfg),
 	}
 
 	p := tea.NewProgram(im)
@@ -36,12 +46,12 @@ func New(cfg commit.Config) error {
 	return nil
 }
 
-func (m model) Init() tea.Cmd {
+func (m MainModel) Init() tea.Cmd {
 	return nil
 }
 
 //nolint:ireturn
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	//nolint:gocritic
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
@@ -53,16 +63,16 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m model) View() string {
+func (m MainModel) View() string {
 	if m.err != nil {
 		return fmt.Sprintf("unable to render view: %s", m.err)
 	}
 
 	return lipgloss.JoinVertical(lipgloss.Top,
-		headerBlock(m),
-		subjectBlock(m),
-		bodyBlock(m),
-		footerBlock(m),
-		statusBlock(m),
+		m.header.render(),
+		m.subject.render(),
+		m.body.render(),
+		m.footer.render(),
+		m.status.render(),
 	)
 }

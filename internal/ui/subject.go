@@ -4,16 +4,29 @@ import (
 	"fmt"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mikelorant/committed/internal/commit"
 )
+
+type SubjectModel struct {
+	emoji   string
+	summary string
+}
 
 const (
 	subjectLimit int = 50
 )
 
-func subjectBlock(m model) string {
+func NewSubject(cfg commit.Config) SubjectModel {
+	return SubjectModel{
+		emoji:   cfg.Emoji,
+		summary: cfg.Summary,
+	}
+}
+
+func (m SubjectModel) render() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
-		Render(subjectRow(m.config.Emoji, m.config.Summary))
+		Render(subjectRow(m.emoji, m.summary))
 }
 
 func subjectRow(e, s string) string {
