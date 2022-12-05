@@ -35,7 +35,7 @@ func hash(str string) string {
 }
 
 func branchRefs(lb, rb string, brefs, remotes []string) string {
-	h := colour("HEAD ->", brightCyan)
+	h := colour("HEAD ->", brightCyan, WithBold(true))
 
 	l := colour(lb, brightGreen, WithBold(true))
 
@@ -46,12 +46,12 @@ func branchRefs(lb, rb string, brefs, remotes []string) string {
 	str := fmt.Sprintf("%s %s", h, l)
 
 	if rb != "" {
-		str += fmt.Sprintf("%s %s", c, colour(rb, red))
+		str += fmt.Sprintf("%s %s", c, colour(rb, red, WithBold(true)))
 	}
 
 	for _, ref := range brefs {
 		if containsPrefixes(ref, remotes) {
-			rc := colour(ref, red)
+			rc := colour(ref, red, WithBold(true))
 			str += fmt.Sprintf("%s %s", c, rc)
 			continue
 		}
