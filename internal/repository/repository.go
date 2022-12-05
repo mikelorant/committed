@@ -10,6 +10,7 @@ type Repository struct {
 	gitRepository *git.Repository
 	User          User
 	Branch        Branch
+	Remote        Remote
 }
 
 const repositoryPath string = "."
@@ -34,9 +35,15 @@ func New() (*Repository, error) {
 		return nil, fmt.Errorf("unable to initialise branch: %w", err)
 	}
 
+	remote, err := NewRemote(repo)
+	if err != nil {
+		return nil, fmt.Errorf("unable to initialise remote: %w", err)
+	}
+
 	return &Repository{
 		gitRepository: repo,
 		User:          user,
 		Branch:        branch,
+		Remote:        remote,
 	}, nil
 }
