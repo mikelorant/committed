@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
 )
@@ -17,6 +18,7 @@ type HeaderModel struct {
 	remotes      []string
 	name         string
 	email        string
+	focus        bool
 }
 
 const (
@@ -35,7 +37,24 @@ func NewHeader(cfg commit.Config) HeaderModel {
 	}
 }
 
-func (m HeaderModel) render() string {
+func (m HeaderModel) Init() tea.Cmd {
+	return nil
+}
+
+//nolint:ireturn
+func (m HeaderModel) Update(msg tea.Msg) (HeaderModel, tea.Cmd) {
+	//nolint:gocritic
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		if msg.Type == tea.KeyCtrlC {
+			return m, tea.Quit
+		}
+	}
+
+	return m, nil
+}
+
+func (m HeaderModel) View() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
 		Render(headerColumn(

@@ -3,6 +3,7 @@ package ui
 import (
 	"fmt"
 
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
 )
@@ -10,6 +11,7 @@ import (
 type SubjectModel struct {
 	emoji   string
 	summary string
+	focus   bool
 }
 
 const (
@@ -23,13 +25,34 @@ func NewSubject(cfg commit.Config) SubjectModel {
 	}
 }
 
+func (m SubjectModel) Init() tea.Cmd {
+	return nil
+}
+
+//nolint:ireturn
+func (m SubjectModel) Update(msg tea.Msg) (SubjectModel, tea.Cmd) {
+	//nolint:gocritic
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		if msg.Type == tea.KeyCtrlC {
+			return m, tea.Quit
+		}
+	}
+
+	return m, nil
+}
+
+func (m SubjectModel) View() string {
+	return m.render()
+}
+
 func (m SubjectModel) render() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
-		Render(subjectRow(m.emoji, m.summary))
+		Render(subjectRow(m.emoji, m.summary, m.focus))
 }
 
-func subjectRow(e, s string) string {
+func subjectRow(e, s string, focus bool) string {
 	i := len(s)
 	if e != "" {
 		i += 2
@@ -38,7 +61,7 @@ func subjectRow(e, s string) string {
 	return lipgloss.JoinHorizontal(
 		lipgloss.Top,
 		emoji(e),
-		summary(s),
+		summary(s, focus),
 		counter(i, subjectLimit),
 	)
 }
@@ -54,7 +77,7 @@ func emoji(str string) string {
 		Render(str)
 }
 
-func summary(str string) string {
+func summary(str string, focus bool) string {
 	return lipgloss.NewStyle().
 		Width(61).
 		Height(1).
@@ -62,7 +85,7 @@ func summary(str string) string {
 		Align(lipgloss.Left, lipgloss.Center).
 		Padding(0, 0, 0, 1).
 		BorderStyle(lipgloss.NormalBorder()).
-		Faint(true).
+		Faint(!focus).
 		Render(str)
 }
 

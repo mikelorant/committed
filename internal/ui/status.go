@@ -4,15 +4,16 @@ import (
 	"fmt"
 	"strings"
 
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-
+	"github.com/mikelorant/committed/internal/commit"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
-
-	"github.com/mikelorant/committed/internal/commit"
 )
 
-type StatusModel struct{}
+type StatusModel struct {
+	focus bool
+}
 
 type keys []key
 
@@ -34,7 +35,24 @@ func NewStatus(cfg commit.Config) StatusModel {
 	return StatusModel{}
 }
 
-func (m StatusModel) render() string {
+func (m StatusModel) Init() tea.Cmd {
+	return nil
+}
+
+//nolint:ireturn
+func (m StatusModel) Update(msg tea.Msg) (StatusModel, tea.Cmd) {
+	//nolint:gocritic
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		if msg.Type == tea.KeyCtrlC {
+			return m, tea.Quit
+		}
+	}
+
+	return m, nil
+}
+
+func (m StatusModel) View() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
 		Render(statusRow())
