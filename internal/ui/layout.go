@@ -11,41 +11,41 @@ const (
 	subjectLimit   int    = 50
 )
 
-func commit(m model) string {
-	blockHeader := lipgloss.NewStyle().
+func commitBlock(m model) string {
+	headerBlock := lipgloss.NewStyle().
 		MarginBottom(1).
 		Render(headerColumn(
-			m.commit,
-			m.localBranch,
-			m.remoteBranch,
-			m.branchRefs,
-			m.remotes,
-			m.name,
-			m.email,
+			m.config.Hash,
+			m.config.LocalBranch,
+			m.config.RemoteBranch,
+			m.config.BranchRefs,
+			m.config.Remotes,
+			m.config.Name,
+			m.config.Email,
 		))
 
-	blockSubject := lipgloss.NewStyle().
+	subjectBlock := lipgloss.NewStyle().
 		MarginBottom(1).
-		Render(subjectRow(m.emoji, m.summary))
+		Render(subjectRow(m.config.Emoji, m.config.Summary))
 
-	blockBody := lipgloss.NewStyle().
+	bodyBlock := lipgloss.NewStyle().
 		MarginBottom(1).
-		Render(body(m.body))
+		Render(body(m.config.Body))
 
-	blockFooter := lipgloss.NewStyle().
+	footerBlock := lipgloss.NewStyle().
 		MarginBottom(1).
-		Render(footerRow(m.name, m.email))
+		Render(footerRow(m.config.Name, m.config.Email))
 
-	blockStatus := lipgloss.NewStyle().
+	statusBlock := lipgloss.NewStyle().
 		MarginBottom(1).
 		Render(statusRow())
 
 	return lipgloss.JoinVertical(lipgloss.Top,
-		blockHeader,
-		blockSubject,
-		blockBody,
-		blockFooter,
-		blockStatus,
+		headerBlock,
+		subjectBlock,
+		bodyBlock,
+		footerBlock,
+		statusBlock,
 	)
 }
 

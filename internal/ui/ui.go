@@ -1,38 +1,19 @@
 package ui
 
 import (
-	_ "embed"
 	"fmt"
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/mikelorant/committed/internal/repository"
+	"github.com/mikelorant/committed/internal/commit"
 )
 
 type model struct {
-	commit       string
-	name         string
-	email        string
-	emoji        string
-	summary      string
-	body         string
-	localBranch  string
-	remoteBranch string
-	branchRefs   []string
-	remotes      []string
-	err          error
+	config commit.Config
+	err    error
 }
 
-//go:embed message.txt
-var message string
-
-const (
-	mockCommit  string = "1234567890abcdef1234567890abcdef1234567890"
-	mockEmoji   string = "🐛"
-	mockSummary string = "Capitalized, short (50 chars or less) summary"
-)
-
-func New() error {
+func New(cfg commit.Config) error {
 	logfilePath := os.Getenv("BUBBLETEA_LOG")
 	if logfilePath != "" {
 		fh, err := tea.LogToFile(logfilePath, "committed")
@@ -42,9 +23,8 @@ func New() error {
 		defer fh.Close()
 	}
 
-	im, err := initialModel()
-	if err != nil {
-		return fmt.Errorf("unable to build initial model: %w", err)
+	im := model{
+		config: cfg,
 	}
 
 	p := tea.NewProgram(im)
@@ -77,25 +57,5 @@ func (m model) View() string {
 		return fmt.Sprintf("unable to render view: %s", m.err)
 	}
 
-	return commit(m)
-}
-
-func initialModel() (model, error) {
-	r, err := repository.New()
-	if err != nil {
-		return model{}, fmt.Errorf("unable to get repository: %w", err)
-	}
-
-	return model{
-		commit:       mockCommit,
-		name:         r.User.Name,
-		email:        r.User.Email,
-		emoji:        mockEmoji,
-		summary:      mockSummary,
-		body:         message,
-		localBranch:  r.Branch.Local,
-		remoteBranch: r.Branch.Remote,
-		branchRefs:   r.Branch.Refs,
-		remotes:      r.Remote.Remotes,
-	}, nil
+	return commitBlock(m)
 }
