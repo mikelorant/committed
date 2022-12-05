@@ -20,20 +20,53 @@ type BranchTest struct {
 }
 
 func TestNewBranch(t *testing.T) {
-	tests := []struct {
-		name   string
+	type args struct {
+		local string
+	}
+
+	type want struct {
 		local  string
 		remote string
+		refs   []string
+	}
+
+	tests := []struct {
+		name string
+		args args
+		want want
 	}{
 		{
-			name:   "master",
-			local:  "master",
-			remote: "origin/master",
+			name: "master",
+			args: args{
+				local: "master",
+			},
+			want: want{
+				local:  "master",
+				remote: "origin/master",
+				refs:   []string{"v1.0.0"},
+			},
 		},
 		{
-			name:   "branch",
-			local:  "branch",
-			remote: "origin/branch",
+			name: "branch",
+			args: args{
+				local: "branch",
+			},
+			want: want{
+				local:  "branch",
+				remote: "origin/branch",
+				refs:   nil,
+			},
+		},
+		{
+			name: "invalid",
+			args: args{
+				local: "invalid",
+			},
+			want: want{
+				local:  "master",
+				remote: "origin/master",
+				refs:   []string{"v1.0.0"},
+			},
 		},
 	}
 
@@ -45,15 +78,16 @@ func TestNewBranch(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			b.repository()
-			b.branch(tt.local)
+			b.branch(tt.args.local)
 
 			branch, err := repository.NewBranch(b.gitRepository)
 			if err != nil {
-				t.Errorf("unable to initialise branch: %v", tt.local)
+				t.Errorf("unable to initialise branch: %v", tt.args.local)
 			}
 
-			assert.Equal(t, tt.local, branch.Local)
-			assert.Equal(t, tt.remote, branch.Remote)
+			assert.Equal(t, tt.want.local, branch.Local)
+			assert.Equal(t, tt.want.remote, branch.Remote)
+			assert.Equal(t, tt.want.refs, branch.Refs)
 		})
 	}
 }
