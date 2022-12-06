@@ -1,8 +1,7 @@
 # Committed
 
-Committed is a WYSIWYG Git commit editor that helps improve the
-quality of your commits by showing you the layout in the same format
-as `git log`.
+Committed is a WYSIWYG Git commit editor that helps improve the quality of your
+commits by showing you the layout in the same format as `git log`.
 
 ## Features
 
@@ -65,7 +64,7 @@ Install Committed with Homebrew.
 ## Shortcuts
 
 | Command       | Key           |
-|:--------------|:--------------|
+| :------------ | :------------ |
 | Commit        | control-enter |
 | Cancel        | control-c     |
 | Focus author  | control-a     |
@@ -75,7 +74,8 @@ Install Committed with Homebrew.
 
 ## Git Commands
 
-The following commands are used as reference to extract from Git specific fields for the interface.
+The following commands are used as reference to extract from Git specific fields
+for the interface.
 
 | Field                    | Method                                            |
 | :----------------------- | :------------------------------------------------ |
