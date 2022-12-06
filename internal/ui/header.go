@@ -2,8 +2,6 @@ package ui
 
 import (
 	"fmt"
-	"strings"
-	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -16,30 +14,18 @@ type HeaderModel struct {
 }
 
 type HeaderConfig struct {
-	hash         string
-	localBranch  string
-	remoteBranch string
-	branchRefs   []string
-	remotes      []string
-	name         string
-	email        string
-	date         string
+	emoji   string
+	summary string
 }
 
 const (
-	dateTimeFormat string = "Mon Jan 2 15:04:05 2006 -0700"
+	subjectLimit int = 50
 )
 
 func NewHeader(cfg commit.Config) HeaderModel {
 	c := HeaderConfig{
-		hash:         cfg.Hash,
-		localBranch:  cfg.LocalBranch,
-		remoteBranch: cfg.RemoteBranch,
-		branchRefs:   cfg.BranchRefs,
-		remotes:      cfg.Remotes,
-		name:         cfg.Name,
-		email:        cfg.Email,
-		date:		  time.Now().Format(dateTimeFormat),
+		emoji:   cfg.Emoji,
+		summary: cfg.Summary,
 	}
 
 	return HeaderModel{
@@ -65,85 +51,59 @@ func (m HeaderModel) Update(msg tea.Msg) (HeaderModel, tea.Cmd) {
 }
 
 func (m HeaderModel) View() string {
+	return m.render()
+}
+
+func (m HeaderModel) render() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
-		Render(m.headerColumn())
+		Render(m.headerRow())
 }
 
-func (m HeaderModel) headerColumn() string {
-	hashBranchRefs := lipgloss.JoinHorizontal(
+func (m HeaderModel) headerRow() string {
+	return lipgloss.JoinHorizontal(
 		lipgloss.Top,
-		m.hash(),
-		m.branchRefs(),
-	)
-
-	return lipgloss.JoinVertical(
-		lipgloss.Top,
-		hashBranchRefs,
-		m.author(),
-		m.date(),
+		m.emoji(),
+		m.summary(),
+		m.counter(),
 	)
 }
 
-func (m HeaderModel) hash() string {
-	k := colour("commit", yellow)
-	h := colour(m.config.hash, yellow)
+func (m HeaderModel) emoji() string {
+	return lipgloss.NewStyle().
+		Width(4).
+		Height(1).
+		MarginLeft(4).
+		MarginRight(1).
+		Align(lipgloss.Center, lipgloss.Center).
+		BorderStyle(lipgloss.NormalBorder()).
+		Render(m.config.emoji)
+}
+
+func (m HeaderModel) summary() string {
+	return lipgloss.NewStyle().
+		Width(61).
+		Height(1).
+		MarginRight(1).
+		Align(lipgloss.Left, lipgloss.Center).
+		Padding(0, 0, 0, 1).
+		BorderStyle(lipgloss.NormalBorder()).
+		Faint(!m.focus).
+		Render(m.config.summary)
+}
+
+func (m HeaderModel) counter() string {
+	i := len(m.config.summary)
+	if m.config.emoji != "" {
+		i += 2
+	}
+
+	c := colour(fmt.Sprintf("%d", i), white)
+	t := colour(fmt.Sprintf("%d", subjectLimit), white)
 
 	return lipgloss.NewStyle().
-		MarginRight(1).
-		Render(fmt.Sprintf("%s %s", k, h))
-}
-
-func (m HeaderModel) branchRefs() string {
-	h := colour("HEAD ->", brightCyan, WithBold(true))
-
-	l := colour(m.config.localBranch, brightGreen, WithBold(true))
-
-	lp := colour("(", yellow)
-	rp := colour(")", yellow)
-	c := colour(",", yellow)
-
-	str := fmt.Sprintf("%s %s", h, l)
-
-	if m.config.remoteBranch != "" {
-		str += fmt.Sprintf("%s %s", c, colour(m.config.remoteBranch, red, WithBold(true)))
-	}
-
-	for _, ref := range m.config.branchRefs {
-		if containsPrefixes(ref, m.config.remotes) {
-			rc := colour(ref, red, WithBold(true))
-			str += fmt.Sprintf("%s %s", c, rc)
-			continue
-		}
-
-		rc := colour(ref, brightGreen, WithBold(true))
-		str += fmt.Sprintf("%s %s", c, rc)
-	}
-
-	return fmt.Sprintf("%s%s%s", lp, str, rp)
-}
-
-func (m HeaderModel) author() string {
-	k := colour("author", white)
-	n := colour(m.config.name, white)
-	e := colour(m.config.email, white)
-
-	return fmt.Sprintf("%s: %s <%s>", k, n, e)
-}
-
-func (m HeaderModel) date() string {
-	k := colour("date", white)
-	d := colour(m.config.date, white)
-
-	return fmt.Sprintf("%s:   %s", k, d)
-}
-
-func containsPrefixes(str string, ps []string) bool {
-	for _, p := range ps {
-		if strings.HasPrefix(str, fmt.Sprintf("%s/", p)) {
-			return true
-		}
-	}
-
-	return false
+		Width(5).
+		Height(3).
+		Align(lipgloss.Right, lipgloss.Center).
+		Render(fmt.Sprintf("%s/%s", c, t))
 }

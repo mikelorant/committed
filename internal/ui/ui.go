@@ -10,21 +10,21 @@ import (
 )
 
 type MainModel struct {
-	state   sessionState
-	header  HeaderModel
-	subject SubjectModel
-	body    BodyModel
-	footer  FooterModel
-	status  StatusModel
-	config  commit.Config
-	err     error
+	state  sessionState
+	info   InfoModel
+	header HeaderModel
+	body   BodyModel
+	footer FooterModel
+	status StatusModel
+	config commit.Config
+	err    error
 }
 
 type sessionState int
 
 const (
-	headerView sessionState = iota
-	subjectView
+	infoView sessionState = iota
+	headerView
 	bodyView
 	footerView
 	statusView
@@ -41,13 +41,13 @@ func New(cfg commit.Config) error {
 	}
 
 	im := MainModel{
-		state:   headerView,
-		header:  NewHeader(cfg),
-		subject: NewSubject(cfg),
-		body:    NewBody(cfg),
-		footer:  NewFooter(cfg),
-		status:  NewStatus(cfg),
-		config:  cfg,
+		state:  infoView,
+		info:   NewInfo(cfg),
+		header: NewHeader(cfg),
+		body:   NewBody(cfg),
+		footer: NewFooter(cfg),
+		status: NewStatus(cfg),
+		config: cfg,
 	}
 
 	p := tea.NewProgram(im)
@@ -60,8 +60,8 @@ func New(cfg commit.Config) error {
 
 func (m MainModel) Init() tea.Cmd {
 	return tea.Batch(
+		m.info.Init(),
 		m.header.Init(),
-		m.subject.Init(),
 		m.body.Init(),
 		m.footer.Init(),
 		m.status.Init(),
@@ -79,13 +79,13 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "ctrl+a":
-			m.state = headerView
+			m.state = infoView
 		case "ctrl+b":
 			m.state = bodyView
 		case "ctrl+e":
-			m.state = subjectView
+			m.state = headerView
 		case "ctrl+s":
-			m.state = subjectView
+			m.state = headerView
 		}
 
 		if msg.Type == tea.KeyCtrlC {
@@ -93,11 +93,11 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 		switch m.state {
+		case infoView:
+			m.info, cmd = m.info.Update(msg)
+			cmds = append(cmds, cmd)
 		case headerView:
 			m.header, cmd = m.header.Update(msg)
-			cmds = append(cmds, cmd)
-		case subjectView:
-			m.subject, cmd = m.subject.Update(msg)
 			cmds = append(cmds, cmd)
 		case bodyView:
 			m.body, cmd = m.body.Update(msg)
@@ -119,15 +119,15 @@ func (m MainModel) View() string {
 		return fmt.Sprintf("unable to render view: %s", m.err)
 	}
 
+	m.info.focus = m.state == infoView
 	m.header.focus = m.state == headerView
-	m.subject.focus = m.state == subjectView
 	m.body.focus = m.state == bodyView
 	m.footer.focus = m.state == footerView
 	m.status.focus = m.state == statusView
 
 	return lipgloss.JoinVertical(lipgloss.Top,
+		m.info.View(),
 		m.header.View(),
-		m.subject.View(),
 		m.body.View(),
 		m.footer.View(),
 		m.status.View(),

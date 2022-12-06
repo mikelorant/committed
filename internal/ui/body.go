@@ -9,8 +9,8 @@ import (
 )
 
 type BodyModel struct {
-	config	BodyConfig
-	focus   bool
+	config BodyConfig
+	focus  bool
 }
 
 type BodyConfig struct {
