@@ -14,12 +14,12 @@ type BodyModel struct {
 }
 
 type BodyConfig struct {
-	message string
+	body string
 }
 
 func NewBody(cfg commit.Config) BodyModel {
 	c := BodyConfig{
-		message: cfg.Body,
+		body: cfg.Body,
 	}
 
 	return BodyModel{
@@ -59,5 +59,5 @@ func (m *BodyModel) body() string {
 		BorderStyle(lipgloss.NormalBorder()).
 		Padding(0, 1, 0, 1).
 		Faint(!m.focus).
-		Render(strings.TrimSpace(m.config.message))
+		Render(strings.TrimSpace(m.config.body))
 }
