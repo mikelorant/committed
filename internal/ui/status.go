@@ -18,21 +18,27 @@ type StatusModel struct {
 
 type StatusConfig struct{}
 
-type keys []key
-
-type key struct {
+type shortcut struct {
 	key   string
 	label string
 }
 
-var shortcuts = keys{
+var altShortcuts = []shortcut{
 	{key: "enter", label: "commit"},
-	{key: "c", label: "cancel"},
 	{key: "a", label: "author"},
 	{key: "e", label: "emoji"},
 	{key: "s", label: "summary"},
 	{key: "b", label: "body"},
 }
+
+var ctrlShortcuts = []shortcut{
+	{key: "c", label: "cancel"},
+}
+
+const (
+	altKey  = "Alt"
+	ctrlKey = "Ctrl"
+)
 
 func NewStatus(cfg commit.Config) StatusModel {
 	c := StatusConfig{}
@@ -48,14 +54,6 @@ func (m StatusModel) Init() tea.Cmd {
 
 //nolint:ireturn
 func (m StatusModel) Update(msg tea.Msg) (StatusModel, tea.Cmd) {
-	//nolint:gocritic
-	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		if msg.Type == tea.KeyCtrlC {
-			return m, tea.Quit
-		}
-	}
-
 	return m, nil
 }
 
@@ -68,35 +66,132 @@ func (m StatusModel) View() string {
 func (m StatusModel) statusRow() string {
 	return lipgloss.JoinHorizontal(
 		lipgloss.Top,
-		m.modifier(),
-		m.commands(shortcuts),
+		m.modifiers(),
+		m.shortcuts(),
 	)
 }
 
-func (m StatusModel) modifier() string {
-	c := colour("Control +", cyan)
+func (m StatusModel) modifiers() string {
+	mods := []string{altKey, ctrlKey}
+	w := sliceMaxLen(mods)
+
+	var ss []string
+	for _, mod := range mods {
+		str := lipgloss.NewStyle().
+			Foreground(lipgloss.Color("6")).
+			Width(w).
+			Align(lipgloss.Right).
+			Render(mod)
+
+		ss = append(ss, fmt.Sprintf("%s +", str))
+	}
+	strs := strings.Join(ss, "\n")
 
 	return lipgloss.NewStyle().
-		Width(9).
-		Height(1).
+		Width(w + 2).
+		Height(len(mods)).
 		MarginRight(1).
-		Render(c)
+		Render(strs)
 }
 
-func (m StatusModel) commands(k keys) string {
-	var str strings.Builder
-	for _, v := range k {
-		fmt.Fprintf(&str, "%s ", command(v.key, v.label))
+func (m StatusModel) shortcuts() string {
+	col := len(altShortcuts)
+	if len(ctrlShortcuts) > col {
+		col = len(ctrlShortcuts)
 	}
 
-	return strings.TrimSpace(str.String())
+	var ss []string
+	for i := 0; i < col; i++ {
+		var alt, ctrl shortcut
+
+		if i < len(altShortcuts) {
+			alt = altShortcuts[i]
+		}
+
+		if i < len(ctrlShortcuts) {
+			ctrl = ctrlShortcuts[i]
+		}
+
+		ss = append(ss, shortcutColumn(alt, ctrl))
+	}
+
+	return lipgloss.JoinHorizontal(
+		lipgloss.Top,
+		ss...,
+	)
 }
 
-func command(key, label string) string {
-	label = cases.Title(language.English).String(label)
+func shortcutColumn(alt, ctrl shortcut) string {
+	keys := shortcutColumnKeys(alt.key, ctrl.key)
+	labels := shortcutColumnLabels(alt.label, ctrl.label)
 
-	k := colour(key, cyan)
-	l := colour(label, green)
+	sc := lipgloss.JoinHorizontal(lipgloss.Top, keys, labels)
 
-	return fmt.Sprintf("<%s> %s", k, l)
+	return lipgloss.NewStyle().
+		MarginRight(1).
+		Render(sc)
+}
+
+func shortcutColumnKeys(alt, ctrl string) string {
+	keys := []string{alt, ctrl}
+	w := sliceMaxLen(keys)
+
+	var ss []string
+	for _, key := range keys {
+		if key == "" {
+			ss = append(ss, "")
+			continue
+		}
+
+		str := lipgloss.NewStyle().
+			Foreground(lipgloss.Color("6")).
+			Render(key)
+
+		wrappedStr := lipgloss.NewStyle().
+			Align(lipgloss.Right).
+			Width(w + 2).
+			Render(fmt.Sprintf("<%s>", str))
+
+		ss = append(ss, wrappedStr)
+	}
+	return lipgloss.NewStyle().
+		MarginRight(1).
+		Render(strings.Join(ss, "\n"))
+}
+
+func shortcutColumnLabels(alt, ctrl string) string {
+	labels := []string{alt, ctrl}
+	w := sliceMaxLen(labels)
+
+	ss := []string{}
+	for _, label := range labels {
+		if label == "" {
+			ss = append(ss, "")
+			continue
+		}
+
+		str := lipgloss.NewStyle().
+			Foreground(lipgloss.Color("2")).
+			Width(w).
+			Align(lipgloss.Left).
+			Render(title(label))
+
+		ss = append(ss, str)
+	}
+	return strings.Join(ss, "\n")
+}
+
+func sliceMaxLen(ss []string) int {
+	var i int
+	for _, v := range ss {
+		if len(v) > i {
+			i = len(v)
+		}
+	}
+
+	return i
+}
+
+func title(str string) string {
+	return cases.Title(language.English).String(str)
 }
