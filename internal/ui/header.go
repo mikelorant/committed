@@ -98,12 +98,26 @@ func (m HeaderModel) summary() string {
 }
 
 func (m HeaderModel) counter() string {
-	i := len(m.config.summary)
+	i := len(m.textInput.Value())
 	if m.config.emoji != "" {
 		i += 2
 	}
 
-	c := colour(fmt.Sprintf("%d", i), white)
+	clr := white
+	bold := false
+	switch {
+	case i > 0 && i < 5:
+		clr = yellow
+	case i >= 5 && i <= 40:
+		clr = green
+	case i > 40 && i <= 50:
+		clr = yellow
+	case i > 50:
+		clr = brightRed
+		bold = true
+	}
+
+	c := colour(fmt.Sprintf("%d", i), clr, WithBold(bold))
 	t := colour(fmt.Sprintf("%d", subjectLimit), white)
 
 	return lipgloss.NewStyle().
