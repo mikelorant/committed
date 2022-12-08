@@ -49,7 +49,8 @@ Date:   Mon Jan 2 15:04:05 2006 -0700
 
       Signed-off-by: John Doe <john.doe@example.com>
 
-Control + <enter> Commit <c> Cancel <a> Author <e> Emoji <s> Summary <b> Body
+Alt  + <enter> Commit <1> Author <2> Emoji <3> Summary <4> Body
+Ctrl +     <c> Cancel
 ```
 
 ## Installation
