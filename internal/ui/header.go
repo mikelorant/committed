@@ -122,7 +122,6 @@ func (m HeaderModel) counter() string {
 		Bold(bold).
 		Render(fmt.Sprintf("%d", i))
 
-
 	t := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(white)).
 		Render(fmt.Sprintf("%d", subjectLimit))

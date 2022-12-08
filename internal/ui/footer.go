@@ -64,7 +64,6 @@ func (m FooterModel) signoff() string {
 		Foreground(lipgloss.Color(white)).
 		Render("Signed-off-by")
 
-
 	n := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(white)).
 		Render(m.config.name)
