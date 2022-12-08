@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"strings"
+
 	"github.com/charmbracelet/bubbles/textarea"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -16,6 +18,10 @@ type BodyModel struct {
 type BodyConfig struct {
 	body string
 }
+
+const (
+	tabSize = 4
+)
 
 func NewBody(cfg commit.Config) BodyModel {
 	c := BodyConfig{
@@ -36,6 +42,17 @@ func (m BodyModel) Init() tea.Cmd {
 func (m BodyModel) Update(msg tea.Msg) (BodyModel, tea.Cmd) {
 	var cmd tea.Cmd
 	var cmds []tea.Cmd
+
+	if m.focus {
+		//nolint:gocritic
+		switch msg := msg.(type) {
+		case tea.KeyMsg:
+			switch msg.String() {
+			case "tab":
+				m.textArea.InsertString(strings.Repeat(" ", tabSize))
+			}
+		}
+	}
 
 	switch {
 	case m.focus && !m.textArea.Focused():
