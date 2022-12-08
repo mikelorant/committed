@@ -16,6 +16,10 @@ commits by showing you the layout in the same format as `git log`.
 
 ## Interface
 
+### Main
+
+The main view when the application is started.
+
 ```
 commit 1234567890abcdef1234567890abcdef1234567890
 Author: John Doe <john.doe@example.com>
@@ -45,6 +49,47 @@ Date:   Mon Jan 2 15:04:05 2006 -0700
     │   single space, with blank lines in between, but conventions vary here   │
     │                                                                          │
     │ - Use a hanging indent                                                   │
+    └──────────────────────────────────────────────────────────────────────────┘
+
+      Signed-off-by: John Doe <john.doe@example.com>
+
+Alt  + <enter> Commit <1> Author <2> Emoji <3> Summary <4> Body
+Ctrl +     <c> Cancel
+```
+
+### Emoji
+
+The emoji view reduces the position and lines of the body section to make space for a selector to appear. Filtering is available to narrow the choices down.
+
+```
+commit 1234567890abcdef1234567890abcdef1234567890
+Author: John Doe <john.doe@example.com>
+Date:   Mon Jan 2 15:04:05 2006 -0700
+
+    ┌───┐ ┌──────────────────────────────────────────────────────────────┐
+    │ X │ │ Capitalized, short (50 chars or less) summary                │ 47/50
+    └─┬─┘ └──────────────────────────────────────────────────────────────┘
+      └───────────────────────────────────┐
+    ┌─────────────────────────────────────┴────────────────────────────────────┐
+    │? Choose an emoji: █                                                      │
+    │> x - Improve structure / format of the code.                             │
+    │  x - Improve performance.                                                │
+    │  x - Remove code or files.                                               │
+    │  x - Fix a bug.                                                          │
+    │  x - Critical hotfix.                                                    │
+    │  x - Introduce new features.                                             │
+    │  x - Add or update documentation.                                        │
+    │  x - Deploy stuff.                                                       │
+    │  x - Add or update the UI and style files.                               │
+    └──────────────────────────────────────────────────────────────────────────┘
+
+    ┌──────────────────────────────────────────────────────────────────────────┐
+    │ More detailed explanatory text, if necessary.  Wrap it to about 72       │
+    │ characters or so.  In some contexts, the first line is treated as the    │
+    │ subject of an email and the rest of the text as the body.  The blank     │
+    │ line separating the summary from the body is critical (unless you omit   │
+    │ the body entirely); tools like rebase can get confused if you run the    │
+    │ two together.                                                            │
     └──────────────────────────────────────────────────────────────────────────┘
 
       Signed-off-by: John Doe <john.doe@example.com>
