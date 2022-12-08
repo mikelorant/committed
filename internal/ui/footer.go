@@ -60,9 +60,18 @@ func (m FooterModel) footerRow() string {
 }
 
 func (m FooterModel) signoff() string {
-	s := colour("Signed-off-by", white)
-	n := colour(m.config.name, white)
-	e := colour(m.config.email, white)
+	s := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(white)).
+		Render("Signed-off-by")
+
+
+	n := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(white)).
+		Render(m.config.name)
+
+	e := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(white)).
+		Render(m.config.email)
 
 	str := fmt.Sprintf("%s: %s <%s>", s, n, e)
 

@@ -86,8 +86,13 @@ func (m InfoModel) infoColumn() string {
 }
 
 func (m InfoModel) hash() string {
-	k := colour("commit", yellow)
-	h := colour(m.config.hash, yellow)
+	k := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(yellow)).
+		Render("commit")
+
+	h := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(yellow)).
+		Render(m.config.hash)
 
 	return lipgloss.NewStyle().
 		MarginRight(1).
@@ -95,28 +100,53 @@ func (m InfoModel) hash() string {
 }
 
 func (m InfoModel) branchRefs() string {
-	h := colour("HEAD ->", brightCyan, WithBold(true))
+	h := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(brightCyan)).
+		Bold(true).
+		Render("HEAD ->")
 
-	l := colour(m.config.localBranch, brightGreen, WithBold(true))
+	l := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(brightGreen)).
+		Bold(true).
+		Render(m.config.localBranch)
 
-	lp := colour("(", yellow)
-	rp := colour(")", yellow)
-	c := colour(",", yellow)
+	lp := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(yellow)).
+		Render("(")
+
+	rp := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(yellow)).
+		Render(")")
+
+	c := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(yellow)).
+		Render(",")
 
 	str := fmt.Sprintf("%s %s", h, l)
 
 	if m.config.remoteBranch != "" {
-		str += fmt.Sprintf("%s %s", c, colour(m.config.remoteBranch, red, WithBold(true)))
+		b := lipgloss.NewStyle().
+			Foreground(lipgloss.Color(red)).
+			Bold(true).
+			Render(m.config.remoteBranch)
+
+		str += fmt.Sprintf("%s %s", c, b)
 	}
 
 	for _, ref := range m.config.branchRefs {
 		if containsPrefixes(ref, m.config.remotes) {
-			rc := colour(ref, red, WithBold(true))
+			rc := lipgloss.NewStyle().
+				Foreground(lipgloss.Color(red)).
+				Bold(true).
+				Render(m.config.remoteBranch)
 			str += fmt.Sprintf("%s %s", c, rc)
 			continue
 		}
 
-		rc := colour(ref, brightGreen, WithBold(true))
+		rc := lipgloss.NewStyle().
+			Foreground(lipgloss.Color(brightGreen)).
+			Bold(true).
+			Render(ref)
 		str += fmt.Sprintf("%s %s", c, rc)
 	}
 
@@ -124,16 +154,26 @@ func (m InfoModel) branchRefs() string {
 }
 
 func (m InfoModel) author() string {
-	k := colour("author", white)
-	n := colour(m.config.name, white)
-	e := colour(m.config.email, white)
+	k := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(white)).
+		Render("author")
+	n := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(white)).
+		Render(m.config.name)
+	e := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(white)).
+		Render(m.config.email)
 
 	return fmt.Sprintf("%s: %s <%s>", k, n, e)
 }
 
 func (m InfoModel) date() string {
-	k := colour("date", white)
-	d := colour(m.config.date, white)
+	k := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(white)).
+		Render("date")
+	d := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(white)).
+		Render(m.config.date)
 
 	return fmt.Sprintf("%s:   %s", k, d)
 }

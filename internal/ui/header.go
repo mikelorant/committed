@@ -117,8 +117,15 @@ func (m HeaderModel) counter() string {
 		bold = true
 	}
 
-	c := colour(fmt.Sprintf("%d", i), clr, WithBold(bold))
-	t := colour(fmt.Sprintf("%d", subjectLimit), white)
+	c := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(clr)).
+		Bold(bold).
+		Render(fmt.Sprintf("%d", i))
+
+
+	t := lipgloss.NewStyle().
+		Foreground(lipgloss.Color(white)).
+		Render(fmt.Sprintf("%d", subjectLimit))
 
 	return lipgloss.NewStyle().
 		Width(5).
