@@ -3,14 +3,16 @@ package ui
 import (
 	"fmt"
 
+	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
 )
 
 type HeaderModel struct {
-	config HeaderConfig
-	focus  bool
+	config    HeaderConfig
+	focus     bool
+	textInput textinput.Model
 }
 
 type HeaderConfig struct {
@@ -29,7 +31,8 @@ func NewHeader(cfg commit.Config) HeaderModel {
 	}
 
 	return HeaderModel{
-		config: c,
+		config:    c,
+		textInput: textInput(c.summary),
 	}
 }
 
@@ -39,7 +42,22 @@ func (m HeaderModel) Init() tea.Cmd {
 
 //nolint:ireturn
 func (m HeaderModel) Update(msg tea.Msg) (HeaderModel, tea.Cmd) {
-	return m, nil
+	var cmd tea.Cmd
+	var cmds []tea.Cmd
+
+	switch {
+	case m.focus && !m.textInput.Focused():
+		cmd = m.textInput.Focus()
+		return m, cmd
+	case !m.focus && m.textInput.Focused():
+		m.textInput.Blur()
+		return m, nil
+	}
+
+	m.textInput, cmd = m.textInput.Update(msg)
+	cmds = append(cmds, cmd)
+
+	return m, tea.Batch(cmds...)
 }
 
 func (m HeaderModel) View() string {
@@ -76,8 +94,7 @@ func (m HeaderModel) summary() string {
 		Align(lipgloss.Left, lipgloss.Center).
 		Padding(0, 0, 0, 1).
 		BorderStyle(lipgloss.NormalBorder()).
-		Faint(!m.focus).
-		Render(m.config.summary)
+		Render(m.textInput.View())
 }
 
 func (m HeaderModel) counter() string {
@@ -94,4 +111,14 @@ func (m HeaderModel) counter() string {
 		Height(3).
 		Align(lipgloss.Right, lipgloss.Center).
 		Render(fmt.Sprintf("%s/%s", c, t))
+}
+
+func textInput(str string) textinput.Model {
+	ti := textinput.New()
+	ti.Prompt = ""
+	ti.Placeholder = str
+	ti.CharLimit = 72
+	ti.Width = 59
+
+	return ti
 }
