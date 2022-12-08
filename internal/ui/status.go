@@ -25,10 +25,10 @@ type shortcut struct {
 
 var altShortcuts = []shortcut{
 	{key: "enter", label: "commit"},
-	{key: "a", label: "author"},
-	{key: "e", label: "emoji"},
-	{key: "s", label: "summary"},
-	{key: "b", label: "body"},
+	{key: "1", label: "author"},
+	{key: "2", label: "emoji"},
+	{key: "3", label: "summary"},
+	{key: "4", label: "body"},
 }
 
 var ctrlShortcuts = []shortcut{

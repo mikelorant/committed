@@ -83,23 +83,23 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "ctrl+a":
+		case "alt+1":
 			if m.state == infoView {
 				return m, nil
 			}
 			m.state = infoView
-		case "ctrl+b":
-			if m.state == bodyView {
-				return m, nil
-			}
-			m.state = bodyView
-		case "ctrl+e":
+		case "alt+2":
 			fallthrough
-		case "ctrl+s":
+		case "alt+3":
 			if m.state == headerView {
 				return m, nil
 			}
 			m.state = headerView
+		case "alt+4":
+			if m.state == bodyView {
+				return m, nil
+			}
+			m.state = bodyView
 		case "enter":
 			if m.state == headerView {
 				m.state = bodyView
