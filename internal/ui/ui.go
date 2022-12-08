@@ -11,13 +11,17 @@ import (
 
 type MainModel struct {
 	state  sessionState
+	models Models
+	config commit.Config
+	err    error
+}
+
+type Models struct {
 	info   InfoModel
 	header HeaderModel
 	body   BodyModel
 	footer FooterModel
 	status StatusModel
-	config commit.Config
-	err    error
 }
 
 type sessionState int
@@ -41,12 +45,14 @@ func New(cfg commit.Config) error {
 	}
 
 	im := MainModel{
-		state:  infoView,
-		info:   NewInfo(cfg),
-		header: NewHeader(cfg),
-		body:   NewBody(cfg),
-		footer: NewFooter(cfg),
-		status: NewStatus(cfg),
+		state: headerView,
+		models: Models{
+			info:   NewInfo(cfg),
+			header: NewHeader(cfg),
+			body:   NewBody(cfg),
+			footer: NewFooter(cfg),
+			status: NewStatus(cfg),
+		},
 		config: cfg,
 	}
 
@@ -60,17 +66,16 @@ func New(cfg commit.Config) error {
 
 func (m MainModel) Init() tea.Cmd {
 	return tea.Batch(
-		m.info.Init(),
-		m.header.Init(),
-		m.body.Init(),
-		m.footer.Init(),
-		m.status.Init(),
+		m.models.info.Init(),
+		m.models.header.Init(),
+		m.models.body.Init(),
+		m.models.footer.Init(),
+		m.models.status.Init(),
 	)
 }
 
 //nolint:ireturn
 func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	//nolint:gocritic
 	var cmd tea.Cmd
 	var cmds []tea.Cmd
 
@@ -79,37 +84,64 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "ctrl+a":
+			if m.state == infoView {
+				return m, nil
+			}
 			m.state = infoView
 		case "ctrl+b":
+			if m.state == bodyView {
+				return m, nil
+			}
 			m.state = bodyView
 		case "ctrl+e":
-			m.state = headerView
+			fallthrough
 		case "ctrl+s":
+			if m.state == headerView {
+				return m, nil
+			}
 			m.state = headerView
-		}
-
-		if msg.Type == tea.KeyCtrlC {
+		case "enter":
+			if m.state == headerView {
+				m.state = bodyView
+			}
+		case "ctrl+c":
 			return m, tea.Quit
 		}
-
-		switch m.state {
-		case infoView:
-			m.info, cmd = m.info.Update(msg)
-			cmds = append(cmds, cmd)
-		case headerView:
-			m.header, cmd = m.header.Update(msg)
-			cmds = append(cmds, cmd)
-		case bodyView:
-			m.body, cmd = m.body.Update(msg)
-			cmds = append(cmds, cmd)
-		case footerView:
-			m.footer, cmd = m.footer.Update(msg)
-			cmds = append(cmds, cmd)
-		case statusView:
-			m.status, cmd = m.status.Update(msg)
-			cmds = append(cmds, cmd)
-		}
 	}
+
+	m.models.info.focus = false
+	m.models.header.focus = false
+	m.models.body.focus = false
+	m.models.footer.focus = false
+	m.models.status.focus = false
+
+	switch m.state {
+	case infoView:
+		m.models.info.focus = true
+	case headerView:
+		m.models.header.focus = true
+	case bodyView:
+		m.models.body.focus = true
+	case footerView:
+		m.models.footer.focus = true
+	case statusView:
+		m.models.status.focus = true
+	}
+
+	m.models.info, cmd = m.models.info.Update(msg)
+	cmds = append(cmds, cmd)
+
+	m.models.header, cmd = m.models.header.Update(msg)
+	cmds = append(cmds, cmd)
+
+	m.models.body, cmd = m.models.body.Update(msg)
+	cmds = append(cmds, cmd)
+
+	m.models.footer, cmd = m.models.footer.Update(msg)
+	cmds = append(cmds, cmd)
+
+	m.models.status, cmd = m.models.status.Update(msg)
+	cmds = append(cmds, cmd)
 
 	return m, tea.Batch(cmds...)
 }
@@ -119,17 +151,11 @@ func (m MainModel) View() string {
 		return fmt.Sprintf("unable to render view: %s", m.err)
 	}
 
-	m.info.focus = m.state == infoView
-	m.header.focus = m.state == headerView
-	m.body.focus = m.state == bodyView
-	m.footer.focus = m.state == footerView
-	m.status.focus = m.state == statusView
-
 	return lipgloss.JoinVertical(lipgloss.Top,
-		m.info.View(),
-		m.header.View(),
-		m.body.View(),
-		m.footer.View(),
-		m.status.View(),
+		m.models.info.View(),
+		m.models.header.View(),
+		m.models.body.View(),
+		m.models.footer.View(),
+		m.models.status.View(),
 	)
 }

@@ -33,14 +33,6 @@ func (m BodyModel) Init() tea.Cmd {
 
 //nolint:ireturn
 func (m BodyModel) Update(msg tea.Msg) (BodyModel, tea.Cmd) {
-	//nolint:gocritic
-	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		if msg.Type == tea.KeyCtrlC {
-			return m, tea.Quit
-		}
-	}
-
 	return m, nil
 }
 

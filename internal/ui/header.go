@@ -39,22 +39,10 @@ func (m HeaderModel) Init() tea.Cmd {
 
 //nolint:ireturn
 func (m HeaderModel) Update(msg tea.Msg) (HeaderModel, tea.Cmd) {
-	//nolint:gocritic
-	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		if msg.Type == tea.KeyCtrlC {
-			return m, tea.Quit
-		}
-	}
-
 	return m, nil
 }
 
 func (m HeaderModel) View() string {
-	return m.render()
-}
-
-func (m HeaderModel) render() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
 		Render(m.headerRow())
