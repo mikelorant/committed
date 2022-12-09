@@ -2,16 +2,19 @@ package ui
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/emoji"
 )
 
 type HeaderModel struct {
 	config    HeaderConfig
 	state     State
+	height    int
 	textInput textinput.Model
 }
 
@@ -20,8 +23,24 @@ type HeaderConfig struct {
 	summary string
 }
 
+type connectorStyle string
+
 const (
 	subjectLimit int = 50
+
+	headerDefault = 3
+	headerExpand  = 16
+
+	connecterTopRight    connectorStyle = "└"
+	connectopTopLeft     connectorStyle = "┘"
+	connectorBottomLeft  connectorStyle = "┐"
+	connectorBottomRight connectorStyle = "┌"
+	connectorLeftTop     connectorStyle = "└"
+	connectorLeftBottom  connectorStyle = "┌"
+	connectorRightBottom connectorStyle = "┐"
+	connectorRightTop    connectorStyle = "┘"
+	connectorHorizonal   connectorStyle = "─"
+	connectorVertical    connectorStyle = "│"
 )
 
 func NewHeader(cfg commit.Config) HeaderModel {
@@ -32,6 +51,7 @@ func NewHeader(cfg commit.Config) HeaderModel {
 
 	return HeaderModel{
 		config:    c,
+		height:    headerDefault,
 		textInput: textInput(c.summary),
 	}
 }
@@ -44,6 +64,13 @@ func (m HeaderModel) Init() tea.Cmd {
 func (m HeaderModel) Update(msg tea.Msg) (HeaderModel, tea.Cmd) {
 	var cmd tea.Cmd
 	var cmds []tea.Cmd
+
+	switch m.state.display {
+	case expandedDisplay:
+		m.height = headerExpand
+	default:
+		m.height = headerDefault
+	}
 
 	switch {
 	case m.state.component == summaryComponent && !m.textInput.Focused():
@@ -62,17 +89,33 @@ func (m HeaderModel) Update(msg tea.Msg) (HeaderModel, tea.Cmd) {
 
 func (m HeaderModel) View() string {
 	return lipgloss.NewStyle().
-		MarginBottom(1).
 		Render(m.headerRow())
 }
 
 func (m HeaderModel) headerRow() string {
-	return lipgloss.JoinHorizontal(
+	subject := lipgloss.JoinHorizontal(
 		lipgloss.Top,
 		m.emoji(),
 		m.summary(),
 		m.counter(),
 	)
+
+	if m.state.display == defaultDisplay {
+		return lipgloss.NewStyle().
+			Height(m.height).
+			Render(subject)
+	}
+
+	expand := lipgloss.JoinVertical(
+		lipgloss.Top,
+		subject,
+		m.emojiChooserConnector(),
+		m.emojiChooser(),
+	)
+
+	return lipgloss.NewStyle().
+		Height(m.height).
+		Render(expand)
 }
 
 func (m HeaderModel) emoji() string {
@@ -133,6 +176,23 @@ func (m HeaderModel) counter() string {
 		Render(fmt.Sprintf("%s/%s", c, t))
 }
 
+func (m HeaderModel) emojiChooser() string {
+	return lipgloss.NewStyle().
+		Width(74).
+		Height(10).
+		MarginLeft(4).
+		BorderStyle(lipgloss.NormalBorder()).
+		Render(emoji.Emoji())
+}
+
+func (m HeaderModel) emojiChooserConnector() string {
+	c := connector(connecterTopRight, connectorHorizonal, connectorRightBottom, 35)
+
+	return lipgloss.NewStyle().
+		MarginLeft(6).
+		Render(c)
+}
+
 func textInput(str string) textinput.Model {
 	ti := textinput.New()
 	ti.Prompt = ""
@@ -141,4 +201,8 @@ func textInput(str string) textinput.Model {
 	ti.Width = 59
 
 	return ti
+}
+
+func connector(start, axes, end connectorStyle, len int) string {
+	return fmt.Sprintf("%v%v%v", start, strings.Repeat(string(axes), len), end)
 }

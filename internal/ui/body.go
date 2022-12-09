@@ -12,6 +12,7 @@ import (
 type BodyModel struct {
 	config   BodyConfig
 	state    State
+	height   int
 	textArea textarea.Model
 }
 
@@ -21,6 +22,9 @@ type BodyConfig struct {
 
 const (
 	tabSize = 4
+
+	bodyDefault = 19
+	bodyCompact = 6
 )
 
 func NewBody(cfg commit.Config) BodyModel {
@@ -30,6 +34,7 @@ func NewBody(cfg commit.Config) BodyModel {
 
 	return BodyModel{
 		config:   c,
+		height:   bodyDefault,
 		textArea: textArea(c.body),
 	}
 }
@@ -54,6 +59,13 @@ func (m BodyModel) Update(msg tea.Msg) (BodyModel, tea.Cmd) {
 		}
 	}
 
+	switch m.state.display {
+	case compactDisplay:
+		m.height = bodyCompact
+	default:
+		m.height = bodyDefault
+	}
+
 	switch {
 	case m.state.component == bodyComponent && !m.textArea.Focused():
 		cmd = m.textArea.Focus()
@@ -76,9 +88,12 @@ func (m BodyModel) View() string {
 }
 
 func (m *BodyModel) body() string {
+	m.textArea.SetHeight(m.height)
+
 	return lipgloss.NewStyle().
 		Width(74).
-		Height(19).
+		Height(m.height).
+		MarginTop(1).
 		MarginLeft(4).
 		Align(lipgloss.Left, lipgloss.Top).
 		BorderStyle(lipgloss.NormalBorder()).
@@ -91,7 +106,6 @@ func textArea(str string) textarea.Model {
 	ta.Placeholder = str
 	ta.Prompt = ""
 	ta.ShowLineNumbers = false
-	ta.SetHeight(19)
 	ta.SetWidth(72)
 
 	return ta

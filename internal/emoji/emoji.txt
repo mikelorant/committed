@@ -1,0 +1,10 @@
+? Choose an emoji: █
+> x - Improve structure / format of the code.
+  x - Improve performance.
+  x - Remove code or files.
+  x - Fix a bug.
+  x - Critical hotfix.
+  x - Introduce new features.
+  x - Add or update documentation.
+  x - Deploy stuff.
+  x - Add or update the UI and style files.
