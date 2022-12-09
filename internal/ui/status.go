@@ -13,7 +13,7 @@ import (
 
 type StatusModel struct {
 	config StatusConfig
-	focus  bool
+	state  State
 }
 
 type StatusConfig struct{}

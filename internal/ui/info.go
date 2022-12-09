@@ -12,7 +12,7 @@ import (
 
 type InfoModel struct {
 	config InfoConfig
-	focus  bool
+	state  State
 }
 
 type InfoConfig struct {

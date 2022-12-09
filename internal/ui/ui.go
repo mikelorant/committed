@@ -10,7 +10,7 @@ import (
 )
 
 type MainModel struct {
-	state  sessionState
+	state  component
 	models Models
 	config commit.Config
 	err    error
@@ -24,14 +24,28 @@ type Models struct {
 	status StatusModel
 }
 
-type sessionState int
+type State struct {
+	component component
+	display   display
+}
+
+type (
+	component int
+	display   int
+)
 
 const (
-	infoView sessionState = iota
-	headerView
-	bodyView
-	footerView
-	statusView
+	emptyComponent component = iota
+	authorComponent
+	emojiComponent
+	summaryComponent
+	bodyComponent
+)
+
+const (
+	defaultDisplay display = iota
+	compactDisplay
+	expandedDisplay
 )
 
 func New(cfg commit.Config) error {
@@ -45,7 +59,7 @@ func New(cfg commit.Config) error {
 	}
 
 	im := MainModel{
-		state: headerView,
+		state: summaryComponent,
 		models: Models{
 			info:   NewInfo(cfg),
 			header: NewHeader(cfg),
@@ -76,72 +90,64 @@ func (m MainModel) Init() tea.Cmd {
 
 //nolint:ireturn
 func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	var cmd tea.Cmd
-	var cmds []tea.Cmd
-
 	//nolint:gocritic
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "alt+1":
-			if m.state == infoView {
+			if m.state == authorComponent {
 				return m, nil
 			}
-			m.state = infoView
+			m.state = authorComponent
 		case "alt+2":
-			fallthrough
+			if m.state == emojiComponent {
+				return m, nil
+			}
+			m.state = emojiComponent
 		case "alt+3":
-			if m.state == headerView {
+			if m.state == summaryComponent {
 				return m, nil
 			}
-			m.state = headerView
+			m.state = summaryComponent
 		case "alt+4":
-			if m.state == bodyView {
+			if m.state == bodyComponent {
 				return m, nil
 			}
-			m.state = bodyView
+			m.state = bodyComponent
 		case "enter":
-			if m.state == headerView {
-				m.state = bodyView
+			if m.state == summaryComponent {
+				m.state = bodyComponent
 			}
 		case "ctrl+c":
 			return m, tea.Quit
 		}
 	}
 
-	m.models.info.focus = false
-	m.models.header.focus = false
-	m.models.body.focus = false
-	m.models.footer.focus = false
-	m.models.status.focus = false
+	m.models.info.state = State{}
+	m.models.header.state = State{}
+	m.models.body.state = State{}
+	m.models.footer.state = State{}
+	m.models.status.state = State{}
 
 	switch m.state {
-	case infoView:
-		m.models.info.focus = true
-	case headerView:
-		m.models.header.focus = true
-	case bodyView:
-		m.models.body.focus = true
-	case footerView:
-		m.models.footer.focus = true
-	case statusView:
-		m.models.status.focus = true
+	case authorComponent:
+		m.models.header.state.component = authorComponent
+	case emojiComponent:
+		m.models.header.state.component = emojiComponent
+		m.models.header.state.display = expandedDisplay
+		m.models.body.state.display = compactDisplay
+	case summaryComponent:
+		m.models.header.state.component = summaryComponent
+	case bodyComponent:
+		m.models.body.state.component = bodyComponent
 	}
 
-	m.models.info, cmd = m.models.info.Update(msg)
-	cmds = append(cmds, cmd)
-
-	m.models.header, cmd = m.models.header.Update(msg)
-	cmds = append(cmds, cmd)
-
-	m.models.body, cmd = m.models.body.Update(msg)
-	cmds = append(cmds, cmd)
-
-	m.models.footer, cmd = m.models.footer.Update(msg)
-	cmds = append(cmds, cmd)
-
-	m.models.status, cmd = m.models.status.Update(msg)
-	cmds = append(cmds, cmd)
+	cmds := make([]tea.Cmd, 5)
+	m.models.info, cmds[0] = m.models.info.Update(msg)
+	m.models.header, cmds[1] = m.models.header.Update(msg)
+	m.models.body, cmds[2] = m.models.body.Update(msg)
+	m.models.footer, cmds[3] = m.models.footer.Update(msg)
+	m.models.status, cmds[4] = m.models.status.Update(msg)
 
 	return m, tea.Batch(cmds...)
 }

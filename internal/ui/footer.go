@@ -10,7 +10,7 @@ import (
 
 type FooterModel struct {
 	config FooterConfig
-	focus  bool
+	state  State
 }
 
 type FooterConfig struct {

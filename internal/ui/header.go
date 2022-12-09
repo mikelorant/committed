@@ -11,7 +11,7 @@ import (
 
 type HeaderModel struct {
 	config    HeaderConfig
-	focus     bool
+	state     State
 	textInput textinput.Model
 }
 
@@ -46,10 +46,10 @@ func (m HeaderModel) Update(msg tea.Msg) (HeaderModel, tea.Cmd) {
 	var cmds []tea.Cmd
 
 	switch {
-	case m.focus && !m.textInput.Focused():
+	case m.state.component == summaryComponent && !m.textInput.Focused():
 		cmd = m.textInput.Focus()
 		return m, cmd
-	case !m.focus && m.textInput.Focused():
+	case m.state.component != summaryComponent && m.textInput.Focused():
 		m.textInput.Blur()
 		return m, nil
 	}

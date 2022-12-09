@@ -11,7 +11,7 @@ import (
 
 type BodyModel struct {
 	config   BodyConfig
-	focus    bool
+	state    State
 	textArea textarea.Model
 }
 
@@ -43,7 +43,7 @@ func (m BodyModel) Update(msg tea.Msg) (BodyModel, tea.Cmd) {
 	var cmd tea.Cmd
 	var cmds []tea.Cmd
 
-	if m.focus {
+	if m.state.component == bodyComponent {
 		//nolint:gocritic
 		switch msg := msg.(type) {
 		case tea.KeyMsg:
@@ -55,10 +55,10 @@ func (m BodyModel) Update(msg tea.Msg) (BodyModel, tea.Cmd) {
 	}
 
 	switch {
-	case m.focus && !m.textArea.Focused():
+	case m.state.component == bodyComponent && !m.textArea.Focused():
 		cmd = m.textArea.Focus()
 		return m, cmd
-	case !m.focus && m.textArea.Focused():
+	case m.state.component != bodyComponent && m.textArea.Focused():
 		m.textArea.Blur()
 		return m, nil
 	}
