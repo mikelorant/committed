@@ -163,7 +163,7 @@ func shortcutColumnLabels(alt, ctrl string) string {
 	labels := []string{alt, ctrl}
 	w := sliceMaxLen(labels)
 
-	ss := []string{}
+	var ss []string
 	for _, label := range labels {
 		if label == "" {
 			ss = append(ss, "")
