@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+
+	"github.com/mattn/go-runewidth"
 )
 
 type Emoji struct {
@@ -37,7 +39,12 @@ func New() ([]Emoji, error) {
 }
 
 func (e Emoji) Title() string {
-	return fmt.Sprintf("%s - %s", e.EmojiCharacter, e.EmojiDescription)
+	var space string
+	if runewidth.StringWidth(e.Character()) == 1 {
+		space = " "
+	}
+
+	return fmt.Sprintf("%s%s - %s", e.EmojiCharacter, space, e.EmojiDescription)
 }
 
 func (e Emoji) Description() string { return e.EmojiDescription }
