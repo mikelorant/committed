@@ -10,6 +10,7 @@ require (
 	github.com/go-git/go-git-fixtures/v4 v4.3.1
 	github.com/go-git/go-git/v5 v5.5.0
 	github.com/ivanpirog/coloredcobra v1.0.1
+	github.com/lithammer/fuzzysearch v1.1.5
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/text v0.5.0
@@ -47,6 +48,7 @@ require (
 	github.com/pjbgf/sha1cd v0.2.3 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rivo/uniseg v0.4.3 // indirect
+	github.com/sahilm/fuzzy v0.1.0 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/skeema/knownhosts v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect

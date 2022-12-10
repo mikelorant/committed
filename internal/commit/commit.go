@@ -11,7 +11,6 @@ type Config struct {
 	Hash         string
 	Name         string
 	Email        string
-	Emoji        string
 	Summary      string
 	Body         string
 	LocalBranch  string
@@ -39,7 +38,6 @@ func New() (Config, error) {
 		Hash:         mockHash,
 		Name:         r.User.Name,
 		Email:        r.User.Email,
-		Emoji:        mockEmoji,
 		Summary:      mockSummary,
 		Body:         message,
 		LocalBranch:  r.Branch.Local,

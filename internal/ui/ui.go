@@ -59,7 +59,7 @@ func New(cfg commit.Config) error {
 	}
 
 	im := MainModel{
-		state: summaryComponent,
+		state: emojiComponent,
 		models: Models{
 			info:   NewInfo(cfg),
 			header: NewHeader(cfg),
@@ -115,6 +115,11 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			m.state = bodyComponent
 		case "enter":
+			if m.state == emojiComponent {
+				m.models.header, _ = m.models.header.Update(msg)
+				m.state = summaryComponent
+				break
+			}
 			if m.state == summaryComponent {
 				m.state = bodyComponent
 			}
