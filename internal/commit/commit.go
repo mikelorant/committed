@@ -1,14 +1,11 @@
 package commit
 
 import (
-	"bytes"
 	_ "embed"
 	"fmt"
-	"log"
-	"strings"
-	"text/template"
 
 	"github.com/mikelorant/committed/internal/repository"
+	"gopkg.in/alessio/shellescape.v1"
 )
 
 type Commit struct {
@@ -19,6 +16,7 @@ type Commit struct {
 	Summary string
 	Body    string
 	Footer  string
+	cmd     []string
 }
 
 type Config struct {
@@ -36,8 +34,9 @@ type Config struct {
 //go:embed message.txt
 var message string
 
-//go:embed gitcommit.gotmpl
-var gitCommand string
+var commitOptions = []string{
+	"--dry-run",
+}
 
 const (
 	mockHash    string = "1234567890abcdef1234567890abcdef1234567890"
@@ -69,18 +68,30 @@ func New() (*Commit, error) {
 }
 
 func (c *Commit) Create() error {
-	tmpl, err := template.New("commit").Parse(gitCommand)
-	if err != nil {
-		return fmt.Errorf("unable to parse template: %w", err)
+	var cmd []string
+
+	cmd = append(cmd, "git", "commit")
+
+	if c.Name != "" && c.Email != "" {
+		author := fmt.Sprintf("%s <%s>", c.Name, c.Email)
+		cmd = append(cmd, "--author", shellescape.Quote(author))
 	}
 
-	var buf bytes.Buffer
-	if err := tmpl.Execute(&buf, c); err != nil {
-		return fmt.Errorf("unable to execute template: %w", err)
+	var subject string
+	if c.Emoji != "" {
+		subject = fmt.Sprintf("%s %s", c.Emoji, c.Summary)
+	} else {
+		subject = c.Summary
+	}
+	cmd = append(cmd, "--message", shellescape.Quote(subject))
+
+	if c.Body != "" {
+		cmd = append(cmd, "--message", shellescape.Quote(c.Body))
 	}
 
-	out := strings.ReplaceAll(buf.String(), "\n", " ")
-	log.Println(out)
+	cmd = append(cmd, commitOptions...)
+
+	c.cmd = cmd
 
 	return nil
 }
