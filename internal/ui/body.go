@@ -89,6 +89,10 @@ func (m BodyModel) View() string {
 		Render(m.body())
 }
 
+func (m BodyModel) Body() string {
+	return m.textArea.Value()
+}
+
 func (m *BodyModel) body() string {
 	m.textArea.SetHeight(m.height)
 

@@ -13,6 +13,7 @@ type MainModel struct {
 	state  component
 	models Models
 	config commit.Config
+	result Result
 	err    error
 }
 
@@ -27,6 +28,16 @@ type Models struct {
 type State struct {
 	component component
 	display   display
+}
+
+type Result struct {
+	Commit  bool
+	Name    string
+	Email   string
+	Emoji   string
+	Summary string
+	Body    string
+	Footer  string
 }
 
 type (
@@ -48,12 +59,12 @@ const (
 	expandedDisplay
 )
 
-func New(cfg commit.Config) error {
+func New(cfg commit.Config) (Result, error) {
 	logfilePath := os.Getenv("BUBBLETEA_LOG")
 	if logfilePath != "" {
 		fh, err := tea.LogToFile(logfilePath, "committed")
 		if err != nil {
-			return fmt.Errorf("unable to log to file: %w", err)
+			return Result{}, fmt.Errorf("unable to log to file: %w", err)
 		}
 		defer fh.Close()
 	}
@@ -71,11 +82,12 @@ func New(cfg commit.Config) error {
 	}
 
 	p := tea.NewProgram(im)
-	if _, err := p.Run(); err != nil {
-		return fmt.Errorf("unable to run program: %w", err)
+	m, err := p.Run()
+	if err != nil {
+		return Result{}, fmt.Errorf("unable to run program: %w", err)
 	}
 
-	return nil
+	return m.(MainModel).result, nil
 }
 
 func (m MainModel) Init() tea.Cmd {
@@ -122,6 +134,18 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			if m.state == summaryComponent {
 				m.state = bodyComponent
+			}
+		case "alt+enter":
+			m.result = Result{
+				Commit:  true,
+				Name:    m.models.info.Name(),
+				Email:   m.models.info.Email(),
+				Emoji:   m.models.header.EmojiShortCode(),
+				Summary: m.models.header.Summary(),
+				Body:    m.models.body.Body(),
+			}
+			if m.validate() {
+				return m, tea.Quit
 			}
 		case "tab":
 			switch m.state {
@@ -187,4 +211,13 @@ func (m MainModel) View() string {
 		m.models.footer.View(),
 		m.models.status.View(),
 	)
+}
+
+func (m MainModel) validate() bool {
+	//nolint:gocritic
+	switch {
+	case m.result.Summary == "":
+		return false
+	}
+	return true
 }

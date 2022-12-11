@@ -1,0 +1,13 @@
+git commit
+{{- if and .Name .Email }}
+--author="{{ .Name }} <{{ .Email }}>"
+{{- end }}
+{{- if .Emoji }}
+--message="{{ .Emoji }} {{ .Summary }}"
+{{- else }}
+--message="{{ .Summary }}"
+{{- end }}
+{{- if .Body }}
+--message "{{ .Body }}"
+{{- end }}
+--dry-run

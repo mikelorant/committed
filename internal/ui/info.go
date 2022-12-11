@@ -70,6 +70,14 @@ func (m InfoModel) View() string {
 		Render(m.infoColumn())
 }
 
+func (m InfoModel) Name() string {
+	return m.config.name
+}
+
+func (m InfoModel) Email() string {
+	return m.config.email
+}
+
 func (m InfoModel) infoColumn() string {
 	hashBranchRefs := lipgloss.JoinHorizontal(
 		lipgloss.Top,

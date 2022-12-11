@@ -161,6 +161,14 @@ func (m HeaderModel) View() string {
 		Render(m.headerRow())
 }
 
+func (m HeaderModel) EmojiShortCode() string {
+	return m.config.emoji.ShortCode()
+}
+
+func (m HeaderModel) Summary() string {
+	return m.textInput.Value()
+}
+
 func (m HeaderModel) headerRow() string {
 	subject := lipgloss.JoinHorizontal(
 		lipgloss.Top,
