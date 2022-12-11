@@ -123,6 +123,24 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.state == summaryComponent {
 				m.state = bodyComponent
 			}
+		case "tab":
+			switch m.state {
+			case authorComponent:
+				m.state = emojiComponent
+			case emojiComponent:
+				m.state = summaryComponent
+			case summaryComponent:
+				m.state = bodyComponent
+			}
+		case "shift+tab":
+			switch m.state {
+			case emojiComponent:
+				m.state = authorComponent
+			case summaryComponent:
+				m.state = emojiComponent
+			case bodyComponent:
+				m.state = summaryComponent
+			}
 		case "ctrl+c":
 			return m, tea.Quit
 		}

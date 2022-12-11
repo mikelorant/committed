@@ -54,7 +54,9 @@ func (m BodyModel) Update(msg tea.Msg) (BodyModel, tea.Cmd) {
 		case tea.KeyMsg:
 			switch msg.String() {
 			case "tab":
-				m.textArea.InsertString(strings.Repeat(" ", tabSize))
+				if m.textArea.Focused() {
+					m.textArea.InsertString(strings.Repeat(" ", tabSize))
+				}
 			}
 		}
 	}
