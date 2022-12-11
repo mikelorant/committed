@@ -1,9 +1,14 @@
 package commit
 
 import (
+	"bytes"
 	_ "embed"
 	"fmt"
+	"io"
+	"os/exec"
+	"strings"
 
+	"github.com/creack/pty"
 	"github.com/mikelorant/committed/internal/repository"
 	"gopkg.in/alessio/shellescape.v1"
 )
@@ -34,9 +39,14 @@ type Config struct {
 //go:embed message.txt
 var message string
 
-var commitOptions = []string{
-	"--dry-run",
-}
+var (
+	commitCommand = "git"
+	commitOptions = []string{
+		"--dry-run",
+	}
+)
+
+var exitError *exec.ExitError
 
 const (
 	mockHash    string = "1234567890abcdef1234567890abcdef1234567890"
@@ -68,9 +78,18 @@ func New() (*Commit, error) {
 }
 
 func (c *Commit) Create() error {
+	c.build()
+	if err := c.exec(); err != nil {
+		return fmt.Errorf("unable to commit: %w", err)
+	}
+
+	return nil
+}
+
+func (c *Commit) build() {
 	var cmd []string
 
-	cmd = append(cmd, "git", "commit")
+	cmd = append(cmd, "commit")
 
 	if c.Name != "" && c.Email != "" {
 		author := fmt.Sprintf("%s <%s>", c.Name, c.Email)
@@ -92,6 +111,26 @@ func (c *Commit) Create() error {
 	cmd = append(cmd, commitOptions...)
 
 	c.cmd = cmd
+}
+
+func (c *Commit) exec() error {
+	cmd := exec.Command(commitCommand, c.cmd...)
+	fh, err := pty.Start(cmd)
+	if err != nil {
+		return fmt.Errorf("unable to exec commit command: %w", err)
+	}
+	defer fh.Close()
+
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, fh)
+	if err != nil {
+		return fmt.Errorf("unable to copy commit output: %w", err)
+	}
+
+	out := buf.String()
+
+	fmt.Println()
+	fmt.Println(strings.TrimSpace(string(out)))
 
 	return nil
 }
