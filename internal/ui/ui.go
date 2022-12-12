@@ -7,6 +7,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/ui/body"
 )
 
 type MainModel struct {
@@ -20,7 +21,7 @@ type MainModel struct {
 type Models struct {
 	info   InfoModel
 	header HeaderModel
-	body   BodyModel
+	body   body.Model
 	footer FooterModel
 	status StatusModel
 }
@@ -74,7 +75,7 @@ func New(cfg commit.Config) (Result, error) {
 		models: Models{
 			info:   NewInfo(cfg),
 			header: NewHeader(cfg),
-			body:   NewBody(cfg),
+			body:   body.New(cfg),
 			footer: NewFooter(cfg),
 			status: NewStatus(cfg),
 		},
@@ -142,7 +143,7 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				Email:   m.models.info.Email(),
 				Emoji:   m.models.header.EmojiShortCode(),
 				Summary: m.models.header.Summary(),
-				Body:    m.models.body.Body(),
+				Body:    m.models.body.Value(),
 			}
 			if m.validate() {
 				return m, tea.Quit
@@ -172,7 +173,8 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	m.models.info.state = State{}
 	m.models.header.state = State{}
-	m.models.body.state = State{}
+	m.models.body.Blur()
+	m.models.body.Compact = false
 	m.models.footer.state = State{}
 	m.models.status.state = State{}
 
@@ -182,11 +184,11 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case emojiComponent:
 		m.models.header.state.component = emojiComponent
 		m.models.header.state.display = expandedDisplay
-		m.models.body.state.display = compactDisplay
+		m.models.body.Compact = true
 	case summaryComponent:
 		m.models.header.state.component = summaryComponent
 	case bodyComponent:
-		m.models.body.state.component = bodyComponent
+		m.models.body.Focus()
 	}
 
 	cmds := make([]tea.Cmd, 5)
