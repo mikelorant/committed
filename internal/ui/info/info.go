@@ -1,4 +1,4 @@
-package ui
+package info
 
 import (
 	"fmt"
@@ -10,75 +10,67 @@ import (
 	"github.com/mikelorant/committed/internal/commit"
 )
 
-type InfoModel struct {
-	config InfoConfig
-	state  State
-}
-
-type InfoConfig struct {
-	hash         string
-	localBranch  string
-	remoteBranch string
-	branchRefs   []string
-	remotes      []string
-	name         string
-	email        string
-	date         string
+type Model struct {
+	Hash         string
+	LocalBranch  string
+	RemoteBranch string
+	BranchRefs   []string
+	Remotes      []string
+	Name         string
+	Email        string
+	Date         string
 }
 
 const (
 	dateTimeFormat string = "Mon Jan 2 15:04:05 2006 -0700"
+
+	black         = "0"
+	red           = "1"
+	green         = "2"
+	yellow        = "3"
+	blue          = "4"
+	magenta       = "5"
+	cyan          = "6"
+	white         = "7"
+	brightBlack   = "8"
+	brightRed     = "9"
+	brightGreen   = "10"
+	brightYellow  = "11"
+	brightBlue    = "12"
+	brightMagenta = "13"
+	brightCyan    = "14"
+	brightWhite   = "15"
 )
 
-func NewInfo(cfg commit.Config) InfoModel {
-	c := InfoConfig{
-		hash:         cfg.Hash,
-		localBranch:  cfg.LocalBranch,
-		remoteBranch: cfg.RemoteBranch,
-		branchRefs:   cfg.BranchRefs,
-		remotes:      cfg.Remotes,
-		name:         cfg.Name,
-		email:        cfg.Email,
-		date:         time.Now().Format(dateTimeFormat),
-	}
-
-	return InfoModel{
-		config: c,
+func New(cfg commit.Config) Model {
+	return Model{
+		Hash:         cfg.Hash,
+		LocalBranch:  cfg.LocalBranch,
+		RemoteBranch: cfg.RemoteBranch,
+		BranchRefs:   cfg.BranchRefs,
+		Remotes:      cfg.Remotes,
+		Name:         cfg.Name,
+		Email:        cfg.Email,
+		Date:         time.Now().Format(dateTimeFormat),
 	}
 }
 
-func (m InfoModel) Init() tea.Cmd {
+func (m Model) Init() tea.Cmd {
 	return nil
 }
 
 //nolint:ireturn
-func (m InfoModel) Update(msg tea.Msg) (InfoModel, tea.Cmd) {
-	//nolint:gocritic
-	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		if msg.Type == tea.KeyCtrlC {
-			return m, tea.Quit
-		}
-	}
-
+func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m InfoModel) View() string {
+func (m Model) View() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
 		Render(m.infoColumn())
 }
 
-func (m InfoModel) Name() string {
-	return m.config.name
-}
-
-func (m InfoModel) Email() string {
-	return m.config.email
-}
-
-func (m InfoModel) infoColumn() string {
+func (m Model) infoColumn() string {
 	hashBranchRefs := lipgloss.JoinHorizontal(
 		lipgloss.Top,
 		m.hash(),
@@ -93,21 +85,21 @@ func (m InfoModel) infoColumn() string {
 	)
 }
 
-func (m InfoModel) hash() string {
+func (m Model) hash() string {
 	k := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(yellow)).
 		Render("commit")
 
 	h := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(yellow)).
-		Render(m.config.hash)
+		Render(m.Hash)
 
 	return lipgloss.NewStyle().
 		MarginRight(1).
 		Render(fmt.Sprintf("%s %s", k, h))
 }
 
-func (m InfoModel) branchRefs() string {
+func (m Model) branchRefs() string {
 	h := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(brightCyan)).
 		Bold(true).
@@ -116,7 +108,7 @@ func (m InfoModel) branchRefs() string {
 	l := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(brightGreen)).
 		Bold(true).
-		Render(m.config.localBranch)
+		Render(m.LocalBranch)
 
 	lp := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(yellow)).
@@ -132,21 +124,21 @@ func (m InfoModel) branchRefs() string {
 
 	str := fmt.Sprintf("%s %s", h, l)
 
-	if m.config.remoteBranch != "" {
+	if m.RemoteBranch != "" {
 		b := lipgloss.NewStyle().
 			Foreground(lipgloss.Color(red)).
 			Bold(true).
-			Render(m.config.remoteBranch)
+			Render(m.RemoteBranch)
 
 		str += fmt.Sprintf("%s %s", c, b)
 	}
 
-	for _, ref := range m.config.branchRefs {
-		if containsPrefixes(ref, m.config.remotes) {
+	for _, ref := range m.BranchRefs {
+		if containsPrefixes(ref, m.Remotes) {
 			rc := lipgloss.NewStyle().
 				Foreground(lipgloss.Color(red)).
 				Bold(true).
-				Render(m.config.remoteBranch)
+				Render(m.RemoteBranch)
 			str += fmt.Sprintf("%s %s", c, rc)
 			continue
 		}
@@ -161,27 +153,27 @@ func (m InfoModel) branchRefs() string {
 	return fmt.Sprintf("%s%s%s", lp, str, rp)
 }
 
-func (m InfoModel) author() string {
+func (m Model) author() string {
 	k := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(white)).
 		Render("author")
 	n := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(white)).
-		Render(m.config.name)
+		Render(m.Name)
 	e := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(white)).
-		Render(m.config.email)
+		Render(m.Email)
 
 	return fmt.Sprintf("%s: %s <%s>", k, n, e)
 }
 
-func (m InfoModel) date() string {
+func (m Model) date() string {
 	k := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(white)).
 		Render("date")
 	d := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(white)).
-		Render(m.config.date)
+		Render(m.Date)
 
 	return fmt.Sprintf("%s:   %s", k, d)
 }

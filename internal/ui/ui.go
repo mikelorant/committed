@@ -9,6 +9,7 @@ import (
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/ui/body"
 	"github.com/mikelorant/committed/internal/ui/footer"
+	"github.com/mikelorant/committed/internal/ui/info"
 	"github.com/mikelorant/committed/internal/ui/status"
 )
 
@@ -21,7 +22,7 @@ type MainModel struct {
 }
 
 type Models struct {
-	info   InfoModel
+	info   info.Model
 	header HeaderModel
 	body   body.Model
 	footer footer.Model
@@ -75,7 +76,7 @@ func New(cfg commit.Config) (Result, error) {
 	im := MainModel{
 		state: emojiComponent,
 		models: Models{
-			info:   NewInfo(cfg),
+			info:   info.New(cfg),
 			header: NewHeader(cfg),
 			body:   body.New(cfg),
 			footer: footer.New(cfg),
@@ -141,8 +142,8 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "alt+enter":
 			m.result = Result{
 				Commit:  true,
-				Name:    m.models.info.Name(),
-				Email:   m.models.info.Email(),
+				Name:    m.models.info.Name,
+				Email:   m.models.info.Email,
 				Emoji:   m.models.header.EmojiShortCode(),
 				Summary: m.models.header.Summary(),
 				Body:    m.models.body.Value(),
@@ -173,14 +174,11 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
-	m.models.info.state = State{}
 	m.models.header.state = State{}
 	m.models.body.Blur()
 	m.models.body.Compact = false
 
 	switch m.state {
-	case authorComponent:
-		m.models.header.state.component = authorComponent
 	case emojiComponent:
 		m.models.header.state.component = emojiComponent
 		m.models.header.state.display = expandedDisplay
