@@ -8,6 +8,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/ui/body"
+	"github.com/mikelorant/committed/internal/ui/footer"
 	"github.com/mikelorant/committed/internal/ui/status"
 )
 
@@ -23,7 +24,7 @@ type Models struct {
 	info   InfoModel
 	header HeaderModel
 	body   body.Model
-	footer FooterModel
+	footer footer.Model
 	status status.Model
 }
 
@@ -77,7 +78,7 @@ func New(cfg commit.Config) (Result, error) {
 			info:   NewInfo(cfg),
 			header: NewHeader(cfg),
 			body:   body.New(cfg),
-			footer: NewFooter(cfg),
+			footer: footer.New(cfg),
 			status: status.New(),
 		},
 		config: cfg,
@@ -176,7 +177,6 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	m.models.header.state = State{}
 	m.models.body.Blur()
 	m.models.body.Compact = false
-	m.models.footer.state = State{}
 
 	switch m.state {
 	case authorComponent:
