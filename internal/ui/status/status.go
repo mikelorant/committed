@@ -1,4 +1,4 @@
-package ui
+package status
 
 import (
 	"fmt"
@@ -6,17 +6,11 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/mikelorant/committed/internal/commit"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
 
-type StatusModel struct {
-	config StatusConfig
-	state  State
-}
-
-type StatusConfig struct{}
+type Model struct{}
 
 type shortcut struct {
 	key   string
@@ -40,30 +34,26 @@ const (
 	ctrlKey = "Ctrl"
 )
 
-func NewStatus(cfg commit.Config) StatusModel {
-	c := StatusConfig{}
-
-	return StatusModel{
-		config: c,
-	}
+func New() Model {
+	return Model{}
 }
 
-func (m StatusModel) Init() tea.Cmd {
+func (m Model) Init() tea.Cmd {
 	return nil
 }
 
 //nolint:ireturn
-func (m StatusModel) Update(msg tea.Msg) (StatusModel, tea.Cmd) {
+func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m StatusModel) View() string {
+func (m Model) View() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
 		Render(m.statusRow())
 }
 
-func (m StatusModel) statusRow() string {
+func (m Model) statusRow() string {
 	return lipgloss.JoinHorizontal(
 		lipgloss.Top,
 		m.modifiers(),
@@ -71,7 +61,7 @@ func (m StatusModel) statusRow() string {
 	)
 }
 
-func (m StatusModel) modifiers() string {
+func (m Model) modifiers() string {
 	mods := []string{altKey, ctrlKey}
 	w := sliceMaxLen(mods)
 
@@ -94,7 +84,7 @@ func (m StatusModel) modifiers() string {
 		Render(strs)
 }
 
-func (m StatusModel) shortcuts() string {
+func (m Model) shortcuts() string {
 	col := len(altShortcuts)
 	if len(ctrlShortcuts) > col {
 		col = len(ctrlShortcuts)

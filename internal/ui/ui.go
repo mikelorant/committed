@@ -8,6 +8,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/ui/body"
+	"github.com/mikelorant/committed/internal/ui/status"
 )
 
 type MainModel struct {
@@ -23,7 +24,7 @@ type Models struct {
 	header HeaderModel
 	body   body.Model
 	footer FooterModel
-	status StatusModel
+	status status.Model
 }
 
 type State struct {
@@ -77,7 +78,7 @@ func New(cfg commit.Config) (Result, error) {
 			header: NewHeader(cfg),
 			body:   body.New(cfg),
 			footer: NewFooter(cfg),
-			status: NewStatus(cfg),
+			status: status.New(),
 		},
 		config: cfg,
 	}
@@ -176,7 +177,6 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	m.models.body.Blur()
 	m.models.body.Compact = false
 	m.models.footer.state = State{}
-	m.models.status.state = State{}
 
 	switch m.state {
 	case authorComponent:
