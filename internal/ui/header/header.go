@@ -213,7 +213,7 @@ func (m Model) summary() string {
 func (m Model) counter() string {
 	i := len(m.summaryInput.Value())
 	if m.Emoji.Character != "" {
-		i += 2
+		i += 3
 	}
 
 	clr := counterColour(i)
