@@ -9,12 +9,13 @@ import (
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/ui/body"
 	"github.com/mikelorant/committed/internal/ui/footer"
+	"github.com/mikelorant/committed/internal/ui/header"
 	"github.com/mikelorant/committed/internal/ui/info"
 	"github.com/mikelorant/committed/internal/ui/status"
 )
 
 type MainModel struct {
-	state  component
+	state  state
 	models Models
 	config commit.Config
 	result Result
@@ -23,15 +24,10 @@ type MainModel struct {
 
 type Models struct {
 	info   info.Model
-	header HeaderModel
+	header header.Model
 	body   body.Model
 	footer footer.Model
 	status status.Model
-}
-
-type State struct {
-	component component
-	display   display
 }
 
 type Result struct {
@@ -44,23 +40,14 @@ type Result struct {
 	Footer  string
 }
 
-type (
-	component int
-	display   int
-)
+type state int
 
 const (
-	emptyComponent component = iota
+	emptyComponent state = iota
 	authorComponent
 	emojiComponent
 	summaryComponent
 	bodyComponent
-)
-
-const (
-	defaultDisplay display = iota
-	compactDisplay
-	expandedDisplay
 )
 
 func New(cfg commit.Config) (Result, error) {
@@ -77,7 +64,7 @@ func New(cfg commit.Config) (Result, error) {
 		state: emojiComponent,
 		models: Models{
 			info:   info.New(cfg),
-			header: NewHeader(cfg),
+			header: header.New(cfg),
 			body:   body.New(cfg),
 			footer: footer.New(cfg),
 			status: status.New(),
@@ -144,7 +131,7 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				Commit:  true,
 				Name:    m.models.info.Name,
 				Email:   m.models.info.Email,
-				Emoji:   m.models.header.EmojiShortCode(),
+				Emoji:   m.models.header.Emoji.ShortCode,
 				Summary: m.models.header.Summary(),
 				Body:    m.models.body.Value(),
 			}
@@ -174,17 +161,20 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
-	m.models.header.state = State{}
+	m.models.header.Blur()
+	m.models.header.Expand = false
 	m.models.body.Blur()
 	m.models.body.Compact = false
 
 	switch m.state {
 	case emojiComponent:
-		m.models.header.state.component = emojiComponent
-		m.models.header.state.display = expandedDisplay
+		m.models.header.Focus()
+		m.models.header.SelectEmoji()
+		m.models.header.Expand = true
 		m.models.body.Compact = true
 	case summaryComponent:
-		m.models.header.state.component = summaryComponent
+		m.models.header.Focus()
+		m.models.header.SelectSummary()
 	case bodyComponent:
 		m.models.body.Focus()
 	}
