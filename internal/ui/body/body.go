@@ -10,17 +10,17 @@ import (
 )
 
 type Model struct {
-	Height   	  int
-	Width         int
+	Height int
+	Width  int
 
-	focus    	  bool
+	focus    bool
 	textArea textarea.Model
 }
 
 const (
 	tabSize = 4
 
-	defaultWidth  = 72
+	defaultWidth = 72
 )
 
 func New(cfg commit.Config, h int) Model {

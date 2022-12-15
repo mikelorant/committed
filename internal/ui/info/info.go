@@ -49,8 +49,8 @@ func New(cfg commit.Config) Model {
 		RemoteBranch: cfg.RemoteBranch,
 		BranchRefs:   cfg.BranchRefs,
 		Remotes:      cfg.Remotes,
-		Name:         cfg.Name,
-		Email:        cfg.Email,
+		Name:         cfg.Authors[0].Name,
+		Email:        cfg.Authors[0].Email,
 		Date:         time.Now().Format(dateTimeFormat),
 	}
 }

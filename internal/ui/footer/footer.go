@@ -15,8 +15,8 @@ type Model struct {
 
 func New(cfg commit.Config) Model {
 	return Model{
-		Name:  cfg.Name,
-		Email: cfg.Email,
+		Name:  cfg.Authors[0].Name,
+		Email: cfg.Authors[0].Email,
 	}
 }
 

@@ -27,8 +27,7 @@ type Commit struct {
 
 type Config struct {
 	Hash         string
-	Name         string
-	Email        string
+	Authors      []Author
 	Summary      string
 	Body         string
 	LocalBranch  string
@@ -36,6 +35,11 @@ type Config struct {
 	BranchRefs   []string
 	Remotes      []string
 	Emojis       []emoji.Emoji
+}
+
+type Author struct {
+	Name  string
+	Email string
 }
 
 //go:embed message.txt
@@ -66,10 +70,17 @@ func New() (*Commit, error) {
 		return nil, fmt.Errorf("unable to get emojis: %w", err)
 	}
 
+	defaultAuthor := Author{
+		Name:  r.User.Name,
+		Email: r.User.Email,
+	}
+
+	var authors []Author
+	authors = append(authors, defaultAuthor)
+
 	cfg := Config{
 		Hash:         mockHash,
-		Name:         r.User.Name,
-		Email:        r.User.Email,
+		Authors:      authors,
 		Summary:      summary,
 		Body:         message,
 		LocalBranch:  r.Branch.Local,
