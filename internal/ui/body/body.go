@@ -10,29 +10,23 @@ import (
 )
 
 type Model struct {
-	Compact       bool
-	DefaultHeight int
-	CompactHeight int
+	Height   	  int
 	Width         int
 
-	focus    bool
-	height   int
+	focus    	  bool
 	textArea textarea.Model
 }
 
 const (
 	tabSize = 4
 
-	defaultHeight = 19
-	compactHeight = 6
 	defaultWidth  = 72
 )
 
-func New(cfg commit.Config) Model {
+func New(cfg commit.Config, h int) Model {
 	return Model{
-		DefaultHeight: defaultHeight,
-		CompactHeight: compactHeight,
-		textArea:      newTextArea(cfg.Body, defaultWidth),
+		Height:   h,
+		textArea: newTextArea(cfg.Body, defaultWidth),
 	}
 }
 
@@ -57,11 +51,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 		}
 	}
 
-	m.height = m.DefaultHeight
-	if m.Compact {
-		m.height = m.CompactHeight
-	}
-	m.textArea.SetHeight(m.height)
+	m.textArea.SetHeight(m.Height)
 
 	switch {
 	case m.focus && !m.textArea.Focused():
@@ -80,7 +70,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 func (m Model) View() string {
 	return lipgloss.NewStyle().
 		Width(74).
-		Height(m.height).
+		Height(m.Height).
 		MarginTop(1).
 		MarginBottom(1).
 		MarginLeft(4).

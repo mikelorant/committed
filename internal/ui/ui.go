@@ -49,6 +49,11 @@ const (
 	bodyComponent
 )
 
+const (
+	bodyDefaultHeight = 19
+	bodyEmojiHeight   = 6
+)
+
 func New(cfg commit.Config) (Result, error) {
 	logfilePath := os.Getenv("BUBBLETEA_LOG")
 	if logfilePath != "" {
@@ -64,7 +69,7 @@ func New(cfg commit.Config) (Result, error) {
 		models: Models{
 			info:   info.New(cfg),
 			header: header.New(cfg),
-			body:   body.New(cfg),
+			body:   body.New(cfg, bodyDefaultHeight),
 			footer: footer.New(cfg),
 			status: status.New(),
 		},
@@ -162,14 +167,14 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	m.models.header.Blur()
 	m.models.header.Expand = false
 	m.models.body.Blur()
-	m.models.body.Compact = false
+	m.models.body.Height = bodyDefaultHeight
 
 	switch m.state {
 	case emojiComponent:
 		m.models.header.Focus()
 		m.models.header.SelectEmoji()
 		m.models.header.Expand = true
-		m.models.body.Compact = true
+		m.models.body.Height = bodyEmojiHeight
 	case summaryComponent:
 		m.models.header.Focus()
 		m.models.header.SelectSummary()
