@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/creack/pty"
+	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
 	"gopkg.in/alessio/shellescape.v1"
 )
@@ -34,6 +35,7 @@ type Config struct {
 	RemoteBranch string
 	BranchRefs   []string
 	Remotes      []string
+	Emojis       []emoji.Emoji
 }
 
 //go:embed message.txt
@@ -49,9 +51,8 @@ var (
 var exitError *exec.ExitError
 
 const (
-	mockHash    string = "1234567890abcdef1234567890abcdef1234567890"
-	mockEmoji   string = "🐛"
-	mockSummary string = "Capitalized, short (50 chars or less) summary"
+	mockHash string = "1234567890abcdef1234567890abcdef1234567890"
+	summary  string = "Capitalized, short (50 chars or less) summary"
 )
 
 func New() (*Commit, error) {
@@ -60,16 +61,22 @@ func New() (*Commit, error) {
 		return nil, fmt.Errorf("unable to get repository: %w", err)
 	}
 
+	e, err := emoji.New()
+	if err != nil {
+		return nil, fmt.Errorf("unable to get emojis: %w", err)
+	}
+
 	cfg := Config{
 		Hash:         mockHash,
 		Name:         r.User.Name,
 		Email:        r.User.Email,
-		Summary:      mockSummary,
+		Summary:      summary,
 		Body:         message,
 		LocalBranch:  r.Branch.Local,
 		RemoteBranch: r.Branch.Remote,
 		BranchRefs:   r.Branch.Refs,
 		Remotes:      r.Remote.Remotes,
+		Emojis:       e,
 	}
 
 	return &Commit{

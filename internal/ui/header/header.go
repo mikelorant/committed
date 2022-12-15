@@ -2,7 +2,6 @@ package header
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
@@ -20,11 +19,11 @@ type Model struct {
 	ExpandHeight  int
 	Placeholder   string
 	Emoji         emoji.Emoji
+	Emojis        []emoji.Emoji
 
 	focus     bool
 	component component
 	height    int
-	emojis    []emoji.Emoji
 
 	summaryInput textinput.Model
 	filterList   filterlist.Model
@@ -51,18 +50,13 @@ const (
 )
 
 func New(cfg commit.Config) Model {
-	e, err := emoji.New()
-	if err != nil {
-		log.Fatal("Unable to use emojis.")
-	}
-
 	return Model{
 		DefaultHeight: defaultHeight,
 		ExpandHeight:  expandHeight,
-		emojis:        e,
+		Emojis:        cfg.Emojis,
 		summaryInput:  summaryInput(cfg.Summary),
 		filterList: filterlist.New(
-			castToListItems(e),
+			castToListItems(cfg.Emojis),
 			filterPromptText,
 		),
 	}
@@ -115,11 +109,11 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 		return m, nil
 
 	case m.focus && m.component == emojiComponent:
-		ranks := fuzzy.Rank(m.filterList.Filter(), castToFuzzyItems(m.emojis))
+		ranks := fuzzy.Rank(m.filterList.Filter(), castToFuzzyItems(m.Emojis))
 
 		items := make([]list.Item, len(ranks))
 		for i, rank := range ranks {
-			items[i] = castToListItems(m.emojis)[rank]
+			items[i] = castToListItems(m.Emojis)[rank]
 		}
 		m.filterList.SetItems(items)
 	}
