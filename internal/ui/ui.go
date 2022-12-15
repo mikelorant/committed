@@ -14,10 +14,9 @@ import (
 	"github.com/mikelorant/committed/internal/ui/status"
 )
 
-type MainModel struct {
+type Model struct {
 	state  state
 	models Models
-	config commit.Config
 	result Result
 	err    error
 }
@@ -60,7 +59,7 @@ func New(cfg commit.Config) (Result, error) {
 		defer fh.Close()
 	}
 
-	im := MainModel{
+	im := Model{
 		state: emojiComponent,
 		models: Models{
 			info:   info.New(cfg),
@@ -69,7 +68,6 @@ func New(cfg commit.Config) (Result, error) {
 			footer: footer.New(cfg),
 			status: status.New(),
 		},
-		config: cfg,
 	}
 
 	p := tea.NewProgram(im)
@@ -78,10 +76,10 @@ func New(cfg commit.Config) (Result, error) {
 		return Result{}, fmt.Errorf("unable to run program: %w", err)
 	}
 
-	return m.(MainModel).result, nil
+	return m.(Model).result, nil
 }
 
-func (m MainModel) Init() tea.Cmd {
+func (m Model) Init() tea.Cmd {
 	return tea.Batch(
 		m.models.info.Init(),
 		m.models.header.Init(),
@@ -92,7 +90,7 @@ func (m MainModel) Init() tea.Cmd {
 }
 
 //nolint:ireturn
-func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	//nolint:gocritic
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
@@ -189,7 +187,7 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, tea.Batch(cmds...)
 }
 
-func (m MainModel) View() string {
+func (m Model) View() string {
 	if m.err != nil {
 		return fmt.Sprintf("unable to render view: %s", m.err)
 	}
@@ -203,7 +201,7 @@ func (m MainModel) View() string {
 	)
 }
 
-func (m MainModel) validate() bool {
+func (m Model) validate() bool {
 	//nolint:gocritic
 	switch {
 	case m.result.Summary == "":
