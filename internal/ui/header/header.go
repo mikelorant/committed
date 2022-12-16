@@ -46,6 +46,8 @@ const (
 	warningCounter = 40
 	maximumCounter = 50
 
+	filterHeight = 9
+
 	filterPromptText = "Choose an emoji:"
 )
 
@@ -58,6 +60,7 @@ func New(cfg commit.Config) Model {
 		filterList: filterlist.New(
 			castToListItems(cfg.Emojis),
 			filterPromptText,
+			filterHeight,
 		),
 	}
 }
@@ -77,8 +80,10 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 		case tea.KeyMsg:
 			switch msg.String() {
 			case "enter":
-				m.Emoji = m.filterList.SelectedItem().(listItem).emoji
-				return m, nil
+				if m.filterList.Focused() {
+					m.Emoji = m.filterList.SelectedItem().(listItem).emoji
+					return m, nil
+				}
 			case "delete":
 				m.Emoji = emoji.Emoji{}
 			}

@@ -16,8 +16,7 @@ import (
 
 type Commit struct {
 	Config  Config
-	Name    string
-	Email   string
+	Author  Author
 	Emoji   string
 	Summary string
 	Body    string
@@ -109,8 +108,8 @@ func (c *Commit) build() {
 
 	cmd = append(cmd, "commit")
 
-	if c.Name != "" && c.Email != "" {
-		author := fmt.Sprintf("%s <%s>", c.Name, c.Email)
+	if c.Author.Name != "" && c.Author.Email != "" {
+		author := fmt.Sprintf("%s <%s>", c.Author.Name, c.Author.Email)
 		cmd = append(cmd, "--author", shellescape.Quote(author))
 	}
 

@@ -62,8 +62,8 @@ func Execute() {
 }
 
 func Commit(c *commit.Commit, res ui.Result) error {
-	c.Name = res.Name
-	c.Email = res.Email
+	c.Author.Name = res.Author.Name
+	c.Author.Email = res.Author.Email
 	c.Emoji = res.Emoji
 	c.Summary = res.Summary
 	c.Body = strings.TrimSpace(res.Body)

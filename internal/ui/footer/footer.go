@@ -9,14 +9,12 @@ import (
 )
 
 type Model struct {
-	Name  string
-	Email string
+	Author commit.Author
 }
 
 func New(cfg commit.Config) Model {
 	return Model{
-		Name:  cfg.Authors[0].Name,
-		Email: cfg.Authors[0].Email,
+		Author: cfg.Authors[0],
 	}
 }
 
@@ -36,7 +34,7 @@ func (m Model) View() string {
 }
 
 func (m Model) signoff() string {
-	str := fmt.Sprintf("Signed-off-by: %s <%s>", m.Name, m.Email)
+	str := fmt.Sprintf("Signed-off-by: %s <%s>", m.Author.Name, m.Author.Email)
 
 	return lipgloss.NewStyle().
 		Width(74).

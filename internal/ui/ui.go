@@ -31,8 +31,7 @@ type Models struct {
 
 type Result struct {
 	Commit  bool
-	Name    string
-	Email   string
+	Author  commit.Author
 	Emoji   string
 	Summary string
 	Body    string
@@ -51,6 +50,7 @@ const (
 
 const (
 	bodyDefaultHeight = 19
+	bodyAuthorHeight  = 12
 	bodyEmojiHeight   = 6
 )
 
@@ -121,6 +121,11 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			m.state = bodyComponent
 		case "enter":
+			if m.state == authorComponent {
+				m.models.info, _ = m.models.info.Update(msg)
+				m.state = emojiComponent
+				break
+			}
 			if m.state == emojiComponent {
 				m.models.header, _ = m.models.header.Update(msg)
 				m.state = summaryComponent
@@ -132,8 +137,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "alt+enter":
 			m.result = Result{
 				Commit:  true,
-				Name:    m.models.info.Name,
-				Email:   m.models.info.Email,
+				Author:  m.models.info.Author,
 				Emoji:   m.models.header.Emoji.ShortCode,
 				Summary: m.models.header.Summary(),
 				Body:    m.models.body.Value(),
@@ -164,12 +168,19 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
+	m.models.info.Blur()
+	m.models.info.Expand = false
 	m.models.header.Blur()
 	m.models.header.Expand = false
 	m.models.body.Blur()
 	m.models.body.Height = bodyDefaultHeight
+	m.models.footer.Author = m.models.info.Author
 
 	switch m.state {
+	case authorComponent:
+		m.models.info.Focus()
+		m.models.info.Expand = true
+		m.models.body.Height = bodyAuthorHeight
 	case emojiComponent:
 		m.models.header.Focus()
 		m.models.header.SelectEmoji()

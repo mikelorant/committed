@@ -5,20 +5,29 @@ import (
 	"strings"
 	"time"
 
+	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/fuzzy"
+	"github.com/mikelorant/committed/internal/ui/filterlist"
 )
 
 type Model struct {
-	Hash         string
-	LocalBranch  string
-	RemoteBranch string
-	BranchRefs   []string
-	Remotes      []string
-	Name         string
-	Email        string
-	Date         string
+	Expand        bool
+	DefaultHeight int
+	ExpandHeight  int
+	Hash          string
+	LocalBranch   string
+	RemoteBranch  string
+	BranchRefs    []string
+	Remotes       []string
+	Date          string
+	Author        commit.Author
+	Authors       []commit.Author
+
+	focus      bool
+	filterList filterlist.Model
 }
 
 const (
@@ -40,6 +49,10 @@ const (
 	brightMagenta = "13"
 	brightCyan    = "14"
 	brightWhite   = "15"
+
+	filterPromptText = "Choose an author:"
+
+	filterHeight = 3
 )
 
 func New(cfg commit.Config) Model {
@@ -49,9 +62,14 @@ func New(cfg commit.Config) Model {
 		RemoteBranch: cfg.RemoteBranch,
 		BranchRefs:   cfg.BranchRefs,
 		Remotes:      cfg.Remotes,
-		Name:         cfg.Authors[0].Name,
-		Email:        cfg.Authors[0].Email,
 		Date:         time.Now().Format(dateTimeFormat),
+		Author:       cfg.Authors[0],
+		Authors:      cfg.Authors,
+		filterList: filterlist.New(
+			castToListItems(cfg.Authors),
+			filterPromptText,
+			filterHeight,
+		),
 	}
 }
 
@@ -61,13 +79,54 @@ func (m Model) Init() tea.Cmd {
 
 //nolint:ireturn
 func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
-	return m, nil
+	var cmd tea.Cmd
+	var cmds []tea.Cmd
+
+	if m.focus {
+		//nolint:gocritic
+		switch msg := msg.(type) {
+		case tea.KeyMsg:
+			switch msg.String() {
+			case "enter":
+				m.Author = m.filterList.SelectedItem().(listItem).author
+			}
+		}
+	}
+
+	switch {
+	case !m.focus && m.filterList.Focused():
+		m.filterList.Blur()
+	case m.focus && !m.filterList.Focused():
+		m.filterList.Focus()
+		fallthrough
+	case m.focus:
+		ranks := fuzzy.Rank(m.filterList.Filter(), castToFuzzyItems(m.Authors))
+
+		items := make([]list.Item, len(ranks))
+		for i, rank := range ranks {
+			items[i] = castToListItems(m.Authors)[rank]
+		}
+		m.filterList.SetItems(items)
+	}
+
+	m.filterList, cmd = m.filterList.Update(msg)
+	cmds = append(cmds, cmd)
+
+	return m, tea.Batch(cmds...)
 }
 
 func (m Model) View() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
 		Render(m.infoColumn())
+}
+
+func (m *Model) Focus() {
+	m.focus = true
+}
+
+func (m *Model) Blur() {
+	m.focus = false
 }
 
 func (m Model) infoColumn() string {
@@ -77,11 +136,25 @@ func (m Model) infoColumn() string {
 		m.branchRefs(),
 	)
 
-	return lipgloss.JoinVertical(
+	it := lipgloss.JoinVertical(
 		lipgloss.Top,
 		hashBranchRefs,
 		m.author(),
 		m.date(),
+	)
+
+	if !m.Expand {
+		return it
+	}
+
+	fl := lipgloss.NewStyle().
+		MarginTop(1).
+		Render(m.filterList.View())
+
+	return lipgloss.JoinVertical(
+		lipgloss.Top,
+		it,
+		fl,
 	)
 }
 
@@ -159,10 +232,10 @@ func (m Model) author() string {
 		Render("author")
 	n := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(white)).
-		Render(m.Name)
+		Render(m.Author.Name)
 	e := lipgloss.NewStyle().
 		Foreground(lipgloss.Color(white)).
-		Render(m.Email)
+		Render(m.Author.Email)
 
 	return fmt.Sprintf("%s: %s <%s>", k, n, e)
 }

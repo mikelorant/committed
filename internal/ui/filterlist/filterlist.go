@@ -9,6 +9,7 @@ import (
 
 type Model struct {
 	PromptText string
+	Height     int
 
 	focus        bool
 	list         list.Model
@@ -20,10 +21,11 @@ type Model struct {
 
 const listPrompt = "❯"
 
-func New(items []list.Item, prompt string) Model {
+func New(items []list.Item, prompt string, h int) Model {
 	return Model{
 		PromptText: prompt,
-		list:       newList(items),
+		Height:     h,
+		list:       newList(items, h),
 		textInput:  newTextInput(prompt),
 		items:      items,
 	}
@@ -99,7 +101,7 @@ func (m Model) View() string {
 
 	return lipgloss.NewStyle().
 		Width(74).
-		Height(10).
+		Height(m.Height - 1).
 		MarginLeft(4).
 		BorderStyle(lipgloss.NormalBorder()).
 		Render(ep)
@@ -130,7 +132,7 @@ func (m *Model) SetItems(i []list.Item) tea.Cmd {
 	return m.list.SetItems(i)
 }
 
-func newList(is []list.Item) list.Model {
+func newList(is []list.Item, h int) list.Model {
 	// Item prompt is set as a left border character.
 	b := lipgloss.Border{
 		Left: listPrompt,
@@ -152,7 +154,7 @@ func newList(is []list.Item) list.Model {
 	d.ShowDescription = false
 	d.Styles = s
 
-	l := list.New(is, d, 70, 9)
+	l := list.New(is, d, 70, h)
 	l.SetShowHelp(false)
 	l.SetShowPagination(false)
 	l.SetShowStatusBar(false)
