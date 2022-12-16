@@ -255,12 +255,14 @@ func counterColour(i int) string {
 	switch {
 	case i > emptyCounter && i < minimumCounter:
 		clr = yellow
+	case i >= minimumCounter && i <= warningCounter:
+		clr = green
 	case i > warningCounter && i <= maximumCounter:
 		clr = yellow
 	case i > maximumCounter:
 		clr = brightRed
 	default:
-		clr = green
+		clr = white
 	}
 
 	return clr
