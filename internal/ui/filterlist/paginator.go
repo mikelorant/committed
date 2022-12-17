@@ -6,21 +6,12 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-const (
-	paginatorDot       = "○"
-	paginatorActiveDot = "●"
-)
-
 func verticalPaginator(pos, total int) string {
-	d := dots(pos, total)
-
-	return strings.Join(d, "\n")
+	return strings.Join(dots(pos, total), "\n")
 }
 
 func horizontalPaginator(pos, total int) string {
-	d := dots(pos, total)
-
-	return strings.Join(d, "")
+	return strings.Join(dots(pos, total), "")
 }
 
 func dots(pos, total int) []string {

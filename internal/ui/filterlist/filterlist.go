@@ -12,6 +12,7 @@ type Model struct {
 	Height     int
 
 	focus        bool
+	styles       Styles
 	list         list.Model
 	textInput    textinput.Model
 	selectedItem list.Item
@@ -19,16 +20,18 @@ type Model struct {
 	filter       string
 }
 
-const listPrompt = "❯"
-
 func New(items []list.Item, prompt string, h int) Model {
-	return Model{
+	m := Model{
 		PromptText: prompt,
 		Height:     h,
-		list:       newList(items, h),
-		textInput:  newTextInput(prompt),
+		styles:     defaultStyles(),
 		items:      items,
 	}
+
+	m.list = m.newList()
+	m.textInput = m.newTextInput()
+
+	return m
 }
 
 func (m Model) Init() tea.Cmd {
@@ -90,21 +93,11 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	e := lipgloss.JoinVertical(
-		lipgloss.Top,
-		m.textInput.View(),
-		m.list.View(),
-	)
-
+	e := lipgloss.JoinVertical(lipgloss.Top, m.textInput.View(), m.list.View())
 	p := verticalPaginator(m.list.Paginator.Page, m.list.Paginator.TotalPages)
 	ep := lipgloss.JoinHorizontal(lipgloss.Top, e, p)
 
-	return lipgloss.NewStyle().
-		Width(74).
-		Height(m.Height - 1).
-		MarginLeft(4).
-		BorderStyle(lipgloss.NormalBorder()).
-		Render(ep)
+	return m.styles.boundary.Height(m.Height - 1).Render(ep)
 }
 
 func (m *Model) Focus() {
@@ -132,19 +125,9 @@ func (m *Model) SetItems(i []list.Item) tea.Cmd {
 	return m.list.SetItems(i)
 }
 
-func newList(is []list.Item, h int) list.Model {
-	// Item prompt is set as a left border character.
-	b := lipgloss.Border{
-		Left: listPrompt,
-	}
-
-	// Assign border style to the selected item.
+func (m Model) newList() list.Model {
 	s := list.NewDefaultItemStyles()
-	s.SelectedTitle = lipgloss.NewStyle().
-		Border(b, false, false, false, true).
-		BorderForeground(lipgloss.Color(cyan)).
-		Foreground(lipgloss.Color(cyan)).
-		Padding(0, 0, 0, 1)
+	s.SelectedTitle = m.styles.selectedTitle
 
 	// Delegate is the list of items.
 	// Only the title is used and description is disabled.
@@ -154,7 +137,7 @@ func newList(is []list.Item, h int) list.Model {
 	d.ShowDescription = false
 	d.Styles = s
 
-	l := list.New(is, d, 70, h)
+	l := list.New(m.items, d, 70, m.Height)
 	l.SetShowHelp(false)
 	l.SetShowPagination(false)
 	l.SetShowStatusBar(false)
@@ -164,23 +147,10 @@ func newList(is []list.Item, h int) list.Model {
 	return l
 }
 
-func newTextInput(pt string) textinput.Model {
-	promptMark := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(green)).
-		MarginRight(1).
-		Render("?")
-
-	promptText := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(white)).
-		Bold(true).
-		MarginRight(1).
-		Render(pt)
-
-	prompt := lipgloss.JoinHorizontal(
-		lipgloss.Left,
-		promptMark,
-		promptText,
-	)
+func (m Model) newTextInput() textinput.Model {
+	promptMark := m.styles.promptMark.Render("?")
+	promptText := m.styles.promptText.Render(m.PromptText)
+	prompt := lipgloss.JoinHorizontal(lipgloss.Left, promptMark, promptText)
 
 	ti := textinput.New()
 	ti.Prompt = prompt
