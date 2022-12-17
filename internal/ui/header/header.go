@@ -23,6 +23,7 @@ type Model struct {
 
 	focus     bool
 	component component
+	styles    Styles
 	height    int
 
 	summaryInput textinput.Model
@@ -41,13 +42,7 @@ const (
 	expandHeight  = 16
 	defaultWidth  = 72
 
-	emptyCounter   = 0
-	minimumCounter = 5
-	warningCounter = 40
-	maximumCounter = 50
-
-	filterHeight = 9
-
+	filterHeight     = 9
 	filterPromptText = "Choose an emoji:"
 )
 
@@ -56,6 +51,7 @@ func New(cfg commit.Config) Model {
 		DefaultHeight: defaultHeight,
 		ExpandHeight:  expandHeight,
 		Emojis:        cfg.Emojis,
+		styles:        defaultStyles(),
 		summaryInput:  summaryInput(cfg.Summary),
 		filterList: filterlist.New(
 			castToListItems(cfg.Emojis),
@@ -162,51 +158,23 @@ func (m Model) Summary() string {
 }
 
 func (m Model) headerRow() string {
-	subject := lipgloss.JoinHorizontal(
-		lipgloss.Top,
-		m.emoji(),
-		m.summary(),
-		m.counter(),
-	)
+	subject := lipgloss.JoinHorizontal(lipgloss.Top, m.emoji(), m.summary(), m.counter())
 
 	if !m.Expand {
-		return lipgloss.NewStyle().
-			Height(m.height).
-			Render(subject)
+		return lipgloss.NewStyle().Height(m.height).Render(subject)
 	}
 
-	expand := lipgloss.JoinVertical(
-		lipgloss.Top,
-		subject,
-		m.emojiConnector(),
-		m.filterList.View(),
-	)
+	expand := lipgloss.JoinVertical(lipgloss.Top, subject, m.emojiConnector(), m.filterList.View())
 
-	return lipgloss.NewStyle().
-		Height(m.height).
-		Render(expand)
+	return lipgloss.NewStyle().Height(m.height).Render(expand)
 }
 
 func (m Model) emoji() string {
-	return lipgloss.NewStyle().
-		Width(4).
-		Height(1).
-		MarginLeft(4).
-		MarginRight(1).
-		Align(lipgloss.Center, lipgloss.Center).
-		BorderStyle(lipgloss.NormalBorder()).
-		Render(m.Emoji.Character)
+	return m.styles.emojiBoundary.Render(m.Emoji.Character)
 }
 
 func (m Model) summary() string {
-	return lipgloss.NewStyle().
-		Width(61).
-		Height(1).
-		MarginRight(1).
-		Align(lipgloss.Left, lipgloss.Center).
-		Padding(0, 0, 0, 1).
-		BorderStyle(lipgloss.NormalBorder()).
-		Render(m.summaryInput.View())
+	return m.styles.summaryBoundary.Render(m.summaryInput.View())
 }
 
 func (m Model) counter() string {
@@ -215,34 +183,16 @@ func (m Model) counter() string {
 		i += 3
 	}
 
-	clr := counterColour(i)
-	bold := false
-	if i > maximumCounter {
-		bold = true
-	}
+	c := counterStyle(i).Render(fmt.Sprintf("%d", i))
+	t := m.styles.counterLimit.Render(fmt.Sprintf("%d", subjectLimit))
 
-	c := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(clr)).
-		Bold(bold).
-		Render(fmt.Sprintf("%d", i))
-
-	t := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(white)).
-		Render(fmt.Sprintf("%d", subjectLimit))
-
-	return lipgloss.NewStyle().
-		Width(5).
-		Height(3).
-		Align(lipgloss.Right, lipgloss.Center).
-		Render(fmt.Sprintf("%s/%s", c, t))
+	return m.styles.counterBoundary.Render(fmt.Sprintf("%s/%s", c, t))
 }
 
 func (m Model) emojiConnector() string {
 	c := connector(connecterTopRight, connectorHorizonal, connectorRightBottom, 35)
 
-	return lipgloss.NewStyle().
-		MarginLeft(6).
-		Render(c)
+	return m.styles.emojiConnector.Render(c)
 }
 
 func summaryInput(str string) textinput.Model {
@@ -253,22 +203,4 @@ func summaryInput(str string) textinput.Model {
 	ti.Width = 59
 
 	return ti
-}
-
-func counterColour(i int) string {
-	var clr string
-	switch {
-	case i > emptyCounter && i < minimumCounter:
-		clr = yellow
-	case i >= minimumCounter && i <= warningCounter:
-		clr = green
-	case i > warningCounter && i <= maximumCounter:
-		clr = yellow
-	case i > maximumCounter:
-		clr = brightRed
-	default:
-		clr = white
-	}
-
-	return clr
 }
