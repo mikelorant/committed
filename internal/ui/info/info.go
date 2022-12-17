@@ -27,32 +27,13 @@ type Model struct {
 	Authors       []commit.Author
 
 	focus      bool
+	styles     Styles
 	filterList filterlist.Model
 }
 
 const (
-	dateTimeFormat string = "Mon Jan 2 15:04:05 2006 -0700"
-
-	black         = "0"
-	red           = "1"
-	green         = "2"
-	yellow        = "3"
-	blue          = "4"
-	magenta       = "5"
-	cyan          = "6"
-	white         = "7"
-	brightBlack   = "8"
-	brightRed     = "9"
-	brightGreen   = "10"
-	brightYellow  = "11"
-	brightBlue    = "12"
-	brightMagenta = "13"
-	brightCyan    = "14"
-	brightWhite   = "15"
-
 	filterPromptText = "Choose an author:"
-
-	filterHeight = 3
+	filterHeight     = 3
 )
 
 func New(cfg commit.Config) Model {
@@ -65,6 +46,7 @@ func New(cfg commit.Config) Model {
 		Date:         time.Now().Format(dateTimeFormat),
 		Author:       cfg.Authors[0],
 		Authors:      cfg.Authors,
+		styles:       defaultStyles(),
 		filterList: filterlist.New(
 			castToListItems(cfg.Authors),
 			filterPromptText,
@@ -116,9 +98,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	return lipgloss.NewStyle().
-		MarginBottom(1).
-		Render(m.infoColumn())
+	return m.styles.infoBoundary.Render(m.infoColumn())
 }
 
 func (m *Model) Focus() {
@@ -147,9 +127,7 @@ func (m Model) infoColumn() string {
 		return it
 	}
 
-	fl := lipgloss.NewStyle().
-		MarginTop(1).
-		Render(m.filterList.View())
+	fl := m.styles.filterListBoundary.Render(m.filterList.View())
 
 	return lipgloss.JoinVertical(
 		lipgloss.Top,
@@ -159,67 +137,36 @@ func (m Model) infoColumn() string {
 }
 
 func (m Model) hash() string {
-	k := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(yellow)).
-		Render("commit")
+	k := m.styles.hashText
+	h := m.styles.hashValue.Render(m.Hash)
 
-	h := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(yellow)).
-		Render(m.Hash)
-
-	return lipgloss.NewStyle().
-		MarginRight(1).
-		Render(fmt.Sprintf("%s %s", k, h))
+	return m.styles.hashBoundary.Render(fmt.Sprintf("%s %s", k, h))
 }
 
 func (m Model) branchRefs() string {
-	h := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(brightCyan)).
-		Bold(true).
-		Render("HEAD ->")
+	h := m.styles.branchHead
+	l := m.styles.branchLocal.Render(m.LocalBranch)
 
-	l := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(brightGreen)).
-		Bold(true).
-		Render(m.LocalBranch)
-
-	lp := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(yellow)).
-		Render("(")
-
-	rp := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(yellow)).
-		Render(")")
-
-	c := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(yellow)).
-		Render(",")
+	lp := m.styles.branchGrouping.Render("(")
+	rp := m.styles.branchGrouping.Render(")")
+	c := m.styles.branchGrouping.Render(",")
 
 	str := fmt.Sprintf("%s %s", h, l)
 
 	if m.RemoteBranch != "" {
-		b := lipgloss.NewStyle().
-			Foreground(lipgloss.Color(red)).
-			Bold(true).
-			Render(m.RemoteBranch)
+		b := m.styles.branchRemote.Render(m.RemoteBranch)
 
 		str += fmt.Sprintf("%s %s", c, b)
 	}
 
 	for _, ref := range m.BranchRefs {
 		if containsPrefixes(ref, m.Remotes) {
-			rc := lipgloss.NewStyle().
-				Foreground(lipgloss.Color(red)).
-				Bold(true).
-				Render(m.RemoteBranch)
+			rc := m.styles.branchRemote.Render(m.RemoteBranch)
 			str += fmt.Sprintf("%s %s", c, rc)
 			continue
 		}
 
-		rc := lipgloss.NewStyle().
-			Foreground(lipgloss.Color(brightGreen)).
-			Bold(true).
-			Render(ref)
+		rc := m.styles.branchLocal.Render(ref)
 		str += fmt.Sprintf("%s %s", c, rc)
 	}
 
@@ -227,26 +174,16 @@ func (m Model) branchRefs() string {
 }
 
 func (m Model) author() string {
-	k := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(white)).
-		Render("author")
-	n := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(white)).
-		Render(m.Author.Name)
-	e := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(white)).
-		Render(m.Author.Email)
+	k := m.styles.authorText
+	n := m.styles.authorValue.Render(m.Author.Name)
+	e := m.styles.authorValue.Render(m.Author.Email)
 
 	return fmt.Sprintf("%s: %s <%s>", k, n, e)
 }
 
 func (m Model) date() string {
-	k := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(white)).
-		Render("date")
-	d := lipgloss.NewStyle().
-		Foreground(lipgloss.Color(white)).
-		Render(m.Date)
+	k := m.styles.dateText
+	d := m.styles.dateValue.Render(m.Date)
 
 	return fmt.Sprintf("%s:   %s", k, d)
 }
