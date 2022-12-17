@@ -3,6 +3,8 @@ package body
 import (
 	"strings"
 
+	"github.com/acarl005/stripansi"
+	"github.com/charmbracelet/bubbles/cursor"
 	"github.com/charmbracelet/bubbles/textarea"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -93,7 +95,15 @@ func (m Model) Focused() bool {
 }
 
 func (m Model) Value() string {
-	return m.textArea.Value()
+	if m.textArea.Value() == "" {
+		return ""
+	}
+
+	m.textArea.Cursor.SetMode(cursor.CursorHide)
+	res := strings.TrimSpace(stripansi.Strip(m.textArea.View()))
+	m.textArea.Cursor.SetMode(cursor.CursorBlink)
+
+	return res
 }
 
 func newTextArea(ph string, w int) textarea.Model {
