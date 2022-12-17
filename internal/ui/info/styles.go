@@ -58,11 +58,11 @@ func defaultStyles() Styles {
 		MarginTop(1)
 
 	s.hashText = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(yellow))
-
-	s.hashValue = lipgloss.NewStyle().
 		Foreground(lipgloss.Color(yellow)).
 		SetString("commit")
+
+	s.hashValue = lipgloss.NewStyle().
+		Foreground(lipgloss.Color(yellow))
 
 	s.hashBoundary = lipgloss.NewStyle().
 		MarginRight(1)
