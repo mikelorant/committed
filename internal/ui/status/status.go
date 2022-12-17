@@ -10,7 +10,9 @@ import (
 	"golang.org/x/text/language"
 )
 
-type Model struct{}
+type Model struct {
+	styles Styles
+}
 
 type shortcut struct {
 	key   string
@@ -35,7 +37,9 @@ const (
 )
 
 func New() Model {
-	return Model{}
+	return Model{
+		styles: defaultStyles(),
+	}
 }
 
 func (m Model) Init() tea.Cmd {
@@ -48,9 +52,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	return lipgloss.NewStyle().
-		MarginBottom(1).
-		Render(m.statusRow())
+	return m.styles.boundary.Render(m.statusRow())
 }
 
 func (m Model) statusRow() string {
@@ -67,21 +69,13 @@ func (m Model) modifiers() string {
 
 	var ss []string
 	for _, mod := range mods {
-		str := lipgloss.NewStyle().
-			Foreground(lipgloss.Color("6")).
-			Width(w).
-			Align(lipgloss.Right).
-			Render(mod)
+		str := m.styles.modifiers.Width(w).Render(mod)
 
 		ss = append(ss, fmt.Sprintf("%s +", str))
 	}
 	strs := strings.Join(ss, "\n")
 
-	return lipgloss.NewStyle().
-		Width(w + 2).
-		Height(len(mods)).
-		MarginRight(1).
-		Render(strs)
+	return m.styles.modifiersBoundary.Width(w + 2).Height(len(mods)).Render(strs)
 }
 
 func (m Model) shortcuts() string {
@@ -102,7 +96,7 @@ func (m Model) shortcuts() string {
 			ctrl = ctrlShortcuts[i]
 		}
 
-		ss = append(ss, shortcutColumn(alt, ctrl))
+		ss = append(ss, m.shortcutColumn(alt, ctrl))
 	}
 
 	return lipgloss.JoinHorizontal(
@@ -111,18 +105,16 @@ func (m Model) shortcuts() string {
 	)
 }
 
-func shortcutColumn(alt, ctrl shortcut) string {
-	keys := shortcutColumnKeys(alt.key, ctrl.key)
-	labels := shortcutColumnLabels(alt.label, ctrl.label)
+func (m Model) shortcutColumn(alt, ctrl shortcut) string {
+	keys := m.shortcutColumnKeys(alt.key, ctrl.key)
+	labels := m.shortcutColumnLabels(alt.label, ctrl.label)
 
 	sc := lipgloss.JoinHorizontal(lipgloss.Top, keys, labels)
 
-	return lipgloss.NewStyle().
-		MarginRight(1).
-		Render(sc)
+	return m.styles.shortcutBoundary.Render(sc)
 }
 
-func shortcutColumnKeys(alt, ctrl string) string {
+func (m Model) shortcutColumnKeys(alt, ctrl string) string {
 	keys := []string{alt, ctrl}
 	w := sliceMaxLen(keys)
 
@@ -133,14 +125,8 @@ func shortcutColumnKeys(alt, ctrl string) string {
 			continue
 		}
 
-		str := lipgloss.NewStyle().
-			Foreground(lipgloss.Color("6")).
-			Render(key)
-
-		wrappedStr := lipgloss.NewStyle().
-			Align(lipgloss.Right).
-			Width(w + 2).
-			Render(fmt.Sprintf("<%s>", str))
+		str := m.styles.shortcutKey.Render(key)
+		wrappedStr := m.styles.shortcutDecorateKey.Width(w + 2).Render(fmt.Sprintf("<%s>", str))
 
 		ss = append(ss, wrappedStr)
 	}
@@ -149,7 +135,7 @@ func shortcutColumnKeys(alt, ctrl string) string {
 		Render(strings.Join(ss, "\n"))
 }
 
-func shortcutColumnLabels(alt, ctrl string) string {
+func (m Model) shortcutColumnLabels(alt, ctrl string) string {
 	labels := []string{alt, ctrl}
 	w := sliceMaxLen(labels)
 
@@ -160,11 +146,7 @@ func shortcutColumnLabels(alt, ctrl string) string {
 			continue
 		}
 
-		str := lipgloss.NewStyle().
-			Foreground(lipgloss.Color("2")).
-			Width(w).
-			Align(lipgloss.Left).
-			Render(title(label))
+		str := m.styles.shortcutLabel.Width(w).Render(title(label))
 
 		ss = append(ss, str)
 	}
