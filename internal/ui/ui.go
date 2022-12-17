@@ -11,6 +11,7 @@ import (
 	"github.com/mikelorant/committed/internal/ui/footer"
 	"github.com/mikelorant/committed/internal/ui/header"
 	"github.com/mikelorant/committed/internal/ui/info"
+	"github.com/mikelorant/committed/internal/ui/message"
 	"github.com/mikelorant/committed/internal/ui/status"
 )
 
@@ -18,15 +19,17 @@ type Model struct {
 	state  state
 	models Models
 	result Result
+	quit   bool
 	err    error
 }
 
 type Models struct {
-	info   info.Model
-	header header.Model
-	body   body.Model
-	footer footer.Model
-	status status.Model
+	info    info.Model
+	header  header.Model
+	body    body.Model
+	footer  footer.Model
+	status  status.Model
+	message message.Model
 }
 
 type Result struct {
@@ -143,6 +146,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				Body:    m.models.body.Value(),
 			}
 			if m.validate() {
+				m.quit = true
+				m.message()
 				return m, tea.Quit
 			}
 		case "tab":
@@ -208,6 +213,13 @@ func (m Model) View() string {
 		return fmt.Sprintf("unable to render view: %s", m.err)
 	}
 
+	if m.quit {
+		return lipgloss.JoinVertical(lipgloss.Top,
+			m.models.info.View(),
+			m.models.message.View(),
+		)
+	}
+
 	return lipgloss.JoinVertical(lipgloss.Top,
 		m.models.info.View(),
 		m.models.header.View(),
@@ -215,6 +227,16 @@ func (m Model) View() string {
 		m.models.footer.View(),
 		m.models.status.View(),
 	)
+}
+
+func (m *Model) message() {
+	mc := message.Config{
+		Emoji:   m.models.header.Emoji,
+		Summary: m.models.header.Summary(),
+		Body:    m.models.body.Value(),
+	}
+
+	m.models.message = message.New(mc)
 }
 
 func (m Model) validate() bool {

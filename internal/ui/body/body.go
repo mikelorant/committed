@@ -7,7 +7,6 @@ import (
 	"github.com/charmbracelet/bubbles/cursor"
 	"github.com/charmbracelet/bubbles/textarea"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
 )
 
@@ -16,6 +15,7 @@ type Model struct {
 	Width  int
 
 	focus    bool
+	styles   Styles
 	textArea textarea.Model
 }
 
@@ -28,6 +28,7 @@ const (
 func New(cfg commit.Config, h int) Model {
 	return Model{
 		Height:   h,
+		styles:   defaultStyles(),
 		textArea: newTextArea(cfg.Body, defaultWidth),
 	}
 }
@@ -70,16 +71,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	return lipgloss.NewStyle().
-		Width(74).
-		Height(m.Height).
-		MarginTop(1).
-		MarginBottom(1).
-		MarginLeft(4).
-		Align(lipgloss.Left, lipgloss.Top).
-		BorderStyle(lipgloss.NormalBorder()).
-		Padding(0, 1, 0, 1).
-		Render(m.textArea.View())
+	return m.styles.boundary.Height(m.Height).Render(m.textArea.View())
 }
 
 func (m *Model) Focus() {
