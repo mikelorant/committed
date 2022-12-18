@@ -69,13 +69,15 @@ func New() (*Commit, error) {
 		return nil, fmt.Errorf("unable to get emojis: %w", err)
 	}
 
-	defaultAuthor := Author{
-		Name:  r.User.Name,
-		Email: r.User.Email,
-	}
-
 	var authors []Author
-	authors = append(authors, defaultAuthor)
+	for _, user := range r.Users {
+		a := Author{
+			Name:  user.Name,
+			Email: user.Email,
+		}
+
+		authors = append(authors, a)
+	}
 
 	cfg := Config{
 		Hash:         mockHash,

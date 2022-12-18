@@ -49,13 +49,13 @@ func TestNewUser(t *testing.T) {
 			u.repository()
 			u.config(tt.userName, tt.userEmail)
 
-			user, err := repository.NewUser(u.gitRepository)
+			user, err := repository.NewUsers(u.gitRepository)
 			if err != nil {
 				t.Errorf("unable to initialise user")
 			}
 
-			assert.Equal(t, tt.userName, user.Name)
-			assert.Equal(t, tt.userEmail, user.Email)
+			assert.Equal(t, tt.userName, user[0].Name)
+			assert.Equal(t, tt.userEmail, user[0].Email)
 		})
 	}
 }

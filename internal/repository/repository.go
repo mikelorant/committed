@@ -8,7 +8,7 @@ import (
 
 type Repository struct {
 	gitRepository *git.Repository
-	User          User
+	Users         []User
 	Branch        Branch
 	Remote        Remote
 }
@@ -25,7 +25,7 @@ func New() (*Repository, error) {
 		return nil, fmt.Errorf("unable to open git repository: %v: %w", repositoryPath, err)
 	}
 
-	user, err := NewUser(repo)
+	users, err := NewUsers(repo)
 	if err != nil {
 		return nil, fmt.Errorf("unable to initialise user: %w", err)
 	}
@@ -42,7 +42,7 @@ func New() (*Repository, error) {
 
 	return &Repository{
 		gitRepository: repo,
-		User:          user,
+		Users:         users,
 		Branch:        branch,
 		Remote:        remote,
 	}, nil

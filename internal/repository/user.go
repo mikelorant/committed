@@ -12,21 +12,26 @@ type User struct {
 	Email string
 }
 
-func NewUser(r *git.Repository) (User, error) {
+func NewUsers(r *git.Repository) ([]User, error) {
+	var users []User
+
 	cfg, err := r.Config()
 	if err != nil {
-		return User{}, fmt.Errorf("unable to get repository config: %w", err)
+		return users, fmt.Errorf("unable to get repository config: %w", err)
 	}
 	if (cfg.User.Name != "") || (cfg.User.Email != "") {
-		return user(cfg), nil
+		users = append(users, user(cfg))
 	}
 
-	cfg, err = r.ConfigScoped(config.GlobalScope)
+	cfg, err = config.LoadConfig(config.GlobalScope)
 	if err != nil {
-		return User{}, fmt.Errorf("unable to get global config: %w", err)
+		return users, fmt.Errorf("unable to get global config: %w", err)
+	}
+	if (cfg.User.Name != "") || (cfg.User.Email != "") {
+		users = append(users, user(cfg))
 	}
 
-	return user(cfg), nil
+	return users, nil
 }
 
 func user(c *config.Config) User {
