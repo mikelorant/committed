@@ -273,14 +273,14 @@ build the interface.
 The following commands are used as reference to extract from Git specific fields
 for the interface.
 
-| Field                    | Method                                            |
-| :----------------------- | :------------------------------------------------ |
-| commit hash              | indeterminable                                    |
-| current branch           | `git rev-parse --abbrev-ref HEAD`                 |
-| tip of branch            | `git log -1` = `git log HEAD -1`                  |
-| upstream tracking branch | `git rev-parse --abbrev-ref ${branch}@{upstream}` |
-| user name                | `git config user.name`                            |
-| user email               | `git config user.email`                           |
+| Field                    | Method                                                       |
+| :----------------------- | :----------------------------------------------------------- |
+| commit hash              | indeterminable                                               |
+| current branch           | `git rev-parse --abbrev-ref HEAD`                            |
+| tip of branch            | `git log -1` = `git log HEAD -1`                             |
+| upstream tracking branch | `git rev-parse --abbrev-ref ${branch}@{upstream}`            |
+| user name                | `git config user.name`<br />`git config --global user.name`  |
+| user email               | `git config user.email`<br />`git config --global user.email` |
 
 ## Authors
 
