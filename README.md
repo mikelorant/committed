@@ -187,14 +187,29 @@ Install Committed with Homebrew.
 
 ## Shortcuts
 
-| Command       | Key           |
-| :------------ | :------------ |
-| Commit        | control-enter |
-| Cancel        | control-c     |
-| Focus author  | control-a     |
-| Focus emoji   | control-e     |
-| Focus summary | control-s     |
-| Focus body    | control-b     |
+**Global**
+
+| Command            | Key       |
+| :----------------- | :-------- |
+| Commit             | alt-enter |
+| Toggle sign-off    | alt-s     |
+| Help               | alt-/     |
+| Focus author       | alt-1     |
+| Focus emoji        | alt-2     |
+| Focus summary      | alt-3     |
+| Focus body         | alt-4     |
+| Cancel             | control-c |
+| Next component     | tab       |
+| Previous component | shift-tab |
+
+**Emoji**
+
+| Command       | Key       |
+| ------------- | --------- |
+| Clear emoji   | delete    |
+| Reset filter  | escape    |
+| Next page     | page down |
+| Previous page | page up   |
 
 ## Architecture
 
