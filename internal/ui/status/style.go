@@ -5,12 +5,12 @@ import (
 )
 
 type Styles struct {
-	boundary            lipgloss.Style
-	modifiers           lipgloss.Style
-	modifiersBoundary   lipgloss.Style
 	shortcutBoundary    lipgloss.Style
+	shortcutBlockLeft   lipgloss.Style
+	shortcutBlockRight  lipgloss.Style
+	shortcutColumnLeft  lipgloss.Style
+	shortcutColumnRight lipgloss.Style
 	shortcutKey         lipgloss.Style
-	shortcutDecorateKey lipgloss.Style
 	shortcutLabel       lipgloss.Style
 }
 
@@ -36,28 +36,28 @@ const (
 func defaultStyles() Styles {
 	var s Styles
 
-	s.boundary = lipgloss.NewStyle().
+	s.shortcutBoundary = lipgloss.NewStyle().
 		MarginBottom(1)
 
-	s.modifiers = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cyan)).
+	s.shortcutBlockLeft = lipgloss.NewStyle().
+		Width(50).
+		Align(lipgloss.Left)
+
+	s.shortcutBlockRight = lipgloss.NewStyle().
+		Width(30).
 		Align(lipgloss.Right)
 
-	s.modifiersBoundary = lipgloss.NewStyle().
+	s.shortcutColumnRight = lipgloss.NewStyle().
 		MarginRight(1)
 
-	s.shortcutBoundary = lipgloss.NewStyle().
-		MarginRight(1)
+	s.shortcutColumnLeft = lipgloss.NewStyle().
+		MarginLeft(1)
 
 	s.shortcutKey = lipgloss.NewStyle().
 		Foreground(lipgloss.Color(cyan))
 
-	s.shortcutDecorateKey = lipgloss.NewStyle().
-		Align(lipgloss.Right)
-
 	s.shortcutLabel = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(green)).
-		Align(lipgloss.Left)
+		Foreground(lipgloss.Color(green))
 
 	return s
 }

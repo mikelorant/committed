@@ -57,6 +57,14 @@ const (
 	bodyEmojiHeight   = 6
 )
 
+const (
+	emptyName   = ""
+	authorName  = "Author"
+	emojiName   = "Emoji"
+	summaryName = "Summary"
+	bodyName    = "Body"
+)
+
 func New(cfg commit.Config) (Result, error) {
 	logfilePath := os.Getenv("BUBBLETEA_LOG")
 	if logfilePath != "" {
@@ -186,16 +194,24 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.models.info.Focus()
 		m.models.info.Expand = true
 		m.models.body.Height = bodyAuthorHeight
+		m.models.status.Previous = emptyName
+		m.models.status.Next = emojiName
 	case emojiComponent:
 		m.models.header.Focus()
 		m.models.header.SelectEmoji()
 		m.models.header.Expand = true
 		m.models.body.Height = bodyEmojiHeight
+		m.models.status.Previous = authorName
+		m.models.status.Next = summaryName
 	case summaryComponent:
 		m.models.header.Focus()
 		m.models.header.SelectSummary()
+		m.models.status.Previous = emojiName
+		m.models.status.Next = bodyName
 	case bodyComponent:
 		m.models.body.Focus()
+		m.models.status.Previous = summaryName
+		m.models.status.Next = emptyName
 	}
 
 	cmds := make([]tea.Cmd, 5)
