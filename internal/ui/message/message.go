@@ -12,12 +12,14 @@ type Model struct {
 	emoji   emoji.Emoji
 	summary string
 	body    string
+	footer  string
 }
 
 type Config struct {
 	Emoji   emoji.Emoji
 	Summary string
 	Body    string
+	Footer  string
 }
 
 func New(cfg Config) Model {
@@ -25,6 +27,7 @@ func New(cfg Config) Model {
 		emoji:   cfg.Emoji,
 		summary: cfg.Summary,
 		body:    cfg.Body,
+		footer:  cfg.Footer,
 	}
 }
 
@@ -48,6 +51,14 @@ func (m Model) View() string {
 			Render(m.body)
 
 		message = lipgloss.JoinVertical(lipgloss.Top, message, b)
+	}
+
+	if m.footer != "" {
+		f := lipgloss.NewStyle().
+			MarginTop(1).
+			Render(m.footer)
+
+		message = lipgloss.JoinVertical(lipgloss.Top, message, f)
 	}
 
 	return lipgloss.NewStyle().

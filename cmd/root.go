@@ -67,6 +67,7 @@ func Commit(c *commit.Commit, res ui.Result) error {
 	c.Emoji = res.Emoji
 	c.Summary = res.Summary
 	c.Body = strings.TrimSpace(res.Body)
+	c.Footer = res.Footer
 
 	if err := c.Create(); err != nil {
 		return fmt.Errorf("unable to create commit: %w", err)

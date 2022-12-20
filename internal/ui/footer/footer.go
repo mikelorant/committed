@@ -9,7 +9,8 @@ import (
 )
 
 type Model struct {
-	Author commit.Author
+	Author  commit.Author
+	Signoff bool
 }
 
 func New(cfg commit.Config) Model {
@@ -31,6 +32,18 @@ func (m Model) View() string {
 	return lipgloss.NewStyle().
 		MarginBottom(1).
 		Render(m.signoff())
+}
+
+func (m *Model) ToggleSignoff() {
+	m.Signoff = !m.Signoff
+}
+
+func (m Model) Value() string {
+	if !m.Signoff {
+		return ""
+	}
+
+	return fmt.Sprintf("Signed-off-by: %s <%s>", m.Author.Name, m.Author.Email)
 }
 
 func (m Model) signoff() string {

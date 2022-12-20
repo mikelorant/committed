@@ -16,11 +16,12 @@ import (
 )
 
 type Model struct {
-	state  state
-	models Models
-	result Result
-	quit   bool
-	err    error
+	state   state
+	models  Models
+	result  Result
+	quit    bool
+	signoff bool
+	err     error
 }
 
 type Models struct {
@@ -55,6 +56,8 @@ const (
 	bodyDefaultHeight = 19
 	bodyAuthorHeight  = 12
 	bodyEmojiHeight   = 6
+
+	footerSignoffHeight = 2
 )
 
 const (
@@ -152,12 +155,15 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				Emoji:   m.models.header.Emoji.ShortCode,
 				Summary: m.models.header.Summary(),
 				Body:    m.models.body.Value(),
+				Footer:  m.models.footer.Value(),
 			}
 			if m.validate() {
 				m.quit = true
 				m.message()
 				return m, tea.Quit
 			}
+		case "alt+s":
+			m.signoff = !m.signoff
 		case "tab":
 			switch m.state {
 			case authorComponent:
@@ -214,6 +220,17 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.models.status.Next = emptyName
 	}
 
+	if m.signoff {
+		m.models.body.Height -= footerSignoffHeight
+	}
+
+	if m.signoff != m.models.footer.Signoff {
+		m.models.footer.ToggleSignoff()
+		m.models.body, _ = m.models.body.Update(nil)
+		m.models.footer, _ = m.models.footer.Update(nil)
+		return m, nil
+	}
+
 	cmds := make([]tea.Cmd, 5)
 	m.models.info, cmds[0] = m.models.info.Update(msg)
 	m.models.header, cmds[1] = m.models.header.Update(msg)
@@ -236,6 +253,15 @@ func (m Model) View() string {
 		)
 	}
 
+	if !m.models.footer.Signoff {
+		return lipgloss.JoinVertical(lipgloss.Top,
+			m.models.info.View(),
+			m.models.header.View(),
+			m.models.body.View(),
+			m.models.status.View(),
+		)
+	}
+
 	return lipgloss.JoinVertical(lipgloss.Top,
 		m.models.info.View(),
 		m.models.header.View(),
@@ -250,6 +276,7 @@ func (m *Model) message() {
 		Emoji:   m.models.header.Emoji,
 		Summary: m.models.header.Summary(),
 		Body:    m.models.body.Value(),
+		Footer:  m.models.footer.Value(),
 	}
 
 	m.models.message = message.New(mc)

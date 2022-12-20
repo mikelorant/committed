@@ -127,6 +127,10 @@ func (c *Commit) build() {
 		cmd = append(cmd, "--message", shellescape.Quote(c.Body))
 	}
 
+	if c.Footer != "" {
+		cmd = append(cmd, "--message", shellescape.Quote(c.Footer))
+	}
+
 	cmd = append(cmd, commitOptions...)
 
 	c.cmd = cmd
