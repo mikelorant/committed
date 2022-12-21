@@ -30,7 +30,13 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 
 func (m Model) View() string {
 	return lipgloss.NewStyle().
+		Width(74).
+		Height(1).
+		MarginLeft(4).
 		MarginBottom(1).
+		Align(lipgloss.Left, lipgloss.Center).
+		Border(lipgloss.HiddenBorder(), false, true).
+		Padding(0, 1, 0, 1).
 		Render(m.signoff())
 }
 
@@ -43,18 +49,9 @@ func (m Model) Value() string {
 		return ""
 	}
 
-	return fmt.Sprintf("Signed-off-by: %s <%s>", m.Author.Name, m.Author.Email)
+	return m.signoff()
 }
 
 func (m Model) signoff() string {
-	str := fmt.Sprintf("Signed-off-by: %s <%s>", m.Author.Name, m.Author.Email)
-
-	return lipgloss.NewStyle().
-		Width(74).
-		Height(1).
-		MarginLeft(4).
-		Align(lipgloss.Left, lipgloss.Center).
-		Border(lipgloss.HiddenBorder(), false, true).
-		Padding(0, 1, 0, 1).
-		Render(str)
+	return fmt.Sprintf("Signed-off-by: %s <%s>", m.Author.Name, m.Author.Email)
 }
