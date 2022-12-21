@@ -10,18 +10,20 @@ import (
 	"github.com/mikelorant/committed/internal/ui/body"
 	"github.com/mikelorant/committed/internal/ui/footer"
 	"github.com/mikelorant/committed/internal/ui/header"
+	"github.com/mikelorant/committed/internal/ui/help"
 	"github.com/mikelorant/committed/internal/ui/info"
 	"github.com/mikelorant/committed/internal/ui/message"
 	"github.com/mikelorant/committed/internal/ui/status"
 )
 
 type Model struct {
-	state   state
-	models  Models
-	result  Result
-	quit    bool
-	signoff bool
-	err     error
+	state         state
+	previousState state
+	models        Models
+	result        Result
+	quit          bool
+	signoff       bool
+	err           error
 }
 
 type Models struct {
@@ -30,6 +32,7 @@ type Models struct {
 	body    body.Model
 	footer  footer.Model
 	status  status.Model
+	help    help.Model
 	message message.Model
 }
 
@@ -50,6 +53,7 @@ const (
 	emojiComponent
 	summaryComponent
 	bodyComponent
+	helpComponent
 )
 
 const (
@@ -86,6 +90,7 @@ func New(cfg commit.Config) (Result, error) {
 			body:   body.New(cfg, bodyDefaultHeight),
 			footer: footer.New(cfg),
 			status: status.New(),
+			help:   help.New(),
 		},
 	}
 
@@ -105,6 +110,7 @@ func (m Model) Init() tea.Cmd {
 		m.models.body.Init(),
 		m.models.footer.Init(),
 		m.models.status.Init(),
+		m.models.help.Init(),
 	)
 }
 
@@ -164,6 +170,17 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case "alt+s":
 			m.signoff = !m.signoff
+		case "alt+/":
+			if m.state == helpComponent {
+				m.state = m.previousState
+				break
+			}
+			m.previousState = m.state
+			m.state = helpComponent
+		case "esc":
+			if m.state == helpComponent {
+				m.state = m.previousState
+			}
 		case "tab":
 			switch m.state {
 			case authorComponent:
@@ -194,6 +211,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	m.models.body.Blur()
 	m.models.body.Height = bodyDefaultHeight
 	m.models.footer.Author = m.models.info.Author
+	m.models.help.Blur()
 
 	switch m.state {
 	case authorComponent:
@@ -218,6 +236,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.models.body.Focus()
 		m.models.status.Previous = summaryName
 		m.models.status.Next = emptyName
+	case helpComponent:
+		m.models.status.Previous = emptyName
+		m.models.status.Next = emptyName
+		m.models.help.Focus()
 	}
 
 	if m.signoff {
@@ -231,12 +253,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 	}
 
-	cmds := make([]tea.Cmd, 5)
+	cmds := make([]tea.Cmd, 6)
 	m.models.info, cmds[0] = m.models.info.Update(msg)
 	m.models.header, cmds[1] = m.models.header.Update(msg)
 	m.models.body, cmds[2] = m.models.body.Update(msg)
 	m.models.footer, cmds[3] = m.models.footer.Update(msg)
 	m.models.status, cmds[4] = m.models.status.Update(msg)
+	m.models.help, cmds[5] = m.models.help.Update(msg)
 
 	return m, tea.Batch(cmds...)
 }
@@ -250,6 +273,14 @@ func (m Model) View() string {
 		return lipgloss.JoinVertical(lipgloss.Top,
 			m.models.info.View(),
 			m.models.message.View(),
+		)
+	}
+
+	if m.state == helpComponent {
+		return lipgloss.JoinVertical(lipgloss.Top,
+			m.models.info.View(),
+			m.models.help.View(),
+			m.models.status.View(),
 		)
 	}
 
