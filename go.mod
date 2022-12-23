@@ -11,12 +11,12 @@ require (
 	github.com/go-git/go-billy/v5 v5.3.1
 	github.com/go-git/go-git-fixtures/v4 v4.3.1
 	github.com/go-git/go-git/v5 v5.5.1
+	github.com/goccy/go-yaml v1.9.8
 	github.com/ivanpirog/coloredcobra v1.0.1
 	github.com/lithammer/fuzzysearch v1.1.5
 	github.com/mattn/go-runewidth v0.0.14
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.8.1
-	golang.org/x/text v0.5.0
 	gopkg.in/alessio/shellescape.v1 v1.0.0-20170105083845-52074bc9df61
 )
 
@@ -65,7 +65,9 @@ require (
 	golang.org/x/net v0.4.0 // indirect
 	golang.org/x/sys v0.3.0 // indirect
 	golang.org/x/term v0.3.0 // indirect
+	golang.org/x/text v0.5.0 // indirect
 	golang.org/x/tools v0.4.0 // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
