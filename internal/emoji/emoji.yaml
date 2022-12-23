@@ -557,14 +557,15 @@
   hex: F0 9F A7 B1
   shortcode: ":bricks:"
 
-- name: technologist
-  emoji: 🧑‍💻
-  description: Improve developer experience
-  characters: 3
-  codepoint: 1f9d1, 200d, 1f4bb
-  hex: F0 9F A7 91, E2 80 8D, F0 9F 92 BB
-  shortcode: ":technologist:"
-  zwj: true
+# Compatibility issue with ZWJ.
+# - name: technologist
+#   emoji: 🧑‍💻
+#   description: Improve developer experience
+#   characters: 3
+#   codepoint: 1f9d1, 200d, 1f4bb
+#   hex: F0 9F A7 91, E2 80 8D, F0 9F 92 BB
+#   shortcode: ":technologist:"
+#   zwj: true
 
 - name: money-with-wings
   emoji: 💸
