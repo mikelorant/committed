@@ -31,11 +31,11 @@
   shortcode: ":bug:"
 
 - name: ambulance
-  emoji: 🚑️
+  emoji: 🚑
   description: Critical hotfix.
   characters: 1
   codepoint: 1f691
-  hex: F0 9F 9A 91, EF B8 8F
+  hex: F0 9F 9A 91
   shortcode: ":ambulance:"
 
 - name: sparkles
@@ -87,11 +87,11 @@
   shortcode: ":white_check_mark:"
 
 - name: locked
-  emoji: 🔒️
+  emoji: 🔒
   description: Fix security issues.
   characters: 1
   codepoint: 1f512
-  hex: F0 9F 94 92, EF B8 8F
+  hex: F0 9F 94 92
   shortcode: ":lock:"
 
 - name: locked-with-key
@@ -239,11 +239,11 @@
   shortcode: ":hankey:"
 
 - name: fast-reverse-button
-  emoji: ⏪️
+  emoji: ⏪
   description: Revert changes.
   characters: 1
   codepoint: 23ea
-  hex: E2 8F AA, EF B8 8F
+  hex: E2 8F AA
   shortcode: ":rewind:"
 
 - name: shuffle-tracks-button
@@ -255,7 +255,7 @@
   shortcode: ":twisted_rightwards_arrows:"
 
 - name: package
-  emoji: 📦️
+  emoji: 📦
   description: Add or update compiled files or packages.
   characters: 1
   codepoint: 1f4e6
@@ -263,11 +263,11 @@
   shortcode: ":package:"
 
 - name: alien
-  emoji: 👽️
+  emoji: 👽
   description: Update code due to external API changes.
   characters: 1
   codepoint: 1f47d
-  hex: F0 9F 91 BD, EF B8, 8F
+  hex: F0 9F 91 BD
   shortcode: ":alien:"
 
 - name: delivery-truck
@@ -303,11 +303,11 @@
   shortcode: ":bento:"
 
 - name: wheelchair
-  emoji: ♿️
+  emoji: ♿
   description: Improve accessibility.
   characters: 2
-  codepoint: 267f, fe0f
-  hex: E2 99 BF, EF B8 8F
+  codepoint: 267f
+  hex: E2 99 BF
   shortcode: ":wheelchair:"
 
 - name: light-bulb
@@ -335,11 +335,11 @@
   shortcode: ":speech_balloon:"
 
 - name: card-file-box
-  emoji: 🗃️
+  emoji: 🗃
   description: Perform database related changes.
   characters: 1
   codepoint: 1f5c3
-  hex: F0 9F 97 83, EF B8 8F
+  hex: F0 9F 97 83
   shortcode: ":card_box:"
 
 - name: speaker-high-volume
@@ -375,11 +375,11 @@
   shortcode: ":children_crossing:"
 
 - name: building-construction
-  emoji: 🏗️
+  emoji: 🏗
   description: Make architectural changes.
   characters: 1
   codepoint: 1f3d7
-  hex: F0 9F 8F 97, EF B8 8F
+  hex: F0 9F 8F 97
   shortcode: ":building_construction:"
 
 - name: mobile-phone
@@ -431,19 +431,19 @@
   shortcode: ":alembic:"
 
 - name: mag
-  emoji: 🔍️
+  emoji: 🔍
   description: Improve SEO.
   characters: 1
   codepoint: 1f50d
-  hex: F0 9F 94 8D, EF B8 8F
+  hex: F0 9F 94 8D
   shortcode: ":mag:"
 
 - name: label
-  emoji: 🏷️
+  emoji: 🏷
   description: Add or update types.
   characters: 1
   codepoint: 1f3f7
-  hex: F0 9F 8F B7, EF B8 8F
+  hex: F0 9F 8F B7
   shortcode: ":label:"
 
 - name: seedling
@@ -479,11 +479,11 @@
   shortcode: ":dizzy:"
 
 - name: wastebasket
-  emoji: 🗑️
+  emoji: 🗑
   description: Deprecate code that needs to be cleaned up.
   characters: 1
   codepoint: 1f5d1
-  hex: F0 9F 97 91, EF B8 8F
+  hex: F0 9F 97 91
   shortcode: ":wastebasket:"
 
 - name: passport-control
