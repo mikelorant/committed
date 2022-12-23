@@ -1,0 +1,583 @@
+- name: art
+  emoji: 🎨
+  description: Improve structure / format of the code.
+  characters: 1
+  codepoint: 1f3a8
+  hex: F0 9F 8E A8
+  shortcode: ":art:"
+
+- name: high-voltage
+  emoji: ⚡️
+  description: Improve performance.
+  characters: 2
+  codepoint: 26a1
+  hex: E2 9A A1, EF B8 8F
+  shortcode: ":zap:"
+
+- name: fire
+  emoji: 🔥
+  description: Remove code or files.
+  characters: 1
+  codepoint: e11d
+  hex: F0 9F 94 A5
+  shortcode: ":fire:"
+
+- name: bug
+  emoji: 🐛
+  description: Fix a bug.
+  characters: 1
+  codepoint: e525
+  hex: F0 9F 90 9B
+  shortcode: ":bug:"
+
+- name: ambulance
+  emoji: 🚑️
+  description: Critical hotfix.
+  characters: 1
+  codepoint: 1f691
+  hex: F0 9F 9A 91, EF B8 8F
+  shortcode: ":ambulance:"
+
+- name: sparkles
+  emoji: ✨
+  description: Introduce new features.
+  characters: 1
+  codepoint: 2728
+  hex: E2 9C A8
+  shortcode: ":sparkles:"
+
+- name: memo
+  emoji: 📝
+  description: Add or update documentation.
+  characters: 1
+  codepoint: 1f4dd
+  hex: F0 9F 93 9D
+  shortcodde: ":memo:"
+
+- name: rocket
+  emoji: 🚀
+  description: Deploy stuff.
+  characters: 1
+  codepoint: 1f680
+  hex: F0 9F 9A 80
+  shortcode: ":rocket:"
+
+- name: lipstick
+  emoji: 💄
+  description: Add or update the UI and style files.
+  characters: 1
+  codepoint: 1f484
+  hex: F0 9F 92 84
+  shortcode: ":lipstick:"
+
+- name: party-popper
+  emoji: 🎉
+  description: Begin a project.
+  characters: 1
+  codepoint: 1f389
+  hex: F0 9F 8E 89
+  shortcode: ":tada:"
+
+- name: white-heavy-check-mark
+  emoji: ✅
+  description: Add or update tests.
+  characters: 1
+  codepoint: 2705
+  hex: E2 9C 85
+  shortcode: ":white_check_mark:"
+
+- name: locked
+  emoji: 🔒️
+  description: Fix security issues.
+  characters: 1
+  codepoint: 1f512
+  hex: F0 9F 94 92, EF B8 8F
+  shortcode: ":lock:"
+
+- name: locked-with-key
+  emoji: 🔐
+  description: Add or update secrets.
+  characters: 1
+  codepoint: 1f510
+  hex: F0 9F 94 90
+  shortcode: ":closed_lock_with_key"
+
+- name: bookmark
+  emoji: 🔖
+  description: Release / Version tags.
+  characters: 1
+  codepoint: 1f516
+  hex: F0 9F 94 96
+  shortcode: ":bookmark:"
+
+- name: police-car-light
+  emoji: 🚨
+  description: Remove linter warnings.
+  characters: 1
+  codepoint: 1f6a8
+  hex: F0 9F 9A A8
+  shortcode: ":rotating_light:"
+
+- name: construction
+  emoji: 🚧
+  description: Work in progress.
+  characters: 1
+  codepoint: 1f6a7
+  hex: F0 9F 9A A7
+  shortcode: ":construction:"
+
+- name: green-heart
+  emoji: 💚
+  description: Fix CI Build.
+  characters: 1
+  codepoint: 1f49a
+  hex: F0 9F 92 9A
+  shortcode: ":green_heart:"
+
+- name: down-arrow
+  emoji: ⬇️
+  description: Downgrade dependencies.
+  characters: 2
+  codepoint: 2b07, fe0f
+  hex: E2 AC 87, EF B8 8F
+  shortcode: ":arrow_down:"
+
+- name: up-arrow
+  emoji: ⬆️
+  description: Upgrade dependencies.
+  characters: 2
+  codepoint: 2b06, fe0f
+  hex: E2 AC 86, EF B8 8F
+  shortcode: ":arrow_up:"
+
+- name: pushpin
+  emoji: 📌
+  description: Pin dependencies to specific versions.
+  characters: 1
+  codepoint: 1f4cc
+  hex: F0 9F 93 8C
+  shortcode: ":pushpin:"
+
+- name: construction-worker
+  emoji: 👷
+  description: Add or update CI build system.
+  characters: 1
+  codepoint: F0 9F 91 B7
+  hex: 1f477
+  shortcode: ":construction_worker:"
+
+- name: chart-increasing
+  emoji: 📈
+  description: Add or update analytics or track code.
+  characters: 1
+  codepoint: 1f4c8
+  hex: F0 9F 93 88
+  shortcode: ":chart_with_upwards_trend:"
+
+- name: recycling
+  emoji: ♻️
+  description: Refactor code.
+  characters: 2
+  codepoint: 267b, fe0f
+  hex: E2 99 BB, EF B8 8F
+  shortcode: ":recycle:"
+
+- name: heavy-plus-sign
+  emoji: ➕
+  description: Add a dependency.
+  characters: 1
+  codepoint: 2795
+  hex: E2 9E 95
+  shortcode: ":heavy_plus_sign:"
+
+- name: heavy-minus-sign
+  emoji: ➖
+  description: Remove a dependency.
+  characters: 1
+  codepoint: 2796
+  hex: E2 9E 96
+  shortcode: ":heavy_minus_sign:"
+
+- name: wrench
+  emoji: 🔧
+  description: Add or update configuration files.
+  characters: 1
+  codepoint: 1f527
+  hex: F0 9F 94 A7
+  shortcode: ":wrench:"
+
+- name: hammer
+  emoji: 🔨
+  description: Add or update build scripts.
+  characters: 1
+  codepoint: 1f528
+  hex: F0 9F 94 A8
+  shortcode: ":hammer:"
+
+- name: globe-with-meridians
+  emoji: 🌐
+  description: Internationalization and localization.
+  characters: 1
+  codepoint: 1f310
+  hex: F0 9F 8C 90
+  shortcode: ":globe_with_meridians:"
+
+- name: pencil
+  emoji: ✏️
+  description: Fix typos.
+  characters: 2
+  codepoint: 270f, fe0f
+  hex: E2 9C 8F, EF B8 8F
+  shortcode: ":pencil2:"
+
+- name: pile-of-poo
+  emoji: 💩
+  description: Write bad code that needs to be improved.
+  characters: 1
+  codepoint: 1f4a9
+  hex: F0 9F 92 A9
+  shortcode: ":hankey:"
+
+- name: fast-reverse-button
+  emoji: ⏪️
+  description: Revert changes.
+  characters: 1
+  codepoint: 23ea
+  hex: E2 8F AA, EF B8 8F
+  shortcode: ":rewind:"
+
+- name: shuffle-tracks-button
+  emoji: 🔀
+  description: Merge branches.
+  characters: 1
+  codepoint: 1f500
+  hex: F0 9F 94 80
+  shortcode: ":twisted_rightwards_arrows:"
+
+- name: package
+  emoji: 📦️
+  description: Add or update compiled files or packages.
+  characters: 1
+  codepoint: 1f4e6
+  hex: F0 9F 93 A6
+  shortcode: ":package:"
+
+- name: alien
+  emoji: 👽️
+  description: Update code due to external API changes.
+  characters: 1
+  codepoint: 1f47d
+  hex: F0 9F 91 BD, EF B8, 8F
+  shortcode: ":alien:"
+
+- name: delivery-truck
+  emoji: 🚚
+  description: "Move or rename resources (e.g.: files, paths, routes)."
+  characters: 1
+  codepoint: 1f69a
+  hex: F0 9F 9A 9A
+  shortcode: ":truck:"
+
+- name: page-facing-up
+  emoji: 📄
+  description: Add or update license.
+  characters: 1
+  codepoint: 1f4c4
+  hex: F0 9F 93 84
+  shortcode: ":page_facing_up:"
+
+- name: collision
+  emoji: 💥
+  description: Introduce breaking changes.
+  characters: 1
+  codepoint: 1f4a5
+  hex: F0 9F 92 A5
+  shortcode: ":boom:"
+
+- name: bento-box
+  emoji: 🍱
+  description: Add or update assets.
+  characters: 1
+  codepoint: 1f371
+  hex: F0 9F 8D B1
+  shortcode: ":bento:"
+
+- name: wheelchair
+  emoji: ♿️
+  description: Improve accessibility.
+  characters: 2
+  codepoint: 267f, fe0f
+  hex: E2 99 BF, EF B8 8F
+  shortcode: ":wheelchair:"
+
+- name: light-bulb
+  emoji: 💡
+  description: Add or update comments in source code.
+  characters: 1
+  codepoint: 1f4a1
+  hex: F0 9F 92 A1
+  shortcode: ":bulb:"
+
+- name: clinking-beer-mugs
+  emoji: 🍻
+  description: Write code drunkenly.
+  characters: 1
+  codepoint: 1f37b
+  hex: F0 9F 8D BB
+  shortcode: ":beers:"
+
+- name: speech-balloon
+  emoji: 💬
+  description: Add or update text and literals.
+  characters: 1
+  codepoint: 1f4ac
+  hex: F0 9F 92 AC
+  shortcode: ":speech_balloon:"
+
+- name: card-file-box
+  emoji: 🗃️
+  description: Perform database related changes.
+  characters: 1
+  codepoint: 1f5c3
+  hex: F0 9F 97 83, EF B8 8F
+  shortcode: ":card_box:"
+
+- name: speaker-high-volume
+  emoji: 🔊
+  description: Add or update logs.
+  characters: 1
+  codepoint: 1f50a
+  hex: F0 9F 94 8A
+  shortcode: ":loud_sound:"
+
+- name: mute
+  emoji: 🔇
+  description: Remove logs.
+  characters: 1
+  codepoint: 1f507
+  hex: F0 9F 94 87
+  shortcode: ":mute:"
+
+- name: busts-in-silhouette
+  emoji: 👥
+  description: Add or update contributor(s).
+  characters: 1
+  codepoint: 1f465
+  hex: F0 9F 91 A5
+  shortcode: ":busts_in_silhouette:"
+
+- name: children-crossing
+  emoji: 🚸
+  description: Improve user experience / usability.
+  characters: 1
+  codepoint: 1f6b8
+  hex: F0 9F 9A B8
+  shortcode: ":children_crossing:"
+
+- name: building-construction
+  emoji: 🏗️
+  description: Make architectural changes.
+  characters: 1
+  codepoint: 1f3d7
+  hex: F0 9F 8F 97, EF B8 8F
+  shortcode: ":building_construction:"
+
+- name: mobile-phone
+  emoji: 📱
+  description: Work on responsive design.
+  characters: 1
+  codepoint: 1f4f1
+  hex: F0 9F 93 B1
+  shortcode: ":iphone:"
+
+- name: clown-face
+  emoji: 🤡
+  description: Mock things.
+  characters: 1
+  codepoint: 1f921
+  hex: F0 9F A4 A1
+  shortcode: ":clown_face:"
+
+- name: egg
+  emoji: 🥚
+  description: Add or update an easter egg.
+  characters: 1
+  codepoint: 1f95a
+  hex: F0 9F A5 9A
+  shortcode: ":egg:"
+
+- name: see-no-evil-monkey
+  emoji: 🙈
+  description: Add or update a .gitignore file.
+  characters: 1
+  codepoint: 1f648
+  hex: F0 9F 99 88
+  shortcode: ":see_no_evil:"
+
+- name: camera-with-flash
+  emoji: 📸
+  description: Add or update snapshots.
+  characters: 1
+  codepoint: 1f4f8
+  hex: F0 9F 93 B8
+  shortcode: ":camera_flash:"
+
+- name: alembic
+  emoji: ⚗️
+  description: Perform experiments.
+  characters: 2
+  codepoint: 2697, fe0f
+  hex: E2 9A 97, EF B8 8F
+  shortcode: ":alembic:"
+
+- name: mag
+  emoji: 🔍️
+  description: Improve SEO.
+  characters: 1
+  codepoint: 1f50d
+  hex: F0 9F 94 8D, EF B8 8F
+  shortcode: ":mag:"
+
+- name: label
+  emoji: 🏷️
+  description: Add or update types.
+  characters: 1
+  codepoint: 1f3f7
+  hex: F0 9F 8F B7, EF B8 8F
+  shortcode: ":label:"
+
+- name: seedling
+  emoji: 🌱
+  description: Add or update seed files.
+  characters: 1
+  codepoint: 1f331
+  hex: F0 9F 8C B1
+  shortcode: ":seedling:"
+
+- name: triangular-flag
+  emoji: 🚩
+  description: Add, update, or remove feature flags.
+  characters: 1
+  codepoint: 1f6a9
+  hex: F0 9F 9A A9
+  shortcode: ":triangular_flag_on_post:"
+
+- name: goal-net
+  emoji: 🥅
+  description: Catch errors.
+  characters: 1
+  codepoint: 1f945
+  hex: F0 9F A5 85
+  shortcode: ":goal_net:"
+
+- name: dizzy
+  emoji: 💫
+  description: Add or update animations and transitions.
+  characters: 1
+  codepoint: 1f4ab
+  hex: F0 9F 92 AB
+  shortcode: ":dizzy:"
+
+- name: wastebasket
+  emoji: 🗑️
+  description: Deprecate code that needs to be cleaned up.
+  characters: 1
+  codepoint: 1f5d1
+  hex: F0 9F 97 91, EF B8 8F
+  shortcode: ":wastebasket:"
+
+- name: passport-control
+  emoji: 🛂
+  description: Work on code related to authorization, roles and permissions.
+  characters: 1
+  codepoint: 1f6c2
+  hex: F0 9F 9B 82
+  shortcode: ":passport_control:"
+
+- name: adhesive-bandage
+  emoji: 🩹
+  description: Simple fix for a non-critical issue.
+  characters:
+  codepoint: 1fa79
+  hex: F0 9F A9 B9
+  shortcode: ":adhesive_bandage:"
+
+- name: face-with-monocle
+  emoji: 🧐
+  description: Data exploration/inspection.
+  characters: 1
+  codepoint: 1f9d0
+  hex: F0 9F A7 90
+  shortcode: ":monocle_face:"
+
+- name: coffin
+  emoji: ⚰️
+  description: Remove dead code.
+  characters: 1
+  codepoint: 26b0
+  hex: E2 9A B0, EF B8 8F
+  shortcode: ":coffin:"
+
+- name: test-tube
+  emoji: 🧪
+  description: Add a failing test.
+  characters: 1
+  codepoint: 1f9ea
+  hex: F0 9F A7 AA
+  shortcode: ":test_tube:"
+
+- name: necktie
+  emoji: 👔
+  description: Add or update business logic.
+  characters: 1
+  codepoint: 1f454
+  hex: F0 9F 91 94
+  shortcode: ":necktie:"
+
+- name: stethoscope
+  emoji: 🩺
+  description: Add or update healthcheck.
+  characters: 1
+  codepoint: 1fa7a
+  hex: F0 9F A9 BA
+  shortcode: ":stethoscope:"
+
+- name: bricks
+  emoji: 🧱
+  description: Infrastructure related changes.
+  characters: 1
+  codepoint: 1f9f1
+  hex: F0 9F A7 B1
+  shortcode: ":bricks:"
+
+- name: technologist
+  emoji: 🧑‍💻
+  description: Improve developer experience
+  characters: 3
+  codepoint: 1f9d1, 200d, 1f4bb
+  hex: F0 9F A7 91, E2 80 8D, F0 9F 92 BB
+  shortcode: ":technologist:"
+
+- name: money-with-wings
+  emoji: 💸
+  description: Add sponsorships or money related infrastructure.
+  characters: 1
+  codepoint: 1f4b8
+  hex: F0 9F 92 B8
+  shortcode: ":money_with_wings:"
+
+- name: thread
+  emoji: 🧵
+  description: Add or update code related to multithreading or concurrency.
+  charcters: 1
+  codepoint: 1f9f5
+  hex: F0 9F A7 B5
+  shortcode: ":thread:"
+
+- name: safety-vest
+  emoji: 🦺
+  description: Add or update code related to validation.
+  characters: 1
+  codepoint: 1f9ba
+  hex: F0 9F A6 BA
+  shortcode: ":safety_vest:"
