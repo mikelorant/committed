@@ -13,6 +13,7 @@
   codepoint: 26a1
   hex: E2 9A A1, EF B8 8F
   shortcode: ":zap:"
+  variant: true
 
 - name: fire
   emoji: 🔥
@@ -141,6 +142,7 @@
   codepoint: 2b07, fe0f
   hex: E2 AC 87, EF B8 8F
   shortcode: ":arrow_down:"
+  variant: true
 
 - name: up-arrow
   emoji: ⬆️
@@ -149,6 +151,7 @@
   codepoint: 2b06, fe0f
   hex: E2 AC 86, EF B8 8F
   shortcode: ":arrow_up:"
+  variant: true
 
 - name: pushpin
   emoji: 📌
@@ -181,6 +184,7 @@
   codepoint: 267b, fe0f
   hex: E2 99 BB, EF B8 8F
   shortcode: ":recycle:"
+  variant: true
 
 - name: heavy-plus-sign
   emoji: ➕
@@ -229,6 +233,7 @@
   codepoint: 270f, fe0f
   hex: E2 9C 8F, EF B8 8F
   shortcode: ":pencil2:"
+  variant: true
 
 - name: pile-of-poo
   emoji: 💩
@@ -429,6 +434,7 @@
   codepoint: 2697, fe0f
   hex: E2 9A 97, EF B8 8F
   shortcode: ":alembic:"
+  variant: true
 
 - name: mag
   emoji: 🔍
@@ -517,6 +523,7 @@
   codepoint: 26b0
   hex: E2 9A B0, EF B8 8F
   shortcode: ":coffin:"
+  variant: true
 
 - name: test-tube
   emoji: 🧪
@@ -557,6 +564,7 @@
   codepoint: 1f9d1, 200d, 1f4bb
   hex: F0 9F A7 91, E2 80 8D, F0 9F 92 BB
   shortcode: ":technologist:"
+  zwj: true
 
 - name: money-with-wings
   emoji: 💸
