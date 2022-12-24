@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"os/exec"
-	"strings"
 
 	"github.com/creack/pty"
 	"github.com/mikelorant/committed/internal/emoji"
@@ -160,7 +159,7 @@ func (c *Commit) exec() error {
 	out := buf.String()
 
 	fmt.Println()
-	fmt.Println(strings.TrimSpace(string(out)))
+	fmt.Println(string(out))
 
 	return nil
 }
