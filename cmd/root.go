@@ -18,7 +18,7 @@ func NewRootCmd() *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "committed",
-		Short: "A brief description of your application",
+		Short: "Committed is a WYSIWYG Git commit editor",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			c, err := commit.New(opts)
 			if err != nil {
