@@ -14,11 +14,13 @@ import (
 )
 
 func NewRootCmd() *cobra.Command {
+	var opts commit.Options
+
 	cmd := &cobra.Command{
 		Use:   "committed",
 		Short: "A brief description of your application",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			c, err := commit.New()
+			c, err := commit.New(opts)
 			if err != nil {
 				log.Fatalf("unable to init commit: %v", err)
 			}
@@ -39,6 +41,8 @@ func NewRootCmd() *cobra.Command {
 			return nil
 		},
 	}
+
+	cmd.Flags().BoolVarP(&opts.Apply, "yes", "y", false, "Specify --yes to apply the commit")
 
 	cc.Init(&cc.Config{
 		RootCmd:         cmd,

@@ -21,6 +21,8 @@ type Commit struct {
 	Summary string
 	Body    string
 	Footer  string
+
+	options Options
 	cmd     []string
 }
 
@@ -34,6 +36,10 @@ type Config struct {
 	BranchRefs   []string
 	Remotes      []string
 	Emojis       []emoji.Emoji
+}
+
+type Options struct {
+	Apply bool
 }
 
 type Author struct {
@@ -58,7 +64,7 @@ const (
 	summary  string = "Capitalized, short (50 chars or less) summary"
 )
 
-func New() (*Commit, error) {
+func New(opts Options) (*Commit, error) {
 	r, err := repository.New()
 	if err != nil {
 		return nil, fmt.Errorf("unable to get repository: %w", err)
@@ -92,7 +98,8 @@ func New() (*Commit, error) {
 	}
 
 	return &Commit{
-		Config: cfg,
+		Config:  cfg,
+		options: opts,
 	}, nil
 }
 
