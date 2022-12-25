@@ -3,8 +3,10 @@ package commit
 import (
 	"bytes"
 	_ "embed"
+	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"os/exec"
 
 	"github.com/creack/pty"
@@ -152,9 +154,14 @@ func (c *Commit) exec() error {
 	defer fh.Close()
 
 	var buf bytes.Buffer
-	_, err = io.Copy(&buf, fh)
-	if err != nil {
-		return fmt.Errorf("unable to copy commit output: %w", err)
+	if _, err = io.Copy(&buf, fh); err != nil {
+		var pathError *fs.PathError
+		if !errors.As(err, &pathError) {
+			return fmt.Errorf("unable to copy commit output: %w", err)
+		}
+		if pathError.Path != "/dev/ptmx" {
+			return fmt.Errorf("unable to copy commit output: %w", err)
+		}
 	}
 
 	out := buf.String()
