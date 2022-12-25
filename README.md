@@ -16,6 +16,24 @@ commits by showing you the layout in the same format as `git log`.
 - Formats body width to 72 characters
 - Best practise recommendations
 
+## Compatibility
+
+Terminals render emojis differently and this makes alignment of borders
+complicated and difficult. It is an ongoing process to improve the compatibility
+with terminals. The following list are the terminals that have been tested.
+Other terminals may display correctly and feedback would be appreciated to help
+update the list.
+
+| Terminal       | Status                  |
+| :------------- | :---------------------- |
+| macOS Terminal | Compatible              |
+| iTerm2         | Compatible              |
+| VS Code        | Compatible              |
+| Hyper          | Compatible              |
+| Alacritty      | Compatible              |
+| WezTerm        | Compatible              |
+| Kitty          | Border alignment issues |
+
 ## Installation
 
 Install Committed with Homebrew.
