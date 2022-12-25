@@ -10,7 +10,6 @@ import (
 	"github.com/creack/pty"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
-	"gopkg.in/alessio/shellescape.v1"
 )
 
 type Commit struct {
@@ -118,7 +117,7 @@ func (c *Commit) build() {
 
 	if c.Author.Name != "" && c.Author.Email != "" {
 		author := fmt.Sprintf("%s <%s>", c.Author.Name, c.Author.Email)
-		cmd = append(cmd, "--author", shellescape.Quote(author))
+		cmd = append(cmd, "--author", author)
 	}
 
 	var subject string
@@ -127,14 +126,14 @@ func (c *Commit) build() {
 	} else {
 		subject = c.Summary
 	}
-	cmd = append(cmd, "--message", shellescape.Quote(subject))
+	cmd = append(cmd, "--message", subject)
 
 	if c.Body != "" {
-		cmd = append(cmd, "--message", shellescape.Quote(c.Body))
+		cmd = append(cmd, "--message", c.Body)
 	}
 
 	if c.Footer != "" {
-		cmd = append(cmd, "--message", shellescape.Quote(c.Footer))
+		cmd = append(cmd, "--message", c.Footer)
 	}
 
 	if !c.options.Apply {

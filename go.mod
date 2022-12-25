@@ -17,7 +17,6 @@ require (
 	github.com/mattn/go-runewidth v0.0.14
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.8.1
-	gopkg.in/alessio/shellescape.v1 v1.0.0-20170105083845-52074bc9df61
 )
 
 replace (
@@ -29,7 +28,6 @@ require (
 	github.com/Microsoft/go-winio v0.6.0 // indirect
 	github.com/ProtonMail/go-crypto v0.0.0-20221026131551-cf6655e29de4 // indirect
 	github.com/acomagu/bufpipe v1.0.3 // indirect
-	github.com/alessio/shellescape v1.4.1 // indirect
 	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/aymanbagabas/go-osc52 v1.2.1 // indirect
 	github.com/cloudflare/circl v1.3.0 // indirect
