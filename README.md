@@ -7,16 +7,24 @@ commits by showing you the layout in the same format as `git log`.
 
 ## Features
 
-- Built-in editor
-- Emoji support
-- Switch to a different author profile
-- Does not take over the entire screen
+- Built-in multiline editor
+- Emoji selector
+- Author profile switching
+- Inline text interface
 - Subject line counter
 - Appends sign-off
-- Formats body to a maximum of 72 characters
-- Best practises recommendations
+- Formats body width to 72 characters
+- Best practise recommendations
 
-## Interface
+## Installation
+
+Install Committed with Homebrew.
+
+```bash
+brew install mikelorant/taps/committed
+```
+
+## Views
 
 ### Main
 
@@ -181,15 +189,6 @@ Date:   Mon Jan 2 15:04:05 2006 -0700
  3 files changed, 2 insertions(+), 1 deletions(-)
 ```
 
-## Installation
-
-Install Committed with Homebrew.
-
-```bash
-  brew tap mikelorant/homebrew-custom
-  brew install committed
-```
-
 ## Shortcuts
 
 **Global**
@@ -210,7 +209,7 @@ Install Committed with Homebrew.
 **Emoji**
 
 | Command       | Key       |
-| ------------- | --------- |
+| :------------ | :-------- |
 | Clear emoji   | delete    |
 | Reset filter  | escape    |
 | Next page     | page down |
