@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/go-git/go-git/v5"
@@ -13,6 +14,10 @@ type Repository struct {
 	Remote        Remote
 }
 
+type repositoryNotFoundError struct{}
+
+var errRepositoryNotFound = errors.New("repository does not exist")
+
 const repositoryPath string = "."
 
 func New() (*Repository, error) {
@@ -21,7 +26,11 @@ func New() (*Repository, error) {
 	}
 
 	repo, err := git.PlainOpenWithOptions(repositoryPath, &openOpts)
-	if err != nil {
+	switch {
+	case err == nil:
+	case err.Error() == errRepositoryNotFound.Error():
+		return nil, repositoryNotFoundError{}
+	default:
 		return nil, fmt.Errorf("unable to open git repository: %v: %w", repositoryPath, err)
 	}
 
@@ -46,4 +55,12 @@ func New() (*Repository, error) {
 		Branch:        branch,
 		Remote:        remote,
 	}, nil
+}
+
+func (e repositoryNotFoundError) Error() string {
+	return errRepositoryNotFound.Error()
+}
+
+func NotFoundError() error {
+	return repositoryNotFoundError{}
 }

@@ -1,12 +1,14 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
 	"strings"
 
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/repository"
 	"github.com/mikelorant/committed/internal/ui"
 
 	cc "github.com/ivanpirog/coloredcobra"
@@ -21,7 +23,11 @@ func NewRootCmd() *cobra.Command {
 		Short: "Committed is a WYSIWYG Git commit editor",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			c, err := commit.New(opts)
-			if err != nil {
+			switch {
+			case err == nil:
+			case errors.Is(err, repository.NotFoundError()):
+				log.Fatalf("No git repository found.")
+			default:
 				log.Fatalf("unable to init commit: %v", err)
 			}
 

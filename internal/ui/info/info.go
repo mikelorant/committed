@@ -144,6 +144,10 @@ func (m Model) hash() string {
 }
 
 func (m Model) branchRefs() string {
+	if m.LocalBranch == "" {
+		return ""
+	}
+
 	h := m.styles.branchHead
 	l := m.styles.branchLocal.Render(m.LocalBranch)
 

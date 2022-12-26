@@ -1,12 +1,15 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/plumbing"
 )
+
+var errReferenceNotFound = errors.New("reference not found")
 
 type Branch struct {
 	repository *git.Repository
@@ -24,7 +27,11 @@ func NewBranch(r *git.Repository) (Branch, error) {
 	}
 
 	h, err := r.Head()
-	if err != nil {
+	switch {
+	case err == nil:
+	case err.Error() == errReferenceNotFound.Error():
+		return Branch{}, nil
+	default:
 		return Branch{}, fmt.Errorf("unable to get head reference: %w", err)
 	}
 
