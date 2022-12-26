@@ -16,6 +16,32 @@ commits by showing you the layout in the same format as `git log`.
 - Formats body width to 72 characters
 - Best practise recommendations
 
+## Purpose
+
+The benefits of high quality commits are well documented however the tooling to
+follow these practises has been lacking. In most cases you are either providing
+a single line commit message or forced into a full screen editor which has no
+knowledge of recommended Git practises.
+
+It is common to accidentally commit to the wrong branch or use the incorrect
+author name. Improving clarity of commits with emojis or detailed messages is
+often frustrating.
+
+For many, knowing what makes a good commit is not even thought about.
+
+Committed attempts to solve these problems by first educating on best practises.
+It then helps guide and enforce these de factor standards while showing how the
+commit will end up being displayed to other users.
+
+The interface does not take over the sceen or force switching to another
+application. All actions are done with the keyboard which is consistent with the
+Git command which is often used before the actual commit. Having an editor which
+allows for more advanced cursor movement and editing assists with revising
+rather than accepting what has already been written.
+
+These capabilities all contribute to helping create a commit message that is
+useful.
+
 ## Compatibility
 
 Terminals render emojis differently and this makes alignment of borders
