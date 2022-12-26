@@ -171,7 +171,7 @@ Ctrl +     <c> Cancel                                                    + Shift
 
 ### Commit
 
-Accepting the commit shows the output that will closely match the the `git log`
+Accepting the commit shows the output that will closely match the `git log`
 command.
 
 ```
