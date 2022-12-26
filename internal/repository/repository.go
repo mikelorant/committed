@@ -12,6 +12,7 @@ type Repository struct {
 	Users         []User
 	Branch        Branch
 	Remote        Remote
+	HeadCommit    Commit
 }
 
 type repositoryNotFoundError struct{}
@@ -49,11 +50,17 @@ func New() (*Repository, error) {
 		return nil, fmt.Errorf("unable to initialise remote: %w", err)
 	}
 
+	commit, err := NewHeadCommit(repo)
+	if err != nil {
+		return nil, fmt.Errorf("unable to get head commit: %w", err)
+	}
+
 	return &Repository{
 		gitRepository: repo,
 		Users:         users,
 		Branch:        branch,
 		Remote:        remote,
+		HeadCommit:    commit,
 	}, nil
 }
 
