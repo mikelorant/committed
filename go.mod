@@ -8,6 +8,7 @@ require (
 	github.com/charmbracelet/bubbletea v0.23.1
 	github.com/charmbracelet/lipgloss v0.6.0
 	github.com/creack/pty v1.1.18
+	github.com/forPelevin/gomoji v1.1.8
 	github.com/go-git/go-billy/v5 v5.3.1
 	github.com/go-git/go-git-fixtures/v4 v4.3.1
 	github.com/go-git/go-git/v5 v5.5.1

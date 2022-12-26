@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/forPelevin/gomoji"
 	"github.com/goccy/go-yaml"
 )
 
@@ -33,4 +34,20 @@ func New() ([]Emoji, error) {
 	}
 
 	return e, nil
+}
+
+func HasEmoji(str string) bool {
+	return gomoji.ContainsEmoji(str)
+}
+
+func HasShortcode(str string) bool {
+	if len(str) <= 2 {
+		return false
+	}
+
+	if string(str[0]) == ":" && string(str[len(str)-1]) == ":" {
+		return true
+	}
+
+	return false
 }
