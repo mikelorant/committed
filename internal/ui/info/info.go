@@ -37,7 +37,7 @@ const (
 )
 
 func New(cfg commit.Config) Model {
-	return Model{
+	m := Model{
 		Hash:         cfg.Placeholders.Hash,
 		LocalBranch:  cfg.LocalBranch,
 		RemoteBranch: cfg.RemoteBranch,
@@ -53,6 +53,13 @@ func New(cfg commit.Config) Model {
 			filterHeight,
 		),
 	}
+
+	if cfg.Amend {
+		m.Hash = cfg.HeadCommit.Hash
+		m.Date = cfg.HeadCommit.When.Format(dateTimeFormat)
+	}
+
+	return m
 }
 
 func (m Model) Init() tea.Cmd {

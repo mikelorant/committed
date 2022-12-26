@@ -47,7 +47,7 @@ const (
 )
 
 func New(cfg commit.Config) Model {
-	return Model{
+	m := Model{
 		DefaultHeight: defaultHeight,
 		ExpandHeight:  expandHeight,
 		Emojis:        cfg.Emojis,
@@ -59,6 +59,13 @@ func New(cfg commit.Config) Model {
 			filterHeight,
 		),
 	}
+
+	if cfg.Amend {
+		m.Emoji = cfg.HeadCommit.Emoji
+		m.summaryInput.SetValue(cfg.HeadCommit.Summary)
+	}
+
+	return m
 }
 
 func (m Model) Init() tea.Cmd {

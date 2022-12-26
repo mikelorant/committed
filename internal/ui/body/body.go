@@ -26,11 +26,17 @@ const (
 )
 
 func New(cfg commit.Config, h int) Model {
-	return Model{
+	m := Model{
 		Height:   h,
 		styles:   defaultStyles(),
 		textArea: newTextArea(cfg.Placeholders.Body, defaultWidth),
 	}
+
+	if cfg.Amend {
+		m.textArea.SetValue(cfg.HeadCommit.Body)
+	}
+
+	return m
 }
 
 func (m Model) Init() tea.Cmd {

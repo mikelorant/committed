@@ -49,6 +49,7 @@ func NewRootCmd() *cobra.Command {
 	}
 
 	cmd.Flags().BoolVarP(&opts.Apply, "yes", "y", false, "Specify --yes to apply the commit")
+	cmd.Flags().BoolVarP(&opts.Amend, "amend", "a", false, "Replace the tip of the current branch by creating a new commit")
 
 	cc.Init(&cc.Config{
 		RootCmd:         cmd,

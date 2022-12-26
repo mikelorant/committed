@@ -8,6 +8,7 @@ import (
 	"io"
 	"io/fs"
 	"os/exec"
+	"time"
 
 	"github.com/creack/pty"
 	"github.com/mikelorant/committed/internal/emoji"
@@ -33,16 +34,27 @@ type Config struct {
 	RemoteBranch string
 	BranchRefs   []string
 	Remotes      []string
+	HeadCommit   HeadCommit
 	Emojis       []emoji.Emoji
+	Amend        bool
 }
 
 type Options struct {
 	Apply bool
+	Amend bool
 }
 
 type Author struct {
 	Name  string
 	Email string
+}
+
+type HeadCommit struct {
+	Hash    string
+	When    time.Time
+	Emoji   emoji.Emoji
+	Summary string
+	Body    string
 }
 
 type Placeholders struct {
@@ -103,6 +115,17 @@ func New(opts Options) (*Commit, error) {
 		BranchRefs:   r.Branch.Refs,
 		Remotes:      r.Remote.Remotes,
 		Emojis:       e,
+		Amend:        opts.Amend,
+	}
+
+	if opts.Amend && r.HeadCommit.Hash != "" {
+		cfg.HeadCommit = HeadCommit{
+			Hash:    r.HeadCommit.Hash,
+			When:    r.HeadCommit.When,
+			Emoji:   messageToEmoji(r.HeadCommit.Message, e),
+			Summary: messageToSummary(r.HeadCommit.Message),
+			Body:    messageToBody(r.HeadCommit.Message),
+		}
 	}
 
 	return &Commit{
@@ -144,6 +167,10 @@ func (c *Commit) build() {
 
 	if c.Footer != "" {
 		cmd = append(cmd, "--message", c.Footer)
+	}
+
+	if c.options.Amend {
+		cmd = append(cmd, "--amend")
 	}
 
 	if !c.options.Apply {
