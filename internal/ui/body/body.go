@@ -29,7 +29,7 @@ func New(cfg commit.Config, h int) Model {
 	return Model{
 		Height:   h,
 		styles:   defaultStyles(),
-		textArea: newTextArea(cfg.Body, defaultWidth),
+		textArea: newTextArea(cfg.Placeholders.Body, defaultWidth),
 	}
 }
 

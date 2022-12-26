@@ -27,10 +27,8 @@ type Commit struct {
 }
 
 type Config struct {
-	Hash         string
 	Authors      []Author
-	Summary      string
-	Body         string
+	Placeholders Placeholders
 	LocalBranch  string
 	RemoteBranch string
 	BranchRefs   []string
@@ -45,6 +43,12 @@ type Options struct {
 type Author struct {
 	Name  string
 	Email string
+}
+
+type Placeholders struct {
+	Hash    string
+	Summary string
+	Body    string
 }
 
 //go:embed message.txt
@@ -85,11 +89,15 @@ func New(opts Options) (*Commit, error) {
 		authors = append(authors, a)
 	}
 
+	placeholders := Placeholders{
+		Hash:    mockHash,
+		Summary: summary,
+		Body:    message,
+	}
+
 	cfg := Config{
-		Hash:         mockHash,
 		Authors:      authors,
-		Summary:      summary,
-		Body:         message,
+		Placeholders: placeholders,
 		LocalBranch:  r.Branch.Local,
 		RemoteBranch: r.Branch.Remote,
 		BranchRefs:   r.Branch.Refs,

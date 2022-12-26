@@ -52,7 +52,7 @@ func New(cfg commit.Config) Model {
 		ExpandHeight:  expandHeight,
 		Emojis:        cfg.Emojis,
 		styles:        defaultStyles(),
-		summaryInput:  summaryInput(cfg.Summary),
+		summaryInput:  summaryInput(cfg.Placeholders.Summary),
 		filterList: filterlist.New(
 			castToListItems(cfg.Emojis),
 			filterPromptText,

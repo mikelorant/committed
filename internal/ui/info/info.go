@@ -38,7 +38,7 @@ const (
 
 func New(cfg commit.Config) Model {
 	return Model{
-		Hash:         cfg.Hash,
+		Hash:         cfg.Placeholders.Hash,
 		LocalBranch:  cfg.LocalBranch,
 		RemoteBranch: cfg.RemoteBranch,
 		BranchRefs:   cfg.BranchRefs,
