@@ -70,6 +70,31 @@ Install Committed with Homebrew.
 brew install mikelorant/taps/committed
 ```
 
+## Usage
+
+```
+Committed is a WYSIWYG Git commit editor
+
+Usage:
+  committed [flags]
+
+Flags:
+  -a, --amend   Replace the tip of the current branch by creating a new commit
+  -h, --help    help for committed
+  -y, --yes     Specify --yes to apply the commit
+```
+
+To apply a commit use `committed --yes `. Shell or Git aliases can be used to
+tailor this to your preferred workflow.
+
+To amend an existing commit use `committed --yes --amend`. There are certain
+limitations when amending commits and it is recommended only for use with
+commits created with Committed. The limitations are:
+
+- Emoji character or shortcode must be in the existing data set.
+- Trailers will be imported into the body.
+- Summary will be truncated if more than 72 characters.
+
 ## Views
 
 ### Main
