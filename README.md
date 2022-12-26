@@ -1,5 +1,7 @@
 # Committed
 
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/mikelorant/committed)[![goreleaser](https://github.com/mikelorant/committed/actions/workflows/release.yaml/badge.svg)](https://github.com/mikelorant/committed/actions/workflows/release.yaml)![GitHub](https://img.shields.io/github/license/mikelorant/committed)
+
 Committed is a WYSIWYG Git commit editor that helps improve the quality of your
 commits by showing you the layout in the same format as `git log`.
 
