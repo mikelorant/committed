@@ -22,8 +22,10 @@ func NewRootCmd() *cobra.Command {
 	var dryRun bool
 
 	cmd := &cobra.Command{
-		Use:   "committed",
-		Short: "Committed is a WYSIWYG Git commit editor",
+		Use:         "committed",
+		Short:       "Committed is a WYSIWYG Git commit editor",
+		Version:     ReleaseVersion,
+		Annotations: annotations(),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Apply = apply(opts.Apply, dryRun)
 
@@ -53,6 +55,9 @@ func NewRootCmd() *cobra.Command {
 		},
 	}
 
+	cmd.AddCommand(NewVersionCmd())
+	cmd.SetVersionTemplate(verTmpl)
+	cmd.Flags().SortFlags = false
 	cmd.Flags().BoolVarP(&dryRun, "dry-run", "", false, "Simulate applying a commit")
 	cmd.Flags().BoolVarP(&opts.Amend, "amend", "a", false, "Replace the tip of the current branch by creating a new commit")
 

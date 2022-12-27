@@ -6,6 +6,12 @@ builds:
     goarch:
       - amd64
       - arm64
+    ldflags:
+      - -s
+      - -w
+      - -X github.com/mikelorant/committed/cmd.ReleaseVersion={{.Version}}
+      - -X github.com/mikelorant/committed/cmd.ReleaseDate={{.Date}}
+      - -X github.com/mikelorant/committed/cmd.ReleaseCommit={{.ShortCommit}}
     tags:
       - release
 
