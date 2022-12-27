@@ -1,6 +1,6 @@
 # Committed
 
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/mikelorant/committed)[![goreleaser](https://github.com/mikelorant/committed/actions/workflows/release.yaml/badge.svg)](https://github.com/mikelorant/committed/actions/workflows/release.yaml)![GitHub](https://img.shields.io/github/license/mikelorant/committed)
+[![Release](https://img.shields.io/github/v/release/mikelorant/committed)](https://github.com/mikelorant/committed/releases)[![Build](https://github.com/mikelorant/committed/actions/workflows/release.yaml/badge.svg)](https://github.com/mikelorant/committed/actions/workflows/release.yaml)[![License](https://img.shields.io/github/license/mikelorant/committed)](https://spdx.org/licenses/MIT.html)
 
 Committed is a WYSIWYG Git commit editor that helps improve the quality of your
 commits by showing you the layout in the same format as `git log`.
@@ -77,15 +77,24 @@ Committed is a WYSIWYG Git commit editor
 
 Usage:
   committed [flags]
+  committed [command]
+
+Available Commands:
+  completion   Generate the autocompletion script for the specified shell
+  help         Help about any command
+  version      Print the version information
 
 Flags:
-  -a, --amend     Replace the tip of the current branch by creating a new commit
       --dry-run   Simulate applying a commit
+  -a, --amend     Replace the tip of the current branch by creating a new commit
   -h, --help      help for committed
+  -v, --version   version for committed
+
+Use "committed [command] --help" for more information about a command.
 ```
 
-To create and apply a commit run `committed ` without any arguments. Shell or
-Git aliases can be used to tailor this to your preferred workflow.
+To create and apply a commit run `committed` without any arguments. Shell or Git
+aliases can be used to tailor this to your preferred workflow.
 
 To amend an existing commit use `committed --amend`. There are certain
 limitations when amending commits and it is recommended only for use with
