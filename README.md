@@ -79,15 +79,15 @@ Usage:
   committed [flags]
 
 Flags:
-  -a, --amend   Replace the tip of the current branch by creating a new commit
-  -h, --help    help for committed
-  -y, --yes     Specify --yes to apply the commit
+  -a, --amend     Replace the tip of the current branch by creating a new commit
+      --dry-run   Simulate applying a commit
+  -h, --help      help for committed
 ```
 
-To apply a commit use `committed --yes `. Shell or Git aliases can be used to
-tailor this to your preferred workflow.
+To create and apply a commit run `committed ` without any arguments. Shell or
+Git aliases can be used to tailor this to your preferred workflow.
 
-To amend an existing commit use `committed --yes --amend`. There are certain
+To amend an existing commit use `committed --amend`. There are certain
 limitations when amending commits and it is recommended only for use with
 commits created with Committed. The limitations are:
 
