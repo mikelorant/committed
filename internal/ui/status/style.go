@@ -2,6 +2,7 @@ package status
 
 import (
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Styles struct {
@@ -14,27 +15,10 @@ type Styles struct {
 	shortcutLabel       lipgloss.Style
 }
 
-const (
-	black         = "0"
-	red           = "1"
-	green         = "2"
-	yellow        = "3"
-	blue          = "4"
-	magenta       = "5"
-	cyan          = "6"
-	white         = "7"
-	brightBlack   = "8"
-	brightRed     = "9"
-	brightGreen   = "10"
-	brightYellow  = "11"
-	brightBlue    = "12"
-	brightMagenta = "13"
-	brightCyan    = "14"
-	brightWhite   = "15"
-)
-
 func defaultStyles() Styles {
 	var s Styles
+
+	tint := theme.Tint()
 
 	s.shortcutBoundary = lipgloss.NewStyle().
 		MarginBottom(1)
@@ -54,10 +38,10 @@ func defaultStyles() Styles {
 		MarginLeft(1)
 
 	s.shortcutKey = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cyan))
+		Foreground(tint.Cyan())
 
 	s.shortcutLabel = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(green))
+		Foreground(tint.Green())
 
 	return s
 }

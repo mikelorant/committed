@@ -2,6 +2,7 @@ package info
 
 import (
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 const (
@@ -29,27 +30,10 @@ type Styles struct {
 	dateValue lipgloss.Style
 }
 
-const (
-	black         = "0"
-	red           = "1"
-	green         = "2"
-	yellow        = "3"
-	blue          = "4"
-	magenta       = "5"
-	cyan          = "6"
-	white         = "7"
-	brightBlack   = "8"
-	brightRed     = "9"
-	brightGreen   = "10"
-	brightYellow  = "11"
-	brightBlue    = "12"
-	brightMagenta = "13"
-	brightCyan    = "14"
-	brightWhite   = "15"
-)
-
 func defaultStyles() Styles {
 	var s Styles
+
+	tint := theme.Tint()
 
 	s.infoBoundary = lipgloss.NewStyle().
 		MarginBottom(1)
@@ -58,44 +42,44 @@ func defaultStyles() Styles {
 		MarginTop(1)
 
 	s.hashText = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(yellow)).
+		Foreground(tint.Yellow()).
 		SetString("commit")
 
 	s.hashValue = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(yellow))
+		Foreground(tint.Yellow())
 
 	s.hashBoundary = lipgloss.NewStyle().
 		MarginRight(1)
 
 	s.branchHead = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(brightCyan)).
+		Foreground(tint.BrightCyan()).
 		Bold(true).
 		SetString("HEAD ->")
 
 	s.branchLocal = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(brightGreen)).
+		Foreground(tint.BrightGreen()).
 		Bold(true)
 
 	s.branchGrouping = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(yellow))
+		Foreground(tint.Yellow())
 
 	s.branchRemote = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(red)).
+		Foreground(tint.Red()).
 		Bold(true)
 
 	s.authorText = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(white)).
+		Foreground(tint.Fg()).
 		SetString("author")
 
 	s.authorValue = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(white))
+		Foreground(tint.Fg())
 
 	s.dateText = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(white)).
+		Foreground(tint.Fg()).
 		SetString("date")
 
 	s.dateValue = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(white))
+		Foreground(tint.Fg())
 
 	return s
 }

@@ -2,6 +2,7 @@ package header
 
 import (
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Styles struct {
@@ -22,13 +23,16 @@ const (
 func defaultStyles() Styles {
 	var s Styles
 
+	tint := theme.Tint()
+
 	s.emojiBoundary = lipgloss.NewStyle().
 		Width(4).
 		Height(1).
 		MarginLeft(4).
 		MarginRight(1).
 		Align(lipgloss.Center, lipgloss.Center).
-		BorderStyle(lipgloss.NormalBorder())
+		BorderStyle(lipgloss.NormalBorder()).
+		BorderForeground(tint.Fg())
 
 	s.summaryBoundary = lipgloss.NewStyle().
 		Width(61).
@@ -36,10 +40,11 @@ func defaultStyles() Styles {
 		MarginRight(1).
 		Align(lipgloss.Left, lipgloss.Center).
 		Padding(0, 0, 0, 1).
-		BorderStyle(lipgloss.NormalBorder())
+		BorderStyle(lipgloss.NormalBorder()).
+		BorderForeground(tint.Fg())
 
 	s.counterLimit = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(white))
+		Foreground(tint.Fg())
 
 	s.counterBoundary = lipgloss.NewStyle().
 		Width(5).
@@ -53,18 +58,21 @@ func defaultStyles() Styles {
 }
 
 func counterStyle(i int) lipgloss.Style {
-	var clr string
+	var clr lipgloss.TerminalColor
+
+	tint := theme.Tint()
+
 	switch {
 	case i > emptyCounter && i < minimumCounter:
-		clr = yellow
+		clr = tint.Yellow()
 	case i >= minimumCounter && i <= warningCounter:
-		clr = green
+		clr = tint.Green()
 	case i > warningCounter && i <= maximumCounter:
-		clr = yellow
+		clr = tint.Yellow()
 	case i > maximumCounter:
-		clr = brightRed
+		clr = tint.BrightRed()
 	default:
-		clr = white
+		clr = tint.Fg()
 	}
 
 	bold := false
@@ -73,6 +81,6 @@ func counterStyle(i int) lipgloss.Style {
 	}
 
 	return lipgloss.NewStyle().
-		Foreground(lipgloss.Color(clr)).
+		Foreground(clr).
 		Bold(bold)
 }

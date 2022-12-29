@@ -2,6 +2,7 @@ package filterlist
 
 import (
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Styles struct {
@@ -20,32 +21,16 @@ const (
 	paginatorActiveDot = "●"
 )
 
-const (
-	black         = "0"
-	red           = "1"
-	green         = "2"
-	yellow        = "3"
-	blue          = "4"
-	magenta       = "5"
-	cyan          = "6"
-	white         = "7"
-	brightBlack   = "8"
-	brightRed     = "9"
-	brightGreen   = "10"
-	brightYellow  = "11"
-	brightBlue    = "12"
-	brightMagenta = "13"
-	brightCyan    = "14"
-	brightWhite   = "15"
-)
-
 func defaultStyles() Styles {
 	var s Styles
+
+	tint := theme.Tint()
 
 	s.boundary = lipgloss.NewStyle().
 		Width(74).
 		MarginLeft(4).
-		BorderStyle(lipgloss.NormalBorder())
+		BorderStyle(lipgloss.NormalBorder()).
+		BorderForeground(tint.Fg())
 
 	// Item prompt is set as a left border character.
 	s.itemPrompt = lipgloss.Border{
@@ -55,21 +40,21 @@ func defaultStyles() Styles {
 	// Assign border style to the selected item.
 	s.selectedTitle = lipgloss.NewStyle().
 		Border(s.itemPrompt, false, false, false, true).
-		BorderForeground(lipgloss.Color(cyan)).
-		Foreground(lipgloss.Color(cyan)).
+		BorderForeground(tint.Cyan()).
+		Foreground(tint.Cyan()).
 		Padding(0, 0, 0, 1)
 
 	s.promptMark = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(green)).
+		Foreground(tint.Green()).
 		MarginRight(1)
 
 	s.promptText = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(white)).
+		Foreground(tint.Fg()).
 		Bold(true).
 		MarginRight(1)
 
 	s.paginatorDots = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cyan))
+		Foreground(tint.Cyan())
 
 	return s
 }

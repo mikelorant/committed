@@ -6,6 +6,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Model struct {
@@ -29,6 +30,8 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
+	tint := theme.Tint()
+
 	return lipgloss.NewStyle().
 		Width(74).
 		Height(1).
@@ -37,6 +40,7 @@ func (m Model) View() string {
 		Align(lipgloss.Left, lipgloss.Center).
 		Border(lipgloss.HiddenBorder(), false, true).
 		Padding(0, 1, 0, 1).
+		Foreground(tint.Fg()).
 		Render(m.signoff())
 }
 

@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 func verticalPaginator(pos, total int) string {
@@ -15,6 +16,8 @@ func horizontalPaginator(pos, total int) string {
 }
 
 func dots(pos, total int) []string {
+	tint := theme.Tint()
+
 	dots := make([]string, total)
 	for i := range dots {
 		dots[i] = paginatorDot
@@ -22,7 +25,7 @@ func dots(pos, total int) []string {
 
 	dots = append(dots[:pos], dots[pos:]...)
 	dots[pos] = lipgloss.NewStyle().
-		Foreground(lipgloss.Color(cyan)).
+		Foreground(tint.Cyan()).
 		Render(paginatorActiveDot)
 
 	return dots
