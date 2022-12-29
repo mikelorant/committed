@@ -6,11 +6,17 @@ import (
 )
 
 type Styles struct {
-	emojiBoundary   lipgloss.Style
-	summaryBoundary lipgloss.Style
-	counterLimit    lipgloss.Style
-	counterBoundary lipgloss.Style
-	emojiConnector  lipgloss.Style
+	emojiBoundary                lipgloss.Style
+	summaryBoundary              lipgloss.Style
+	counterDivider               lipgloss.Style
+	counterLimit                 lipgloss.Style
+	counterBoundary              lipgloss.Style
+	emojiConnector               lipgloss.Style
+	filterListBoundary           lipgloss.Style
+	summaryInputPromptStyle      lipgloss.Style
+	summaryInputTextStyle        lipgloss.Style
+	summaryInputPlaceholderStyle lipgloss.Style
+	summaryInputCursorStyle      lipgloss.Style
 }
 
 const (
@@ -43,6 +49,10 @@ func defaultStyles() Styles {
 		BorderStyle(lipgloss.NormalBorder()).
 		BorderForeground(tint.Fg())
 
+	s.counterDivider = lipgloss.NewStyle().
+		Foreground(tint.Fg()).
+		SetString("/")
+
 	s.counterLimit = lipgloss.NewStyle().
 		Foreground(tint.Fg())
 
@@ -53,6 +63,21 @@ func defaultStyles() Styles {
 
 	s.emojiConnector = lipgloss.NewStyle().
 		MarginLeft(6)
+
+	s.filterListBoundary = lipgloss.NewStyle().
+		MarginTop(1)
+
+	s.summaryInputPromptStyle = lipgloss.NewStyle().
+		Foreground(tint.Fg())
+
+	s.summaryInputTextStyle = lipgloss.NewStyle().
+		Foreground(tint.Fg())
+
+	s.summaryInputPlaceholderStyle = lipgloss.NewStyle().
+		Foreground(tint.BrightBlack())
+
+	s.summaryInputCursorStyle = lipgloss.NewStyle().
+		Foreground(tint.Fg())
 
 	return s
 }

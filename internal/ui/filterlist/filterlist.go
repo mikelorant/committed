@@ -126,8 +126,27 @@ func (m *Model) SetItems(i []list.Item) tea.Cmd {
 }
 
 func (m Model) newList() list.Model {
+	l := list.New(m.items, list.NewDefaultDelegate(), 70, m.Height)
+	l.SetShowHelp(false)
+	l.SetShowPagination(false)
+	l.SetShowStatusBar(false)
+	l.SetShowTitle(false)
+	l.SetShowFilter(false)
+
+	m.styleList(&l)
+	m.styleListDelegate(&l)
+
+	return l
+}
+
+func (m *Model) styleList(l *list.Model) {
+	l.Styles.NoItems = m.styles.listNoItems
+}
+
+func (m *Model) styleListDelegate(l *list.Model) {
 	s := list.NewDefaultItemStyles()
-	s.SelectedTitle = m.styles.selectedTitle
+	s.NormalTitle = m.styles.listNormalTitle
+	s.SelectedTitle = m.styles.listSelectedTitle
 
 	// Delegate is the list of items.
 	// Only the title is used and description is disabled.
@@ -137,26 +156,27 @@ func (m Model) newList() list.Model {
 	d.ShowDescription = false
 	d.Styles = s
 
-	l := list.New(m.items, d, 70, m.Height)
-	l.SetShowHelp(false)
-	l.SetShowPagination(false)
-	l.SetShowStatusBar(false)
-	l.SetShowTitle(false)
-	l.SetShowFilter(false)
-
-	return l
+	l.SetDelegate(d)
 }
 
 func (m Model) newTextInput() textinput.Model {
-	promptMark := m.styles.promptMark.Render("?")
-	promptText := m.styles.promptText.Render(m.PromptText)
-	prompt := lipgloss.JoinHorizontal(lipgloss.Left, promptMark, promptText)
-
 	ti := textinput.New()
-	ti.Prompt = prompt
 	ti.Placeholder = ""
 	ti.CharLimit = 20
 	ti.Width = 52
 
+	m.styleTextInput(&ti)
+
 	return ti
+}
+
+func (m Model) styleTextInput(ti *textinput.Model) {
+	promptMark := m.styles.textInputPromptMark.Render("?")
+	promptText := m.styles.textInputPromptText.Render(m.PromptText)
+
+	ti.Prompt = lipgloss.JoinHorizontal(lipgloss.Left, promptMark, promptText)
+	ti.PromptStyle = m.styles.textInputPromptStyle
+	ti.TextStyle = m.styles.textInputTextStyle
+	ti.PlaceholderStyle = m.styles.textInputPlaceholderStyle
+	ti.Cursor.Style = m.styles.textInputCursorStyle
 }

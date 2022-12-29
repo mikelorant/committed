@@ -6,7 +6,12 @@ import (
 )
 
 type Styles struct {
-	boundary lipgloss.Style
+	boundary            lipgloss.Style
+	textAreaPlaceholder lipgloss.Style
+	textAreaPrompt      lipgloss.Style
+	textAreaFocusedText lipgloss.Style
+	textAreaBlurredText lipgloss.Style
+	textAreaCursorStyle lipgloss.Style
 }
 
 func defaultStyles() Styles {
@@ -23,6 +28,21 @@ func defaultStyles() Styles {
 		BorderStyle(lipgloss.NormalBorder()).
 		BorderForeground(tint.Fg()).
 		Padding(0, 1, 0, 1)
+
+	s.textAreaPlaceholder = lipgloss.NewStyle().
+		Foreground(tint.BrightBlack())
+
+	s.textAreaPrompt = lipgloss.NewStyle().
+		Foreground(tint.Fg())
+
+	s.textAreaFocusedText = lipgloss.NewStyle().
+		Foreground(tint.Fg())
+
+	s.textAreaBlurredText = lipgloss.NewStyle().
+		Foreground(tint.Fg())
+
+	s.textAreaCursorStyle = lipgloss.NewStyle().
+		Foreground(tint.Fg())
 
 	return s
 }

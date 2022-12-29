@@ -186,17 +186,21 @@ func (m Model) branchRefs() string {
 
 func (m Model) author() string {
 	k := m.styles.authorText
+	c := m.styles.colon
+	lb := m.styles.authorAngledBracket.Render("<")
+	rb := m.styles.authorAngledBracket.Render(">")
 	n := m.styles.authorValue.Render(m.Author.Name)
 	e := m.styles.authorValue.Render(m.Author.Email)
 
-	return fmt.Sprintf("%s: %s <%s>", k, n, e)
+	return fmt.Sprintf("%s%s %s %s%s%s", k, c, n, lb, e, rb)
 }
 
 func (m Model) date() string {
 	k := m.styles.dateText
+	c := m.styles.colon
 	d := m.styles.dateValue.Render(m.Date)
 
-	return fmt.Sprintf("%s:   %s", k, d)
+	return fmt.Sprintf("%s%s   %s", k, c, d)
 }
 
 func containsPrefixes(str string, ps []string) bool {

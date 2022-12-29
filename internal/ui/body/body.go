@@ -111,5 +111,23 @@ func newTextArea(ph string, w int) textarea.Model {
 	ta.ShowLineNumbers = false
 	ta.SetWidth(w)
 
+	styleTextArea(&ta)
+
 	return ta
+}
+
+func styleTextArea(ta *textarea.Model) {
+	s := defaultStyles()
+
+	ta.FocusedStyle.CursorLine = s.textAreaFocusedText
+	ta.FocusedStyle.Placeholder = s.textAreaPlaceholder
+	ta.FocusedStyle.Prompt = s.textAreaPrompt
+	ta.FocusedStyle.Text = s.textAreaFocusedText
+
+	ta.BlurredStyle.CursorLine = s.textAreaBlurredText
+	ta.BlurredStyle.Placeholder = s.textAreaPlaceholder
+	ta.BlurredStyle.Prompt = s.textAreaPrompt
+	ta.BlurredStyle.Text = s.textAreaBlurredText
+
+	ta.Cursor.Style = s.textAreaCursorStyle
 }

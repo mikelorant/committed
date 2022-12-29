@@ -6,12 +6,18 @@ import (
 )
 
 type Styles struct {
-	boundary      lipgloss.Style
-	itemPrompt    lipgloss.Border
-	selectedTitle lipgloss.Style
-	promptMark    lipgloss.Style
-	promptText    lipgloss.Style
-	paginatorDots lipgloss.Style
+	boundary                  lipgloss.Style
+	listItemPrompt            lipgloss.Border
+	listNormalTitle           lipgloss.Style
+	listSelectedTitle         lipgloss.Style
+	listNoItems               lipgloss.Style
+	textInputPromptMark       lipgloss.Style
+	textInputPromptText       lipgloss.Style
+	textInputPromptStyle      lipgloss.Style
+	textInputTextStyle        lipgloss.Style
+	textInputPlaceholderStyle lipgloss.Style
+	textInputCursorStyle      lipgloss.Style
+	paginatorDots             lipgloss.Style
 }
 
 const (
@@ -33,28 +39,47 @@ func defaultStyles() Styles {
 		BorderForeground(tint.Fg())
 
 	// Item prompt is set as a left border character.
-	s.itemPrompt = lipgloss.Border{
+	s.listItemPrompt = lipgloss.Border{
 		Left: listPrompt,
 	}
 
+	s.listNormalTitle = lipgloss.NewStyle().
+		Foreground(tint.Fg()).
+		Padding(0, 0, 0, 2)
+
 	// Assign border style to the selected item.
-	s.selectedTitle = lipgloss.NewStyle().
-		Border(s.itemPrompt, false, false, false, true).
+	s.listSelectedTitle = lipgloss.NewStyle().
+		Border(s.listItemPrompt, false, false, false, true).
 		BorderForeground(tint.Cyan()).
 		Foreground(tint.Cyan()).
 		Padding(0, 0, 0, 1)
 
-	s.promptMark = lipgloss.NewStyle().
+	s.listNoItems = lipgloss.NewStyle().
+		Foreground(tint.BrightBlack())
+
+	s.textInputPromptMark = lipgloss.NewStyle().
 		Foreground(tint.Green()).
 		MarginRight(1)
 
-	s.promptText = lipgloss.NewStyle().
+	s.textInputPromptText = lipgloss.NewStyle().
 		Foreground(tint.Fg()).
 		Bold(true).
 		MarginRight(1)
 
 	s.paginatorDots = lipgloss.NewStyle().
 		Foreground(tint.Cyan())
+
+	s.textInputPromptStyle = lipgloss.NewStyle().
+		Foreground(tint.Fg())
+
+	s.textInputTextStyle = lipgloss.NewStyle().
+		Foreground(tint.Fg())
+
+	s.textInputPlaceholderStyle = lipgloss.NewStyle().
+		Foreground(tint.BrightBlack())
+
+	s.textInputCursorStyle = lipgloss.NewStyle().
+		Foreground(tint.Fg())
 
 	return s
 }

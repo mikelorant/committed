@@ -23,8 +23,11 @@ type Styles struct {
 	branchGrouping lipgloss.Style
 	branchRemote   lipgloss.Style
 
-	authorText  lipgloss.Style
-	authorValue lipgloss.Style
+	colon lipgloss.Style
+
+	authorAngledBracket lipgloss.Style
+	authorText          lipgloss.Style
+	authorValue         lipgloss.Style
 
 	dateText  lipgloss.Style
 	dateValue lipgloss.Style
@@ -66,6 +69,13 @@ func defaultStyles() Styles {
 	s.branchRemote = lipgloss.NewStyle().
 		Foreground(tint.Red()).
 		Bold(true)
+
+	s.colon = lipgloss.NewStyle().
+		Foreground(tint.Fg()).
+		SetString(":")
+
+	s.authorAngledBracket = lipgloss.NewStyle().
+		Foreground(tint.Fg())
 
 	s.authorText = lipgloss.NewStyle().
 		Foreground(tint.Fg()).

@@ -13,6 +13,7 @@ type Model struct {
 	summary string
 	body    string
 	footer  string
+	styles  Styles
 }
 
 type Config struct {
@@ -28,6 +29,7 @@ func New(cfg Config) Model {
 		summary: cfg.Summary,
 		body:    cfg.Body,
 		footer:  cfg.Footer,
+		styles:  defaultStyles(),
 	}
 }
 
@@ -40,29 +42,21 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	message := m.summary
+	message := m.styles.summary.Render(m.summary)
 	if m.emoji.ShortCode != "" {
-		message = fmt.Sprintf("%s %s", m.emoji.ShortCode, m.summary)
+		s := fmt.Sprintf("%s %s", m.emoji.ShortCode, m.summary)
+		message = m.styles.summary.Render(s)
 	}
 
 	if m.body != "" {
-		b := lipgloss.NewStyle().
-			MarginTop(1).
-			Render(m.body)
-
+		b := m.styles.body.Render(m.body)
 		message = lipgloss.JoinVertical(lipgloss.Top, message, b)
 	}
 
 	if m.footer != "" {
-		f := lipgloss.NewStyle().
-			MarginTop(1).
-			Render(m.footer)
-
+		f := m.styles.footer.Render(m.footer)
 		message = lipgloss.JoinVertical(lipgloss.Top, message, f)
 	}
 
-	return lipgloss.NewStyle().
-		MarginLeft(4).
-		MarginBottom(1).
-		Render(message)
+	return m.styles.message.Render(message)
 }

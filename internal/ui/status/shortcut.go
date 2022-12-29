@@ -246,7 +246,7 @@ func modifierToShortcut(a int, ms []Modifier) []Shortcut {
 		}
 
 		if v.Label != "" {
-			label = "+"
+			label = defaultStyles().shortcutPlus.String()
 		}
 
 		scs := Shortcut{
@@ -269,7 +269,11 @@ func (s shortcutSet) decorateKey(key string, len int, align lipgloss.Position, b
 		k = s.styles.shortcutKey.Render(key)
 		if bracket {
 			padding = 2
-			k = fmt.Sprintf("<%s>", s.styles.shortcutKey.Render(key))
+			k = fmt.Sprintf("%v%v%v",
+				s.styles.shortcutAngleBracket.Render("<"),
+				s.styles.shortcutKey.Render(key),
+				s.styles.shortcutAngleBracket.Render(">"),
+			)
 		}
 	}
 
@@ -291,8 +295,8 @@ func (s shortcutSet) decorateLabel(label string, len int, align lipgloss.Positio
 func sliceMaxLen(ss []string) int {
 	var i int
 	for _, v := range ss {
-		if len(v) > i {
-			i = len(v)
+		if lipgloss.Width(v) > i {
+			i = lipgloss.Width(v)
 		}
 	}
 

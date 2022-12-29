@@ -171,7 +171,9 @@ func (m Model) headerRow() string {
 		return lipgloss.NewStyle().Height(m.height).Render(subject)
 	}
 
-	expand := lipgloss.JoinVertical(lipgloss.Top, subject, m.emojiConnector(), m.filterList.View())
+	fl := m.styles.filterListBoundary.Render(m.filterList.View())
+
+	expand := lipgloss.JoinVertical(lipgloss.Top, subject, fl)
 
 	return lipgloss.NewStyle().Height(m.height).Render(expand)
 }
@@ -191,9 +193,10 @@ func (m Model) counter() string {
 	}
 
 	c := counterStyle(i).Render(fmt.Sprintf("%d", i))
+	d := m.styles.counterDivider
 	t := m.styles.counterLimit.Render(fmt.Sprintf("%d", subjectLimit))
 
-	return m.styles.counterBoundary.Render(fmt.Sprintf("%s/%s", c, t))
+	return m.styles.counterBoundary.Render(fmt.Sprintf("%v%v%v", c, d, t))
 }
 
 func (m Model) emojiConnector() string {
@@ -209,5 +212,16 @@ func summaryInput(str string) textinput.Model {
 	ti.CharLimit = 72
 	ti.Width = 59
 
+	styleSummaryInput(&ti)
+
 	return ti
+}
+
+func styleSummaryInput(si *textinput.Model) {
+	s := defaultStyles()
+
+	si.PromptStyle = s.summaryInputPromptStyle
+	si.TextStyle = s.summaryInputTextStyle
+	si.PlaceholderStyle = s.summaryInputPlaceholderStyle
+	si.Cursor.Style = s.summaryInputCursorStyle
 }

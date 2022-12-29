@@ -6,13 +6,15 @@ import (
 )
 
 type Styles struct {
-	shortcutBoundary    lipgloss.Style
-	shortcutBlockLeft   lipgloss.Style
-	shortcutBlockRight  lipgloss.Style
-	shortcutColumnLeft  lipgloss.Style
-	shortcutColumnRight lipgloss.Style
-	shortcutKey         lipgloss.Style
-	shortcutLabel       lipgloss.Style
+	shortcutBoundary     lipgloss.Style
+	shortcutBlockLeft    lipgloss.Style
+	shortcutBlockRight   lipgloss.Style
+	shortcutColumnLeft   lipgloss.Style
+	shortcutColumnRight  lipgloss.Style
+	shortcutKey          lipgloss.Style
+	shortcutLabel        lipgloss.Style
+	shortcutPlus         lipgloss.Style
+	shortcutAngleBracket lipgloss.Style
 }
 
 func defaultStyles() Styles {
@@ -42,6 +44,12 @@ func defaultStyles() Styles {
 
 	s.shortcutLabel = lipgloss.NewStyle().
 		Foreground(tint.Green())
+
+	s.shortcutPlus = lipgloss.NewStyle().
+		Foreground(tint.Fg()).
+		SetString("+")
+	s.shortcutAngleBracket = lipgloss.NewStyle().
+		Foreground(tint.Fg())
 
 	return s
 }

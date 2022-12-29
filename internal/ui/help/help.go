@@ -5,11 +5,11 @@ import (
 
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 )
 
 type Model struct {
 	focus    bool
+	styles   Styles
 	viewport viewport.Model
 }
 
@@ -23,6 +23,7 @@ const (
 
 func New() Model {
 	return Model{
+		styles:   defaultStyles(),
 		viewport: newViewport(defaultWidth, defaultHeight),
 	}
 }
@@ -42,14 +43,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	return lipgloss.NewStyle().
-		Width(74).
-		MarginBottom(1).
-		MarginLeft(4).
-		Align(lipgloss.Left, lipgloss.Top).
-		BorderStyle(lipgloss.NormalBorder()).
-		Padding(0, 1, 0, 1).
-		Render(m.viewport.View())
+	return m.styles.boundary.Render(m.viewport.View())
 }
 
 func (m *Model) Focus() {
@@ -68,5 +62,11 @@ func newViewport(w, h int) viewport.Model {
 	vp := viewport.New(w, h)
 	vp.SetContent(Content)
 
+	styleViewport(&vp)
+
 	return vp
+}
+
+func styleViewport(vp *viewport.Model) {
+	vp.Style = defaultStyles().viewport
 }
