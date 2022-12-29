@@ -15,6 +15,7 @@ require (
 	github.com/goccy/go-yaml v1.9.8
 	github.com/ivanpirog/coloredcobra v1.0.1
 	github.com/lithammer/fuzzysearch v1.1.5
+	github.com/lrstanley/bubbletint v0.0.0-20221222153826-8c18bc6ecfd0
 	github.com/mattn/go-runewidth v0.0.14
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.8.1
