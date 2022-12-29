@@ -8,6 +8,7 @@ import (
 	"github.com/charmbracelet/bubbles/textarea"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Model struct {
@@ -46,6 +47,7 @@ func (m Model) Init() tea.Cmd {
 //nolint:ireturn
 func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	var cmd tea.Cmd
+	var cmds []tea.Cmd
 
 	if m.focus {
 		//nolint:gocritic
@@ -60,20 +62,34 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 		}
 	}
 
+	//nolint:gocritic
+	switch msg.(type) {
+	case theme.Msg:
+		m.styles = defaultStyles()
+		styleTextArea(&m.textArea)
+		switch m.textArea.Focused() {
+		case true:
+			cmd = m.textArea.Focus()
+			cmds = append(cmds, cmd)
+		case false:
+			m.textArea.Blur()
+		}
+	}
+
 	m.textArea.SetHeight(m.Height)
 
 	switch {
 	case m.focus && !m.textArea.Focused():
 		cmd = m.textArea.Focus()
-		return m, cmd
+		cmds = append(cmds, cmd)
 	case !m.focus && m.textArea.Focused():
 		m.textArea.Blur()
-		return m, nil
 	}
 
 	m.textArea, cmd = m.textArea.Update(msg)
+	cmds = append(cmds, cmd)
 
-	return m, cmd
+	return m, tea.Batch(cmds...)
 }
 
 func (m Model) View() string {

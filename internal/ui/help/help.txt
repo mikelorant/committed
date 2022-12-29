@@ -2,8 +2,9 @@ Global                           Emoji
 
 Commit               alt+enter   Clear emoji     delete
 Toggle sign-off      alt+s       Reset filter    escape
-Help                 alt+/       Next page       page down
-Focus author         alt+1       Previous page   page up
+Toggle theme         alt+t       Next page       page down
+Help                 alt+/       Previous page   page up
+Focus author         alt+1
 Focus emoji          alt+2
 Focus summary        alt+3
 Focus body           alt+4

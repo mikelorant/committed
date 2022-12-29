@@ -14,6 +14,7 @@ import (
 	"github.com/mikelorant/committed/internal/ui/info"
 	"github.com/mikelorant/committed/internal/ui/message"
 	"github.com/mikelorant/committed/internal/ui/status"
+	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Model struct {
@@ -170,6 +171,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case "alt+s":
 			m.signoff = !m.signoff
+		case "alt+t":
+			cmd := theme.NextTint
+			return m, cmd
 		case "alt+/":
 			if m.state == helpComponent {
 				m.state = m.previousState

@@ -5,6 +5,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Model struct {
@@ -34,6 +35,13 @@ func (m Model) Init() tea.Cmd {
 
 func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	var cmd tea.Cmd
+
+	//nolint:gocritic
+	switch msg.(type) {
+	case theme.Msg:
+		m.styles = defaultStyles()
+		styleViewport(&m.viewport)
+	}
 
 	if m.focus {
 		m.viewport, cmd = m.viewport.Update(msg)

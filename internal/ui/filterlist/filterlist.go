@@ -5,6 +5,7 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Model struct {
@@ -72,6 +73,15 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 				m.list.ResetSelected()
 			}
 		}
+	}
+
+	//nolint:gocritic
+	switch msg.(type) {
+	case theme.Msg:
+		m.styles = defaultStyles()
+		m.styleTextInput(&m.textInput)
+		m.styleList(&m.list)
+		m.styleListDelegate(&m.list)
 	}
 
 	if m.focus && !m.textInput.Focused() {

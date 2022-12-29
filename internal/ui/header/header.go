@@ -11,6 +11,7 @@ import (
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/fuzzy"
 	"github.com/mikelorant/committed/internal/ui/filterlist"
+	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Model struct {
@@ -91,6 +92,13 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 				m.Emoji = emoji.Emoji{}
 			}
 		}
+	}
+
+	//nolint:gocritic
+	switch msg.(type) {
+	case theme.Msg:
+		m.styles = defaultStyles()
+		styleSummaryInput(&m.summaryInput)
 	}
 
 	m.height = m.DefaultHeight

@@ -2,6 +2,7 @@ package status
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Model struct {
@@ -25,6 +26,12 @@ func (m Model) Init() tea.Cmd {
 
 //nolint:ireturn
 func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
+	//nolint:gocritic
+	switch msg.(type) {
+	case theme.Msg:
+		m.styles = defaultStyles()
+	}
+
 	m.shortcuts.shortcuts = defaultShortcuts()
 	m.next()
 	m.previous()

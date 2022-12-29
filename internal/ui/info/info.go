@@ -11,6 +11,7 @@ import (
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/fuzzy"
 	"github.com/mikelorant/committed/internal/ui/filterlist"
+	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Model struct {
@@ -80,6 +81,12 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 				m.Author = m.filterList.SelectedItem().(listItem).author
 			}
 		}
+	}
+
+	//nolint:gocritic
+	switch msg.(type) {
+	case theme.Msg:
+		m.styles = defaultStyles()
 	}
 
 	switch {
