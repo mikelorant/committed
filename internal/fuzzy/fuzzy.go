@@ -35,7 +35,7 @@ func Rank(term string, items []Item) []int {
 	ranks := fuzzy.RankFindFold(term, lines)
 	sort.Sort(ranks)
 
-	idx = nil
+	idx = make([]int, 0)
 	for _, v := range ranks {
 		pos := strings.Split(v.Target, null)[0]
 		i, _ := strconv.Atoi(pos)
