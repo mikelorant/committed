@@ -1,26 +1,17 @@
 # Requirements:
-# - Enable single space padding for all emojis (emoji.go)
 # - Modify high-voltage emoji with text version (emoji.yaml)
-# - Add keyboard alternatives: (ui.go)
-#     alt+enter -> ctrl+f
-#     alt+s -> ctrl+s
-#     shift+tab -> ctrl+b
-# - Replace Lipgloss with local package (go.mod)
-# - Lipgloss emoji changes: (get.go)
-#     Add package "github.com/rivo/uniseg"
-#     Change "PrintableStringWidth" function to return:
-#       uniseg.GraphemeClusterCount(string(sr))
+# - Build release:
+#     go build -tags release
 # - Git config changes: (~/.gitconfig)
 #     name = John Doe
-#     email = john.doe@example.org
+#     email = jdoe@example.org
 
 Output demo.gif
 
-Set Width 720
-Set Height 640
-Set Padding 36
-Set FontSize 12
-Set FontFamily "JetBrains Mono"
+Set Width 794
+Set Height 760
+Set Padding 18
+Set FontSize 16
 Set Theme "Builtin Dark"
 
 Hide
@@ -30,19 +21,31 @@ Hide
 # Sleep 0.3 Enter Sleep 0.3
 # Type "git add test"
 # Sleep 0.3 Enter Sleep 0.3
-
-Sleep 1s
-Type "./committed --yes"
-Enter
-Sleep 5s
+# Type "export COMMITTED_TERMINAL=ttyd"
+# Sleep 0.3 Enter Sleep 0.3
+# Type "export LIPGLOSS_TERMINAL=ttyd"
+# Sleep 0.3 Enter Sleep 0.3
+# Type "export PATH=.:$PATH"
+# Sleep 0.3 Enter Sleep 0.3
+# Type "clear"
+# Sleep 0.3 Enter Sleep 0.3
 
 Show
+Sleep 1s
+Type "committed"
+Sleep 1s
+Enter
+
 Sleep 3s
-Ctrl+B
+ShiftTab
 Sleep 3s
 Enter
 
 Sleep 1s
+PageDown
+Sleep 2s
+PageDown
+Sleep 2s
 Type@200ms "bug"
 Sleep 2s
 Enter
@@ -63,10 +66,10 @@ Sleep 0.5s
 Enter
 
 Sleep 1s
-Ctrl+S
+Alt+S
 
 Sleep 3s
-Ctrl+F
+Alt+ENTER
 Sleep 5s
 
 Hide

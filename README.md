@@ -5,7 +5,7 @@
 Committed is a WYSIWYG Git commit editor that helps improve the quality of your
 commits by showing you the layout in the same format as `git log`.
 
-<img src="docs/demo.gif" align="left" style="zoom:100%;" />
+![demo](docs/demo.gif)
 
 ## Highlights
 
