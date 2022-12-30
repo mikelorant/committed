@@ -45,6 +45,10 @@ func HasShortcode(str string) bool {
 		return false
 	}
 
+	if strings.Count(str, ":") > 2 {
+		return false
+	}
+
 	if string(str[0]) == ":" && string(str[len(str)-1]) == ":" {
 		return true
 	}
