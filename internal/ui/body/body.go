@@ -81,7 +81,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	switch {
 	case m.focus && !m.textArea.Focused():
 		cmd = m.textArea.Focus()
-		cmds = append(cmds, cmd)
+		return m, cmd
 	case !m.focus && m.textArea.Focused():
 		m.textArea.Blur()
 	}
