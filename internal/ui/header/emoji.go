@@ -2,11 +2,16 @@ package header
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/mattn/go-runewidth"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/fuzzy"
+)
+
+const (
+	ttydTerminal = "ttyd"
 )
 
 type listItem struct {
@@ -19,8 +24,14 @@ type fuzzyItem struct {
 
 func (i listItem) Title() string {
 	var space string
-	if runewidth.StringWidth(i.emoji.Character) == 1 {
+
+	switch os.Getenv("COMMITTED_TERMINAL") {
+	case ttydTerminal:
 		space = " "
+	default:
+		if runewidth.StringWidth(i.emoji.Character) == 1 {
+			space = " "
+		}
 	}
 
 	return fmt.Sprintf("%s%s - %s", i.emoji.Character, space, i.emoji.Description)
