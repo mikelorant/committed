@@ -23,7 +23,7 @@ require (
 
 replace (
 	github.com/charmbracelet/bubbles => github.com/mikelorant/bubbles v0.0.0-20221206230145-c5687de7af43
-	github.com/charmbracelet/lipgloss => github.com/mikelorant/lipgloss v0.0.0-20221211042105-6d10502e42d7
+	github.com/charmbracelet/lipgloss => github.com/mikelorant/lipgloss v0.0.0-20221230031354-3413d8aef598
 )
 
 require (
