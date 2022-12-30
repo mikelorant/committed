@@ -125,6 +125,7 @@ func newTextArea(ph string, w int) textarea.Model {
 	ta.Placeholder = ph
 	ta.Prompt = ""
 	ta.ShowLineNumbers = false
+	ta.CharLimit = 0
 	ta.SetWidth(w)
 
 	styleTextArea(&ta)
