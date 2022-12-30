@@ -72,7 +72,7 @@ brew install mikelorant/taps/committed
 
 ## Usage
 
-```
+```text
 Committed is a WYSIWYG Git commit editor
 
 Usage:
@@ -110,7 +110,7 @@ commits created with Committed. The limitations are:
 
 The main view when entering either the summary or body.
 
-```
+```text
 commit 1234567890abcdef1234567890abcdef1234567890
 Author: John Doe <john.doe@example.com>
 Date:   Mon Jan 2 15:04:05 2006 -0700
@@ -152,7 +152,7 @@ Ctrl +     <c> Cancel                                       Author <tab> + Shift
 The emoji view reduces the position and lines of the body section to make space
 for a selector to appear. Filtering is available to narrow the choices down.
 
-```
+```text
 commit 1234567890abcdef1234567890abcdef1234567890
 Author: John Doe <john.doe@example.com>
 Date:   Mon Jan 2 15:04:05 2006 -0700
@@ -194,7 +194,7 @@ Ctrl +     <c> Cancel                                       Author <tab> + Shift
 The author view moves the subject line down and reduces the height of the body
 section. This provides space for a selector to choose the commit author.
 
-```
+```text
 commit 1234567890abcdef1234567890abcdef1234567890
 Author: John Doe <john.doe@example.com>
 Date:   Mon Jan 2 15:04:05 2006 -0700
@@ -236,7 +236,7 @@ Ctrl +     <c> Cancel                                                    + Shift
 Accepting the commit shows the output that will closely match the `git log`
 command.
 
-```
+```text
 commit 1234567890abcdef1234567890abcdef1234567890
 Author: John Doe <john.doe@example.com>
 Date:   Mon Jan 2 15:04:05 2006 -0700
@@ -271,7 +271,7 @@ Date:   Mon Jan 2 15:04:05 2006 -0700
 
 ## Shortcuts
 
-**Global**
+The global shortcuts can be used within any view.
 
 | Command            | Key       |
 | :----------------- | :-------- |
@@ -287,7 +287,7 @@ Date:   Mon Jan 2 15:04:05 2006 -0700
 | Next component     | tab       |
 | Previous component | shift-tab |
 
-**Emoji**
+The emoji shortcuts are limited to the emoji view only.
 
 | Command       | Key       |
 | :------------ | :-------- |
