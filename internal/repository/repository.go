@@ -6,6 +6,8 @@ import (
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/config"
+	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/plumbing/object"
 )
 
 type Configer interface {
@@ -16,15 +18,20 @@ type Remoter interface {
 	Remotes() ([]*git.Remote, error)
 }
 
+type Header interface {
+	Head() (*plumbing.Reference, error)
+	CommitObject(h plumbing.Hash) (*object.Commit, error)
+}
+
 type Repository struct {
 	gitRepository *git.Repository
 
-	Branch     Branch
-	HeadCommit Commit
+	Branch Branch
 
 	Configer     Configer
 	GlobalConfig func(scope config.Scope) (*config.Config, error)
 	Remoter      Remoter
+	Header       Header
 }
 
 type repositoryNotFoundError struct{}
@@ -52,18 +59,13 @@ func New() (*Repository, error) {
 		return nil, fmt.Errorf("unable to initialise branch: %w", err)
 	}
 
-	commit, err := NewHeadCommit(repo)
-	if err != nil {
-		return nil, fmt.Errorf("unable to get head commit: %w", err)
-	}
-
 	return &Repository{
 		gitRepository: repo,
 		Configer:      repo,
 		GlobalConfig:  config.LoadConfig,
 		Remoter:       repo,
+		Header:        repo,
 		Branch:        branch,
-		HeadCommit:    commit,
 	}, nil
 }
 

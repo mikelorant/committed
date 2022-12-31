@@ -101,6 +101,11 @@ func New(opts Options) (*Commit, error) {
 		return nil, fmt.Errorf("unable to get remotes: %w", err)
 	}
 
+	h, err := r.Head()
+	if err != nil {
+		return nil, fmt.Errorf("unable to get head commit: %w", err)
+	}
+
 	var authors []Author
 	for _, u := range us {
 		a := Author{
@@ -128,13 +133,13 @@ func New(opts Options) (*Commit, error) {
 		Amend:        opts.Amend,
 	}
 
-	if opts.Amend && r.HeadCommit.Hash != "" {
+	if opts.Amend && h.Hash != "" {
 		cfg.HeadCommit = HeadCommit{
-			Hash:    r.HeadCommit.Hash,
-			When:    r.HeadCommit.When,
-			Emoji:   messageToEmoji(r.HeadCommit.Message, e),
-			Summary: messageToSummary(r.HeadCommit.Message),
-			Body:    messageToBody(r.HeadCommit.Message),
+			Hash:    h.Hash,
+			When:    h.When,
+			Emoji:   messageToEmoji(h.Message, e),
+			Summary: messageToSummary(h.Message),
+			Body:    messageToBody(h.Message),
 		}
 	}
 
