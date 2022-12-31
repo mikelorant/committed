@@ -1,63 +1,110 @@
 package repository_test
 
 import (
+	"errors"
 	"testing"
 
-	"github.com/go-git/go-billy/v5/memfs"
-	fixtures "github.com/go-git/go-git-fixtures/v4"
 	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing/cache"
-	"github.com/go-git/go-git/v5/storage/filesystem"
+	"github.com/go-git/go-git/v5/config"
+	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/mikelorant/committed/internal/repository"
 	"github.com/stretchr/testify/assert"
 )
 
-type RemoteTest struct {
-	t             *testing.T
-	fixtures      *fixtures.Fixture
-	gitRepository *git.Repository
+type MockRepositoryRemote struct {
+	remotes []*git.Remote
+	err     error
 }
 
-func TestNewRemote(t *testing.T) {
-	tests := []struct {
-		name    string
+func (m MockRepositoryRemote) Remotes() ([]*git.Remote, error) {
+	return m.remotes, m.err
+}
+
+var errMockRemote = errors.New("error")
+
+func TestRemote(t *testing.T) {
+	type args struct {
 		remotes []string
-	}{
-		{
-			name:    "origin",
-			remotes: []string{"origin"},
-		},
+		err     error
 	}
 
-	r := RemoteTest{
-		t:        t,
-		fixtures: fixtures.Basic().One(),
+	type want struct {
+		remotes []string
+		err     error
+	}
+
+	tests := []struct {
+		name string
+		args args
+		want want
+	}{
+		{
+			name: "single",
+			args: args{
+				remotes: []string{"origin"},
+			},
+			want: want{
+				remotes: []string{"origin"},
+			},
+		},
+		{
+			name: "multiple",
+			args: args{
+				remotes: []string{"origin", "upstream"},
+			},
+			want: want{
+				remotes: []string{"origin", "upstream"},
+			},
+		},
+		{
+			name: "empty",
+			args: args{
+				remotes: []string{},
+			},
+			want: want{
+				remotes: nil,
+			},
+		},
+		{
+			name: "error",
+			args: args{
+				err: errMockUser,
+			},
+			want: want{
+				remotes: nil,
+				err:     errMockUser,
+			},
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			r.repository()
+			var r repository.Repository
 
-			remote, err := repository.NewRemote(r.gitRepository)
-			if err != nil {
-				t.Errorf("unable to initialise remote")
+			m := memory.NewStorage()
+
+			rms := make([]*git.Remote, len(tt.args.remotes))
+			for i, v := range tt.args.remotes {
+				rc := config.RemoteConfig{
+					Name: v,
+				}
+				rm := git.NewRemote(m, &rc)
+				rms[i] = rm
 			}
 
-			assert.Equal(t, tt.remotes, remote.Remotes)
+			r.Remoter = MockRepositoryRemote{
+				remotes: rms,
+				err:     tt.args.err,
+			}
+
+			rs, err := r.Remotes()
+			if tt.want.err != nil {
+				assert.ErrorContains(t, err, tt.want.err.Error())
+				return
+			}
+			assert.Nil(t, err)
+
+			assert.Equal(t, tt.want.remotes, rs)
 		})
 	}
-}
-
-func (r *RemoteTest) repository() {
-	r.t.Helper()
-
-	dotgit := r.fixtures.DotGit()
-	st := filesystem.NewStorage(dotgit, cache.NewObjectLRUDefault())
-	wt := memfs.New()
-
-	repo, err := git.Open(st, wt)
-	if err != nil {
-		r.t.Errorf("unable to open repository")
-	}
-	r.gitRepository = repo
 }

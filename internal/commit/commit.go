@@ -96,6 +96,11 @@ func New(opts Options) (*Commit, error) {
 		return nil, fmt.Errorf("unable to get users: %w", err)
 	}
 
+	rms, err := r.Remotes()
+	if err != nil {
+		return nil, fmt.Errorf("unable to get remotes: %w", err)
+	}
+
 	var authors []Author
 	for _, u := range us {
 		a := Author{
@@ -118,7 +123,7 @@ func New(opts Options) (*Commit, error) {
 		LocalBranch:  r.Branch.Local,
 		RemoteBranch: r.Branch.Remote,
 		BranchRefs:   r.Branch.Refs,
-		Remotes:      r.Remote.Remotes,
+		Remotes:      rms,
 		Emojis:       e,
 		Amend:        opts.Amend,
 	}

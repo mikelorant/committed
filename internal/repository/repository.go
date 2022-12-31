@@ -12,15 +12,19 @@ type Configer interface {
 	Config() (*config.Config, error)
 }
 
+type Remoter interface {
+	Remotes() ([]*git.Remote, error)
+}
+
 type Repository struct {
 	gitRepository *git.Repository
 
 	Branch     Branch
-	Remote     Remote
 	HeadCommit Commit
 
 	Configer     Configer
 	GlobalConfig func(scope config.Scope) (*config.Config, error)
+	Remoter      Remoter
 }
 
 type repositoryNotFoundError struct{}
@@ -48,11 +52,6 @@ func New() (*Repository, error) {
 		return nil, fmt.Errorf("unable to initialise branch: %w", err)
 	}
 
-	remote, err := NewRemote(repo)
-	if err != nil {
-		return nil, fmt.Errorf("unable to initialise remote: %w", err)
-	}
-
 	commit, err := NewHeadCommit(repo)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get head commit: %w", err)
@@ -62,8 +61,8 @@ func New() (*Repository, error) {
 		gitRepository: repo,
 		Configer:      repo,
 		GlobalConfig:  config.LoadConfig,
+		Remoter:       repo,
 		Branch:        branch,
-		Remote:        remote,
 		HeadCommit:    commit,
 	}, nil
 }
