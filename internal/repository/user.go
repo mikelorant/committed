@@ -3,7 +3,6 @@ package repository
 import (
 	"fmt"
 
-	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/config"
 )
 
@@ -12,10 +11,10 @@ type User struct {
 	Email string
 }
 
-func NewUsers(r *git.Repository) ([]User, error) {
+func (r *Repository) Users() ([]User, error) {
 	var users []User
 
-	cfg, err := r.Config()
+	cfg, err := r.Configer.Config()
 	if err != nil {
 		return users, fmt.Errorf("unable to get repository config: %w", err)
 	}
@@ -23,7 +22,7 @@ func NewUsers(r *git.Repository) ([]User, error) {
 		users = append(users, user(cfg))
 	}
 
-	cfg, err = config.LoadConfig(config.GlobalScope)
+	cfg, err = r.GlobalConfig(config.GlobalScope)
 	if err != nil {
 		return users, fmt.Errorf("unable to get global config: %w", err)
 	}

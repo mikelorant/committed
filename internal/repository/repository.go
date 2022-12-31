@@ -5,14 +5,22 @@ import (
 	"fmt"
 
 	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/config"
 )
+
+type Configer interface {
+	Config() (*config.Config, error)
+}
 
 type Repository struct {
 	gitRepository *git.Repository
-	Users         []User
-	Branch        Branch
-	Remote        Remote
-	HeadCommit    Commit
+
+	Branch     Branch
+	Remote     Remote
+	HeadCommit Commit
+
+	Configer     Configer
+	GlobalConfig func(scope config.Scope) (*config.Config, error)
 }
 
 type repositoryNotFoundError struct{}
@@ -35,11 +43,6 @@ func New() (*Repository, error) {
 		return nil, fmt.Errorf("unable to open git repository: %v: %w", repositoryPath, err)
 	}
 
-	users, err := NewUsers(repo)
-	if err != nil {
-		return nil, fmt.Errorf("unable to initialise user: %w", err)
-	}
-
 	branch, err := NewBranch(repo)
 	if err != nil {
 		return nil, fmt.Errorf("unable to initialise branch: %w", err)
@@ -57,7 +60,8 @@ func New() (*Repository, error) {
 
 	return &Repository{
 		gitRepository: repo,
-		Users:         users,
+		Configer:      repo,
+		GlobalConfig:  config.LoadConfig,
 		Branch:        branch,
 		Remote:        remote,
 		HeadCommit:    commit,

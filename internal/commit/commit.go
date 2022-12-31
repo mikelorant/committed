@@ -91,11 +91,16 @@ func New(opts Options) (*Commit, error) {
 		return nil, fmt.Errorf("unable to get emojis: %w", err)
 	}
 
+	us, err := r.Users()
+	if err != nil {
+		return nil, fmt.Errorf("unable to get users: %w", err)
+	}
+
 	var authors []Author
-	for _, user := range r.Users {
+	for _, u := range us {
 		a := Author{
-			Name:  user.Name,
-			Email: user.Email,
+			Name:  u.Name,
+			Email: u.Email,
 		}
 
 		authors = append(authors, a)
