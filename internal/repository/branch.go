@@ -4,105 +4,112 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/plumbing"
 )
 
-var errReferenceNotFound = errors.New("reference not found")
+var ErrLocalBranchNotFound = errors.New("local branch not found")
 
 type Branch struct {
-	repository *git.Repository
-	config     *config.Config
-	headRef    *plumbing.Reference
-	Local      string
-	Remote     string
-	Refs       []string
+	Local  string
+	Remote string
+	Refs   []string
 }
 
-func NewBranch(r *git.Repository) (Branch, error) {
-	c, err := r.Config()
+type RefsOptions struct {
+	brancher     Brancher
+	localBranch  string
+	remoteBranch string
+	headRef      *plumbing.Reference
+}
+
+type RefsResult struct {
+	refs []string
+}
+
+func (m *Repository) Branch() (Branch, error) {
+	c, err := m.Brancher.Config()
 	if err != nil {
 		return Branch{}, fmt.Errorf("unable to get repository config: %w", err)
 	}
 
-	h, err := r.Head()
+	h, err := m.Brancher.Head()
 	switch {
 	case err == nil:
-	case err.Error() == errReferenceNotFound.Error():
+	case err.Error() == plumbing.ErrReferenceNotFound.Error():
 		return Branch{}, nil
 	default:
 		return Branch{}, fmt.Errorf("unable to get head reference: %w", err)
 	}
 
-	branch := Branch{
-		repository: r,
-		config:     c,
-		headRef:    h,
-	}
-
-	local, err := branch.local()
+	l, err := local(h)
 	if err != nil {
-		return branch, fmt.Errorf("unable to get local branch: %w", err)
+		return Branch{}, fmt.Errorf("unable to get local branch: %w", err)
 	}
-	branch.Local = local
 
-	remote, err := branch.remote()
+	r := remote(l, c)
+
+	ro := RefsOptions{
+		brancher:     m.Brancher,
+		localBranch:  l,
+		remoteBranch: r,
+		headRef:      h,
+	}
+
+	hrefs, err := headRefs(ro)
 	if err != nil {
-		return branch, fmt.Errorf("unable to get remote branch: %w", err)
-	}
-	branch.Remote = remote
-
-	if err := branch.headRefs(); err != nil {
-		return branch, fmt.Errorf("unable to get head references: %w", err)
+		return Branch{}, fmt.Errorf("unable to get head references: %w", err)
 	}
 
-	return branch, nil
+	return Branch{
+		Local:  l,
+		Remote: r,
+		Refs:   hrefs,
+	}, nil
 }
 
-func (b *Branch) local() (string, error) {
-	return b.headRef.Name().Short(), nil
-}
+func local(ref *plumbing.Reference) (string, error) {
+	r := ref.Name().Short()
 
-func (b *Branch) remote() (string, error) {
-	l := b.Local
-	bs := b.config.Branches
-
-	if l == "" {
-		return "", nil
+	if r == "" {
+		return "", ErrLocalBranchNotFound
 	}
 
-	if _, ok := bs[l]; !ok {
-		return "", nil
-	}
-
-	return fmt.Sprintf("%s/%s", bs[l].Remote, bs[l].Name), nil
+	return r, nil
 }
 
-func (b *Branch) headRefs() error {
-	rs, err := b.repository.References()
+func remote(ref string, cfg *config.Config) string {
+	bs := cfg.Branches
+
+	if bs[ref].Remote == "" {
+		return ""
+	}
+
+	return fmt.Sprintf("%s/%s", bs[ref].Remote, bs[ref].Name)
+}
+
+func headRefs(ro RefsOptions) ([]string, error) {
+	var rr RefsResult
+
+	rs, err := ro.brancher.References()
 	if err != nil {
-		return fmt.Errorf("unable to get references: %w", err)
+		return nil, fmt.Errorf("unable to get references: %w", err)
 	}
 
-	rs.ForEach(getRefFunc(b, b.headRef.Hash()))
+	rs.ForEach(getRefFunc(ro, &rr))
 
-	return nil
+	return rr.refs, nil
 }
 
-func getRefFunc(b *Branch, h plumbing.Hash) func(*plumbing.Reference) error {
-	lb := b.Local
-	rb := b.Remote
-
+func getRefFunc(ro RefsOptions, rr *RefsResult) func(*plumbing.Reference) error {
 	return func(ref *plumbing.Reference) error {
 		if ref.Type() == plumbing.HashReference {
-			if ref.Hash() == h {
+			if ref.Hash() == ro.headRef.Hash() {
 				name := ref.Name().Short()
-				if (name == lb) || (name == rb) {
+				if (name == ro.localBranch) || (name == ro.remoteBranch) {
 					return nil
 				}
-
-				b.Refs = append(b.Refs, name)
+				rr.refs = append(rr.refs, name)
 			}
 		}
 

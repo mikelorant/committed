@@ -8,6 +8,7 @@ import (
 	"github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
+	"github.com/go-git/go-git/v5/plumbing/storer"
 )
 
 type Configer interface {
@@ -23,15 +24,18 @@ type Header interface {
 	CommitObject(h plumbing.Hash) (*object.Commit, error)
 }
 
+type Brancher interface {
+	Configer
+	Head() (*plumbing.Reference, error)
+	References() (storer.ReferenceIter, error)
+}
+
 type Repository struct {
-	gitRepository *git.Repository
-
-	Branch Branch
-
 	Configer     Configer
 	GlobalConfig func(scope config.Scope) (*config.Config, error)
 	Remoter      Remoter
 	Header       Header
+	Brancher     Brancher
 }
 
 type repositoryNotFoundError struct{}
@@ -54,18 +58,12 @@ func New() (*Repository, error) {
 		return nil, fmt.Errorf("unable to open git repository: %v: %w", repositoryPath, err)
 	}
 
-	branch, err := NewBranch(repo)
-	if err != nil {
-		return nil, fmt.Errorf("unable to initialise branch: %w", err)
-	}
-
 	return &Repository{
-		gitRepository: repo,
-		Configer:      repo,
-		GlobalConfig:  config.LoadConfig,
-		Remoter:       repo,
-		Header:        repo,
-		Branch:        branch,
+		Configer:     repo,
+		GlobalConfig: config.LoadConfig,
+		Remoter:      repo,
+		Header:       repo,
+		Brancher:     repo,
 	}, nil
 }
 

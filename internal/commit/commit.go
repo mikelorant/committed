@@ -106,6 +106,11 @@ func New(opts Options) (*Commit, error) {
 		return nil, fmt.Errorf("unable to get head commit: %w", err)
 	}
 
+	b, err := r.Branch()
+	if err != nil {
+		return nil, fmt.Errorf("unable to get branch: %w", err)
+	}
+
 	var authors []Author
 	for _, u := range us {
 		a := Author{
@@ -125,9 +130,9 @@ func New(opts Options) (*Commit, error) {
 	cfg := Config{
 		Authors:      authors,
 		Placeholders: placeholders,
-		LocalBranch:  r.Branch.Local,
-		RemoteBranch: r.Branch.Remote,
-		BranchRefs:   r.Branch.Refs,
+		LocalBranch:  b.Local,
+		RemoteBranch: b.Remote,
+		BranchRefs:   b.Refs,
 		Remotes:      rms,
 		Emojis:       e,
 		Amend:        opts.Amend,
