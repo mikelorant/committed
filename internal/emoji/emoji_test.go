@@ -68,6 +68,185 @@ func TestNew(t *testing.T) {
 	}
 }
 
+func TestFind(t *testing.T) {
+	type want struct {
+		valid     bool
+		name      string
+		character string
+		shortcode string
+	}
+
+	tests := []struct {
+		name  string
+		input string
+		want  want
+	}{
+		{
+			name:  "emoji",
+			input: "🎨",
+			want: want{
+				valid:     true,
+				name:      "art",
+				character: "🎨",
+				shortcode: ":art:",
+			},
+		},
+		{
+			name:  "shortcode",
+			input: ":art:",
+			want: want{
+				valid:     true,
+				name:      "art",
+				character: "🎨",
+				shortcode: ":art:",
+			},
+		},
+		{
+			name:  "word",
+			input: "something",
+		},
+		{
+			name:  "empty",
+			input: "",
+		},
+	}
+
+	es := emoji.New()
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := es.Find(tt.input)
+			if !tt.want.valid {
+				assert.False(t, got.Valid)
+				return
+			}
+			assert.True(t, got.Valid)
+			assert.Equal(t, tt.want.name, got.Emoji.Name)
+			assert.Equal(t, tt.want.character, got.Emoji.Character)
+			assert.Equal(t, tt.want.shortcode, got.Emoji.Shortcode)
+		})
+	}
+}
+
+func TestFindByCharacter(t *testing.T) {
+	type want struct {
+		valid bool
+		name  string
+	}
+
+	tests := []struct {
+		name  string
+		input string
+		want  want
+	}{
+		{
+			name:  "emoji",
+			input: "🎨",
+			want: want{
+				valid: true,
+				name:  "art",
+			},
+		},
+		{
+			name:  "shortcode",
+			input: ":art:",
+			want: want{
+				valid: false,
+			},
+		},
+		{
+			name:  "word",
+			input: "something",
+		},
+		{
+			name:  "empty",
+			input: "",
+		},
+	}
+
+	es := emoji.New()
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := es.FindByCharacter(tt.input)
+			if !tt.want.valid {
+				assert.False(t, got.Valid)
+				return
+			}
+			assert.True(t, got.Valid)
+			assert.Equal(t, tt.want.name, got.Emoji.Name)
+		})
+	}
+}
+
+func TestFindByShortcode(t *testing.T) {
+	type want struct {
+		valid bool
+		name  string
+	}
+
+	tests := []struct {
+		name  string
+		input string
+		want  want
+	}{
+		{
+			name:  "shortcode",
+			input: ":art:",
+			want: want{
+				valid: true,
+				name:  "art",
+			},
+		},
+		{
+			name:  "emoji",
+			input: "🎨",
+		},
+		{
+			name:  "word",
+			input: "something",
+		},
+		{
+			name:  "empty",
+			input: "",
+		},
+	}
+
+	es := emoji.New()
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := es.FindByShortcode(tt.input)
+			if !tt.want.valid {
+				assert.False(t, got.Valid)
+				return
+			}
+			assert.True(t, got.Valid)
+			assert.Equal(t, tt.want.name, got.Emoji.Name)
+		})
+	}
+}
+
+func TestHas(t *testing.T) {
+	tests := []struct {
+		name  string
+		input string
+		want  bool
+	}{
+		{name: "emoji", input: "🎨", want: true},
+		{name: "shortcode", input: ":art:", want: true},
+		{name: "empty", input: "", want: false},
+		{name: "word", input: "emoji", want: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := emoji.Has(tt.input)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
 func TestHasEmoji(t *testing.T) {
 	tests := []struct {
 		name  string
