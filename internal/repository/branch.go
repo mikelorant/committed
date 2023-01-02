@@ -81,6 +81,10 @@ func local(ref *plumbing.Reference) (string, error) {
 func remote(ref string, cfg *config.Config) string {
 	bs := cfg.Branches
 
+	if _, ok := bs[ref]; !ok {
+		return ""
+	}
+
 	if bs[ref].Remote == "" {
 		return ""
 	}
