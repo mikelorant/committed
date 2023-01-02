@@ -6,35 +6,11 @@ import (
 	"github.com/mikelorant/committed/internal/emoji"
 )
 
-func messageToEmoji(msg string, es []emoji.Emoji) emoji.Emoji {
+func messageToEmoji(msg string, es []emoji.Emoji) emoji.NullEmoji {
 	ls := strings.Split(msg, "\n")
 	fw := strings.Split(ls[0], " ")[0]
 
-	if emoji.HasEmoji(fw) {
-		for _, e := range es {
-			if e.Character == fw {
-				return emoji.Emoji{
-					Character: fw,
-					Shortcode: e.Shortcode,
-				}
-			}
-		}
-	}
-
-	if !emoji.HasShortcode(fw) {
-		return emoji.Emoji{}
-	}
-
-	for _, e := range es {
-		if e.Shortcode == fw {
-			return emoji.Emoji{
-				Character: e.Character,
-				Shortcode: fw,
-			}
-		}
-	}
-
-	return emoji.Emoji{}
+	return emoji.Find(fw, es)
 }
 
 func messageToSummary(msg string) string {
@@ -43,7 +19,7 @@ func messageToSummary(msg string) string {
 	ls := strings.Split(line, " ")
 	fw := ls[0]
 
-	if emoji.HasEmoji(fw) || emoji.HasShortcode(fw) {
+	if emoji.Has(fw) {
 		if len(line) <= 1 {
 			return ""
 		}

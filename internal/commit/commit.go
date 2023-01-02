@@ -50,11 +50,11 @@ type Author struct {
 }
 
 type HeadCommit struct {
-	Hash    string
-	When    time.Time
-	Emoji   emoji.Emoji
-	Summary string
-	Body    string
+	Hash      string
+	When      time.Time
+	NullEmoji emoji.NullEmoji
+	Summary   string
+	Body      string
 }
 
 type Placeholders struct {
@@ -140,11 +140,11 @@ func New(opts Options) (*Commit, error) {
 
 	if opts.Amend && h.Hash != "" {
 		cfg.HeadCommit = HeadCommit{
-			Hash:    h.Hash,
-			When:    h.When,
-			Emoji:   messageToEmoji(h.Message, e),
-			Summary: messageToSummary(h.Message),
-			Body:    messageToBody(h.Message),
+			Hash:      h.Hash,
+			When:      h.When,
+			NullEmoji: messageToEmoji(h.Message, e),
+			Summary:   messageToSummary(h.Message),
+			Body:      messageToBody(h.Message),
 		}
 	}
 

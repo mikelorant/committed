@@ -21,6 +21,11 @@ type Emoji struct {
 	ZWJ         bool   `json:"zwj"`
 }
 
+type NullEmoji struct {
+	Valid bool
+	Emoji Emoji
+}
+
 //go:embed gitmoji.yaml
 var gitmoji string
 
@@ -36,7 +41,48 @@ func New() ([]Emoji, error) {
 	return e, nil
 }
 
-func HasEmoji(str string) bool {
+func Find(str string, es []Emoji) NullEmoji {
+	switch {
+	case HasCharacter(str):
+		return FindByCharacter(str, es)
+	case HasShortcode(str):
+		return FindByShortcode(str, es)
+	default:
+		return NullEmoji{}
+	}
+}
+
+func FindByCharacter(str string, es []Emoji) NullEmoji {
+	for _, e := range es {
+		if e.Character == str {
+			return NullEmoji{
+				Valid: true,
+				Emoji: e,
+			}
+		}
+	}
+
+	return NullEmoji{}
+}
+
+func FindByShortcode(str string, es []Emoji) NullEmoji {
+	for _, e := range es {
+		if e.Shortcode == str {
+			return NullEmoji{
+				Valid: true,
+				Emoji: e,
+			}
+		}
+	}
+
+	return NullEmoji{}
+}
+
+func Has(str string) bool {
+	return HasCharacter(str) || HasShortcode(str)
+}
+
+func HasCharacter(str string) bool {
 	return gomoji.ContainsEmoji(str)
 }
 

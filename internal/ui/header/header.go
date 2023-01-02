@@ -62,7 +62,9 @@ func New(cfg commit.Config) Model {
 	}
 
 	if cfg.Amend {
-		m.Emoji = cfg.HeadCommit.Emoji
+		if cfg.HeadCommit.NullEmoji.Valid {
+			m.Emoji = cfg.HeadCommit.NullEmoji.Emoji
+		}
 		m.summaryInput.SetValue(cfg.HeadCommit.Summary)
 	}
 
