@@ -86,10 +86,7 @@ func New(opts Options) (*Commit, error) {
 		return nil, fmt.Errorf("unable to get repository: %w", err)
 	}
 
-	e, err := emoji.New()
-	if err != nil {
-		return nil, fmt.Errorf("unable to get emojis: %w", err)
-	}
+	e := emoji.New()
 
 	us, err := r.Users()
 	if err != nil {
@@ -134,7 +131,7 @@ func New(opts Options) (*Commit, error) {
 		RemoteBranch: b.Remote,
 		BranchRefs:   b.Refs,
 		Remotes:      rms,
-		Emojis:       e,
+		Emojis:       e.Emojis,
 		Amend:        opts.Amend,
 	}
 
@@ -142,7 +139,7 @@ func New(opts Options) (*Commit, error) {
 		cfg.HeadCommit = HeadCommit{
 			Hash:      h.Hash,
 			When:      h.When,
-			NullEmoji: messageToEmoji(h.Message, e),
+			NullEmoji: messageToEmoji(h.Message),
 			Summary:   messageToSummary(h.Message),
 			Body:      messageToBody(h.Message),
 		}

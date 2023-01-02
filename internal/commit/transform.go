@@ -6,11 +6,11 @@ import (
 	"github.com/mikelorant/committed/internal/emoji"
 )
 
-func messageToEmoji(msg string, es []emoji.Emoji) emoji.NullEmoji {
+func messageToEmoji(msg string) emoji.NullEmoji {
 	ls := strings.Split(msg, "\n")
 	fw := strings.Split(ls[0], " ")[0]
 
-	return emoji.Find(fw, es)
+	return emoji.New().Find(fw)
 }
 
 func messageToSummary(msg string) string {

@@ -7,23 +7,65 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNew(t *testing.T) {
-	emojiCount := 72
+var firstGitmojiEmoji = emoji.Emoji{
+	Name:        "art",
+	Character:   "🎨",
+	Description: "Improve structure / format of the code.",
+	Characters:  1,
+	Codepoint:   "1f3a8",
+	Hex:         "F0 9F 8E A8",
+	Shortcode:   ":art:",
+}
 
-	firstEmoji := emoji.Emoji{
-		Name:        "art",
-		Character:   "🎨",
-		Description: "Improve structure / format of the code.",
-		Characters:  1,
-		Codepoint:   "1f3a8",
-		Hex:         "F0 9F 8E A8",
-		Shortcode:   ":art:",
+func TestNew(t *testing.T) {
+	type want struct {
+		len   int
+		name  string
+		emoji emoji.Emoji
 	}
 
-	e, err := emoji.New()
-	assert.NoError(t, err)
-	assert.Equal(t, emojiCount, len(e))
-	assert.Equal(t, firstEmoji, e[0])
+	tests := []struct {
+		name    string
+		options func(*emoji.Set)
+		want    want
+	}{
+		{
+			name: "default",
+			want: want{
+				len:   72,
+				name:  "gitmoji",
+				emoji: firstGitmojiEmoji,
+			},
+		},
+		{
+			name:    "gitmoji",
+			options: emoji.WithEmojiSet(emoji.GitmojiProfile),
+			want: want{
+				len:   72,
+				name:  "gitmoji",
+				emoji: firstGitmojiEmoji,
+			},
+		},
+		{
+			name:    "devmoji",
+			options: emoji.WithEmojiSet(emoji.DevmojiProfile),
+			want: want{
+				len:  0,
+				name: "gitmoji",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			e := emoji.New(tt.options)
+
+			assert.Equal(t, tt.want.len, len(e.Emojis))
+			if len(e.Emojis) > 0 {
+				assert.Equal(t, tt.want.emoji, e.Emojis[0])
+			}
+		})
+	}
 }
 
 func TestHasEmoji(t *testing.T) {

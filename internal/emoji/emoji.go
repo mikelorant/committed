@@ -9,6 +9,14 @@ import (
 	"github.com/goccy/go-yaml"
 )
 
+type Set struct {
+	Name   string
+	Emojis []Emoji
+
+	profile   Profile
+	rawEmojis string
+}
+
 type Emoji struct {
 	Name        string `json:"name"`
 	Character   string `json:"emoji"`
@@ -26,34 +34,48 @@ type NullEmoji struct {
 	Emoji Emoji
 }
 
+type Profile int
+
 //go:embed gitmoji.yaml
 var gitmoji string
+var devmoji string
 
-func New() ([]Emoji, error) {
-	var e []Emoji
+const (
+	gitmojiName = "gitmoji"
+	devmojiName = "devmoji"
 
-	r := strings.NewReader(gitmoji)
+	DefaultProfile Profile = iota
+	GitmojiProfile
+	DevmojiProfile
+)
 
-	if err := yaml.NewDecoder(r).Decode(&e); err != nil {
-		return nil, fmt.Errorf("unable to decode emojis: %w", err)
+func New(opts ...func(*Set)) *Set {
+	var es Set
+
+	for _, o := range opts {
+		if o != nil {
+			o(&es)
+		}
 	}
 
-	return e, nil
+	es.load(es.profile)
+
+	return &es
 }
 
-func Find(str string, es []Emoji) NullEmoji {
+func (es *Set) Find(str string) NullEmoji {
 	switch {
 	case HasCharacter(str):
-		return FindByCharacter(str, es)
+		return es.FindByCharacter(str)
 	case HasShortcode(str):
-		return FindByShortcode(str, es)
+		return es.FindByShortcode(str)
 	default:
 		return NullEmoji{}
 	}
 }
 
-func FindByCharacter(str string, es []Emoji) NullEmoji {
-	for _, e := range es {
+func (es *Set) FindByCharacter(str string) NullEmoji {
+	for _, e := range es.Emojis {
 		if e.Character == str {
 			return NullEmoji{
 				Valid: true,
@@ -65,8 +87,8 @@ func FindByCharacter(str string, es []Emoji) NullEmoji {
 	return NullEmoji{}
 }
 
-func FindByShortcode(str string, es []Emoji) NullEmoji {
-	for _, e := range es {
+func (es *Set) FindByShortcode(str string) NullEmoji {
+	for _, e := range es.Emojis {
 		if e.Shortcode == str {
 			return NullEmoji{
 				Valid: true,
@@ -76,6 +98,36 @@ func FindByShortcode(str string, es []Emoji) NullEmoji {
 	}
 
 	return NullEmoji{}
+}
+
+func (es *Set) load(p Profile) {
+	switch p {
+	case GitmojiProfile:
+		es.Name = gitmojiName
+		es.rawEmojis = gitmoji
+	case DevmojiProfile:
+		es.Name = devmojiName
+		es.rawEmojis = devmoji
+	default:
+		es.Name = gitmojiName
+		es.rawEmojis = gitmoji
+	}
+
+	if es.rawEmojis == "" {
+		return
+	}
+
+	r := strings.NewReader(es.rawEmojis)
+
+	if err := yaml.NewDecoder(r).Decode(&es.Emojis); err != nil {
+		panic(fmt.Errorf("unable to decode emojis: %w", err))
+	}
+}
+
+func WithEmojiSet(p Profile) func(*Set) {
+	return func(e *Set) {
+		e.profile = p
+	}
 }
 
 func Has(str string) bool {
