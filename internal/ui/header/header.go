@@ -62,8 +62,9 @@ func New(cfg commit.Config) Model {
 	}
 
 	if cfg.Amend && cfg.Repository.Head.Hash != "" {
-		if cfg.Emoji.Valid {
-			m.Emoji = cfg.MessageToEmoji().Emoji
+		e := cfg.MessageToEmoji()
+		if e.Valid {
+			m.Emoji = e.Emoji
 		}
 		m.summaryInput.SetValue(cfg.MessageToSummary())
 	}
