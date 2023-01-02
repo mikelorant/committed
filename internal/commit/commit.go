@@ -8,7 +8,6 @@ import (
 	"io"
 	"io/fs"
 	"os/exec"
-	"time"
 
 	"github.com/creack/pty"
 	"github.com/mikelorant/committed/internal/emoji"
@@ -17,44 +16,29 @@ import (
 
 type Commit struct {
 	Config  Config
-	Author  Author
 	Emoji   string
 	Summary string
 	Body    string
 	Footer  string
+	Author  repository.User
 
 	options Options
 	cmd     []string
 }
 
 type Config struct {
-	Authors      []Author
 	Placeholders Placeholders
-	LocalBranch  string
-	RemoteBranch string
-	BranchRefs   []string
-	Remotes      []string
-	HeadCommit   HeadCommit
+	Repository   repository.Description
 	Emojis       []emoji.Emoji
+	Emoji        emoji.NullEmoji
+	Summary      string
+	Body         string
 	Amend        bool
 }
 
 type Options struct {
 	Apply bool
 	Amend bool
-}
-
-type Author struct {
-	Name  string
-	Email string
-}
-
-type HeadCommit struct {
-	Hash      string
-	When      time.Time
-	NullEmoji emoji.NullEmoji
-	Summary   string
-	Body      string
 }
 
 type Placeholders struct {
@@ -88,34 +72,9 @@ func New(opts Options) (*Commit, error) {
 
 	e := emoji.New()
 
-	us, err := r.Users()
+	d, err := r.Describe()
 	if err != nil {
-		return nil, fmt.Errorf("unable to get users: %w", err)
-	}
-
-	rms, err := r.Remotes()
-	if err != nil {
-		return nil, fmt.Errorf("unable to get remotes: %w", err)
-	}
-
-	h, err := r.Head()
-	if err != nil {
-		return nil, fmt.Errorf("unable to get head commit: %w", err)
-	}
-
-	b, err := r.Branch()
-	if err != nil {
-		return nil, fmt.Errorf("unable to get branch: %w", err)
-	}
-
-	var authors []Author
-	for _, u := range us {
-		a := Author{
-			Name:  u.Name,
-			Email: u.Email,
-		}
-
-		authors = append(authors, a)
+		return nil, fmt.Errorf("unable to describe repository: %w", err)
 	}
 
 	placeholders := Placeholders{
@@ -125,24 +84,16 @@ func New(opts Options) (*Commit, error) {
 	}
 
 	cfg := Config{
-		Authors:      authors,
 		Placeholders: placeholders,
-		LocalBranch:  b.Local,
-		RemoteBranch: b.Remote,
-		BranchRefs:   b.Refs,
-		Remotes:      rms,
 		Emojis:       e.Emojis,
+		Repository:   d,
 		Amend:        opts.Amend,
 	}
 
-	if opts.Amend && h.Hash != "" {
-		cfg.HeadCommit = HeadCommit{
-			Hash:      h.Hash,
-			When:      h.When,
-			NullEmoji: messageToEmoji(h.Message),
-			Summary:   messageToSummary(h.Message),
-			Body:      messageToBody(h.Message),
-		}
+	if opts.Amend && d.Head.Hash != "" {
+		cfg.Emoji = messageToEmoji(d.Head.Message)
+		cfg.Summary = messageToSummary(d.Head.Message)
+		cfg.Body = messageToBody(d.Head.Message)
 	}
 
 	return &Commit{

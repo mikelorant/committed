@@ -38,6 +38,13 @@ type Repository struct {
 	Brancher     Brancher
 }
 
+type Description struct {
+	Users   []User
+	Remotes []string
+	Head    Head
+	Branch  Branch
+}
+
 type repositoryNotFoundError struct{}
 
 var errRepositoryNotFound = errors.New("repository does not exist")
@@ -64,6 +71,35 @@ func New() (*Repository, error) {
 		Remoter:      repo,
 		Header:       repo,
 		Brancher:     repo,
+	}, nil
+}
+
+func (r *Repository) Describe() (Description, error) {
+	us, err := r.Users()
+	if err != nil {
+		return Description{}, fmt.Errorf("unable to get users: %w", err)
+	}
+
+	rs, err := r.Remotes()
+	if err != nil {
+		return Description{}, fmt.Errorf("unable to get remotes: %w", err)
+	}
+
+	h, err := r.Head()
+	if err != nil {
+		return Description{}, fmt.Errorf("unable to get head commit: %w", err)
+	}
+
+	b, err := r.Branch()
+	if err != nil {
+		return Description{}, fmt.Errorf("unable to get branch: %w", err)
+	}
+
+	return Description{
+		Users:   us,
+		Remotes: rs,
+		Head:    h,
+		Branch:  b,
 	}, nil
 }
 

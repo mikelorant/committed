@@ -34,7 +34,7 @@ func New(cfg commit.Config, h int) Model {
 	}
 
 	if cfg.Amend {
-		m.textArea.SetValue(cfg.HeadCommit.Body)
+		m.textArea.SetValue(cfg.Body)
 	}
 
 	return m

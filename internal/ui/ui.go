@@ -7,6 +7,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/repository"
 	"github.com/mikelorant/committed/internal/ui/body"
 	"github.com/mikelorant/committed/internal/ui/footer"
 	"github.com/mikelorant/committed/internal/ui/header"
@@ -39,7 +40,7 @@ type Models struct {
 
 type Result struct {
 	Commit  bool
-	Author  commit.Author
+	Author  repository.User
 	Emoji   string
 	Summary string
 	Body    string

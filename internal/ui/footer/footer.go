@@ -6,17 +6,18 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/repository"
 	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Model struct {
-	Author  commit.Author
+	Author  repository.User
 	Signoff bool
 }
 
 func New(cfg commit.Config) Model {
 	return Model{
-		Author: cfg.Authors[0],
+		Author: cfg.Repository.Users[0],
 	}
 }
 

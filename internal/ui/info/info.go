@@ -10,6 +10,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/fuzzy"
+	"github.com/mikelorant/committed/internal/repository"
 	"github.com/mikelorant/committed/internal/ui/filterlist"
 	"github.com/mikelorant/committed/internal/ui/theme"
 )
@@ -24,8 +25,8 @@ type Model struct {
 	BranchRefs    []string
 	Remotes       []string
 	Date          string
-	Author        commit.Author
-	Authors       []commit.Author
+	Author        repository.User
+	Authors       []repository.User
 
 	focus      bool
 	styles     Styles
@@ -40,24 +41,24 @@ const (
 func New(cfg commit.Config) Model {
 	m := Model{
 		Hash:         cfg.Placeholders.Hash,
-		LocalBranch:  cfg.LocalBranch,
-		RemoteBranch: cfg.RemoteBranch,
-		BranchRefs:   cfg.BranchRefs,
-		Remotes:      cfg.Remotes,
+		LocalBranch:  cfg.Repository.Branch.Local,
+		RemoteBranch: cfg.Repository.Branch.Remote,
+		BranchRefs:   cfg.Repository.Branch.Refs,
+		Remotes:      cfg.Repository.Remotes,
 		Date:         time.Now().Format(dateTimeFormat),
-		Author:       cfg.Authors[0],
-		Authors:      cfg.Authors,
+		Author:       cfg.Repository.Users[0],
+		Authors:      cfg.Repository.Users,
 		styles:       defaultStyles(),
 		filterList: filterlist.New(
-			castToListItems(cfg.Authors),
+			castToListItems(cfg.Repository.Users),
 			filterPromptText,
 			filterHeight,
 		),
 	}
 
 	if cfg.Amend {
-		m.Hash = cfg.HeadCommit.Hash
-		m.Date = cfg.HeadCommit.When.Format(dateTimeFormat)
+		m.Hash = cfg.Repository.Head.Hash
+		m.Date = cfg.Repository.Head.When.Format(dateTimeFormat)
 	}
 
 	return m

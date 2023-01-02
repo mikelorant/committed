@@ -4,16 +4,16 @@ import (
 	"fmt"
 
 	"github.com/charmbracelet/bubbles/list"
-	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/fuzzy"
+	"github.com/mikelorant/committed/internal/repository"
 )
 
 type listItem struct {
-	author commit.Author
+	author repository.User
 }
 
 type fuzzyItem struct {
-	author commit.Author
+	author repository.User
 }
 
 func (i listItem) Title() string {
@@ -35,7 +35,7 @@ func (i fuzzyItem) Terms() []string {
 	}
 }
 
-func castToListItems(authors []commit.Author) []list.Item {
+func castToListItems(authors []repository.User) []list.Item {
 	res := make([]list.Item, len(authors))
 	for i, a := range authors {
 		var item listItem
@@ -46,7 +46,7 @@ func castToListItems(authors []commit.Author) []list.Item {
 	return res
 }
 
-func castToFuzzyItems(authors []commit.Author) []fuzzy.Item {
+func castToFuzzyItems(authors []repository.User) []fuzzy.Item {
 	res := make([]fuzzy.Item, len(authors))
 	for i, e := range authors {
 		var item fuzzyItem
