@@ -16,36 +16,60 @@ func (c *Config) MessageToEmoji() emoji.NullEmoji {
 func (c *Config) MessageToSummary() string {
 	lines := strings.Split(c.Repository.Head.Message, "\n")
 	line := lines[0]
+
+	if !hasSummary(c.Repository.Head.Message) {
+		return ""
+	}
+
 	ls := strings.Split(line, " ")
 	fw := ls[0]
 
 	if emoji.Has(fw) {
-		if len(line) <= 1 {
+		if len(ls) <= 1 {
 			return ""
 		}
-		return strings.Join(ls[1:], " ")
+		line = strings.Join(ls[1:], " ")
 	}
 
 	return line
 }
 
 func (c *Config) MessageToBody() string {
-	if hasSummary(c.Repository.Head.Message) {
-		ls := strings.Split(c.Repository.Head.Message, "\n")
-		return strings.Join(ls[2:], "\n")
+	lines := c.Repository.Head.Message
+
+	if !hasSummary(lines) {
+		return lines
 	}
 
-	return ""
+	ls := strings.Split(c.Repository.Head.Message, "\n")
+
+	switch len(ls) {
+	case 1:
+		return ""
+	case 2:
+		return ls[1]
+	}
+
+	return strings.Join(ls[2:], "\n")
 }
 
 func hasSummary(msg string) bool {
 	ls := strings.Split(msg, "\n")
-	if len(ls) <= 2 {
-		return false
-	}
 
-	if ls[0] != "" && ls[1] == "" && ls[2] != "" {
+	switch len(ls) {
+	case 1:
+		if len(ls[0]) == 0 || len(ls[0]) > 72 {
+			return false
+		}
 		return true
+	case 2:
+		if ls[0] != "" && ls[1] == "" {
+			return true
+		}
+	default:
+		if ls[0] != "" && ls[1] == "" && ls[2] != "" {
+			return true
+		}
 	}
 
 	return false
