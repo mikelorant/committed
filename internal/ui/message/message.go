@@ -43,8 +43,8 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 
 func (m Model) View() string {
 	message := m.styles.summary.Render(m.summary)
-	if m.emoji.ShortCode != "" {
-		s := fmt.Sprintf("%s %s", m.emoji.ShortCode, m.summary)
+	if m.emoji.Shortcode != "" {
+		s := fmt.Sprintf("%s %s", m.emoji.Shortcode, m.summary)
 		message = m.styles.summary.Render(s)
 	}
 

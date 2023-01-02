@@ -159,7 +159,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.result = Result{
 				Commit:  true,
 				Author:  m.models.info.Author,
-				Emoji:   m.models.header.Emoji.ShortCode,
+				Emoji:   m.models.header.Emoji.Shortcode,
 				Summary: m.models.header.Summary(),
 				Body:    m.models.body.Value(),
 				Footer:  m.models.footer.Value(),

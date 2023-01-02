@@ -15,7 +15,7 @@ func messageToEmoji(msg string, es []emoji.Emoji) emoji.Emoji {
 			if e.Character == fw {
 				return emoji.Emoji{
 					Character: fw,
-					ShortCode: e.ShortCode,
+					Shortcode: e.Shortcode,
 				}
 			}
 		}
@@ -26,10 +26,10 @@ func messageToEmoji(msg string, es []emoji.Emoji) emoji.Emoji {
 	}
 
 	for _, e := range es {
-		if e.ShortCode == fw {
+		if e.Shortcode == fw {
 			return emoji.Emoji{
 				Character: e.Character,
-				ShortCode: fw,
+				Shortcode: fw,
 			}
 		}
 	}

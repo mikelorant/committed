@@ -17,7 +17,7 @@ func TestNew(t *testing.T) {
 		Characters:  1,
 		Codepoint:   "1f3a8",
 		Hex:         "F0 9F 8E A8",
-		ShortCode:   ":art:",
+		Shortcode:   ":art:",
 	}
 
 	e, err := emoji.New()

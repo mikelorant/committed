@@ -16,7 +16,7 @@ type Emoji struct {
 	Characters  int    `json:"characters"`
 	Codepoint   string `json:"codepoint"`
 	Hex         string `json:"hex"`
-	ShortCode   string `json:"shortcode"`
+	Shortcode   string `json:"shortcode"`
 	Variant     bool   `json:"variant"`
 	ZWJ         bool   `json:"zwj"`
 }
