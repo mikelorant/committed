@@ -6,15 +6,15 @@ import (
 	"github.com/mikelorant/committed/internal/emoji"
 )
 
-func messageToEmoji(msg string) emoji.NullEmoji {
-	ls := strings.Split(msg, "\n")
+func (c *Config) MessageToEmoji() emoji.NullEmoji {
+	ls := strings.Split(c.Repository.Head.Message, "\n")
 	fw := strings.Split(ls[0], " ")[0]
 
 	return emoji.New().Find(fw)
 }
 
-func messageToSummary(msg string) string {
-	lines := strings.Split(msg, "\n")
+func (c *Config) MessageToSummary() string {
+	lines := strings.Split(c.Repository.Head.Message, "\n")
 	line := lines[0]
 	ls := strings.Split(line, " ")
 	fw := ls[0]
@@ -29,9 +29,9 @@ func messageToSummary(msg string) string {
 	return line
 }
 
-func messageToBody(msg string) string {
-	if hasSummary(msg) {
-		ls := strings.Split(msg, "\n")
+func (c *Config) MessageToBody() string {
+	if hasSummary(c.Repository.Head.Message) {
+		ls := strings.Split(c.Repository.Head.Message, "\n")
 		return strings.Join(ls[2:], "\n")
 	}
 

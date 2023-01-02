@@ -90,12 +90,6 @@ func New(opts Options) (*Commit, error) {
 		Amend:        opts.Amend,
 	}
 
-	if opts.Amend && d.Head.Hash != "" {
-		cfg.Emoji = messageToEmoji(d.Head.Message)
-		cfg.Summary = messageToSummary(d.Head.Message)
-		cfg.Body = messageToBody(d.Head.Message)
-	}
-
 	return &Commit{
 		Config:  cfg,
 		options: opts,

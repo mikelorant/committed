@@ -33,8 +33,8 @@ func New(cfg commit.Config, h int) Model {
 		textArea: newTextArea(cfg.Placeholders.Body, defaultWidth),
 	}
 
-	if cfg.Amend {
-		m.textArea.SetValue(cfg.Body)
+	if cfg.Amend && cfg.Repository.Head.Hash != "" {
+		m.textArea.SetValue(cfg.MessageToBody())
 	}
 
 	return m
