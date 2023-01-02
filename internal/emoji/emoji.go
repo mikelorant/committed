@@ -21,13 +21,13 @@ type Emoji struct {
 	ZWJ         bool   `json:"zwj"`
 }
 
-//go:embed emoji.yaml
-var emojiYAML string
+//go:embed gitmoji.yaml
+var gitmoji string
 
 func New() ([]Emoji, error) {
 	var e []Emoji
 
-	r := strings.NewReader(emojiYAML)
+	r := strings.NewReader(gitmoji)
 
 	if err := yaml.NewDecoder(r).Decode(&e); err != nil {
 		return nil, fmt.Errorf("unable to decode emojis: %w", err)
