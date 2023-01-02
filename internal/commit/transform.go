@@ -1,6 +1,7 @@
 package commit
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/mikelorant/committed/internal/emoji"
@@ -51,6 +52,26 @@ func (c *Config) MessageToBody() string {
 	}
 
 	return strings.Join(ls[2:], "\n")
+}
+
+func (c *Commit) EmojiSummaryToSubject() string {
+	var subject string
+
+	if c.Emoji != "" {
+		subject = fmt.Sprintf("%s %s", c.Emoji, c.Summary)
+	} else {
+		subject = c.Summary
+	}
+
+	return subject
+}
+
+func (c *Commit) UserToAuthor() string {
+	if c.Author.Name == "" || c.Author.Email == "" {
+		return ""
+	}
+
+	return fmt.Sprintf("%s <%s>", c.Author.Name, c.Author.Email)
 }
 
 func hasSummary(msg string) bool {

@@ -212,3 +212,108 @@ func TestMessageToBody(t *testing.T) {
 		})
 	}
 }
+
+func TestEmojiSummaryToSubject(t *testing.T) {
+	type args struct {
+		emoji   string
+		summary string
+	}
+
+	tests := []struct {
+		name    string
+		args    args
+		subject string
+	}{
+		{
+			name: "emoji_summary",
+			args: args{
+				emoji:   ":art:",
+				summary: "summary",
+			},
+			subject: ":art: summary",
+		},
+		{
+			name: "summary",
+			args: args{
+				summary: "summary",
+			},
+			subject: "summary",
+		},
+		{
+			name: "empty",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := commit.Commit{
+				Emoji:   tt.args.emoji,
+				Summary: tt.args.summary,
+			}
+
+			s := c.EmojiSummaryToSubject()
+			if tt.subject == "" {
+				assert.Empty(t, s)
+				return
+			}
+			assert.NotEmpty(t, s)
+			assert.Equal(t, tt.subject, s)
+		})
+	}
+}
+
+func TestUserToAuthor(t *testing.T) {
+	type args struct {
+		name  string
+		email string
+	}
+
+	tests := []struct {
+		name   string
+		args   args
+		author string
+	}{
+		{
+			name: "name_email",
+			args: args{
+				name:  "John Doe",
+				email: "john.doe@example.com",
+			},
+			author: "John Doe <john.doe@example.com>",
+		},
+		{
+			name: "name",
+			args: args{
+				name: "John Doe",
+			},
+		},
+		{
+			name: "email",
+			args: args{
+				email: "john.doe@example.com",
+			},
+		},
+		{
+			name: "empty",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := commit.Commit{
+				Author: repository.User{
+					Name:  tt.args.name,
+					Email: tt.args.email,
+				},
+			}
+
+			a := c.UserToAuthor()
+			if tt.author == "" {
+				assert.Empty(t, a)
+				return
+			}
+			assert.NotEmpty(t, a)
+			assert.Equal(t, tt.author, a)
+		})
+	}
+}

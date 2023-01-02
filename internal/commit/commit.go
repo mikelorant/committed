@@ -1,15 +1,10 @@
 package commit
 
 import (
-	"bytes"
 	_ "embed"
-	"errors"
 	"fmt"
-	"io"
-	"io/fs"
 	"os/exec"
 
-	"github.com/creack/pty"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
 )
@@ -50,13 +45,6 @@ type Placeholders struct {
 //go:embed message.txt
 var message string
 
-var (
-	commitCommand = "git"
-	commitOptions = []string{
-		"--dry-run",
-	}
-)
-
 var exitError *exec.ExitError
 
 const (
@@ -96,75 +84,22 @@ func New(opts Options) (*Commit, error) {
 	}, nil
 }
 
-func (c *Commit) Create() error {
-	c.build()
-	if err := c.exec(); err != nil {
-		return fmt.Errorf("unable to commit: %w", err)
+func (c *Commit) Apply() error {
+	com := repository.Commit{
+		Author:  c.UserToAuthor(),
+		Subject: c.EmojiSummaryToSubject(),
+		Body:    c.Body,
+		Footer:  c.Footer,
 	}
 
-	return nil
-}
-
-func (c *Commit) build() {
-	var cmd []string
-
-	cmd = append(cmd, "commit")
-
-	if c.Author.Name != "" && c.Author.Email != "" {
-		author := fmt.Sprintf("%s <%s>", c.Author.Name, c.Author.Email)
-		cmd = append(cmd, "--author", author)
+	opts := []repository.CommitOptions{
+		repository.WithAmend(c.options.Amend),
+		repository.WithDryRun(!c.options.Apply),
 	}
 
-	var subject string
-	if c.Emoji != "" {
-		subject = fmt.Sprintf("%s %s", c.Emoji, c.Summary)
-	} else {
-		subject = c.Summary
+	if err := repository.Apply(com, opts...); err != nil {
+		return fmt.Errorf("unable to apply commit: %w", err)
 	}
-	cmd = append(cmd, "--message", subject)
-
-	if c.Body != "" {
-		cmd = append(cmd, "--message", c.Body)
-	}
-
-	if c.Footer != "" {
-		cmd = append(cmd, "--message", c.Footer)
-	}
-
-	if c.options.Amend {
-		cmd = append(cmd, "--amend")
-	}
-
-	if !c.options.Apply {
-		cmd = append(cmd, commitOptions...)
-	}
-
-	c.cmd = cmd
-}
-
-func (c *Commit) exec() error {
-	cmd := exec.Command(commitCommand, c.cmd...)
-	fh, err := pty.Start(cmd)
-	if err != nil {
-		return fmt.Errorf("unable to exec commit command: %w", err)
-	}
-	defer fh.Close()
-
-	var buf bytes.Buffer
-	if _, err = io.Copy(&buf, fh); err != nil {
-		var pathError *fs.PathError
-		if !errors.As(err, &pathError) {
-			return fmt.Errorf("unable to copy commit output: %w", err)
-		}
-		if pathError.Path != "/dev/ptmx" {
-			return fmt.Errorf("unable to copy commit output: %w", err)
-		}
-	}
-
-	out := buf.String()
-
-	fmt.Println()
-	fmt.Println(string(out))
 
 	return nil
 }
