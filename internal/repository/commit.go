@@ -1,15 +1,11 @@
 package repository
 
 import (
-	"bytes"
-	"errors"
 	"fmt"
 	"io"
-	"io/fs"
 	"os"
-	"os/exec"
 
-	"github.com/creack/pty"
+	"github.com/mikelorant/committed/internal/shell"
 )
 
 type Commit struct {
@@ -19,6 +15,7 @@ type Commit struct {
 	Footer  string
 	Amend   bool
 	DryRun  bool
+	Runner  func(w io.Writer, command string, args []string) error
 
 	cmd []string
 }
@@ -32,15 +29,13 @@ func Apply(c Commit, opts ...CommitOptions) error {
 		o(&c)
 	}
 
-	c.build()
-
-	var buf bytes.Buffer
-
-	if err := c.exec(&buf); err != nil {
-		return fmt.Errorf("unable to apply commit: %w", err)
+	if c.Runner == nil {
+		c.Runner = shell.Run
 	}
 
-	output(os.Stdout, &buf)
+	if err := c.Runner(os.Stdout, commitCommand, build(c)); err != nil {
+		return fmt.Errorf("unable to run command: %w", err)
+	}
 
 	return nil
 }
@@ -57,58 +52,28 @@ func WithDryRun(b bool) func(c *Commit) {
 	}
 }
 
-func (c *Commit) build() {
-	var cmd []string
+func build(c Commit) []string {
+	var args []string
 
-	cmd = append(cmd, "commit")
-	cmd = append(cmd, "--author", c.Author)
-	cmd = append(cmd, "--message", c.Subject)
+	args = append(args, "commit")
+	args = append(args, "--author", c.Author)
+	args = append(args, "--message", c.Subject)
 
 	if c.Body != "" {
-		cmd = append(cmd, "--message", c.Body)
+		args = append(args, "--message", c.Body)
 	}
 
 	if c.Footer != "" {
-		cmd = append(cmd, "--message", c.Footer)
+		args = append(args, "--message", c.Footer)
 	}
 
 	if c.DryRun {
-		cmd = append(cmd, "--dry-run")
+		args = append(args, "--dry-run")
 	}
 
 	if c.Amend {
-		cmd = append(cmd, "--amend")
+		args = append(args, "--amend")
 	}
 
-	c.cmd = cmd
-}
-
-func (c *Commit) exec(buf *bytes.Buffer) error {
-	cmd := exec.Command(commitCommand, c.cmd...)
-	fh, err := pty.Start(cmd)
-	if err != nil {
-		return fmt.Errorf("unable to exec commit command: %w", err)
-	}
-	defer fh.Close()
-
-	if _, err = io.Copy(buf, fh); err != nil {
-		var pathError *fs.PathError
-		if !errors.As(err, &pathError) {
-			return fmt.Errorf("unable to copy commit output: %w", err)
-		}
-		if pathError.Path != "/dev/ptmx" {
-			return fmt.Errorf("unable to copy commit output: %w", err)
-		}
-	}
-
-	return nil
-}
-
-func output(w io.Writer, r io.Reader) error {
-	fmt.Fprintln(w)
-	if _, err := io.Copy(w, r); err != nil {
-		return fmt.Errorf("unable to copy output: %w", err)
-	}
-
-	return nil
+	return args
 }

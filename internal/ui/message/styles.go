@@ -19,7 +19,7 @@ func defaultStyles() Styles {
 
 	s.message = lipgloss.NewStyle().
 		MarginLeft(4).
-		MarginBottom(1)
+		MarginBottom(2)
 
 	s.summary = lipgloss.NewStyle().
 		Foreground(tint.Fg())
