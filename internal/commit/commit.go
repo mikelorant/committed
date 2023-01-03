@@ -16,9 +16,9 @@ type Commit struct {
 	Body    string
 	Footer  string
 	Author  repository.User
+	Options Options
 
-	options Options
-	cmd     []string
+	cmd []string
 }
 
 type Config struct {
@@ -80,7 +80,7 @@ func New(opts Options) (*Commit, error) {
 
 	return &Commit{
 		Config:  cfg,
-		options: opts,
+		Options: opts,
 	}, nil
 }
 
@@ -93,8 +93,8 @@ func (c *Commit) Apply() error {
 	}
 
 	opts := []repository.CommitOptions{
-		repository.WithAmend(c.options.Amend),
-		repository.WithDryRun(!c.options.Apply),
+		repository.WithAmend(c.Options.Amend),
+		repository.WithDryRun(!c.Options.Apply),
 	}
 
 	if err := repository.Apply(com, opts...); err != nil {

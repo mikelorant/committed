@@ -17,10 +17,10 @@ type Commit struct {
 	Subject string
 	Body    string
 	Footer  string
+	Amend   bool
+	DryRun  bool
 
-	cmd    []string
-	amend  bool
-	dryRun bool
+	cmd []string
 }
 
 type CommitOptions func(c *Commit)
@@ -47,13 +47,13 @@ func Apply(c Commit, opts ...CommitOptions) error {
 
 func WithAmend(b bool) func(c *Commit) {
 	return func(c *Commit) {
-		c.amend = b
+		c.Amend = b
 	}
 }
 
 func WithDryRun(b bool) func(c *Commit) {
 	return func(c *Commit) {
-		c.dryRun = b
+		c.DryRun = b
 	}
 }
 
@@ -72,11 +72,11 @@ func (c *Commit) build() {
 		cmd = append(cmd, "--message", c.Footer)
 	}
 
-	if c.dryRun {
+	if c.DryRun {
 		cmd = append(cmd, "--dry-run")
 	}
 
-	if c.amend {
+	if c.Amend {
 		cmd = append(cmd, "--amend")
 	}
 
