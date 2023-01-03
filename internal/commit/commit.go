@@ -17,6 +17,7 @@ type Commit struct {
 	Footer  string
 	Author  repository.User
 	Options Options
+	Applier func(c repository.Commit, opts ...repository.CommitOptions) error
 
 	cmd []string
 }
@@ -81,6 +82,7 @@ func New(opts Options) (*Commit, error) {
 	return &Commit{
 		Config:  cfg,
 		Options: opts,
+		Applier: repository.Apply,
 	}, nil
 }
 
@@ -97,7 +99,7 @@ func (c *Commit) Apply() error {
 		repository.WithDryRun(!c.Options.Apply),
 	}
 
-	if err := repository.Apply(com, opts...); err != nil {
+	if err := c.Applier(com, opts...); err != nil {
 		return fmt.Errorf("unable to apply commit: %w", err)
 	}
 
