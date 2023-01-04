@@ -38,9 +38,8 @@ func NewRootCmd() *cobra.Command {
 			if err != nil {
 				log.Fatalf("unable to init ui: %v", err)
 			}
-			c.Request = req
 
-			if err := c.Apply(); err != nil {
+			if err := c.Apply(req); err != nil {
 				log.Fatalf("unable to commit: %v", err)
 			}
 

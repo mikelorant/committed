@@ -5,20 +5,21 @@ import (
 	"strings"
 
 	"github.com/mikelorant/committed/internal/emoji"
+	"github.com/mikelorant/committed/internal/repository"
 )
 
-func (c *Config) MessageToEmoji() emoji.NullEmoji {
-	ls := strings.Split(c.Repository.Head.Message, "\n")
+func MessageToEmoji(msg string) emoji.NullEmoji {
+	ls := strings.Split(msg, "\n")
 	fw := strings.Split(ls[0], " ")[0]
 
 	return emoji.New().Find(fw)
 }
 
-func (c *Config) MessageToSummary() string {
-	lines := strings.Split(c.Repository.Head.Message, "\n")
+func MessageToSummary(msg string) string {
+	lines := strings.Split(msg, "\n")
 	line := lines[0]
 
-	if !hasSummary(c.Repository.Head.Message) {
+	if !hasSummary(msg) {
 		return ""
 	}
 
@@ -35,14 +36,12 @@ func (c *Config) MessageToSummary() string {
 	return line
 }
 
-func (c *Config) MessageToBody() string {
-	lines := c.Repository.Head.Message
-
-	if !hasSummary(lines) {
-		return lines
+func MessageToBody(msg string) string {
+	if !hasSummary(msg) {
+		return msg
 	}
 
-	ls := strings.Split(c.Repository.Head.Message, "\n")
+	ls := strings.Split(msg, "\n")
 
 	switch len(ls) {
 	case 1:
@@ -54,24 +53,24 @@ func (c *Config) MessageToBody() string {
 	return strings.Join(ls[2:], "\n")
 }
 
-func (c *Commit) EmojiSummaryToSubject() string {
+func EmojiSummaryToSubject(emoji, summary string) string {
 	var subject string
 
-	if c.Request.Emoji != "" {
-		subject = fmt.Sprintf("%s %s", c.Request.Emoji, c.Request.Summary)
+	if emoji != "" {
+		subject = fmt.Sprintf("%s %s", emoji, summary)
 	} else {
-		subject = c.Request.Summary
+		subject = summary
 	}
 
 	return subject
 }
 
-func (c *Commit) UserToAuthor() string {
-	if c.Request.Author.Name == "" || c.Request.Author.Email == "" {
+func UserToAuthor(user repository.User) string {
+	if user.Name == "" || user.Email == "" {
 		return ""
 	}
 
-	return fmt.Sprintf("%s <%s>", c.Request.Author.Name, c.Request.Author.Email)
+	return fmt.Sprintf("%s <%s>", user.Name, user.Email)
 }
 
 func hasSummary(msg string) bool {

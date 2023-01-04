@@ -67,15 +67,7 @@ func TestMessageToEmoji(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cfg := commit.Config{
-				Repository: repository.Description{
-					Head: repository.Head{
-						Message: tt.message,
-					},
-				},
-			}
-
-			e := cfg.MessageToEmoji()
+			e := commit.MessageToEmoji(tt.message)
 			if !tt.want.valid {
 				assert.False(t, tt.want.valid)
 				assert.Empty(t, e.Emoji.Name)
@@ -137,15 +129,7 @@ func TestMessageToSummary(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cfg := commit.Config{
-				Repository: repository.Description{
-					Head: repository.Head{
-						Message: tt.message,
-					},
-				},
-			}
-
-			s := cfg.MessageToSummary()
+			s := commit.MessageToSummary(tt.message)
 			if tt.summary == "" {
 				assert.Empty(t, s)
 				return
@@ -194,15 +178,7 @@ func TestMessageToBody(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cfg := commit.Config{
-				Repository: repository.Description{
-					Head: repository.Head{
-						Message: tt.message,
-					},
-				},
-			}
-
-			b := cfg.MessageToBody()
+			b := commit.MessageToBody(tt.message)
 			if tt.body == "" {
 				assert.Empty(t, b)
 				return
@@ -246,14 +222,7 @@ func TestEmojiSummaryToSubject(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := commit.Commit{
-				Request: commit.Request{
-					Emoji:   tt.args.emoji,
-					Summary: tt.args.summary,
-				},
-			}
-
-			s := c.EmojiSummaryToSubject()
+			s := commit.EmojiSummaryToSubject(tt.args.emoji, tt.args.summary)
 			if tt.subject == "" {
 				assert.Empty(t, s)
 				return
@@ -302,16 +271,12 @@ func TestUserToAuthor(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := commit.Commit{
-				Request: commit.Request{
-					Author: repository.User{
-						Name:  tt.args.name,
-						Email: tt.args.email,
-					},
-				},
+			u := repository.User{
+				Name:  tt.args.name,
+				Email: tt.args.email,
 			}
 
-			a := c.UserToAuthor()
+			a := commit.UserToAuthor(u)
 			if tt.author == "" {
 				assert.Empty(t, a)
 				return

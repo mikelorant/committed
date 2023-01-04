@@ -11,11 +11,8 @@ import (
 
 type Commit struct {
 	Config  Config
-	Request Request
 	Options Options
 	Applier func(c repository.Commit, opts ...repository.CommitOptions) error
-
-	cmd []string
 }
 
 type Config struct {
@@ -90,12 +87,12 @@ func New(opts Options) (*Commit, error) {
 	}, nil
 }
 
-func (c *Commit) Apply() error {
+func (c *Commit) Apply(req Request) error {
 	com := repository.Commit{
-		Author:  c.UserToAuthor(),
-		Subject: c.EmojiSummaryToSubject(),
-		Body:    c.Request.Body,
-		Footer:  c.Request.Footer,
+		Author:  UserToAuthor(req.Author),
+		Subject: EmojiSummaryToSubject(req.Emoji, req.Summary),
+		Body:    req.Body,
+		Footer:  req.Footer,
 	}
 
 	opts := []repository.CommitOptions{

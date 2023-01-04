@@ -62,11 +62,11 @@ func New(cfg commit.Config) Model {
 	}
 
 	if cfg.Amend && cfg.Repository.Head.Hash != "" {
-		e := cfg.MessageToEmoji()
+		e := commit.MessageToEmoji(cfg.Repository.Head.Message)
 		if e.Valid {
 			m.Emoji = e.Emoji
 		}
-		m.summaryInput.SetValue(cfg.MessageToSummary())
+		m.summaryInput.SetValue(commit.MessageToSummary(cfg.Repository.Head.Message))
 	}
 
 	return m

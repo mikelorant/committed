@@ -16,8 +16,6 @@ type Commit struct {
 	Amend   bool
 	DryRun  bool
 	Runner  func(w io.Writer, command string, args []string) error
-
-	cmd []string
 }
 
 type CommitOptions func(c *Commit)

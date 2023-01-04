@@ -34,7 +34,7 @@ func New(cfg commit.Config, h int) Model {
 	}
 
 	if cfg.Amend && cfg.Repository.Head.Hash != "" {
-		m.textArea.SetValue(cfg.MessageToBody())
+		m.textArea.SetValue(commit.MessageToBody(cfg.Repository.Head.Message))
 	}
 
 	return m

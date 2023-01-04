@@ -125,19 +125,20 @@ func TestApply(t *testing.T) {
 				err: tt.want.err,
 			}
 
+			req := commit.Request{
+				Emoji:   tt.args.emoji,
+				Summary: tt.args.summary,
+				Body:    tt.args.body,
+				Footer:  tt.args.footer,
+				Author:  tt.args.author,
+			}
+
 			c := commit.Commit{
-				Request: commit.Request{
-					Emoji:   tt.args.emoji,
-					Summary: tt.args.summary,
-					Body:    tt.args.body,
-					Footer:  tt.args.footer,
-					Author:  tt.args.author,
-				},
 				Options: tt.args.options,
 				Applier: a.Apply(),
 			}
 
-			err := c.Apply()
+			err := c.Apply(req)
 			if tt.want.err != nil {
 				assert.NotNil(t, err)
 				assert.ErrorContains(t, err, tt.want.err.Error())
