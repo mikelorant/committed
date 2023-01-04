@@ -21,7 +21,7 @@ type Model struct {
 	state         state
 	previousState state
 	models        Models
-	request       commit.Request
+	request       *commit.Request
 	quit          bool
 	signoff       bool
 	err           error
@@ -64,12 +64,12 @@ const (
 	bodyName    = "Body"
 )
 
-func New(cfg commit.Config) (commit.Request, error) {
+func New(cfg commit.Config) (*commit.Request, error) {
 	logfilePath := os.Getenv("BUBBLETEA_LOG")
 	if logfilePath != "" {
 		fh, err := tea.LogToFile(logfilePath, "committed")
 		if err != nil {
-			return commit.Request{}, fmt.Errorf("unable to log to file: %w", err)
+			return nil, fmt.Errorf("unable to log to file: %w", err)
 		}
 		defer fh.Close()
 	}
@@ -89,7 +89,7 @@ func New(cfg commit.Config) (commit.Request, error) {
 	p := tea.NewProgram(im)
 	m, err := p.Run()
 	if err != nil {
-		return commit.Request{}, fmt.Errorf("unable to run program: %w", err)
+		return nil, fmt.Errorf("unable to run program: %w", err)
 	}
 
 	return m.(Model).request, nil
@@ -147,7 +147,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.state = bodyComponent
 			}
 		case "alt+enter":
-			m.request = commit.Request{
+			m.request = &commit.Request{
 				Author:  m.models.info.Author,
 				Emoji:   m.models.header.Emoji.Shortcode,
 				Summary: m.models.header.Summary(),

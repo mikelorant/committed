@@ -87,7 +87,11 @@ func New(opts Options) (*Commit, error) {
 	}, nil
 }
 
-func (c *Commit) Apply(req Request) error {
+func (c *Commit) Apply(req *Request) error {
+	if req == nil {
+		return nil
+	}
+
 	com := repository.Commit{
 		Author:  UserToAuthor(req.Author),
 		Subject: EmojiSummaryToSubject(req.Emoji, req.Summary),

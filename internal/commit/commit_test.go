@@ -125,7 +125,7 @@ func TestApply(t *testing.T) {
 				err: tt.want.err,
 			}
 
-			req := commit.Request{
+			req := &commit.Request{
 				Emoji:   tt.args.emoji,
 				Summary: tt.args.summary,
 				Body:    tt.args.body,
