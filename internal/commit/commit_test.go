@@ -141,11 +141,13 @@ func TestApply(t *testing.T) {
 			}
 
 			c := commit.Commit{
-				Emoji:   tt.args.emoji,
-				Summary: tt.args.summary,
-				Body:    tt.args.body,
-				Footer:  tt.args.footer,
-				Author:  tt.args.author,
+				Request: commit.Request{
+					Emoji:   tt.args.emoji,
+					Summary: tt.args.summary,
+					Body:    tt.args.body,
+					Footer:  tt.args.footer,
+					Author:  tt.args.author,
+				},
 				Options: tt.args.options,
 				Applier: a.Apply(),
 			}

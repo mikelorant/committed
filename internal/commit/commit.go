@@ -11,11 +11,7 @@ import (
 
 type Commit struct {
 	Config  Config
-	Emoji   string
-	Summary string
-	Body    string
-	Footer  string
-	Author  repository.User
+	Request Request
 	Options Options
 	Applier func(c repository.Commit, opts ...repository.CommitOptions) error
 
@@ -30,6 +26,14 @@ type Config struct {
 	Summary      string
 	Body         string
 	Amend        bool
+}
+
+type Request struct {
+	Emoji   string
+	Summary string
+	Body    string
+	Footer  string
+	Author  repository.User
 }
 
 type Options struct {
@@ -90,8 +94,8 @@ func (c *Commit) Apply() error {
 	com := repository.Commit{
 		Author:  c.UserToAuthor(),
 		Subject: c.EmojiSummaryToSubject(),
-		Body:    c.Body,
-		Footer:  c.Footer,
+		Body:    c.Request.Body,
+		Footer:  c.Request.Footer,
 	}
 
 	opts := []repository.CommitOptions{

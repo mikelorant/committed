@@ -247,8 +247,10 @@ func TestEmojiSummaryToSubject(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := commit.Commit{
-				Emoji:   tt.args.emoji,
-				Summary: tt.args.summary,
+				Request: commit.Request{
+					Emoji:   tt.args.emoji,
+					Summary: tt.args.summary,
+				},
 			}
 
 			s := c.EmojiSummaryToSubject()
@@ -301,9 +303,11 @@ func TestUserToAuthor(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := commit.Commit{
-				Author: repository.User{
-					Name:  tt.args.name,
-					Email: tt.args.email,
+				Request: commit.Request{
+					Author: repository.User{
+						Name:  tt.args.name,
+						Email: tt.args.email,
+					},
 				},
 			}
 

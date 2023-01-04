@@ -57,21 +57,21 @@ func (c *Config) MessageToBody() string {
 func (c *Commit) EmojiSummaryToSubject() string {
 	var subject string
 
-	if c.Emoji != "" {
-		subject = fmt.Sprintf("%s %s", c.Emoji, c.Summary)
+	if c.Request.Emoji != "" {
+		subject = fmt.Sprintf("%s %s", c.Request.Emoji, c.Request.Summary)
 	} else {
-		subject = c.Summary
+		subject = c.Request.Summary
 	}
 
 	return subject
 }
 
 func (c *Commit) UserToAuthor() string {
-	if c.Author.Name == "" || c.Author.Email == "" {
+	if c.Request.Author.Name == "" || c.Request.Author.Email == "" {
 		return ""
 	}
 
-	return fmt.Sprintf("%s <%s>", c.Author.Name, c.Author.Email)
+	return fmt.Sprintf("%s <%s>", c.Request.Author.Name, c.Request.Author.Email)
 }
 
 func hasSummary(msg string) bool {

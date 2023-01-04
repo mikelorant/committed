@@ -7,7 +7,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
-	"github.com/mikelorant/committed/internal/repository"
 	"github.com/mikelorant/committed/internal/ui/body"
 	"github.com/mikelorant/committed/internal/ui/footer"
 	"github.com/mikelorant/committed/internal/ui/header"
@@ -22,7 +21,7 @@ type Model struct {
 	state         state
 	previousState state
 	models        Models
-	result        Result
+	request       commit.Request
 	quit          bool
 	signoff       bool
 	err           error
@@ -36,15 +35,6 @@ type Models struct {
 	status  status.Model
 	help    help.Model
 	message message.Model
-}
-
-type Result struct {
-	Commit  bool
-	Author  repository.User
-	Emoji   string
-	Summary string
-	Body    string
-	Footer  string
 }
 
 type state int
@@ -74,12 +64,12 @@ const (
 	bodyName    = "Body"
 )
 
-func New(cfg commit.Config) (Result, error) {
+func New(cfg commit.Config) (commit.Request, error) {
 	logfilePath := os.Getenv("BUBBLETEA_LOG")
 	if logfilePath != "" {
 		fh, err := tea.LogToFile(logfilePath, "committed")
 		if err != nil {
-			return Result{}, fmt.Errorf("unable to log to file: %w", err)
+			return commit.Request{}, fmt.Errorf("unable to log to file: %w", err)
 		}
 		defer fh.Close()
 	}
@@ -99,10 +89,10 @@ func New(cfg commit.Config) (Result, error) {
 	p := tea.NewProgram(im)
 	m, err := p.Run()
 	if err != nil {
-		return Result{}, fmt.Errorf("unable to run program: %w", err)
+		return commit.Request{}, fmt.Errorf("unable to run program: %w", err)
 	}
 
-	return m.(Model).result, nil
+	return m.(Model).request, nil
 }
 
 func (m Model) Init() tea.Cmd {
@@ -157,8 +147,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.state = bodyComponent
 			}
 		case "alt+enter":
-			m.result = Result{
-				Commit:  true,
+			m.request = commit.Request{
 				Author:  m.models.info.Author,
 				Emoji:   m.models.header.Emoji.Shortcode,
 				Summary: m.models.header.Summary(),
@@ -321,7 +310,7 @@ func (m *Model) message() {
 func (m Model) validate() bool {
 	//nolint:gocritic
 	switch {
-	case m.result.Summary == "":
+	case m.request.Summary == "":
 		return false
 	}
 	return true
