@@ -37,8 +37,8 @@ type Request struct {
 }
 
 type Options struct {
-	Apply bool
-	Amend bool
+	DryRun bool
+	Amend  bool
 }
 
 type Placeholders struct {
@@ -100,7 +100,7 @@ func (c *Commit) Apply() error {
 
 	opts := []repository.CommitOptions{
 		repository.WithAmend(c.Options.Amend),
-		repository.WithDryRun(!c.Options.Apply),
+		repository.WithDryRun(c.Options.DryRun),
 	}
 
 	if err := c.Applier(com, opts...); err != nil {

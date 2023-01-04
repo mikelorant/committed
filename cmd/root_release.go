@@ -3,5 +3,5 @@
 package cmd
 
 func init() {
-	hideApplyFlag = true
+	defaultDryRun = false
 }

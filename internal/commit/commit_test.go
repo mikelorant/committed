@@ -68,9 +68,6 @@ func TestApply(t *testing.T) {
 					Name:  "John Doe",
 					Email: "john.doe@example.com",
 				},
-				options: commit.Options{
-					Apply: true,
-				},
 			},
 			want: want{
 				author:  "John Doe <john.doe@example.com>",
@@ -80,21 +77,10 @@ func TestApply(t *testing.T) {
 			},
 		},
 		{
-			name: "apply",
+			name: "dryrun",
 			args: args{
 				options: commit.Options{
-					Apply: true,
-				},
-			},
-			want: want{
-				dryRun: false,
-			},
-		},
-		{
-			name: "dry_run",
-			args: args{
-				options: commit.Options{
-					Apply: false,
+					DryRun: true,
 				},
 			},
 			want: want{
@@ -102,23 +88,22 @@ func TestApply(t *testing.T) {
 			},
 		},
 		{
-			name: "amend_apply",
-			args: args{
-				options: commit.Options{
-					Amend: true,
-					Apply: true,
-				},
-			},
-			want: want{
-				amend:  true,
-				dryRun: false,
-			},
-		},
-		{
 			name: "amend",
 			args: args{
 				options: commit.Options{
 					Amend: true,
+				},
+			},
+			want: want{
+				amend: true,
+			},
+		},
+		{
+			name: "amend_dryrun",
+			args: args{
+				options: commit.Options{
+					Amend:  true,
+					DryRun: true,
 				},
 			},
 			want: want{

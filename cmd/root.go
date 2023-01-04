@@ -14,11 +14,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var hideApplyFlag bool
+var defaultDryRun = true
 
 func NewRootCmd() *cobra.Command {
 	var opts commit.Options
-	var dryRun bool
 
 	cmd := &cobra.Command{
 		Use:         "committed",
@@ -26,8 +25,6 @@ func NewRootCmd() *cobra.Command {
 		Version:     ReleaseVersion,
 		Annotations: annotations(),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			opts.Apply = apply(opts.Apply, dryRun)
-
 			c, err := commit.New(opts)
 			switch {
 			case err == nil:
@@ -54,12 +51,8 @@ func NewRootCmd() *cobra.Command {
 	cmd.AddCommand(NewVersionCmd())
 	cmd.SetVersionTemplate(verTmpl)
 	cmd.Flags().SortFlags = false
-	cmd.Flags().BoolVarP(&dryRun, "dry-run", "", false, "Simulate applying a commit")
+	cmd.Flags().BoolVarP(&opts.DryRun, "dry-run", "", defaultDryRun, "Simulate applying a commit")
 	cmd.Flags().BoolVarP(&opts.Amend, "amend", "a", false, "Replace the tip of the current branch by creating a new commit")
-
-	if !hideApplyFlag {
-		cmd.Flags().BoolVarP(&opts.Apply, "yes", "y", false, "Specify --yes to apply the commit")
-	}
 
 	cc.Init(&cc.Config{
 		RootCmd:         cmd,
@@ -80,20 +73,4 @@ func Execute() {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
-}
-
-func apply(a bool, dr bool) bool {
-	if a {
-		return true
-	}
-
-	if hideApplyFlag {
-		a = true
-	}
-
-	if dr {
-		a = false
-	}
-
-	return a
 }
