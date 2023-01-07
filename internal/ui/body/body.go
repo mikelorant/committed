@@ -2,6 +2,7 @@ package body
 
 import (
 	"strings"
+	"unicode"
 
 	"github.com/acarl005/stripansi"
 	"github.com/charmbracelet/bubbles/cursor"
@@ -114,7 +115,7 @@ func (m Model) Value() string {
 	}
 
 	m.textArea.Cursor.SetMode(cursor.CursorHide)
-	res := strings.TrimSpace(stripansi.Strip(m.textArea.View()))
+	res := strings.TrimRightFunc(stripansi.Strip(m.textArea.View()), unicode.IsSpace)
 	m.textArea.Cursor.SetMode(cursor.CursorBlink)
 
 	return res
