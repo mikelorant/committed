@@ -124,6 +124,10 @@ func (m *Model) Blur() {
 	m.focus = false
 }
 
+func (m Model) Focused() bool {
+	return m.focus
+}
+
 func (m Model) infoColumn() string {
 	hashBranchRefs := lipgloss.JoinHorizontal(
 		lipgloss.Top,
