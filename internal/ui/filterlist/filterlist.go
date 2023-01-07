@@ -39,7 +39,8 @@ func (m Model) Init() tea.Cmd {
 	return nil
 }
 
-func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
+//nolint:ireturn
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	var cmds []tea.Cmd
 
@@ -189,4 +190,8 @@ func (m Model) styleTextInput(ti *textinput.Model) {
 	ti.TextStyle = m.styles.textInputTextStyle
 	ti.PlaceholderStyle = m.styles.textInputPlaceholderStyle
 	ti.Cursor.Style = m.styles.textInputCursorStyle
+}
+
+func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
+	return m.(Model), c
 }

@@ -134,12 +134,12 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.state = bodyComponent
 		case "enter":
 			if m.state == authorComponent {
-				m.models.info, _ = m.models.info.Update(msg)
+				m.models.info, _ = info.ToModel(m.models.info.Update(msg))
 				m.state = emojiComponent
 				break
 			}
 			if m.state == emojiComponent {
-				m.models.header, _ = m.models.header.Update(msg)
+				m.models.header, _ = header.ToModel(m.models.header.Update(msg))
 				m.state = summaryComponent
 				break
 			}
@@ -242,18 +242,18 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	if m.signoff != m.models.footer.Signoff {
 		m.models.footer.ToggleSignoff()
-		m.models.body, _ = m.models.body.Update(nil)
-		m.models.footer, _ = m.models.footer.Update(nil)
+		m.models.body, _ = body.ToModel(m.models.body.Update(nil))
+		m.models.footer, _ = footer.ToModel(m.models.footer.Update(nil))
 		return m, nil
 	}
 
 	cmds := make([]tea.Cmd, 6)
-	m.models.info, cmds[0] = m.models.info.Update(msg)
-	m.models.header, cmds[1] = m.models.header.Update(msg)
-	m.models.body, cmds[2] = m.models.body.Update(msg)
-	m.models.footer, cmds[3] = m.models.footer.Update(msg)
-	m.models.status, cmds[4] = m.models.status.Update(msg)
-	m.models.help, cmds[5] = m.models.help.Update(msg)
+	m.models.info, cmds[0] = info.ToModel(m.models.info.Update(msg))
+	m.models.header, cmds[1] = header.ToModel(m.models.header.Update(msg))
+	m.models.body, cmds[2] = body.ToModel(m.models.body.Update(msg))
+	m.models.footer, cmds[3] = footer.ToModel(m.models.footer.Update(msg))
+	m.models.status, cmds[4] = status.ToModel(m.models.status.Update(msg))
+	m.models.help, cmds[5] = help.ToModel(m.models.help.Update(msg))
 
 	return m, tea.Batch(cmds...)
 }

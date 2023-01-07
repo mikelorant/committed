@@ -26,7 +26,7 @@ func (m Model) Init() tea.Cmd {
 }
 
 //nolint:ireturn
-func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
@@ -59,4 +59,8 @@ func (m Model) Value() string {
 
 func (m Model) signoff() string {
 	return fmt.Sprintf("Signed-off-by: %s <%s>", m.Author.Name, m.Author.Email)
+}
+
+func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
+	return m.(Model), c
 }

@@ -45,7 +45,7 @@ func (m Model) Init() tea.Cmd {
 }
 
 //nolint:ireturn
-func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	var cmds []tea.Cmd
 
@@ -118,6 +118,10 @@ func (m Model) Value() string {
 	m.textArea.Cursor.SetMode(cursor.CursorBlink)
 
 	return res
+}
+
+func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
+	return m.(Model), c
 }
 
 func newTextArea(ph string, w int) textarea.Model {

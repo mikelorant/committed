@@ -69,7 +69,7 @@ func (m Model) Init() tea.Cmd {
 }
 
 //nolint:ireturn
-func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	var cmds []tea.Cmd
 
@@ -106,7 +106,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 		m.filterList.SetItems(items)
 	}
 
-	m.filterList, cmd = m.filterList.Update(msg)
+	m.filterList, cmd = filterlist.ToModel(m.filterList.Update(msg))
 	cmds = append(cmds, cmd)
 
 	return m, tea.Batch(cmds...)
@@ -209,6 +209,10 @@ func (m Model) date() string {
 	d := m.styles.dateValue.Render(m.Date)
 
 	return fmt.Sprintf("%s%s   %s", k, c, d)
+}
+
+func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
+	return m.(Model), c
 }
 
 func containsPrefixes(str string, ps []string) bool {

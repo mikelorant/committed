@@ -33,7 +33,8 @@ func (m Model) Init() tea.Cmd {
 	return nil
 }
 
-func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
+//nolint:ireturn
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 
 	//nolint:gocritic
@@ -64,6 +65,10 @@ func (m *Model) Blur() {
 
 func (m Model) Focused() bool {
 	return m.focus
+}
+
+func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
+	return m.(Model), c
 }
 
 func newViewport(w, h int) viewport.Model {

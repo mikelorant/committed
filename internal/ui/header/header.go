@@ -77,7 +77,7 @@ func (m Model) Init() tea.Cmd {
 }
 
 //nolint:ireturn
-func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	var cmds []tea.Cmd
 
@@ -117,7 +117,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	case m.focus && m.component == emojiComponent && !m.filterList.Focused():
 		m.summaryInput.Blur()
 		m.filterList.Focus()
-		m.filterList, cmd = m.filterList.Update(msg)
+		m.filterList, cmd = filterlist.ToModel(m.filterList.Update(msg))
 		return m, cmd
 
 	case !m.focus && m.summaryInput.Focused():
@@ -140,7 +140,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	m.summaryInput, cmd = m.summaryInput.Update(msg)
 	cmds = append(cmds, cmd)
 
-	m.filterList, cmd = m.filterList.Update(msg)
+	m.filterList, cmd = filterlist.ToModel(m.filterList.Update(msg))
 	cmds = append(cmds, cmd)
 
 	return m, tea.Batch(cmds...)
@@ -214,6 +214,10 @@ func (m Model) emojiConnector() string {
 	c := connector(connecterTopRight, connectorHorizonal, connectorRightBottom, 35)
 
 	return m.styles.emojiConnector.Render(c)
+}
+
+func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
+	return m.(Model), c
 }
 
 func summaryInput(str string) textinput.Model {

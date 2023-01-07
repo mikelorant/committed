@@ -25,7 +25,7 @@ func (m Model) Init() tea.Cmd {
 }
 
 //nolint:ireturn
-func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	//nolint:gocritic
 	switch msg.(type) {
 	case theme.Msg:
@@ -70,4 +70,8 @@ func (m *Model) previous() {
 	}
 
 	m.shortcuts.shortcuts = append(m.shortcuts.shortcuts, previous)
+}
+
+func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
+	return m.(Model), c
 }
