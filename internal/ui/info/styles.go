@@ -67,7 +67,7 @@ func defaultStyles() Styles {
 		Foreground(tint.Yellow())
 
 	s.branchRemote = lipgloss.NewStyle().
-		Foreground(tint.Red()).
+		Foreground(tint.BrightRed()).
 		Bold(true)
 
 	s.colon = lipgloss.NewStyle().
