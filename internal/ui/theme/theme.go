@@ -16,14 +16,12 @@ var (
 
 var tints = []tint.Tint{
 	tint.TintBuiltinDark,
+	tint.TintGruvboxDark,
+	tint.TintSolarizedDarkHigherContrast,
+	tint.TintRetrowave,
 	tint.TintDracula,
-	tint.TintGithub,
-	tint.TintMaterial,
-	tint.TintMonokaiPro,
 	tint.TintNord,
-	tint.TintOneDark,
 	tint.TintTokyoNight,
-	tint.TintTomorrowNight,
 }
 
 func Tint() *tint.Registry {
