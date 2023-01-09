@@ -11,6 +11,8 @@ import (
 type Model struct {
 	PromptText string
 	Height     int
+	Width      int
+	CharLimit  int
 
 	focus        bool
 	styles       Styles
@@ -21,16 +23,23 @@ type Model struct {
 	filter       string
 }
 
+const (
+	defaultWidth     = 68
+	defaultCharLimit = 20
+)
+
 func New(items []list.Item, prompt string, h int) Model {
 	m := Model{
 		PromptText: prompt,
 		Height:     h,
+		Width:      defaultWidth,
+		CharLimit:  defaultCharLimit,
 		styles:     defaultStyles(),
 		items:      items,
 	}
 
-	m.list = m.newList()
-	m.textInput = m.newTextInput()
+	m.list = m.newList(defaultWidth)
+	m.textInput = m.newTextInput(defaultWidth, defaultCharLimit)
 
 	return m
 }
@@ -105,7 +114,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m Model) View() string {
 	e := lipgloss.JoinVertical(lipgloss.Top, m.textInput.View(), m.list.View())
-	p := verticalPaginator(m.list.Paginator.Page, m.list.Paginator.TotalPages)
+	p := m.styles.paginatorBoundary.Render(m.stylePaginatorColumn())
 	ep := lipgloss.JoinHorizontal(lipgloss.Top, e, p)
 
 	return m.styles.boundary.Height(m.Height - 1).Render(ep)
@@ -136,8 +145,8 @@ func (m *Model) SetItems(i []list.Item) tea.Cmd {
 	return m.list.SetItems(i)
 }
 
-func (m Model) newList() list.Model {
-	l := list.New(m.items, list.NewDefaultDelegate(), 70, m.Height)
+func (m Model) newList(w int) list.Model {
+	l := list.New(m.items, list.NewDefaultDelegate(), m.Width, m.Height)
 	l.SetShowHelp(false)
 	l.SetShowPagination(false)
 	l.SetShowStatusBar(false)
@@ -170,11 +179,15 @@ func (m *Model) styleListDelegate(l *list.Model) {
 	l.SetDelegate(d)
 }
 
-func (m Model) newTextInput() textinput.Model {
+func (m Model) stylePaginatorColumn() string {
+	return verticalPaginator(m.list.Paginator.Page, m.list.Paginator.TotalPages)
+}
+
+func (m Model) newTextInput(w, c int) textinput.Model {
 	ti := textinput.New()
 	ti.Placeholder = ""
-	ti.CharLimit = 20
-	ti.Width = 52
+	ti.CharLimit = m.CharLimit
+	ti.Width = m.Width - lipgloss.Width(m.PromptText)
 
 	m.styleTextInput(&ti)
 

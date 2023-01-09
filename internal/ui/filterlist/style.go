@@ -17,6 +17,7 @@ type Styles struct {
 	textInputTextStyle        lipgloss.Style
 	textInputPlaceholderStyle lipgloss.Style
 	textInputCursorStyle      lipgloss.Style
+	paginatorBoundary         lipgloss.Style
 	paginatorDots             lipgloss.Style
 }
 
@@ -33,10 +34,12 @@ func defaultStyles() Styles {
 	tint := theme.Tint()
 
 	s.boundary = lipgloss.NewStyle().
-		Width(74).
 		MarginLeft(4).
 		BorderStyle(lipgloss.NormalBorder()).
 		BorderForeground(tint.Fg())
+
+	s.paginatorBoundary = lipgloss.NewStyle().
+		MarginRight(1)
 
 	// Item prompt is set as a left border character.
 	s.listItemPrompt = lipgloss.Border{
