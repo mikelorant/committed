@@ -1,4 +1,4 @@
-package status
+package shortcut
 
 import (
 	"fmt"
@@ -6,13 +6,6 @@ import (
 
 	"github.com/charmbracelet/lipgloss"
 )
-
-type Shortcuts struct {
-	Shortcuts []Shortcut
-	Modifiers []Modifier
-	styles    Styles
-	view      string
-}
 
 type shortcutSet struct {
 	align     int
@@ -23,39 +16,6 @@ type shortcutSet struct {
 	height    int
 	width     int
 	styles    Styles
-}
-
-type Shortcut struct {
-	Modifier int
-	Key      string
-	Label    string
-}
-
-type Modifier struct {
-	Modifier int
-	Label    string
-	Align    int
-}
-
-const (
-	NoModifier = iota
-	AltModifier
-	ControlModifier
-	ShiftModifier
-
-	AlignLeft = iota
-	AlignRight
-)
-
-func newShortcuts() Shortcuts {
-	s := Shortcuts{
-		Modifiers: defaultModifiers(),
-		Shortcuts: defaultShortcuts(),
-		styles:    defaultStyles(),
-	}
-	s.view = s.render()
-
-	return s
 }
 
 func newShortcutSet(a int, ms []Modifier, ss []Shortcut, d bool) []string {
@@ -70,35 +30,6 @@ func newShortcutSet(a int, ms []Modifier, ss []Shortcut, d bool) []string {
 	scs.initShortcuts()
 	scs.fillShortcuts()
 	return scs.joinShortcuts()
-}
-
-func (s Shortcuts) render() string {
-	l := newShortcutSet(AlignLeft, s.Modifiers, s.Shortcuts, true)
-	r := newShortcutSet(AlignRight, s.Modifiers, s.Shortcuts, true)
-	ml := newShortcutSet(AlignLeft, s.Modifiers, modifierToShortcut(AlignLeft, s.Modifiers), false)
-	mr := newShortcutSet(AlignRight, s.Modifiers, modifierToShortcut(AlignRight, s.Modifiers), false)
-
-	var left, right []string
-
-	if len(l) != 0 {
-		left = append(left, ml...)
-	}
-	left = append(left, l...)
-
-	right = append(right, r...)
-	if len(r) != 0 {
-		right = append(right, mr...)
-	}
-
-	hleft := lipgloss.JoinHorizontal(lipgloss.Top, left...)
-	hright := lipgloss.JoinHorizontal(lipgloss.Top, right...)
-
-	bleft := s.styles.shortcutBlockLeft.Render(hleft)
-	bright := s.styles.shortcutBlockRight.Render(hright)
-
-	block := lipgloss.JoinHorizontal(lipgloss.Top, bleft, bright)
-
-	return s.styles.shortcutBoundary.Render(block)
 }
 
 func (s *shortcutSet) shortcutDimensions() {
@@ -234,31 +165,6 @@ func (s *shortcutSet) countShortcuts(modifier int) int {
 	}
 
 	return i
-}
-
-func modifierToShortcut(a int, ms []Modifier) []Shortcut {
-	var ss []Shortcut
-	var label string
-
-	for _, v := range ms {
-		if v.Align != a {
-			continue
-		}
-
-		if v.Label != "" {
-			label = defaultStyles().shortcutPlus.String()
-		}
-
-		scs := Shortcut{
-			Modifier: v.Modifier,
-			Key:      v.Label,
-			Label:    label,
-		}
-
-		ss = append(ss, scs)
-	}
-
-	return ss
 }
 
 func (s shortcutSet) decorateKey(key string, len int, align lipgloss.Position, bracket bool) string {

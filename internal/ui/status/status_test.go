@@ -4,14 +4,15 @@ import (
 	"testing"
 
 	"github.com/hexops/autogold/v2"
+	"github.com/mikelorant/committed/internal/ui/shortcut"
 	"github.com/mikelorant/committed/internal/ui/status"
 	"github.com/mikelorant/committed/internal/ui/uitest"
 )
 
 func TestModel(t *testing.T) {
 	type args struct {
-		shortcuts []status.Shortcut
-		modifiers []status.Modifier
+		shortcuts []shortcut.Shortcut
+		modifiers []shortcut.Modifier
 		next      string
 		previous  string
 	}
@@ -56,15 +57,16 @@ func TestModel(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			m := status.New()
-
-			if tt.args.shortcuts != nil && tt.args.modifiers != nil {
-				m.Shortcuts.Shortcuts = tt.args.shortcuts
-				m.Shortcuts.Modifiers = tt.args.modifiers
+			scs := shortcut.NewShortcut(status.GlobalShortcuts(tt.args.next, tt.args.previous))
+			if tt.args.modifiers != nil && tt.args.shortcuts != nil {
+				scs = shortcut.NewShortcut(tt.args.modifiers, tt.args.shortcuts)
 			}
 
-			m.Next = tt.args.next
-			m.Previous = tt.args.previous
+			m := status.Model{
+				Next:      tt.args.next,
+				Previous:  tt.args.previous,
+				Shortcuts: scs,
+			}
 
 			m, _ = status.ToModel(m.Update(nil))
 

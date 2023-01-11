@@ -1,4 +1,4 @@
-package status
+package shortcut
 
 import (
 	"github.com/charmbracelet/lipgloss"
@@ -48,6 +48,7 @@ func defaultStyles() Styles {
 	s.shortcutPlus = lipgloss.NewStyle().
 		Foreground(tint.Fg()).
 		SetString("+")
+
 	s.shortcutAngleBracket = lipgloss.NewStyle().
 		Foreground(tint.Fg())
 

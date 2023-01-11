@@ -1,22 +1,21 @@
 package status
 
 import (
+	"strings"
+
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/mikelorant/committed/internal/ui/theme"
+	"github.com/mikelorant/committed/internal/ui/shortcut"
 )
 
 type Model struct {
-	Next     string
-	Previous string
-
-	Shortcuts Shortcuts
-	styles    Styles
+	Next      string
+	Previous  string
+	Shortcuts shortcut.Model
 }
 
 func New() Model {
 	return Model{
-		Shortcuts: newShortcuts(),
-		styles:    defaultStyles(),
+		Shortcuts: shortcut.NewShortcut(defaultModifiers(), defaultShortcuts()),
 	}
 }
 
@@ -26,52 +25,85 @@ func (m Model) Init() tea.Cmd {
 
 //nolint:ireturn
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	//nolint:gocritic
-	switch msg.(type) {
-	case theme.Msg:
-		m.styles = defaultStyles()
-	}
-
-	m.Shortcuts.Shortcuts = defaultShortcuts()
-	m.next()
-	m.previous()
-	m.Shortcuts.view = m.Shortcuts.render()
+	m.Shortcuts, _ = shortcut.ToModel(m.Shortcuts.Update(nil))
 
 	return m, nil
 }
 
 func (m Model) View() string {
-	return m.Shortcuts.view
+	return m.Shortcuts.View()
 }
 
-func (m *Model) next() {
-	if m.Next == "" {
-		return
+func GlobalShortcuts(next, previous string) ([]shortcut.Modifier, []shortcut.Shortcut) {
+	scs := defaultShortcuts()
+	mods := defaultModifiers()
+
+	switch next {
+	case "":
+		mods = append(mods, shortcut.Modifier{
+			Modifier: shortcut.NoModifier,
+			Align:    shortcut.AlignRight,
+		})
+
+		scs = append(scs, shortcut.Shortcut{
+			Modifier: shortcut.NoModifier,
+		})
+	default:
+		mods = append(mods, shortcut.Modifier{
+			Modifier: shortcut.NoModifier,
+			Align:    shortcut.AlignRight,
+		})
+
+		scs = append(scs, shortcut.Shortcut{
+			Modifier: shortcut.NoModifier,
+			Key:      "tab",
+			Label:    next,
+		})
 	}
 
-	next := Shortcut{
-		Modifier: NoModifier,
-		Key:      "tab",
-		Label:    m.Next,
+	switch previous {
+	case "":
+		mods = append(mods, shortcut.Modifier{
+			Modifier: shortcut.ShiftModifier,
+			Align:    shortcut.AlignRight,
+			Label:    strings.Repeat(" ", 6),
+		})
+
+		scs = append(scs, shortcut.Shortcut{
+			Modifier: shortcut.ShiftModifier,
+		})
+	default:
+		mods = append(mods, shortcut.Modifier{
+			Modifier: shortcut.ShiftModifier,
+			Label:    "Shift", Align: shortcut.AlignRight,
+		})
+
+		scs = append(scs, shortcut.Shortcut{
+			Modifier: shortcut.ShiftModifier,
+			Key:      "tab",
+			Label:    previous,
+		})
 	}
 
-	m.Shortcuts.Shortcuts = append(m.Shortcuts.Shortcuts, next)
-}
-
-func (m *Model) previous() {
-	if m.Previous == "" {
-		return
-	}
-
-	previous := Shortcut{
-		Modifier: ShiftModifier,
-		Key:      "tab",
-		Label:    m.Previous,
-	}
-
-	m.Shortcuts.Shortcuts = append(m.Shortcuts.Shortcuts, previous)
+	return mods, scs
 }
 
 func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
 	return m.(Model), c
+}
+
+func defaultModifiers() []shortcut.Modifier {
+	return []shortcut.Modifier{
+		{Modifier: shortcut.AltModifier, Label: "Alt", Align: shortcut.AlignLeft},
+		{Modifier: shortcut.ControlModifier, Label: "Ctrl", Align: shortcut.AlignLeft},
+	}
+}
+
+func defaultShortcuts() []shortcut.Shortcut {
+	return []shortcut.Shortcut{
+		{Modifier: shortcut.ControlModifier, Key: "c", Label: "Cancel"},
+		{Modifier: shortcut.AltModifier, Key: "enter", Label: "Commit"},
+		{Modifier: shortcut.AltModifier, Key: "s", Label: "Sign-off"},
+		{Modifier: shortcut.AltModifier, Key: "/", Label: "Help"},
+	}
 }
