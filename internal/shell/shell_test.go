@@ -16,14 +16,14 @@ type badBuffer struct {
 	err error
 }
 
-func (b *badBuffer) Write(p []byte) (n int, err error) {
+func (b *badBuffer) Write(p []byte) (int, error) {
 	if b.err != nil {
 		return 0, b.err
 	}
 	return b.buf.Write(p)
 }
 
-func (b *badBuffer) Read(p []byte) (n int, err error) {
+func (b *badBuffer) Read(p []byte) (int, error) {
 	return b.buf.Read(p)
 }
 

@@ -20,7 +20,6 @@ type Model struct {
 	textInput    textinput.Model
 	selectedItem list.Item
 	items        []list.Item
-	filter       string
 }
 
 const (
@@ -38,8 +37,8 @@ func New(items []list.Item, prompt string, h int) Model {
 		items:      items,
 	}
 
-	m.list = m.newList(defaultWidth)
-	m.textInput = m.newTextInput(defaultWidth, defaultCharLimit)
+	m.list = m.newList()
+	m.textInput = m.newTextInput()
 
 	return m
 }
@@ -145,7 +144,7 @@ func (m *Model) SetItems(i []list.Item) tea.Cmd {
 	return m.list.SetItems(i)
 }
 
-func (m Model) newList(w int) list.Model {
+func (m Model) newList() list.Model {
 	l := list.New(m.items, list.NewDefaultDelegate(), m.Width, m.Height)
 	l.SetShowHelp(false)
 	l.SetShowPagination(false)
@@ -183,7 +182,7 @@ func (m Model) stylePaginatorColumn() string {
 	return verticalPaginator(m.list.Paginator.Page, m.list.Paginator.TotalPages)
 }
 
-func (m Model) newTextInput(w, c int) textinput.Model {
+func (m Model) newTextInput() textinput.Model {
 	ti := textinput.New()
 	ti.Placeholder = ""
 	ti.CharLimit = m.CharLimit

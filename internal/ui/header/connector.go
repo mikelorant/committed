@@ -20,6 +20,6 @@ const (
 	connectorVertical    connectorStyle = "│"
 )
 
-func connector(start, axes, end connectorStyle, len int) string {
-	return fmt.Sprintf("%v%v%v", start, strings.Repeat(string(axes), len), end)
+func connector(start, axes, end connectorStyle, length int) string {
+	return fmt.Sprintf("%v%v%v", start, strings.Repeat(string(axes), length), end)
 }

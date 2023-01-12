@@ -1,7 +1,6 @@
 package repository_test
 
 import (
-	"errors"
 	"testing"
 
 	"github.com/go-git/go-git/v5"
@@ -19,8 +18,6 @@ type MockRepositoryRemote struct {
 func (m MockRepositoryRemote) Remotes() ([]*git.Remote, error) {
 	return m.remotes, m.err
 }
-
-var errMockRemote = errors.New("error")
 
 func TestRemote(t *testing.T) {
 	type args struct {

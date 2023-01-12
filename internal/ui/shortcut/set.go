@@ -102,9 +102,9 @@ func (s *shortcutSet) joinShortcuts() []string {
 		for j := 0; j < len(s.target); j++ {
 			col = append(col, s.target[j][i])
 		}
-		len := sliceMaxLen(col)
+		max := sliceMaxLen(col)
 
-		str := s.joinColumn(col, len, offset)
+		str := s.joinColumn(col, max, offset)
 
 		if str == "" {
 			continue
@@ -122,7 +122,7 @@ func (s *shortcutSet) joinShortcuts() []string {
 	return ss
 }
 
-func (s *shortcutSet) joinColumn(col []string, len int, offset int) string {
+func (s *shortcutSet) joinColumn(col []string, max int, offset int) string {
 	var res []string
 
 	remainder := 0
@@ -138,10 +138,10 @@ func (s *shortcutSet) joinColumn(col []string, len int, offset int) string {
 	for _, v := range col {
 		switch offset%2 == remainder {
 		case true:
-			d := s.decorateKey(v, len, lr, s.decorate)
+			d := s.decorateKey(v, max, lr, s.decorate)
 			res = append(res, d)
 		case false:
-			d := s.decorateLabel(v, len, ll, s.decorate)
+			d := s.decorateLabel(v, max, ll, s.decorate)
 			res = append(res, d)
 		}
 	}
@@ -171,7 +171,7 @@ func (s *shortcutSet) countShortcuts(modifier int) int {
 	return i
 }
 
-func (s shortcutSet) decorateKey(key string, len int, align lipgloss.Position, bracket bool) string {
+func (s shortcutSet) decorateKey(key string, max int, align lipgloss.Position, bracket bool) string {
 	var k string
 	padding := 0
 
@@ -187,10 +187,10 @@ func (s shortcutSet) decorateKey(key string, len int, align lipgloss.Position, b
 		}
 	}
 
-	return lipgloss.NewStyle().Width(len + padding).Align(align).Render(k)
+	return lipgloss.NewStyle().Width(max + padding).Align(align).Render(k)
 }
 
-func (s shortcutSet) decorateLabel(label string, len int, align lipgloss.Position, colour bool) string {
+func (s shortcutSet) decorateLabel(label string, max int, align lipgloss.Position, colour bool) string {
 	var l string
 	if label != "" {
 		l = label
@@ -199,7 +199,7 @@ func (s shortcutSet) decorateLabel(label string, len int, align lipgloss.Positio
 		}
 	}
 
-	return lipgloss.NewStyle().Width(len).Align(align).Render(l)
+	return lipgloss.NewStyle().Width(max).Align(align).Render(l)
 }
 
 func sliceMaxLen(ss []string) int {

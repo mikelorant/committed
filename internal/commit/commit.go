@@ -3,7 +3,6 @@ package commit
 import (
 	_ "embed"
 	"fmt"
-	"os/exec"
 
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
@@ -46,8 +45,6 @@ type Placeholders struct {
 
 //go:embed message.txt
 var message string
-
-var exitError *exec.ExitError
 
 const (
 	mockHash string = "1234567890abcdef1234567890abcdef1234567890"

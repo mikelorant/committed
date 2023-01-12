@@ -36,10 +36,10 @@ func Tint() *tint.Registry {
 func NextTint() tea.Msg {
 	var msg Msg
 
-	len := len(registry.TintIDs())
+	l := len(registry.TintIDs())
 	ids := registry.TintIDs()
 
-	if registry.ID() == ids[len-1] {
+	if registry.ID() == ids[l-1] {
 		registry.SetTintID(ids[0])
 		return msg
 	}

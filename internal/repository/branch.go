@@ -27,13 +27,13 @@ type RefsResult struct {
 	refs []string
 }
 
-func (m *Repository) Branch() (Branch, error) {
-	c, err := m.Brancher.Config()
+func (r *Repository) Branch() (Branch, error) {
+	c, err := r.Brancher.Config()
 	if err != nil {
 		return Branch{}, fmt.Errorf("unable to get repository config: %w", err)
 	}
 
-	h, err := m.Brancher.Head()
+	h, err := r.Brancher.Head()
 	switch {
 	case err == nil:
 	case err.Error() == plumbing.ErrReferenceNotFound.Error():
@@ -47,12 +47,12 @@ func (m *Repository) Branch() (Branch, error) {
 		return Branch{}, fmt.Errorf("unable to get local branch: %w", err)
 	}
 
-	r := remote(l, c)
+	rm := remote(l, c)
 
 	ro := RefsOptions{
-		brancher:     m.Brancher,
+		brancher:     r.Brancher,
 		localBranch:  l,
-		remoteBranch: r,
+		remoteBranch: rm,
 		headRef:      h,
 	}
 
@@ -63,7 +63,7 @@ func (m *Repository) Branch() (Branch, error) {
 
 	return Branch{
 		Local:  l,
-		Remote: r,
+		Remote: rm,
 		Refs:   hrefs,
 	}, nil
 }
@@ -100,7 +100,9 @@ func headRefs(ro RefsOptions) ([]string, error) {
 		return nil, fmt.Errorf("unable to get references: %w", err)
 	}
 
-	rs.ForEach(getRefFunc(ro, &rr))
+	if err := rs.ForEach(getRefFunc(ro, &rr)); err != nil {
+		return nil, fmt.Errorf("unable to get references: %w", err)
+	}
 
 	return rr.refs, nil
 }
