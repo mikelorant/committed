@@ -7,9 +7,9 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-type shortcuts struct {
-	shortcuts []Shortcut
-	modifiers []Modifier
+type Shortcuts struct {
+	Shortcuts []Shortcut
+	Modifiers []Modifier
 	styles    Styles
 	view      string
 }
@@ -38,19 +38,19 @@ type Modifier struct {
 }
 
 const (
-	noModifier = iota
-	altModifier
-	controlModifier
-	shiftModifier
+	NoModifier = iota
+	AltModifier
+	ControlModifier
+	ShiftModifier
 
-	alignLeft = iota
-	alignRight
+	AlignLeft = iota
+	AlignRight
 )
 
-func newShortcuts() shortcuts {
-	s := shortcuts{
-		modifiers: defaultModifiers(),
-		shortcuts: defaultShortcuts(),
+func newShortcuts() Shortcuts {
+	s := Shortcuts{
+		Modifiers: defaultModifiers(),
+		Shortcuts: defaultShortcuts(),
 		styles:    defaultStyles(),
 	}
 	s.view = s.render()
@@ -72,11 +72,11 @@ func newShortcutSet(a int, ms []Modifier, ss []Shortcut, d bool) []string {
 	return scs.joinShortcuts()
 }
 
-func (s shortcuts) render() string {
-	l := newShortcutSet(alignLeft, s.modifiers, s.shortcuts, true)
-	r := newShortcutSet(alignRight, s.modifiers, s.shortcuts, true)
-	ml := newShortcutSet(alignLeft, s.modifiers, modifierToShortcut(alignLeft, s.modifiers), false)
-	mr := newShortcutSet(alignRight, s.modifiers, modifierToShortcut(alignRight, s.modifiers), false)
+func (s Shortcuts) render() string {
+	l := newShortcutSet(AlignLeft, s.Modifiers, s.Shortcuts, true)
+	r := newShortcutSet(AlignRight, s.Modifiers, s.Shortcuts, true)
+	ml := newShortcutSet(AlignLeft, s.Modifiers, modifierToShortcut(AlignLeft, s.Modifiers), false)
+	mr := newShortcutSet(AlignRight, s.Modifiers, modifierToShortcut(AlignRight, s.Modifiers), false)
 
 	var left, right []string
 
@@ -143,10 +143,10 @@ func (s *shortcutSet) fillShortcuts() {
 			}
 
 			switch s.align {
-			case alignLeft:
+			case AlignLeft:
 				s.target[i][j] = vv.Key
 				s.target[i][j+1] = vv.Label
-			case alignRight:
+			case AlignRight:
 				s.target[i][j+1] = vv.Key
 				s.target[i][j] = vv.Label
 			}
@@ -176,7 +176,7 @@ func (s *shortcutSet) joinShortcuts() []string {
 		str := s.joinColumn(col, len, offset)
 
 		m := s.styles.shortcutColumnRight.Render(str)
-		if s.align == alignRight {
+		if s.align == AlignRight {
 			m = s.styles.shortcutColumnLeft.Render(str)
 		}
 
@@ -194,7 +194,7 @@ func (s *shortcutSet) joinColumn(col []string, len int, offset int) string {
 	lr := lipgloss.Right
 	ll := lipgloss.Left
 
-	if s.align == alignRight {
+	if s.align == AlignRight {
 		remainder = 1
 		lr = lipgloss.Left
 		ll = lipgloss.Right

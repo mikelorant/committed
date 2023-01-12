@@ -9,13 +9,13 @@ type Model struct {
 	Next     string
 	Previous string
 
-	shortcuts shortcuts
+	Shortcuts Shortcuts
 	styles    Styles
 }
 
 func New() Model {
 	return Model{
-		shortcuts: newShortcuts(),
+		Shortcuts: newShortcuts(),
 		styles:    defaultStyles(),
 	}
 }
@@ -32,16 +32,16 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.styles = defaultStyles()
 	}
 
-	m.shortcuts.shortcuts = defaultShortcuts()
+	m.Shortcuts.Shortcuts = defaultShortcuts()
 	m.next()
 	m.previous()
-	m.shortcuts.view = m.shortcuts.render()
+	m.Shortcuts.view = m.Shortcuts.render()
 
 	return m, nil
 }
 
 func (m Model) View() string {
-	return m.shortcuts.view
+	return m.Shortcuts.view
 }
 
 func (m *Model) next() {
@@ -50,12 +50,12 @@ func (m *Model) next() {
 	}
 
 	next := Shortcut{
-		Modifier: noModifier,
+		Modifier: NoModifier,
 		Key:      "tab",
 		Label:    m.Next,
 	}
 
-	m.shortcuts.shortcuts = append(m.shortcuts.shortcuts, next)
+	m.Shortcuts.Shortcuts = append(m.Shortcuts.Shortcuts, next)
 }
 
 func (m *Model) previous() {
@@ -64,12 +64,12 @@ func (m *Model) previous() {
 	}
 
 	previous := Shortcut{
-		Modifier: shiftModifier,
+		Modifier: ShiftModifier,
 		Key:      "tab",
 		Label:    m.Previous,
 	}
 
-	m.shortcuts.shortcuts = append(m.shortcuts.shortcuts, previous)
+	m.Shortcuts.Shortcuts = append(m.Shortcuts.Shortcuts, previous)
 }
 
 func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
