@@ -34,10 +34,10 @@ func defaultStyles() Styles {
 		Align(lipgloss.Right)
 
 	s.shortcutColumnRight = lipgloss.NewStyle().
-		MarginRight(1)
+		MarginLeft(1)
 
 	s.shortcutColumnLeft = lipgloss.NewStyle().
-		MarginLeft(1)
+		MarginRight(1)
 
 	s.shortcutKey = lipgloss.NewStyle().
 		Foreground(tint.Cyan())

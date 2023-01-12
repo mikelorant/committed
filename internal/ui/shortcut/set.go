@@ -106,9 +106,13 @@ func (s *shortcutSet) joinShortcuts() []string {
 
 		str := s.joinColumn(col, len, offset)
 
-		m := s.styles.shortcutColumnRight.Render(str)
+		if str == "" {
+			continue
+		}
+
+		m := s.styles.shortcutColumnLeft.Render(str)
 		if s.align == AlignRight {
-			m = s.styles.shortcutColumnLeft.Render(str)
+			m = s.styles.shortcutColumnRight.Render(str)
 		}
 
 		ss = append(ss, m)

@@ -101,9 +101,10 @@ func (m Model) joinShortcutRow(left, right []string) string {
 
 func modifierToShortcut(a int, ms []Modifier) []Shortcut {
 	var ss []Shortcut
-	var label string
 
 	for _, v := range ms {
+		var label string
+
 		if v.Align != a {
 			continue
 		}
