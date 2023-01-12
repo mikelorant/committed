@@ -88,6 +88,24 @@ func GlobalShortcuts(next, previous string) ([]shortcut.Modifier, []shortcut.Sho
 	return mods, scs
 }
 
+func HelpShortcuts() ([]shortcut.Modifier, []shortcut.Shortcut) {
+	scs := defaultShortcuts()
+	mods := defaultModifiers()
+
+	mods = append(mods, shortcut.Modifier{
+		Modifier: shortcut.NoModifier,
+		Align:    shortcut.AlignRight,
+	})
+
+	scs = append(scs, shortcut.Shortcut{
+		Modifier: shortcut.NoModifier,
+		Key:      "esc",
+		Label:    "Exit",
+	})
+
+	return mods, scs
+}
+
 func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
 	return m.(Model), c
 }

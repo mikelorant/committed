@@ -231,7 +231,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.models.body.Focus()
 		mods, scs = status.GlobalShortcuts(emptyName, summaryName)
 	case helpComponent:
-		mods, scs = status.GlobalShortcuts(emptyName, emptyName)
+		mods, scs = status.HelpShortcuts()
 		m.models.help.Focus()
 	}
 

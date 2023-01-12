@@ -9,10 +9,14 @@ import (
 	"github.com/mikelorant/committed/internal/ui/uitest"
 )
 
+const (
+	globalShortcuts = iota
+	helpShortcuts
+)
+
 func TestModel(t *testing.T) {
 	type args struct {
-		shortcuts []shortcut.Shortcut
-		modifiers []shortcut.Modifier
+		shortcuts int
 		next      string
 		previous  string
 	}
@@ -53,13 +57,23 @@ func TestModel(t *testing.T) {
 				previous: "previous",
 			},
 		},
+		{
+			name: "help",
+			args: args{
+				shortcuts: helpShortcuts,
+			},
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			scs := shortcut.NewShortcut(status.GlobalShortcuts(tt.args.next, tt.args.previous))
-			if tt.args.modifiers != nil && tt.args.shortcuts != nil {
-				scs = shortcut.NewShortcut(tt.args.modifiers, tt.args.shortcuts)
+			var scs shortcut.Model
+
+			switch tt.args.shortcuts {
+			case helpShortcuts:
+				scs = shortcut.NewShortcut(status.HelpShortcuts())
+			default:
+				scs = shortcut.NewShortcut(status.GlobalShortcuts(tt.args.next, tt.args.previous))
 			}
 
 			m := status.Model{
