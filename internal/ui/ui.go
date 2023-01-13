@@ -163,8 +163,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "alt+s":
 			m.signoff = !m.signoff
 		case "alt+t":
-			cmd := theme.NextTint
-			return m, cmd
+			return m, theme.NextTint
 		case "alt+/":
 			if m.state == helpComponent {
 				m.state = m.previousState
