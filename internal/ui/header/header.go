@@ -210,12 +210,6 @@ func (m Model) counter() string {
 	return m.styles.counterBoundary.Render(fmt.Sprintf("%v%v%v", c, d, t))
 }
 
-func (m Model) emojiConnector() string {
-	c := connector(connecterTopRight, connectorHorizonal, connectorRightBottom, 35)
-
-	return m.styles.emojiConnector.Render(c)
-}
-
 func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
 	return m.(Model), c
 }
