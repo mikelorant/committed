@@ -19,10 +19,10 @@ import (
 )
 
 type Model struct {
+	Request       *commit.Request
 	state         state
 	previousState state
 	models        Models
-	request       *commit.Request
 	quit          bool
 	signoff       bool
 	err           error
@@ -65,17 +65,8 @@ const (
 	bodyName    = "Body"
 )
 
-func New(cfg commit.Config) (*commit.Request, error) {
-	logfilePath := os.Getenv("BUBBLETEA_LOG")
-	if logfilePath != "" {
-		fh, err := tea.LogToFile(logfilePath, "committed")
-		if err != nil {
-			return nil, fmt.Errorf("unable to log to file: %w", err)
-		}
-		defer fh.Close()
-	}
-
-	im := Model{
+func New(cfg commit.Config) Model {
+	return Model{
 		state: emojiComponent,
 		models: Models{
 			info:   info.New(cfg),
@@ -86,14 +77,25 @@ func New(cfg commit.Config) (*commit.Request, error) {
 			help:   help.New(),
 		},
 	}
+}
 
-	p := tea.NewProgram(im)
-	m, err := p.Run()
+func (m Model) Start() (*commit.Request, error) {
+	logfilePath := os.Getenv("BUBBLETEA_LOG")
+	if logfilePath != "" {
+		fh, err := tea.LogToFile(logfilePath, "committed")
+		if err != nil {
+			return nil, fmt.Errorf("unable to log to file: %w", err)
+		}
+		defer fh.Close()
+	}
+
+	p := tea.NewProgram(m)
+	r, err := p.Run()
 	if err != nil {
 		return nil, fmt.Errorf("unable to run program: %w", err)
 	}
 
-	return m.(Model).request, nil
+	return r.(Model).Request, nil
 }
 
 func (m Model) Init() tea.Cmd {
@@ -148,7 +150,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.state = bodyComponent
 			}
 		case "alt+enter":
-			m.request = &commit.Request{
+			m.Request = &commit.Request{
 				Author:  m.models.info.Author,
 				Emoji:   m.models.header.Emoji.Shortcode,
 				Summary: m.models.header.Summary(),
@@ -311,7 +313,7 @@ func (m *Model) message() {
 func (m Model) validate() bool {
 	//nolint:gocritic
 	switch {
-	case m.request.Summary == "":
+	case m.Request.Summary == "":
 		return false
 	}
 	return true

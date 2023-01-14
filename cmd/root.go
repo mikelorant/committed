@@ -34,7 +34,7 @@ func NewRootCmd() *cobra.Command {
 				log.Fatalf("unable to init commit: %v", err)
 			}
 
-			req, err := ui.New(c.Config)
+			req, err := ui.New(c.Config).Start()
 			if err != nil {
 				log.Fatalf("unable to init ui: %v", err)
 			}
