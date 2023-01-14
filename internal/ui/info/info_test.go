@@ -100,6 +100,14 @@ func TestModel(t *testing.T) {
 			},
 		},
 		{
+			name: "no_users",
+			args: args{
+				config: func(c *commit.Config) {
+					c.Repository.Users = nil
+				},
+			},
+		},
+		{
 			name: "no_local",
 			args: args{
 				config: func(c *commit.Config) {

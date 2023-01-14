@@ -75,9 +75,6 @@ func TestModel(t *testing.T) {
 		},
 		{
 			name: "empty",
-			args: args{
-				author: repository.User{},
-			},
 			want: want{
 				state: func(m footer.Model) {
 					u := repository.User{}
@@ -93,7 +90,9 @@ func TestModel(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var c commit.Config
-			c.Repository.Users = []repository.User{tt.args.author}
+			if tt.args.author.Name != "" && tt.args.author.Email != "" {
+				c.Repository.Users = []repository.User{tt.args.author}
+			}
 
 			m := footer.New(c)
 

@@ -39,6 +39,10 @@ const (
 )
 
 func New(cfg commit.Config) Model {
+	if len(cfg.Repository.Users) == 0 {
+		cfg.Repository.Users = []repository.User{{}}
+	}
+
 	m := Model{
 		Hash:         cfg.Placeholders.Hash,
 		LocalBranch:  cfg.Repository.Branch.Local,
