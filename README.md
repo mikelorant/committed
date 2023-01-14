@@ -103,6 +103,7 @@ commits created with Committed. The limitations are:
 - Emoji character or shortcode must be in the existing data set.
 - Trailers will be imported into the body.
 - Summary will be truncated if more than 72 characters.
+- Lines will not reflow when editing the body.
 
 ## Best Practises
 
