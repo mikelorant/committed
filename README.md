@@ -1,6 +1,6 @@
 # Committed
 
-[![Release](https://img.shields.io/github/v/release/mikelorant/committed)](https://github.com/mikelorant/committed/releases) [![Build](https://github.com/mikelorant/committed/actions/workflows/release.yaml/badge.svg)](https://github.com/mikelorant/committed/actions/workflows/release.yaml) [![License](https://img.shields.io/github/license/mikelorant/committed)](https://spdx.org/licenses/MIT.html)
+[![Release](https://img.shields.io/github/v/release/mikelorant/committed)](https://github.com/mikelorant/committed/releases) [![Build](https://github.com/mikelorant/committed/actions/workflows/release.yaml/badge.svg)](https://github.com/mikelorant/committed/actions/workflows/release.yaml) [![License](https://img.shields.io/github/license/mikelorant/committed)](https://spdx.org/licenses/MIT.html) [![codecov](https://codecov.io/gh/mikelorant/committed/branch/main/graph/badge.svg?token=TW2XDZAJKT)](https://codecov.io/gh/mikelorant/committed)
 
 Committed is a WYSIWYG Git commit editor that helps improve the quality of your
 commits by showing you the layout in the same format as `git log`.
