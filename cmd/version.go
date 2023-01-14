@@ -3,7 +3,6 @@ package cmd
 import (
 	_ "embed"
 	"log"
-	"os"
 	"text/template"
 
 	"github.com/spf13/cobra"
@@ -28,7 +27,7 @@ func NewVersionCmd() *cobra.Command {
 			if err != nil {
 				log.Fatal("Unable to parse version template.")
 			}
-			if err = tmpl.Execute(os.Stdout, cmd); err != nil {
+			if err = tmpl.Execute(cmd.OutOrStdout(), cmd); err != nil {
 				log.Fatal("Unable to show version.")
 			}
 		},
