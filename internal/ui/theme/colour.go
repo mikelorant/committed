@@ -1,7 +1,11 @@
 package theme
 
 import (
+	"fmt"
+	"image/color"
+
 	"github.com/charmbracelet/lipgloss"
+	"github.com/muesli/gamut"
 )
 
 type body struct {
@@ -86,7 +90,7 @@ func Body() body {
 
 	return body{
 		Boundary:            tint.Fg(),
-		TextAreaPlaceholder: tint.BrightBlack(),
+		TextAreaPlaceholder: ToAdaptive(tint.BrightBlack()),
 		TextAreaPrompt:      tint.Fg(),
 		TextAreaFocusedText: tint.Fg(),
 		TextAreaBlurredText: tint.Fg(),
@@ -101,14 +105,14 @@ func FilterList() filterlist {
 	return filterlist{
 		Boundary:                  tint.Fg(),
 		ListNormalTitle:           tint.Fg(),
-		ListSelectedTitle:         tint.Cyan(),
-		ListNoItems:               tint.BrightBlack(),
-		TextInputPromptMark:       tint.Green(),
+		ListSelectedTitle:         ToAdaptive(tint.Cyan()),
+		ListNoItems:               ToAdaptive(tint.BrightBlack()),
+		TextInputPromptMark:       ToAdaptive(tint.Green()),
 		TextInputPromptText:       tint.Fg(),
-		PaginatorDots:             tint.Cyan(),
+		PaginatorDots:             ToAdaptive(tint.Cyan()),
 		TextInputPromptStyle:      tint.Fg(),
 		TextInputTextStyle:        tint.Fg(),
-		TextInputPlaceholderStyle: tint.BrightBlack(),
+		TextInputPlaceholderStyle: ToAdaptive(tint.BrightBlack()),
 		TextInputCursorStyle:      tint.Fg(),
 	}
 }
@@ -133,13 +137,13 @@ func Header() header {
 		CounterLimit:                 tint.Fg(),
 		SummaryInputPromptStyle:      tint.Fg(),
 		SummaryInputTextStyle:        tint.Fg(),
-		SummaryInputPlaceholderStyle: tint.BrightBlack(),
+		SummaryInputPlaceholderStyle: ToAdaptive(tint.BrightBlack()),
 		SummaryInputCursorStyle:      tint.Fg(),
 		CounterDefault:               tint.Fg(),
-		CounterLow:                   tint.Yellow(),
-		CounterNormal:                tint.Green(),
-		CounterWarning:               tint.Yellow(),
-		CounterHigh:                  tint.BrightRed(),
+		CounterLow:                   ToAdaptive(tint.Yellow()),
+		CounterNormal:                ToAdaptive(tint.Green()),
+		CounterWarning:               ToAdaptive(tint.Yellow()),
+		CounterHigh:                  ToAdaptive(tint.BrightRed()),
 	}
 }
 
@@ -158,12 +162,12 @@ func Info() info {
 	tint := Tint()
 
 	return info{
-		HashText:            tint.Yellow(),
-		HashValue:           tint.Yellow(),
-		BranchHead:          tint.BrightCyan(),
-		BranchLocal:         tint.BrightGreen(),
-		BranchGrouping:      tint.Yellow(),
-		BranchRemote:        tint.BrightRed(),
+		HashText:            ToAdaptive(tint.Yellow()),
+		HashValue:           ToAdaptive(tint.Yellow()),
+		BranchHead:          ToAdaptive(tint.BrightCyan()),
+		BranchLocal:         ToAdaptive(tint.BrightGreen()),
+		BranchGrouping:      ToAdaptive(tint.Yellow()),
+		BranchRemote:        ToAdaptive(tint.BrightRed()),
 		Colon:               tint.Fg(),
 		AuthorAngledBracket: tint.Fg(),
 		AuthorText:          tint.Fg(),
@@ -189,9 +193,27 @@ func Shortcut() shortcut {
 	tint := Tint()
 
 	return shortcut{
-		Key:          tint.Cyan(),
-		Label:        tint.Green(),
+		Key:          ToAdaptive(tint.Cyan()),
+		Label:        ToAdaptive(tint.Green()),
 		Plus:         tint.Fg(),
 		AngleBracket: tint.Fg(),
 	}
+}
+
+func ToAdaptive(clr color.Color) lipgloss.AdaptiveColor {
+	return lipgloss.AdaptiveColor{
+		Dark:  ToDefault(clr),
+		Light: ToComplementary(ToDefault(clr)),
+	}
+}
+
+func ToDefault(clr color.Color) string {
+	return fmt.Sprint(clr)
+}
+
+func ToComplementary(hexClr string) string {
+	clr := gamut.Hex(hexClr)
+	compClr := gamut.Complementary(clr)
+
+	return gamut.ToHex(compClr)
 }

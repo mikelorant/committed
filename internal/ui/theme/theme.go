@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 	tint "github.com/lrstanley/bubbletint"
 )
 
@@ -14,7 +15,7 @@ var (
 	once     sync.Once
 )
 
-var tints = []tint.Tint{
+var darkTints = []tint.Tint{
 	tint.TintBuiltinDark,
 	tint.TintGruvboxDark,
 	tint.TintSolarizedDarkHigherContrast,
@@ -24,9 +25,26 @@ var tints = []tint.Tint{
 	tint.TintTokyoNight,
 }
 
+var lightTints = []tint.Tint{
+	tint.TintBuiltinLight,
+	tint.TintGruvboxLight,
+	tint.TintBuiltinSolarizedLight,
+	tint.TintBuiltinTangoLight,
+	tint.TintTokyoNightLight,
+}
+
 func Tint() *tint.Registry {
+	var t []tint.Tint
+
 	once.Do(func() {
-		registry = tint.NewRegistry(tints[0], tints[1:]...)
+		switch lipgloss.HasDarkBackground() {
+		case true:
+			t = darkTints
+		case false:
+			t = lightTints
+		}
+
+		registry = tint.NewRegistry(t[0], t[1:]...)
 	})
 
 	return registry
