@@ -16,7 +16,7 @@ func horizontalPaginator(pos, total int) string {
 }
 
 func dots(pos, total int) []string {
-	tint := theme.Tint()
+	colour := theme.FilterList()
 
 	dots := make([]string, total)
 	for i := range dots {
@@ -25,7 +25,7 @@ func dots(pos, total int) []string {
 
 	dots = append(dots[:pos], dots[pos:]...)
 	dots[pos] = lipgloss.NewStyle().
-		Foreground(tint.Cyan()).
+		Foreground(colour.PaginatorDots).
 		Render(paginatorActiveDot)
 
 	return dots

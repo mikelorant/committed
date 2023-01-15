@@ -17,7 +17,7 @@ type Styles struct {
 func defaultStyles() Styles {
 	var s Styles
 
-	tint := theme.Tint()
+	colour := theme.Body()
 
 	s.boundary = lipgloss.NewStyle().
 		Width(74).
@@ -26,23 +26,23 @@ func defaultStyles() Styles {
 		MarginLeft(4).
 		Align(lipgloss.Left, lipgloss.Top).
 		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(tint.Fg()).
+		BorderForeground(colour.Boundary).
 		Padding(0, 1, 0, 1)
 
 	s.textAreaPlaceholder = lipgloss.NewStyle().
-		Foreground(tint.BrightBlack())
+		Foreground(colour.TextAreaPlaceholder)
 
 	s.textAreaPrompt = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.TextAreaPrompt)
 
 	s.textAreaFocusedText = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.TextAreaFocusedText)
 
 	s.textAreaBlurredText = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.TextAreaBlurredText)
 
 	s.textAreaCursorStyle = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.TextAreaCursorStyle)
 
 	return s
 }

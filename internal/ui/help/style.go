@@ -13,7 +13,7 @@ type Styles struct {
 func defaultStyles() Styles {
 	var s Styles
 
-	tint := theme.Tint()
+	colour := theme.Help()
 
 	s.boundary = lipgloss.NewStyle().
 		Width(74).
@@ -21,11 +21,11 @@ func defaultStyles() Styles {
 		MarginLeft(4).
 		Align(lipgloss.Left, lipgloss.Top).
 		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(tint.Fg()).
+		BorderForeground(colour.Boundary).
 		Padding(0, 1, 0, 1)
 
 	s.viewport = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.Viewport)
 
 	return s
 }

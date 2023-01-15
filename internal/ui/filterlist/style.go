@@ -31,12 +31,12 @@ const (
 func defaultStyles() Styles {
 	var s Styles
 
-	tint := theme.Tint()
+	colour := theme.FilterList()
 
 	s.boundary = lipgloss.NewStyle().
 		MarginLeft(4).
 		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(tint.Fg())
+		BorderForeground(colour.Boundary)
 
 	s.paginatorBoundary = lipgloss.NewStyle().
 		MarginRight(1)
@@ -47,42 +47,42 @@ func defaultStyles() Styles {
 	}
 
 	s.listNormalTitle = lipgloss.NewStyle().
-		Foreground(tint.Fg()).
+		Foreground(colour.ListNormalTitle).
 		Padding(0, 0, 0, 2)
 
 	// Assign border style to the selected item.
 	s.listSelectedTitle = lipgloss.NewStyle().
 		Border(s.listItemPrompt, false, false, false, true).
-		BorderForeground(tint.Cyan()).
-		Foreground(tint.Cyan()).
+		BorderForeground(colour.ListSelectedTitle).
+		Foreground(colour.ListSelectedTitle).
 		Padding(0, 0, 0, 1)
 
 	s.listNoItems = lipgloss.NewStyle().
-		Foreground(tint.BrightBlack())
+		Foreground(colour.ListNoItems)
 
 	s.textInputPromptMark = lipgloss.NewStyle().
-		Foreground(tint.Green()).
+		Foreground(colour.TextInputPromptMark).
 		MarginRight(1)
 
 	s.textInputPromptText = lipgloss.NewStyle().
-		Foreground(tint.Fg()).
+		Foreground(colour.TextInputPromptText).
 		Bold(true).
 		MarginRight(1)
 
 	s.paginatorDots = lipgloss.NewStyle().
-		Foreground(tint.Cyan())
+		Foreground(colour.PaginatorDots)
 
 	s.textInputPromptStyle = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.TextInputPromptStyle)
 
 	s.textInputTextStyle = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.TextInputTextStyle)
 
 	s.textInputPlaceholderStyle = lipgloss.NewStyle().
-		Foreground(tint.BrightBlack())
+		Foreground(colour.TextInputPlaceholderStyle)
 
 	s.textInputCursorStyle = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.TextInputCursorStyle)
 
 	return s
 }

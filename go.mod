@@ -17,6 +17,7 @@ require (
 	github.com/lrstanley/bubbletint v0.0.0-20221222153826-8c18bc6ecfd0
 	github.com/mattn/go-runewidth v0.0.14
 	github.com/spf13/cobra v1.6.1
+	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.8.1
 )
 
@@ -61,7 +62,6 @@ require (
 	github.com/sahilm/fuzzy v0.1.0 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/skeema/knownhosts v1.1.0 // indirect
-	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
 	golang.org/x/crypto v0.4.0 // indirect
 	golang.org/x/mod v0.7.0 // indirect

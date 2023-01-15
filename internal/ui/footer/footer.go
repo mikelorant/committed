@@ -35,7 +35,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	tint := theme.Tint()
+	colour := theme.Footer()
 
 	return lipgloss.NewStyle().
 		Width(74).
@@ -45,7 +45,7 @@ func (m Model) View() string {
 		Align(lipgloss.Left, lipgloss.Center).
 		Border(lipgloss.HiddenBorder(), false, true).
 		Padding(0, 1, 0, 1).
-		Foreground(tint.Fg()).
+		Foreground(colour.View).
 		Render(m.signoff())
 }
 

@@ -20,7 +20,7 @@ type Styles struct {
 func defaultStyles() Styles {
 	var s Styles
 
-	tint := theme.Tint()
+	colour := theme.Shortcut()
 
 	s.shortcutBoundary = lipgloss.NewStyle().
 		MarginBottom(1)
@@ -40,17 +40,17 @@ func defaultStyles() Styles {
 		MarginRight(1)
 
 	s.shortcutKey = lipgloss.NewStyle().
-		Foreground(tint.Cyan())
+		Foreground(colour.Key)
 
 	s.shortcutLabel = lipgloss.NewStyle().
-		Foreground(tint.Green())
+		Foreground(colour.Label)
 
 	s.shortcutPlus = lipgloss.NewStyle().
-		Foreground(tint.Fg()).
+		Foreground(colour.Plus).
 		SetString("+")
 
 	s.shortcutAngleBracket = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.AngleBracket)
 
 	return s
 }

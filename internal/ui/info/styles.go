@@ -36,7 +36,7 @@ type Styles struct {
 func defaultStyles() Styles {
 	var s Styles
 
-	tint := theme.Tint()
+	colour := theme.Info()
 
 	s.infoBoundary = lipgloss.NewStyle().
 		MarginBottom(1)
@@ -45,51 +45,51 @@ func defaultStyles() Styles {
 		MarginTop(1)
 
 	s.hashText = lipgloss.NewStyle().
-		Foreground(tint.Yellow()).
+		Foreground(colour.HashText).
 		SetString("commit")
 
 	s.hashValue = lipgloss.NewStyle().
-		Foreground(tint.Yellow())
+		Foreground(colour.HashValue)
 
 	s.hashBoundary = lipgloss.NewStyle().
 		MarginRight(1)
 
 	s.branchHead = lipgloss.NewStyle().
-		Foreground(tint.BrightCyan()).
+		Foreground(colour.BranchHead).
 		Bold(true).
 		SetString("HEAD ->")
 
 	s.branchLocal = lipgloss.NewStyle().
-		Foreground(tint.BrightGreen()).
+		Foreground(colour.BranchLocal).
 		Bold(true)
 
 	s.branchGrouping = lipgloss.NewStyle().
-		Foreground(tint.Yellow())
+		Foreground(colour.BranchGrouping)
 
 	s.branchRemote = lipgloss.NewStyle().
-		Foreground(tint.BrightRed()).
+		Foreground(colour.BranchRemote).
 		Bold(true)
 
 	s.colon = lipgloss.NewStyle().
-		Foreground(tint.Fg()).
+		Foreground(colour.Colon).
 		SetString(":")
 
 	s.authorAngledBracket = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.AuthorAngledBracket)
 
 	s.authorText = lipgloss.NewStyle().
-		Foreground(tint.Fg()).
+		Foreground(colour.AuthorText).
 		SetString("author")
 
 	s.authorValue = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.AuthorValue)
 
 	s.dateText = lipgloss.NewStyle().
-		Foreground(tint.Fg()).
+		Foreground(colour.DateText).
 		SetString("date")
 
 	s.dateValue = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.DateValue)
 
 	return s
 }

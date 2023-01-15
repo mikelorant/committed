@@ -29,7 +29,7 @@ const (
 func defaultStyles() Styles {
 	var s Styles
 
-	tint := theme.Tint()
+	colour := theme.Header()
 
 	s.emojiBoundary = lipgloss.NewStyle().
 		Width(4).
@@ -38,7 +38,7 @@ func defaultStyles() Styles {
 		MarginRight(1).
 		Align(lipgloss.Center, lipgloss.Center).
 		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(tint.Fg())
+		BorderForeground(colour.EmojiBoundary)
 
 	s.summaryBoundary = lipgloss.NewStyle().
 		Width(61).
@@ -47,37 +47,34 @@ func defaultStyles() Styles {
 		Align(lipgloss.Left, lipgloss.Center).
 		Padding(0, 0, 0, 1).
 		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(tint.Fg())
+		BorderForeground(colour.SummaryBoundary)
 
 	s.counterDivider = lipgloss.NewStyle().
-		Foreground(tint.Fg()).
+		Foreground(colour.CounterDivider).
 		SetString("/")
 
 	s.counterLimit = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.CounterLimit)
 
 	s.counterBoundary = lipgloss.NewStyle().
 		Width(5).
 		Height(3).
 		Align(lipgloss.Right, lipgloss.Center)
 
-	s.emojiConnector = lipgloss.NewStyle().
-		MarginLeft(6)
-
 	s.filterListBoundary = lipgloss.NewStyle().
 		MarginTop(1)
 
 	s.summaryInputPromptStyle = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.SummaryInputPromptStyle)
 
 	s.summaryInputTextStyle = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.SummaryInputTextStyle)
 
 	s.summaryInputPlaceholderStyle = lipgloss.NewStyle().
-		Foreground(tint.BrightBlack())
+		Foreground(colour.SummaryInputPlaceholderStyle)
 
 	s.summaryInputCursorStyle = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.SummaryInputCursorStyle)
 
 	return s
 }
@@ -85,19 +82,19 @@ func defaultStyles() Styles {
 func counterStyle(i int) lipgloss.Style {
 	var clr lipgloss.TerminalColor
 
-	tint := theme.Tint()
+	colour := theme.Header()
 
 	switch {
 	case i > emptyCounter && i < minimumCounter:
-		clr = tint.Yellow()
+		clr = colour.CounterLow
 	case i >= minimumCounter && i <= warningCounter:
-		clr = tint.Green()
+		clr = colour.CounterNormal
 	case i > warningCounter && i <= maximumCounter:
-		clr = tint.Yellow()
+		clr = colour.CounterWarning
 	case i > maximumCounter:
-		clr = tint.BrightRed()
+		clr = colour.CounterHigh
 	default:
-		clr = tint.Fg()
+		clr = colour.CounterDefault
 	}
 
 	bold := false

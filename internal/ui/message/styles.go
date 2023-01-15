@@ -15,22 +15,22 @@ type Styles struct {
 func defaultStyles() Styles {
 	var s Styles
 
-	tint := theme.Tint()
+	colour := theme.Message()
 
 	s.message = lipgloss.NewStyle().
 		MarginLeft(4).
 		MarginBottom(2)
 
 	s.summary = lipgloss.NewStyle().
-		Foreground(tint.Fg())
+		Foreground(colour.Summary)
 
 	s.body = lipgloss.NewStyle().
 		MarginTop(1).
-		Foreground(tint.Fg())
+		Foreground(colour.Body)
 
 	s.footer = lipgloss.NewStyle().
 		MarginTop(1).
-		Foreground(tint.Fg())
+		Foreground(colour.Footer)
 
 	return s
 }
