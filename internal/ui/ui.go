@@ -203,17 +203,14 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 		}
 		m.state = bodyComponent
 	case "enter":
-		if m.state == authorComponent {
+		switch m.state {
+		case authorComponent:
 			m.models.info, _ = info.ToModel(m.models.info.Update(msg))
 			m.state = emojiComponent
-			break
-		}
-		if m.state == emojiComponent {
+		case emojiComponent:
 			m.models.header, _ = header.ToModel(m.models.header.Update(msg))
 			m.state = summaryComponent
-			break
-		}
-		if m.state == summaryComponent {
+		case summaryComponent:
 			m.state = bodyComponent
 		}
 	case "alt+enter":
