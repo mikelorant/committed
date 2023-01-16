@@ -9,22 +9,14 @@ import (
 )
 
 type Model struct {
-	Shortcuts []Shortcut
-	Modifiers []Modifier
+	Shortcuts Shortcuts
 	styles    Styles
 	view      string
 }
 
-type Shortcut struct {
-	Modifier int
-	Key      string
-	Label    string
-}
-
-type Modifier struct {
-	Modifier int
-	Label    string
-	Align    int
+type Shortcuts struct {
+	KeyBindings []KeyBinding
+	Modifiers   []Modifier
 }
 
 const (
@@ -37,9 +29,8 @@ const (
 	AlignRight
 )
 
-func NewShortcut(m []Modifier, s []Shortcut) Model {
+func New(s Shortcuts) Model {
 	return Model{
-		Modifiers: m,
 		Shortcuts: s,
 		styles:    defaultStyles(),
 	}
@@ -67,10 +58,10 @@ func (m Model) View() string {
 }
 
 func (m Model) shortcutRow() string {
-	l := newShortcutSet(AlignLeft, m.Modifiers, m.Shortcuts, true)
-	r := newShortcutSet(AlignRight, m.Modifiers, m.Shortcuts, true)
-	ml := newShortcutSet(AlignLeft, m.Modifiers, modifierToShortcut(AlignLeft, m.Modifiers), false)
-	mr := newShortcutSet(AlignRight, m.Modifiers, modifierToShortcut(AlignRight, m.Modifiers), false)
+	l := newKeySet(AlignLeft, m.Shortcuts.Modifiers, m.Shortcuts.KeyBindings, true)
+	r := newKeySet(AlignRight, m.Shortcuts.Modifiers, m.Shortcuts.KeyBindings, true)
+	ml := newKeySet(AlignLeft, m.Shortcuts.Modifiers, modifierToKeyBinding(AlignLeft, m.Shortcuts.Modifiers), false)
+	mr := newKeySet(AlignRight, m.Shortcuts.Modifiers, modifierToKeyBinding(AlignRight, m.Shortcuts.Modifiers), false)
 
 	var left, right []string
 
@@ -99,8 +90,8 @@ func (m Model) joinShortcutRow(left, right []string) string {
 	return m.styles.boundary.Render(block)
 }
 
-func modifierToShortcut(a int, ms []Modifier) []Shortcut {
-	var ss []Shortcut
+func modifierToKeyBinding(a int, ms []Modifier) []KeyBinding {
+	var ss []KeyBinding
 
 	for _, v := range ms {
 		var label string
@@ -113,13 +104,13 @@ func modifierToShortcut(a int, ms []Modifier) []Shortcut {
 			label = defaultStyles().modifierPlus.String()
 		}
 
-		scs := Shortcut{
+		kb := KeyBinding{
 			Modifier: v.Modifier,
 			Key:      v.Label,
 			Label:    label,
 		}
 
-		ss = append(ss, scs)
+		ss = append(ss, kb)
 	}
 
 	return ss

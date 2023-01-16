@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/hexops/autogold/v2"
-	"github.com/mikelorant/committed/internal/ui/shortcut"
 	"github.com/mikelorant/committed/internal/ui/status"
 	"github.com/mikelorant/committed/internal/ui/uitest"
 )
@@ -67,19 +66,13 @@ func TestModel(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var scs shortcut.Model
+			m := status.New()
 
 			switch tt.args.shortcuts {
 			case helpShortcuts:
-				scs = shortcut.NewShortcut(status.HelpShortcuts())
+				m.Shortcuts = status.HelpShortcuts()
 			default:
-				scs = shortcut.NewShortcut(status.GlobalShortcuts(tt.args.next, tt.args.previous))
-			}
-
-			m := status.Model{
-				Next:      tt.args.next,
-				Previous:  tt.args.previous,
-				Shortcuts: scs,
+				m.Shortcuts = status.GlobalShortcuts(tt.args.next, tt.args.previous)
 			}
 
 			m, _ = status.ToModel(m.Update(nil))

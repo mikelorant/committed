@@ -13,7 +13,6 @@ import (
 	"github.com/mikelorant/committed/internal/ui/help"
 	"github.com/mikelorant/committed/internal/ui/info"
 	"github.com/mikelorant/committed/internal/ui/message"
-	"github.com/mikelorant/committed/internal/ui/shortcut"
 	"github.com/mikelorant/committed/internal/ui/status"
 	"github.com/mikelorant/committed/internal/ui/theme"
 )
@@ -131,35 +130,29 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	m = m.resetModels()
 
-	var mods []shortcut.Modifier
-	var scs []shortcut.Shortcut
-
 	switch m.state {
 	case authorComponent:
 		m.models.info.Focus()
 		m.models.info.Expand = true
 		m.models.body.Height = bodyAuthorHeight
-		mods, scs = status.GlobalShortcuts(emojiName, emptyName)
+		m.models.status.Shortcuts = status.GlobalShortcuts(emojiName, emptyName)
 	case emojiComponent:
 		m.models.header.Focus()
 		m.models.header.SelectEmoji()
 		m.models.header.Expand = true
 		m.models.body.Height = bodyEmojiHeight
-		mods, scs = status.GlobalShortcuts(summaryName, authorName)
+		m.models.status.Shortcuts = status.GlobalShortcuts(summaryName, authorName)
 	case summaryComponent:
 		m.models.header.Focus()
 		m.models.header.SelectSummary()
-		mods, scs = status.GlobalShortcuts(bodyName, emojiName)
+		m.models.status.Shortcuts = status.GlobalShortcuts(bodyName, emojiName)
 	case bodyComponent:
 		m.models.body.Focus()
-		mods, scs = status.GlobalShortcuts(emptyName, summaryName)
+		m.models.status.Shortcuts = status.GlobalShortcuts(emptyName, summaryName)
 	case helpComponent:
-		mods, scs = status.HelpShortcuts()
+		m.models.status.Shortcuts = status.HelpShortcuts()
 		m.models.help.Focus()
 	}
-
-	m.models.status.Shortcuts.Modifiers = mods
-	m.models.status.Shortcuts.Shortcuts = scs
 
 	if m.signoff {
 		m.models.body.Height -= footerSignoffHeight

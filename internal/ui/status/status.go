@@ -8,14 +8,18 @@ import (
 )
 
 type Model struct {
-	Next      string
-	Previous  string
-	Shortcuts shortcut.Model
+	Shortcuts shortcut.Shortcuts
+	shortcut  shortcut.Model
 }
 
 func New() Model {
+	ds := shortcut.Shortcuts{
+		Modifiers:   defaultModifiers(),
+		KeyBindings: defaultKeyBindings(),
+	}
+
 	return Model{
-		Shortcuts: shortcut.NewShortcut(defaultModifiers(), defaultShortcuts()),
+		shortcut: shortcut.New(ds),
 	}
 }
 
@@ -25,18 +29,19 @@ func (m Model) Init() tea.Cmd {
 
 //nolint:ireturn
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	m.Shortcuts, _ = shortcut.ToModel(m.Shortcuts.Update(nil))
+	m.shortcut.Shortcuts = m.Shortcuts
+	m.shortcut, _ = shortcut.ToModel(m.shortcut.Update(nil))
 
 	return m, nil
 }
 
 func (m Model) View() string {
-	return m.Shortcuts.View()
+	return m.shortcut.View()
 }
 
-func GlobalShortcuts(next, previous string) ([]shortcut.Modifier, []shortcut.Shortcut) {
-	scs := defaultShortcuts()
+func GlobalShortcuts(next, previous string) shortcut.Shortcuts {
 	mods := defaultModifiers()
+	kb := defaultKeyBindings()
 
 	switch next {
 	case "":
@@ -45,7 +50,7 @@ func GlobalShortcuts(next, previous string) ([]shortcut.Modifier, []shortcut.Sho
 			Align:    shortcut.AlignRight,
 		})
 
-		scs = append(scs, shortcut.Shortcut{
+		kb = append(kb, shortcut.KeyBinding{
 			Modifier: shortcut.NoModifier,
 		})
 	default:
@@ -54,7 +59,7 @@ func GlobalShortcuts(next, previous string) ([]shortcut.Modifier, []shortcut.Sho
 			Align:    shortcut.AlignRight,
 		})
 
-		scs = append(scs, shortcut.Shortcut{
+		kb = append(kb, shortcut.KeyBinding{
 			Modifier: shortcut.NoModifier,
 			Key:      "tab",
 			Label:    next,
@@ -69,7 +74,7 @@ func GlobalShortcuts(next, previous string) ([]shortcut.Modifier, []shortcut.Sho
 			Label:    strings.Repeat(" ", 6),
 		})
 
-		scs = append(scs, shortcut.Shortcut{
+		kb = append(kb, shortcut.KeyBinding{
 			Modifier: shortcut.ShiftModifier,
 		})
 	default:
@@ -78,18 +83,21 @@ func GlobalShortcuts(next, previous string) ([]shortcut.Modifier, []shortcut.Sho
 			Label:    "Shift", Align: shortcut.AlignRight,
 		})
 
-		scs = append(scs, shortcut.Shortcut{
+		kb = append(kb, shortcut.KeyBinding{
 			Modifier: shortcut.ShiftModifier,
 			Key:      "tab",
 			Label:    previous,
 		})
 	}
 
-	return mods, scs
+	return shortcut.Shortcuts{
+		Modifiers:   mods,
+		KeyBindings: kb,
+	}
 }
 
-func HelpShortcuts() ([]shortcut.Modifier, []shortcut.Shortcut) {
-	scs := defaultShortcuts()
+func HelpShortcuts() shortcut.Shortcuts {
+	kb := defaultKeyBindings()
 	mods := defaultModifiers()
 
 	mods = append(mods, shortcut.Modifier{
@@ -97,13 +105,16 @@ func HelpShortcuts() ([]shortcut.Modifier, []shortcut.Shortcut) {
 		Align:    shortcut.AlignRight,
 	})
 
-	scs = append(scs, shortcut.Shortcut{
+	kb = append(kb, shortcut.KeyBinding{
 		Modifier: shortcut.NoModifier,
 		Key:      "esc",
 		Label:    "Exit",
 	})
 
-	return mods, scs
+	return shortcut.Shortcuts{
+		Modifiers:   mods,
+		KeyBindings: kb,
+	}
 }
 
 func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
@@ -117,8 +128,8 @@ func defaultModifiers() []shortcut.Modifier {
 	}
 }
 
-func defaultShortcuts() []shortcut.Shortcut {
-	return []shortcut.Shortcut{
+func defaultKeyBindings() []shortcut.KeyBinding {
+	return []shortcut.KeyBinding{
 		{Modifier: shortcut.ControlModifier, Key: "c", Label: "Cancel"},
 		{Modifier: shortcut.AltModifier, Key: "enter", Label: "Commit"},
 		{Modifier: shortcut.AltModifier, Key: "s", Label: "Sign-off"},

@@ -10,8 +10,8 @@ import (
 
 func TestModel(t *testing.T) {
 	type args struct {
-		shortcuts []shortcut.Shortcut
-		modifiers []shortcut.Modifier
+		keybindings []shortcut.KeyBinding
+		modifiers   []shortcut.Modifier
 	}
 
 	type want struct{}
@@ -27,7 +27,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "left",
 			args: args{
-				shortcuts: []shortcut.Shortcut{
+				keybindings: []shortcut.KeyBinding{
 					{Modifier: shortcut.NoModifier, Key: "t", Label: "test"},
 				},
 				modifiers: []shortcut.Modifier{
@@ -38,7 +38,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "empty_left",
 			args: args{
-				shortcuts: []shortcut.Shortcut{
+				keybindings: []shortcut.KeyBinding{
 					{Modifier: shortcut.NoModifier, Key: "t", Label: "test"},
 				},
 				modifiers: []shortcut.Modifier{
@@ -49,7 +49,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "empty_left_top",
 			args: args{
-				shortcuts: []shortcut.Shortcut{
+				keybindings: []shortcut.KeyBinding{
 					{Modifier: shortcut.NoModifier, Key: "t1", Label: "test1"},
 					{Modifier: shortcut.AltModifier, Key: "t2", Label: "test2"},
 				},
@@ -62,7 +62,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "empty_left_bottom",
 			args: args{
-				shortcuts: []shortcut.Shortcut{
+				keybindings: []shortcut.KeyBinding{
 					{Modifier: shortcut.AltModifier, Key: "t1", Label: "test1"},
 					{Modifier: shortcut.NoModifier, Key: "t2", Label: "test2"},
 				},
@@ -75,7 +75,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "multiple_same_left",
 			args: args{
-				shortcuts: []shortcut.Shortcut{
+				keybindings: []shortcut.KeyBinding{
 					{Modifier: shortcut.NoModifier, Key: "t1", Label: "test1"},
 					{Modifier: shortcut.NoModifier, Key: "t2", Label: "test2"},
 				},
@@ -87,7 +87,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "multiple_different_left",
 			args: args{
-				shortcuts: []shortcut.Shortcut{
+				keybindings: []shortcut.KeyBinding{
 					{Modifier: shortcut.NoModifier, Key: "t1", Label: "test1"},
 					{Modifier: shortcut.AltModifier, Key: "t2", Label: "test2"},
 				},
@@ -100,7 +100,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "right",
 			args: args{
-				shortcuts: []shortcut.Shortcut{
+				keybindings: []shortcut.KeyBinding{
 					{Modifier: shortcut.NoModifier, Key: "t", Label: "test"},
 				},
 				modifiers: []shortcut.Modifier{
@@ -111,7 +111,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "empty_right",
 			args: args{
-				shortcuts: []shortcut.Shortcut{
+				keybindings: []shortcut.KeyBinding{
 					{Modifier: shortcut.NoModifier, Key: "t", Label: "test"},
 				},
 				modifiers: []shortcut.Modifier{
@@ -122,7 +122,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "empty_right_top",
 			args: args{
-				shortcuts: []shortcut.Shortcut{
+				keybindings: []shortcut.KeyBinding{
 					{Modifier: shortcut.NoModifier, Key: "t1", Label: "test1"},
 					{Modifier: shortcut.AltModifier, Key: "t2", Label: "test2"},
 				},
@@ -135,7 +135,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "empty_right_bottom",
 			args: args{
-				shortcuts: []shortcut.Shortcut{
+				keybindings: []shortcut.KeyBinding{
 					{Modifier: shortcut.AltModifier, Key: "t1", Label: "test1"},
 					{Modifier: shortcut.NoModifier, Key: "t2", Label: "test2"},
 				},
@@ -148,7 +148,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "multiple_same_right",
 			args: args{
-				shortcuts: []shortcut.Shortcut{
+				keybindings: []shortcut.KeyBinding{
 					{Modifier: shortcut.NoModifier, Key: "t1", Label: "test1"},
 					{Modifier: shortcut.NoModifier, Key: "t2", Label: "test2"},
 				},
@@ -160,7 +160,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "multiple_different_right",
 			args: args{
-				shortcuts: []shortcut.Shortcut{
+				keybindings: []shortcut.KeyBinding{
 					{Modifier: shortcut.NoModifier, Key: "t1", Label: "test1"},
 					{Modifier: shortcut.AltModifier, Key: "t2", Label: "test2"},
 				},
@@ -174,7 +174,10 @@ func TestModel(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			m := shortcut.NewShortcut(tt.args.modifiers, tt.args.shortcuts)
+			m := shortcut.New(shortcut.Shortcuts{
+				Modifiers:   tt.args.modifiers,
+				KeyBindings: tt.args.keybindings,
+			})
 
 			m, _ = shortcut.ToModel(m.Update(nil))
 

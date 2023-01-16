@@ -7,32 +7,44 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-type shortcutSet struct {
-	align     int
-	shortcuts []Shortcut
-	modifiers []Modifier
-	target    [][]string
-	decorate  bool
-	height    int
-	width     int
-	styles    Styles
+type KeyBinding struct {
+	Modifier int
+	Key      string
+	Label    string
 }
 
-func newShortcutSet(a int, ms []Modifier, ss []Shortcut, d bool) []string {
-	scs := shortcutSet{
-		align:     a,
-		modifiers: ms,
-		shortcuts: ss,
-		decorate:  d,
-		styles:    defaultStyles(),
+type Modifier struct {
+	Modifier int
+	Label    string
+	Align    int
+}
+
+type keySet struct {
+	align       int
+	keybindings []KeyBinding
+	modifiers   []Modifier
+	target      [][]string
+	decorate    bool
+	height      int
+	width       int
+	styles      Styles
+}
+
+func newKeySet(a int, ms []Modifier, kbs []KeyBinding, d bool) []string {
+	ks := keySet{
+		align:       a,
+		modifiers:   ms,
+		keybindings: kbs,
+		decorate:    d,
+		styles:      defaultStyles(),
 	}
-	scs.shortcutDimensions()
-	scs.initShortcuts()
-	scs.fillShortcuts()
-	return scs.joinShortcuts()
+	ks.keySetDimensions()
+	ks.initKeySet()
+	ks.fillKeySet()
+	return ks.joinKeySet()
 }
 
-func (s *shortcutSet) shortcutDimensions() {
+func (s *keySet) keySetDimensions() {
 	s.height = s.countModifiers()
 
 	width := 0
@@ -40,7 +52,7 @@ func (s *shortcutSet) shortcutDimensions() {
 		if v.Align != s.align {
 			continue
 		}
-		i := s.countShortcuts(v.Modifier)
+		i := s.countKeySet(v.Modifier)
 		if i > width {
 			width = i
 		}
@@ -49,7 +61,7 @@ func (s *shortcutSet) shortcutDimensions() {
 	s.width = width
 }
 
-func (s *shortcutSet) initShortcuts() {
+func (s *keySet) initKeySet() {
 	col := make([][]string, s.height)
 
 	for i := range col {
@@ -60,7 +72,7 @@ func (s *shortcutSet) initShortcuts() {
 	s.target = col
 }
 
-func (s *shortcutSet) fillShortcuts() {
+func (s *keySet) fillKeySet() {
 	i := 0
 	for _, v := range s.modifiers {
 		if v.Align != s.align {
@@ -68,7 +80,7 @@ func (s *shortcutSet) fillShortcuts() {
 		}
 
 		j := 0
-		for _, vv := range s.shortcuts {
+		for _, vv := range s.keybindings {
 			if v.Modifier != vv.Modifier {
 				continue
 			}
@@ -89,7 +101,7 @@ func (s *shortcutSet) fillShortcuts() {
 	}
 }
 
-func (s *shortcutSet) joinShortcuts() []string {
+func (s *keySet) joinKeySet() []string {
 	var ss []string
 	var offset int
 
@@ -122,7 +134,7 @@ func (s *shortcutSet) joinShortcuts() []string {
 	return ss
 }
 
-func (s *shortcutSet) joinColumn(col []string, max int, offset int) string {
+func (s *keySet) joinColumn(col []string, max int, offset int) string {
 	var res []string
 
 	remainder := 0
@@ -148,7 +160,7 @@ func (s *shortcutSet) joinColumn(col []string, max int, offset int) string {
 	return strings.Join(res, "\n")
 }
 
-func (s *shortcutSet) countModifiers() int {
+func (s *keySet) countModifiers() int {
 	i := 0
 	for _, m := range s.modifiers {
 		if m.Align != s.align {
@@ -159,9 +171,9 @@ func (s *shortcutSet) countModifiers() int {
 	return i
 }
 
-func (s *shortcutSet) countShortcuts(modifier int) int {
+func (s *keySet) countKeySet(modifier int) int {
 	i := 0
-	for _, s := range s.shortcuts {
+	for _, s := range s.keybindings {
 		if s.Modifier != modifier {
 			continue
 		}
@@ -171,7 +183,7 @@ func (s *shortcutSet) countShortcuts(modifier int) int {
 	return i
 }
 
-func (s shortcutSet) decorateKey(key string, max int, align lipgloss.Position, bracket bool) string {
+func (s keySet) decorateKey(key string, max int, align lipgloss.Position, bracket bool) string {
 	var k string
 	padding := 0
 
@@ -190,7 +202,7 @@ func (s shortcutSet) decorateKey(key string, max int, align lipgloss.Position, b
 	return lipgloss.NewStyle().Width(max + padding).Align(align).Render(k)
 }
 
-func (s shortcutSet) decorateLabel(label string, max int, align lipgloss.Position, colour bool) string {
+func (s keySet) decorateLabel(label string, max int, align lipgloss.Position, colour bool) string {
 	var l string
 	if label != "" {
 		l = label
