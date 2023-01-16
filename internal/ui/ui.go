@@ -129,14 +129,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m = resp.model
 	}
 
-	m.models.info.Blur()
-	m.models.info.Expand = false
-	m.models.header.Blur()
-	m.models.header.Expand = false
-	m.models.body.Blur()
-	m.models.body.Height = bodyDefaultHeight
-	m.models.footer.Author = m.models.info.Author
-	m.models.help.Blur()
+	m = m.resetModels()
 
 	var mods []shortcut.Modifier
 	var scs []shortcut.Shortcut
@@ -335,4 +328,17 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 	}
 
 	return keyResponse{model: m}
+}
+
+func (m Model) resetModels() Model {
+	m.models.info.Blur()
+	m.models.info.Expand = false
+	m.models.header.Blur()
+	m.models.header.Expand = false
+	m.models.body.Blur()
+	m.models.body.Height = bodyDefaultHeight
+	m.models.footer.Author = m.models.info.Author
+	m.models.help.Blur()
+
+	return m
 }
