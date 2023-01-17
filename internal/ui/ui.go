@@ -166,15 +166,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 	}
 
-	cmds := make([]tea.Cmd, 6)
-	m.models.info, cmds[0] = info.ToModel(m.models.info.Update(msg))
-	m.models.header, cmds[1] = header.ToModel(m.models.header.Update(msg))
-	m.models.body, cmds[2] = body.ToModel(m.models.body.Update(msg))
-	m.models.footer, cmds[3] = footer.ToModel(m.models.footer.Update(msg))
-	m.models.status, cmds[4] = status.ToModel(m.models.status.Update(msg))
-	m.models.help, cmds[5] = help.ToModel(m.models.help.Update(msg))
-
-	return m, tea.Batch(cmds...)
+	return m.updateModels(msg)
 }
 
 func (m Model) View() string {
@@ -367,4 +359,16 @@ func (m Model) setModels() Model {
 	}
 
 	return m
+}
+
+func (m Model) updateModels(msg tea.Msg) (Model, tea.Cmd) {
+	cmds := make([]tea.Cmd, 6)
+	m.models.info, cmds[0] = info.ToModel(m.models.info.Update(msg))
+	m.models.header, cmds[1] = header.ToModel(m.models.header.Update(msg))
+	m.models.body, cmds[2] = body.ToModel(m.models.body.Update(msg))
+	m.models.footer, cmds[3] = footer.ToModel(m.models.footer.Update(msg))
+	m.models.status, cmds[4] = status.ToModel(m.models.status.Update(msg))
+	m.models.help, cmds[5] = help.ToModel(m.models.help.Update(msg))
+
+	return m, tea.Batch(cmds...)
 }
