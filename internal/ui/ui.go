@@ -37,6 +37,13 @@ type Models struct {
 	message message.Model
 }
 
+type keyResponse struct {
+	model  Model
+	cmd    tea.Cmd
+	end    bool
+	nilMsg bool
+}
+
 type state int
 
 const (
@@ -63,13 +70,6 @@ const (
 	summaryName = "Summary"
 	bodyName    = "Body"
 )
-
-type keyResponse struct {
-	model Model
-	msg   tea.Msg
-	cmd   tea.Cmd
-	end   bool
-}
 
 func New(cfg commit.Config) Model {
 	return Model{
@@ -118,11 +118,14 @@ func (m Model) Init() tea.Cmd {
 //nolint:ireturn
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	//nolint:gocritic
-	switch msg := msg.(type) {
+	switch msgType := msg.(type) {
 	case tea.KeyMsg:
-		resp := m.onKeyPress(msg)
-		if resp.end {
+		resp := m.onKeyPress(msgType)
+		switch {
+		case resp.end:
 			return resp.model, resp.cmd
+		case resp.nilMsg:
+			msg = nil
 		}
 
 		m = resp.model
@@ -231,22 +234,22 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 	switch msg.String() {
 	case "alt+1":
 		if m.state == authorComponent {
-			return keyResponse{model: m, cmd: nil, end: true}
+			return keyResponse{model: m, nilMsg: true}
 		}
 		m.state = authorComponent
 	case "alt+2":
 		if m.state == emojiComponent {
-			return keyResponse{model: m, cmd: nil, end: true}
+			return keyResponse{model: m, nilMsg: true}
 		}
 		m.state = emojiComponent
 	case "alt+3":
 		if m.state == summaryComponent {
-			return keyResponse{model: m, cmd: nil, end: true}
+			return keyResponse{model: m, nilMsg: true}
 		}
 		m.state = summaryComponent
 	case "alt+4":
 		if m.state == bodyComponent {
-			return keyResponse{model: m, cmd: nil, end: true}
+			return keyResponse{model: m, nilMsg: true}
 		}
 		m.state = bodyComponent
 	case "enter":
