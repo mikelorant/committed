@@ -134,41 +134,6 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	m = m.resetModels()
 	m = m.setModels()
 
-	switch m.state {
-	case authorComponent:
-		m.models.info.Focus()
-		m.models.info.Expand = true
-		m.models.body.Height = bodyAuthorHeight
-		m.models.status.Shortcuts = status.GlobalShortcuts(emojiName, emptyName)
-	case emojiComponent:
-		m.models.header.Focus()
-		m.models.header.SelectEmoji()
-		m.models.header.Expand = true
-		m.models.body.Height = bodyEmojiHeight
-		m.models.status.Shortcuts = status.GlobalShortcuts(summaryName, authorName)
-	case summaryComponent:
-		m.models.header.Focus()
-		m.models.header.SelectSummary()
-		m.models.status.Shortcuts = status.GlobalShortcuts(bodyName, emojiName)
-	case bodyComponent:
-		m.models.body.Focus()
-		m.models.status.Shortcuts = status.GlobalShortcuts(emptyName, summaryName)
-	case helpComponent:
-		m.models.status.Shortcuts = status.HelpShortcuts()
-		m.models.help.Focus()
-	}
-
-	if m.signoff {
-		m.models.body.Height -= footerSignoffHeight
-	}
-
-	if m.signoff != m.models.footer.Signoff {
-		m.models.footer.ToggleSignoff()
-		m.models.body, _ = body.ToModel(m.models.body.Update(nil))
-		m.models.footer, _ = footer.ToModel(m.models.footer.Update(nil))
-		return m, nil
-	}
-
 	return m.updateModels(msg)
 }
 
@@ -281,6 +246,9 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 		}
 	case "alt+s":
 		m.signoff = !m.signoff
+		m.models.footer.ToggleSignoff()
+
+		return keyResponse{model: m, end: false, nilMsg: true}
 	case "alt+t":
 		return keyResponse{model: m, cmd: theme.NextTint, end: true}
 	case "alt+/":
