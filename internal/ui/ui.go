@@ -180,26 +180,6 @@ func (m Model) View() string {
 	)
 }
 
-func (m Model) message() message.Model {
-	mc := message.Config{
-		Emoji:   m.models.header.Emoji,
-		Summary: m.models.header.Summary(),
-		Body:    m.models.body.Value(),
-		Footer:  m.models.footer.Value(),
-	}
-
-	return message.New(mc)
-}
-
-func (m Model) validate() bool {
-	//nolint:gocritic
-	switch {
-	case m.Request.Summary == "":
-		return false
-	}
-	return true
-}
-
 func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 	switch msg.String() {
 	case "alt+1":
@@ -237,18 +217,13 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 			m.state = bodyComponent
 		}
 	case "alt+enter":
-		m.Request = &commit.Request{
-			Author:  m.models.info.Author,
-			Emoji:   m.models.header.Emoji.Shortcode,
-			Summary: m.models.header.Summary(),
-			Body:    m.models.body.Value(),
-			Footer:  m.models.footer.Value(),
+		if !m.validate() {
+			break
 		}
-		if m.validate() {
-			m.quit = true
-			m.models.message = m.message()
-			return keyResponse{model: m, cmd: tea.Quit, end: true}
-		}
+
+		m = m.commit()
+
+		return keyResponse{model: m, cmd: tea.Quit, end: true}
 	case "alt+s":
 		m.signoff = !m.signoff
 		m.models.footer.ToggleSignoff()
@@ -351,4 +326,29 @@ func (m Model) updateModels(msg tea.Msg) (Model, tea.Cmd) {
 	}
 
 	return m, tea.Batch(cmds...)
+}
+
+func (m Model) commit() Model {
+	m.quit = true
+
+	m.models.message = message.New(message.Config{
+		Emoji:   m.models.header.Emoji,
+		Summary: m.models.header.Summary(),
+		Body:    m.models.body.Value(),
+		Footer:  m.models.footer.Value(),
+	})
+
+	m.Request = &commit.Request{
+		Author:  m.models.info.Author,
+		Emoji:   m.models.header.Emoji.Shortcode,
+		Summary: m.models.header.Summary(),
+		Body:    m.models.body.Value(),
+		Footer:  m.models.footer.Value(),
+	}
+
+	return m
+}
+
+func (m Model) validate() bool {
+	return m.models.header.Summary() != ""
 }
