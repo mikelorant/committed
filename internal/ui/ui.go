@@ -65,6 +65,13 @@ const (
 	bodyName    = "Body"
 )
 
+type keyResponse struct {
+	model Model
+	msg   tea.Msg
+	cmd   tea.Cmd
+	end   bool
+}
+
 func New(cfg commit.Config) Model {
 	return Model{
 		state: emojiComponent,
@@ -114,90 +121,12 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	//nolint:gocritic
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		switch msg.String() {
-		case "alt+1":
-			if m.state == authorComponent {
-				return m, nil
-			}
-			m.state = authorComponent
-		case "alt+2":
-			if m.state == emojiComponent {
-				return m, nil
-			}
-			m.state = emojiComponent
-		case "alt+3":
-			if m.state == summaryComponent {
-				return m, nil
-			}
-			m.state = summaryComponent
-		case "alt+4":
-			if m.state == bodyComponent {
-				return m, nil
-			}
-			m.state = bodyComponent
-		case "enter":
-			if m.state == authorComponent {
-				m.models.info, _ = info.ToModel(m.models.info.Update(msg))
-				m.state = emojiComponent
-				break
-			}
-			if m.state == emojiComponent {
-				m.models.header, _ = header.ToModel(m.models.header.Update(msg))
-				m.state = summaryComponent
-				break
-			}
-			if m.state == summaryComponent {
-				m.state = bodyComponent
-			}
-		case "alt+enter":
-			m.Request = &commit.Request{
-				Author:  m.models.info.Author,
-				Emoji:   m.models.header.Emoji.Shortcode,
-				Summary: m.models.header.Summary(),
-				Body:    m.models.body.Value(),
-				Footer:  m.models.footer.Value(),
-			}
-			if m.validate() {
-				m.quit = true
-				m.message()
-				return m, tea.Quit
-			}
-		case "alt+s":
-			m.signoff = !m.signoff
-		case "alt+t":
-			return m, theme.NextTint
-		case "alt+/":
-			if m.state == helpComponent {
-				m.state = m.previousState
-				break
-			}
-			m.previousState = m.state
-			m.state = helpComponent
-		case "esc":
-			if m.state == helpComponent {
-				m.state = m.previousState
-			}
-		case "tab":
-			switch m.state {
-			case authorComponent:
-				m.state = emojiComponent
-			case emojiComponent:
-				m.state = summaryComponent
-			case summaryComponent:
-				m.state = bodyComponent
-			}
-		case "shift+tab":
-			switch m.state {
-			case emojiComponent:
-				m.state = authorComponent
-			case summaryComponent:
-				m.state = emojiComponent
-			case bodyComponent:
-				m.state = summaryComponent
-			}
-		case "ctrl+c":
-			return m, tea.Quit
+		resp := m.onKeyPress(msg)
+		if resp.end {
+			return resp.model, resp.cmd
 		}
+
+		m = resp.model
 	}
 
 	m.models.info.Blur()
@@ -299,7 +228,7 @@ func (m Model) View() string {
 	)
 }
 
-func (m *Model) message() {
+func (m Model) message() message.Model {
 	mc := message.Config{
 		Emoji:   m.models.header.Emoji,
 		Summary: m.models.header.Summary(),
@@ -307,7 +236,7 @@ func (m *Model) message() {
 		Footer:  m.models.footer.Value(),
 	}
 
-	m.models.message = message.New(mc)
+	return message.New(mc)
 }
 
 func (m Model) validate() bool {
@@ -317,4 +246,93 @@ func (m Model) validate() bool {
 		return false
 	}
 	return true
+}
+
+func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
+	switch msg.String() {
+	case "alt+1":
+		if m.state == authorComponent {
+			return keyResponse{model: m, cmd: nil, end: true}
+		}
+		m.state = authorComponent
+	case "alt+2":
+		if m.state == emojiComponent {
+			return keyResponse{model: m, cmd: nil, end: true}
+		}
+		m.state = emojiComponent
+	case "alt+3":
+		if m.state == summaryComponent {
+			return keyResponse{model: m, cmd: nil, end: true}
+		}
+		m.state = summaryComponent
+	case "alt+4":
+		if m.state == bodyComponent {
+			return keyResponse{model: m, cmd: nil, end: true}
+		}
+		m.state = bodyComponent
+	case "enter":
+		if m.state == authorComponent {
+			m.models.info, _ = info.ToModel(m.models.info.Update(msg))
+			m.state = emojiComponent
+			break
+		}
+		if m.state == emojiComponent {
+			m.models.header, _ = header.ToModel(m.models.header.Update(msg))
+			m.state = summaryComponent
+			break
+		}
+		if m.state == summaryComponent {
+			m.state = bodyComponent
+		}
+	case "alt+enter":
+		m.Request = &commit.Request{
+			Author:  m.models.info.Author,
+			Emoji:   m.models.header.Emoji.Shortcode,
+			Summary: m.models.header.Summary(),
+			Body:    m.models.body.Value(),
+			Footer:  m.models.footer.Value(),
+		}
+		if m.validate() {
+			m.quit = true
+			m.models.message = m.message()
+			return keyResponse{model: m, cmd: tea.Quit, end: true}
+		}
+	case "alt+s":
+		m.signoff = !m.signoff
+	case "alt+t":
+		return keyResponse{model: m, cmd: theme.NextTint, end: true}
+	case "alt+/":
+		if m.state == helpComponent {
+			m.state = m.previousState
+			break
+		}
+		m.previousState = m.state
+		m.state = helpComponent
+	case "esc":
+		if m.state == helpComponent {
+			m.state = m.previousState
+		}
+	case "tab":
+		switch m.state {
+		case authorComponent:
+			m.state = emojiComponent
+		case emojiComponent:
+			m.state = summaryComponent
+		case summaryComponent:
+			m.state = bodyComponent
+		}
+	case "shift+tab":
+		switch m.state {
+		case emojiComponent:
+			m.state = authorComponent
+		case summaryComponent:
+			m.state = emojiComponent
+		case bodyComponent:
+			m.state = summaryComponent
+		}
+	case "ctrl+c":
+		return keyResponse{model: m, cmd: tea.Quit, end: true}
+	}
+
+	return keyResponse{model: m}
 }
