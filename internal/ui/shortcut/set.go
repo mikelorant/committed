@@ -110,9 +110,9 @@ func (s *shortcutSet) joinShortcuts() []string {
 			continue
 		}
 
-		m := s.styles.shortcutColumnLeft.Render(str)
+		m := s.styles.columnLeft.Render(str)
 		if s.align == AlignRight {
-			m = s.styles.shortcutColumnRight.Render(str)
+			m = s.styles.columnRight.Render(str)
 		}
 
 		ss = append(ss, m)
@@ -176,13 +176,13 @@ func (s shortcutSet) decorateKey(key string, max int, align lipgloss.Position, b
 	padding := 0
 
 	if key != "" {
-		k = s.styles.shortcutKey.Render(key)
+		k = s.styles.key.Render(key)
 		if bracket {
 			padding = 2
 			k = fmt.Sprintf("%v%v%v",
-				s.styles.shortcutAngleBracket.Render("<"),
-				s.styles.shortcutKey.Render(key),
-				s.styles.shortcutAngleBracket.Render(">"),
+				s.styles.angleBracket.Render("<"),
+				s.styles.key.Render(key),
+				s.styles.angleBracket.Render(">"),
 			)
 		}
 	}
@@ -195,7 +195,7 @@ func (s shortcutSet) decorateLabel(label string, max int, align lipgloss.Positio
 	if label != "" {
 		l = label
 		if colour {
-			l = s.styles.shortcutLabel.Render(label)
+			l = s.styles.label.Render(label)
 		}
 	}
 

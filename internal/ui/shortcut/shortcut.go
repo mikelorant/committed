@@ -91,12 +91,12 @@ func (m Model) joinShortcutRow(left, right []string) string {
 	hleft := lipgloss.JoinHorizontal(lipgloss.Top, left...)
 	hright := lipgloss.JoinHorizontal(lipgloss.Top, right...)
 
-	bleft := m.styles.shortcutBlockLeft.Render(hleft)
-	bright := m.styles.shortcutBlockRight.Render(hright)
+	bleft := m.styles.blockLeft.Render(hleft)
+	bright := m.styles.blockRight.Render(hright)
 
 	block := lipgloss.JoinHorizontal(lipgloss.Top, bleft, bright)
 
-	return m.styles.shortcutBoundary.Render(block)
+	return m.styles.boundary.Render(block)
 }
 
 func modifierToShortcut(a int, ms []Modifier) []Shortcut {
@@ -110,7 +110,7 @@ func modifierToShortcut(a int, ms []Modifier) []Shortcut {
 		}
 
 		if strings.TrimSpace(v.Label) != "" {
-			label = defaultStyles().shortcutPlus.String()
+			label = defaultStyles().modifierPlus.String()
 		}
 
 		scs := Shortcut{
