@@ -129,6 +129,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	m = m.resetModels()
+	m = m.setModels()
 
 	switch m.state {
 	case authorComponent:
@@ -332,6 +333,38 @@ func (m Model) resetModels() Model {
 	m.models.body.Height = bodyDefaultHeight
 	m.models.footer.Author = m.models.info.Author
 	m.models.help.Blur()
+
+	return m
+}
+
+func (m Model) setModels() Model {
+	switch m.state {
+	case authorComponent:
+		m.models.info.Focus()
+		m.models.info.Expand = true
+		m.models.body.Height = bodyAuthorHeight
+		m.models.status.Shortcuts = status.GlobalShortcuts(emojiName, emptyName)
+	case emojiComponent:
+		m.models.header.Focus()
+		m.models.header.SelectEmoji()
+		m.models.header.Expand = true
+		m.models.body.Height = bodyEmojiHeight
+		m.models.status.Shortcuts = status.GlobalShortcuts(summaryName, authorName)
+	case summaryComponent:
+		m.models.header.Focus()
+		m.models.header.SelectSummary()
+		m.models.status.Shortcuts = status.GlobalShortcuts(bodyName, emojiName)
+	case bodyComponent:
+		m.models.body.Focus()
+		m.models.status.Shortcuts = status.GlobalShortcuts(emptyName, summaryName)
+	case helpComponent:
+		m.models.status.Shortcuts = status.HelpShortcuts()
+		m.models.help.Focus()
+	}
+
+	if m.signoff {
+		m.models.body.Height -= footerSignoffHeight
+	}
 
 	return m
 }
