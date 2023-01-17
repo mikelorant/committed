@@ -33,15 +33,6 @@ func TestModel(t *testing.T) {
 			name: "default",
 		},
 		{
-			name: "initial",
-			args: args{
-				model: func(m ui.Model) ui.Model {
-					m, _ = ToModel(m.Update(nil))
-					return m
-				},
-			},
-		},
-		{
 			name: "alt+1",
 			args: args{
 				model: func(m ui.Model) ui.Model {

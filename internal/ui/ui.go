@@ -25,6 +25,7 @@ type Model struct {
 	quit          bool
 	signoff       bool
 	err           error
+	ready         bool
 }
 
 type Models struct {
@@ -140,6 +141,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m Model) View() string {
 	if m.err != nil {
 		return fmt.Sprintf("unable to render view: %s", m.err)
+	}
+
+	if !m.ready {
+		return ""
 	}
 
 	if m.quit {
@@ -340,6 +345,10 @@ func (m Model) updateModels(msg tea.Msg) (Model, tea.Cmd) {
 	m.models.footer, cmds[3] = footer.ToModel(m.models.footer.Update(msg))
 	m.models.status, cmds[4] = status.ToModel(m.models.status.Update(msg))
 	m.models.help, cmds[5] = help.ToModel(m.models.help.Update(msg))
+
+	if !m.ready {
+		m.ready = true
+	}
 
 	return m, tea.Batch(cmds...)
 }
