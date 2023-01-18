@@ -109,15 +109,20 @@ func headRefs(ro RefsOptions) ([]string, error) {
 
 func getRefFunc(ro RefsOptions, rr *RefsResult) func(*plumbing.Reference) error {
 	return func(ref *plumbing.Reference) error {
-		if ref.Type() == plumbing.HashReference {
-			if ref.Hash() == ro.headRef.Hash() {
-				name := ref.Name().Short()
-				if (name == ro.localBranch) || (name == ro.remoteBranch) {
-					return nil
-				}
-				rr.refs = append(rr.refs, name)
-			}
+		if ref.Type() != plumbing.HashReference {
+			return nil
 		}
+
+		if ref.Hash() != ro.headRef.Hash() {
+			return nil
+		}
+
+		name := ref.Name().Short()
+		if name == ro.localBranch || name == ro.remoteBranch {
+			return nil
+		}
+
+		rr.refs = append(rr.refs, name)
 
 		return nil
 	}
