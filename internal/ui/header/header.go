@@ -47,7 +47,7 @@ const (
 	filterPromptText = "Choose an emoji:"
 )
 
-func New(cfg commit.Config) Model {
+func New(cfg *commit.Config) Model {
 	m := Model{
 		DefaultHeight: defaultHeight,
 		ExpandHeight:  expandHeight,

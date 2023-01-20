@@ -9,9 +9,10 @@ import (
 )
 
 type Commit struct {
-	Config  Config
 	Options Options
 	Applier func(c repository.Commit, opts ...func(c *repository.Commit)) error
+
+	config Config
 }
 
 type Config struct {
@@ -51,7 +52,15 @@ const (
 	summary  string = "Capitalized, short (50 chars or less) summary"
 )
 
-func New(opts Options) (*Commit, error) {
+func New() Commit {
+	return Commit{
+		Applier: repository.Apply,
+	}
+}
+
+func (c *Commit) Configure(opts Options) (*Config, error) {
+	c.Options = opts
+
 	r, err := repository.New()
 	if err != nil {
 		return nil, fmt.Errorf("unable to get repository: %w", err)
@@ -70,18 +79,14 @@ func New(opts Options) (*Commit, error) {
 		Body:    message,
 	}
 
-	cfg := Config{
+	c.config = Config{
 		Placeholders: placeholders,
 		Emojis:       e.Emojis,
 		Repository:   d,
 		Amend:        opts.Amend,
 	}
 
-	return &Commit{
-		Config:  cfg,
-		Options: opts,
-		Applier: repository.Apply,
-	}, nil
+	return &c.config, nil
 }
 
 func (c *Commit) Apply(req *Request) error {

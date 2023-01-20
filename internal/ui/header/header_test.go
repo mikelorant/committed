@@ -739,7 +739,7 @@ func TestModel(t *testing.T) {
 				tt.args.config(&c)
 			}
 
-			m := header.New(c)
+			m := header.New(&c)
 
 			if tt.args.model != nil {
 				m = tt.args.model(m)

@@ -94,7 +94,7 @@ func TestModel(t *testing.T) {
 				c.Repository.Users = []repository.User{tt.args.author}
 			}
 
-			m := footer.New(c)
+			m := footer.New(&c)
 
 			if tt.args.model != nil {
 				m = tt.args.model(m)

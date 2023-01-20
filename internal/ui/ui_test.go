@@ -495,7 +495,8 @@ func TestModel(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			c := testConfig()
 
-			m := ui.New(c)
+			m := ui.New()
+			m.Configure(&c)
 
 			if tt.args.model != nil {
 				m = tt.args.model(m)

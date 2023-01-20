@@ -167,7 +167,7 @@ func TestModel(t *testing.T) {
 				Amend: tt.args.amend,
 			}
 
-			m := body.New(c, tt.args.height)
+			m := body.New(&c, tt.args.height)
 
 			if tt.args.model != nil {
 				m = tt.args.model(m)

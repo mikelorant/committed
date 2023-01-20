@@ -72,17 +72,20 @@ const (
 	bodyName    = "Body"
 )
 
-func New(cfg commit.Config) Model {
+func New() Model {
 	return Model{
 		state: emojiComponent,
-		models: Models{
-			info:   info.New(cfg),
-			header: header.New(cfg),
-			body:   body.New(cfg, bodyDefaultHeight),
-			footer: footer.New(cfg),
-			status: status.New(),
-			help:   help.New(),
-		},
+	}
+}
+
+func (m *Model) Configure(cfg *commit.Config) {
+	m.models = Models{
+		info:   info.New(cfg),
+		header: header.New(cfg),
+		body:   body.New(cfg, bodyDefaultHeight),
+		footer: footer.New(cfg),
+		status: status.New(),
+		help:   help.New(),
 	}
 }
 

@@ -27,7 +27,7 @@ const (
 	defaultWidth = 72
 )
 
-func New(cfg commit.Config, h int) Model {
+func New(cfg *commit.Config, h int) Model {
 	m := Model{
 		Height:   h,
 		styles:   defaultStyles(),

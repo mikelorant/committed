@@ -176,7 +176,7 @@ func TestModel(t *testing.T) {
 				tt.args.config(&c)
 			}
 
-			m := info.New(c)
+			m := info.New(&c)
 
 			if tt.args.model != nil {
 				m = tt.args.model(m)
