@@ -16,8 +16,8 @@ type MockApply struct {
 	err    error
 }
 
-func (a *MockApply) Apply() func(c repository.Commit, opts ...repository.CommitOptions) error {
-	return func(c repository.Commit, opts ...repository.CommitOptions) error {
+func (a *MockApply) Apply() func(c repository.Commit, opts ...func(c *repository.Commit)) error {
+	return func(c repository.Commit, opts ...func(c *repository.Commit)) error {
 		a.commit = c
 
 		for _, o := range opts {

@@ -11,7 +11,7 @@ import (
 type Commit struct {
 	Config  Config
 	Options Options
-	Applier func(c repository.Commit, opts ...repository.CommitOptions) error
+	Applier func(c repository.Commit, opts ...func(c *repository.Commit)) error
 }
 
 type Config struct {
@@ -96,7 +96,7 @@ func (c *Commit) Apply(req *Request) error {
 		Footer:  req.Footer,
 	}
 
-	opts := []repository.CommitOptions{
+	opts := []func(c *repository.Commit){
 		repository.WithAmend(c.Options.Amend),
 		repository.WithDryRun(c.Options.DryRun),
 	}

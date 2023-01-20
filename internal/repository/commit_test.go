@@ -34,7 +34,7 @@ func (r *MockRunner) Runner() func(w io.Writer, command string, args []string) e
 func TestApply(t *testing.T) {
 	type args struct {
 		commit repository.Commit
-		opts   []repository.CommitOptions
+		opts   []func(c *repository.Commit)
 		err    error
 	}
 
@@ -115,7 +115,7 @@ func TestApply(t *testing.T) {
 					Author:  "John Doe <john.doe@example.com",
 					Subject: ":art: summary",
 				},
-				opts: []repository.CommitOptions{
+				opts: []func(c *repository.Commit){
 					repository.WithAmend(true),
 				},
 			},
@@ -136,7 +136,7 @@ func TestApply(t *testing.T) {
 					Author:  "John Doe <john.doe@example.com",
 					Subject: ":art: summary",
 				},
-				opts: []repository.CommitOptions{
+				opts: []func(c *repository.Commit){
 					repository.WithDryRun(true),
 				},
 			},

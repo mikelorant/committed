@@ -18,11 +18,9 @@ type Commit struct {
 	Runner  func(w io.Writer, command string, args []string) error
 }
 
-type CommitOptions func(c *Commit)
+const command = "git"
 
-const commitCommand = "git"
-
-func Apply(c Commit, opts ...CommitOptions) error {
+func Apply(c Commit, opts ...func(c *Commit)) error {
 	for _, o := range opts {
 		o(&c)
 	}
@@ -31,7 +29,7 @@ func Apply(c Commit, opts ...CommitOptions) error {
 		c.Runner = shell.Run
 	}
 
-	if err := c.Runner(os.Stdout, commitCommand, build(c)); err != nil {
+	if err := c.Runner(os.Stdout, command, build(c)); err != nil {
 		return fmt.Errorf("unable to run command: %w", err)
 	}
 
