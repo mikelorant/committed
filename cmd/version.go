@@ -23,11 +23,8 @@ func NewVersionCmd() *cobra.Command {
 		Short:       "Print the version information",
 		Annotations: annotations(),
 		Run: func(cmd *cobra.Command, args []string) {
-			tmpl, err := template.New("version").Parse(verTmpl)
-			if err != nil {
-				log.Fatal("Unable to parse version template.")
-			}
-			if err = tmpl.Execute(cmd.OutOrStdout(), cmd); err != nil {
+			tmpl := template.Must(template.New("version").Parse(verTmpl))
+			if err := tmpl.Execute(cmd.OutOrStdout(), cmd); err != nil {
 				log.Fatal("Unable to show version.")
 			}
 		},
