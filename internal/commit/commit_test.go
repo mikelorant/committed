@@ -11,14 +11,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type MockDescribe struct {
-	err error
+type MockRepository struct {
+	openErr error
+	descErr error
 }
 
-func (d *MockDescribe) Describe() (repository.Description, error) {
-	var desc repository.Description
+func (r *MockRepository) Open() error {
+	return r.openErr
+}
 
-	return desc, d.err
+func (r *MockRepository) Describe() (repository.Description, error) {
+	return repository.Description{}, r.descErr
 }
 
 type MockApply struct {
@@ -57,7 +60,7 @@ var errMock = errors.New("error")
 func TestConfigure(t *testing.T) {
 	type args struct {
 		opts    commit.Options
-		repoErr error
+		openErr error
 		descErr error
 	}
 
@@ -94,12 +97,12 @@ func TestConfigure(t *testing.T) {
 			},
 		},
 		{
-			name: "repository_error",
+			name: "open_error",
 			args: args{
-				repoErr: errMock,
+				openErr: errMock,
 			},
 			want: want{
-				err: "unable to get repository: error",
+				err: "unable to open repository: error",
 			},
 		},
 		{
@@ -115,14 +118,14 @@ func TestConfigure(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			desc := MockDescribe{
-				err: tt.args.descErr,
+			repo := MockRepository{
+				openErr: tt.args.openErr,
+				descErr: tt.args.descErr,
 			}
 
 			c := commit.Commit{
-				Repoer:    MockNewRepository(tt.args.repoErr),
-				Emojier:   MockNewEmoji,
-				Describer: &desc,
+				Repoer:  &repo,
+				Emojier: MockNewEmoji,
 			}
 
 			cfg, err := c.Configure(tt.args.opts)

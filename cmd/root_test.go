@@ -10,10 +10,10 @@ import (
 	"unicode"
 
 	"github.com/acarl005/stripansi"
+	"github.com/go-git/go-git/v5"
 	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/cmd"
 	"github.com/mikelorant/committed/internal/commit"
-	"github.com/mikelorant/committed/internal/repository"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/stretchr/testify/assert"
@@ -97,7 +97,7 @@ func TestNewRootCmd(t *testing.T) {
 		{
 			name: "repository_error",
 			args: args{
-				configErr: repository.NotFoundError(),
+				configErr: git.ErrRepositoryNotExists,
 			},
 			want: want{
 				err: "No git repository found.",

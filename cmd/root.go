@@ -7,9 +7,9 @@ import (
 	"os"
 
 	"github.com/mikelorant/committed/internal/commit"
-	"github.com/mikelorant/committed/internal/repository"
 	"github.com/mikelorant/committed/internal/ui"
 
+	"github.com/go-git/go-git/v5"
 	cc "github.com/ivanpirog/coloredcobra"
 	"github.com/spf13/cobra"
 )
@@ -99,7 +99,7 @@ func (a *App) configure(opts commit.Options) error {
 	cfg, err := a.Commiter.Configure(opts)
 	switch {
 	case err == nil:
-	case errors.Is(err, repository.NotFoundError()):
+	case errors.Is(err, git.ErrRepositoryNotExists):
 		a.Logger.Fatalf("No git repository found.")
 		return err
 	default:

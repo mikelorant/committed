@@ -9,11 +9,10 @@ import (
 )
 
 type Commit struct {
-	Options   Options
-	Applier   func(repository.Commit, ...func(c *repository.Commit)) error
-	Repoer    func() (*repository.Repository, error)
-	Emojier   func(...func(*emoji.Set)) *emoji.Set
-	Describer Describer
+	Options Options
+	Repoer  Repoer
+	Emojier func(...func(*emoji.Set)) *emoji.Set
+	Applier func(repository.Commit, ...func(c *repository.Commit)) error
 
 	config Config
 }
@@ -55,14 +54,15 @@ const (
 	PlaceholderSummary string = "Capitalized, short (50 chars or less) summary"
 )
 
-type Describer interface {
+type Repoer interface {
+	Open() error
 	Describe() (repository.Description, error)
 }
 
 func New() Commit {
 	return Commit{
 		Applier: repository.Apply,
-		Repoer:  repository.New,
+		Repoer:  repository.New(),
 		Emojier: emoji.New,
 	}
 }
@@ -70,18 +70,11 @@ func New() Commit {
 func (c *Commit) Configure(opts Options) (*Config, error) {
 	c.Options = opts
 
-	r, err := c.Repoer()
-	if err != nil {
-		return nil, fmt.Errorf("unable to get repository: %w", err)
+	if err := c.Repoer.Open(); err != nil {
+		return nil, fmt.Errorf("unable to open repository: %w", err)
 	}
 
-	if c.Describer == nil {
-		c.Describer = r
-	}
-
-	e := c.Emojier()
-
-	d, err := c.Describer.Describe()
+	d, err := c.Repoer.Describe()
 	if err != nil {
 		return nil, fmt.Errorf("unable to describe repository: %w", err)
 	}
@@ -94,7 +87,7 @@ func (c *Commit) Configure(opts Options) (*Config, error) {
 
 	c.config = Config{
 		Placeholders: placeholders,
-		Emojis:       e.Emojis,
+		Emojis:       c.Emojier().Emojis,
 		Repository:   d,
 		Amend:        opts.Amend,
 	}

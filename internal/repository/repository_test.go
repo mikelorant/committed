@@ -4,11 +4,74 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/go-git/go-git/v5"
 	"github.com/mikelorant/committed/internal/repository"
 	"github.com/stretchr/testify/assert"
 )
 
-var errMockDescribe = errors.New("error")
+var (
+	errMockOpen     = errors.New("error")
+	errMockDescribe = errors.New("error")
+)
+
+func MockOpen(err error) func(string, *git.PlainOpenOptions) (*git.Repository, error) {
+	return func(string, *git.PlainOpenOptions) (*git.Repository, error) {
+		return nil, err
+	}
+}
+
+func TestOpen(t *testing.T) {
+	type args struct {
+		err error
+	}
+
+	type want struct {
+		err string
+	}
+
+	tests := []struct {
+		name string
+		args args
+		want want
+	}{
+		{
+			name: "default",
+		},
+		{
+			name: "open_repository_not_exists",
+			args: args{
+				err: git.ErrRepositoryNotExists,
+			},
+			want: want{
+				err: "repository does not exist",
+			},
+		},
+		{
+			name: "open_error",
+			args: args{
+				err: errMockOpen,
+			},
+			want: want{
+				err: "unable to open git repository: .: error",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			repo := repository.New()
+			repo.Opener = MockOpen(tt.args.err)
+
+			err := repo.Open()
+			if tt.want.err != "" {
+				assert.NotNil(t, err)
+				assert.Equal(t, tt.want.err, err.Error())
+				return
+			}
+			assert.Nil(t, err)
+		})
+	}
+}
 
 func TestDescribe(t *testing.T) {
 	type args struct {

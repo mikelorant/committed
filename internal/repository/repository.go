@@ -31,8 +31,9 @@ type Brancher interface {
 }
 
 type Repository struct {
+	Opener       func(string, *git.PlainOpenOptions) (*git.Repository, error)
+	GlobalConfig func(config.Scope) (*config.Config, error)
 	Configer     Configer
-	GlobalConfig func(scope config.Scope) (*config.Config, error)
 	Remoter      Remoter
 	Header       Header
 	Brancher     Brancher
@@ -45,33 +46,35 @@ type Description struct {
 	Branch  Branch
 }
 
-type repositoryNotFoundError struct{}
-
-var errRepositoryNotFound = errors.New("repository does not exist")
-
 const repositoryPath string = "."
 
-func New() (*Repository, error) {
+func New() *Repository {
+	return &Repository{
+		GlobalConfig: config.LoadConfig,
+		Opener:       git.PlainOpenWithOptions,
+	}
+}
+
+func (r *Repository) Open() error {
 	openOpts := git.PlainOpenOptions{
 		DetectDotGit: true,
 	}
 
-	repo, err := git.PlainOpenWithOptions(repositoryPath, &openOpts)
+	repo, err := r.Opener(repositoryPath, &openOpts)
 	switch {
 	case err == nil:
-	case err.Error() == errRepositoryNotFound.Error():
-		return nil, repositoryNotFoundError{}
+	case errors.Is(err, git.ErrRepositoryNotExists):
+		return err
 	default:
-		return nil, fmt.Errorf("unable to open git repository: %v: %w", repositoryPath, err)
+		return fmt.Errorf("unable to open git repository: %v: %w", repositoryPath, err)
 	}
 
-	return &Repository{
-		Configer:     repo,
-		GlobalConfig: config.LoadConfig,
-		Remoter:      repo,
-		Header:       repo,
-		Brancher:     repo,
-	}, nil
+	r.Configer = repo
+	r.Remoter = repo
+	r.Header = repo
+	r.Brancher = repo
+
+	return nil
 }
 
 func (r *Repository) Describe() (Description, error) {
@@ -101,12 +104,4 @@ func (r *Repository) Describe() (Description, error) {
 		Head:    h,
 		Branch:  b,
 	}, nil
-}
-
-func (e repositoryNotFoundError) Error() string {
-	return errRepositoryNotFound.Error()
-}
-
-func NotFoundError() error {
-	return repositoryNotFoundError{}
 }
