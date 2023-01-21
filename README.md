@@ -7,7 +7,7 @@ commits by showing you the layout in the same format as `git log`.
 
 ![demo](docs/demo.gif)
 
-## Highlights
+## 💡 Highlights
 
 - Built-in multiline editor
 - Emoji selector
@@ -18,7 +18,7 @@ commits by showing you the layout in the same format as `git log`.
 - Formats body width to 72 characters
 - Best practise recommendations
 
-## Purpose
+## 💬 Purpose
 
 The benefits of high quality commits are well documented however the tooling to
 follow these practises has been lacking. In most cases you are either providing
@@ -44,7 +44,7 @@ rather than accepting what has already been written.
 These capabilities all contribute to helping create a commit message that is
 useful.
 
-## Compatibility
+## ⚠️ Limitations
 
 Terminals render emojis differently and this makes alignment of borders
 complicated and difficult. It is an ongoing process to improve the compatibility
@@ -62,7 +62,7 @@ update the list.
 | WezTerm        | Compatible              |
 | Kitty          | Border alignment issues |
 
-## Installation
+## 🔨 Installation
 
 Install Committed with Homebrew.
 
@@ -70,7 +70,7 @@ Install Committed with Homebrew.
 brew install mikelorant/taps/committed
 ```
 
-## Usage
+## 🎛️ Usage
 
 ```text
 Committed is a WYSIWYG Git commit editor
@@ -106,7 +106,7 @@ commits created with Committed. The limitations are:
 - Summary will be truncated if more than 72 characters.
 - Lines will not reflow when editing the body.
 
-## Configuration
+## ⚙️ Configuration
 
 No configuration is necessary however there are some values that can be changed
 based on preference.
@@ -121,8 +121,7 @@ view:
   focus: emoji
 ```
 
-## Best Practises
-
+## 🏆 Best Practises
 To create a well formed commit, these are some of the best practises that are
 often cited.
 
@@ -157,7 +156,34 @@ Related links:
 - [Joel Parker Henderson](https://github.com/joelparkerhenderson/git-commit-message)
 - [Chris Beams](https://cbea.ms/git-commit/)
 
-## Views
+## ⌨️ Shortcuts
+
+The global shortcuts can be used within any view.
+
+| Command            | Key       |
+| :----------------- | :-------- |
+| Commit             | alt-enter |
+| Toggle sign-off    | alt-s     |
+| Toggle theme       | alt+t     |
+| Help               | alt-/     |
+| Focus author       | alt-1     |
+| Focus emoji        | alt-2     |
+| Focus summary      | alt-3     |
+| Focus body         | alt-4     |
+| Cancel             | control-c |
+| Next component     | tab       |
+| Previous component | shift-tab |
+
+The emoji shortcuts are limited to the emoji view only.
+
+| Command       | Key       |
+| :------------ | :-------- |
+| Clear emoji   | delete    |
+| Reset filter  | escape    |
+| Next page     | page down |
+| Previous page | page up   |
+
+## 🔍 Views
 
 ### Main
 
@@ -322,37 +348,10 @@ Date:   Mon Jan 2 15:04:05 2006 -0700
  3 files changed, 2 insertions(+), 1 deletions(-)
 ```
 
-## Shortcuts
-
-The global shortcuts can be used within any view.
-
-| Command            | Key       |
-| :----------------- | :-------- |
-| Commit             | alt-enter |
-| Toggle sign-off    | alt-s     |
-| Toggle theme       | alt+t     |
-| Help               | alt-/     |
-| Focus author       | alt-1     |
-| Focus emoji        | alt-2     |
-| Focus summary      | alt-3     |
-| Focus body         | alt-4     |
-| Cancel             | control-c |
-| Next component     | tab       |
-| Previous component | shift-tab |
-
-The emoji shortcuts are limited to the emoji view only.
-
-| Command       | Key       |
-| :------------ | :-------- |
-| Clear emoji   | delete    |
-| Reset filter  | escape    |
-| Next page     | page down |
-| Previous page | page up   |
-
-## Authors
+## ✏️ Authors
 
 - [@mikelorant](https://www.github.com/mikelorant)
 
-## License
+## 🎫 License
 
 [MIT](https://choosealicense.com/licenses/mit/)
