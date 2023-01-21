@@ -5,11 +5,21 @@ import (
 	"testing"
 
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
+
 	"github.com/stretchr/testify/assert"
 )
 
-var errMock = errors.New("error")
+type MockDescribe struct {
+	err error
+}
+
+func (d *MockDescribe) Describe() (repository.Description, error) {
+	var desc repository.Description
+
+	return desc, d.err
+}
 
 type MockApply struct {
 	commit repository.Commit
@@ -29,6 +39,101 @@ func (a *MockApply) Apply() func(c repository.Commit, opts ...func(c *repository
 		}
 
 		return nil
+	}
+}
+
+func MockNewRepository(err error) func() (*repository.Repository, error) {
+	return func() (*repository.Repository, error) {
+		return nil, err
+	}
+}
+
+func MockNewEmoji(opts ...func(*emoji.Set)) *emoji.Set {
+	return &emoji.Set{}
+}
+
+var errMock = errors.New("error")
+
+func TestConfigure(t *testing.T) {
+	type args struct {
+		opts    commit.Options
+		repoErr error
+		descErr error
+	}
+
+	type want struct {
+		cfg commit.Config
+		err string
+	}
+
+	tests := []struct {
+		name string
+		args args
+		want want
+	}{
+		{
+			name: "default",
+			want: want{
+				cfg: commit.Config{
+					Placeholders: testPlaceholders(),
+				},
+			},
+		},
+		{
+			name: "amend",
+			args: args{
+				opts: commit.Options{
+					Amend: true,
+				},
+			},
+			want: want{
+				cfg: commit.Config{
+					Placeholders: testPlaceholders(),
+					Amend:        true,
+				},
+			},
+		},
+		{
+			name: "repository_error",
+			args: args{
+				repoErr: errMock,
+			},
+			want: want{
+				err: "unable to get repository: error",
+			},
+		},
+		{
+			name: "describe_error",
+			args: args{
+				descErr: errMock,
+			},
+			want: want{
+				err: "unable to describe repository: error",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			desc := MockDescribe{
+				err: tt.args.descErr,
+			}
+
+			c := commit.Commit{
+				Repoer:    MockNewRepository(tt.args.repoErr),
+				Emojier:   MockNewEmoji,
+				Describer: &desc,
+			}
+
+			cfg, err := c.Configure(tt.args.opts)
+			if tt.want.err != "" {
+				assert.NotNil(t, err)
+				assert.Equal(t, tt.want.err, err.Error())
+				return
+			}
+			assert.Nil(t, err)
+			assert.Equal(t, &tt.want.cfg, cfg)
+		})
 	}
 }
 
@@ -152,5 +257,13 @@ func TestApply(t *testing.T) {
 			assert.Equal(t, tt.want.amend, a.commit.Amend)
 			assert.Equal(t, tt.want.dryRun, a.commit.DryRun)
 		})
+	}
+}
+
+func testPlaceholders() commit.Placeholders {
+	return commit.Placeholders{
+		Hash:    commit.PlaceholderHash,
+		Summary: commit.PlaceholderSummary,
+		Body:    commit.PlaceholderMessage,
 	}
 }

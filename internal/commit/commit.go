@@ -9,8 +9,11 @@ import (
 )
 
 type Commit struct {
-	Options Options
-	Applier func(c repository.Commit, opts ...func(c *repository.Commit)) error
+	Options   Options
+	Applier   func(repository.Commit, ...func(c *repository.Commit)) error
+	Repoer    func() (*repository.Repository, error)
+	Emojier   func(...func(*emoji.Set)) *emoji.Set
+	Describer Describer
 
 	config Config
 }
@@ -45,38 +48,48 @@ type Placeholders struct {
 }
 
 //go:embed message.txt
-var message string
+var PlaceholderMessage string
 
 const (
-	mockHash string = "1234567890abcdef1234567890abcdef1234567890"
-	summary  string = "Capitalized, short (50 chars or less) summary"
+	PlaceholderHash    string = "1234567890abcdef1234567890abcdef1234567890"
+	PlaceholderSummary string = "Capitalized, short (50 chars or less) summary"
 )
+
+type Describer interface {
+	Describe() (repository.Description, error)
+}
 
 func New() Commit {
 	return Commit{
 		Applier: repository.Apply,
+		Repoer:  repository.New,
+		Emojier: emoji.New,
 	}
 }
 
 func (c *Commit) Configure(opts Options) (*Config, error) {
 	c.Options = opts
 
-	r, err := repository.New()
+	r, err := c.Repoer()
 	if err != nil {
 		return nil, fmt.Errorf("unable to get repository: %w", err)
 	}
 
-	e := emoji.New()
+	if c.Describer == nil {
+		c.Describer = r
+	}
 
-	d, err := r.Describe()
+	e := c.Emojier()
+
+	d, err := c.Describer.Describe()
 	if err != nil {
 		return nil, fmt.Errorf("unable to describe repository: %w", err)
 	}
 
 	placeholders := Placeholders{
-		Hash:    mockHash,
-		Summary: summary,
-		Body:    message,
+		Hash:    PlaceholderHash,
+		Summary: PlaceholderSummary,
+		Body:    PlaceholderMessage,
 	}
 
 	c.config = Config{
