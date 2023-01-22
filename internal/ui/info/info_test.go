@@ -207,7 +207,9 @@ func testState() commit.State {
 				When: time.Date(2022, time.January, 1, 1, 0, 0, 0, time.UTC),
 			},
 		},
-		Amend: true,
+		Options: commit.Options{
+			Amend: true,
+		},
 	}
 }
 

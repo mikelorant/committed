@@ -1,30 +1,43 @@
 package commit
 
 import (
-	_ "embed"
+	"errors"
 	"fmt"
+	"io"
+	"io/fs"
+	"os"
+	"strings"
 
+	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
 )
 
 type Commit struct {
 	Options Options
+	Applier Applier
+	Emojier Emojier
+	Loader  Loader
+	Opener  Opener
 	Repoer  Repoer
-	Emojier func(...func(*emoji.Set)) *emoji.Set
-	Applier func(repository.Commit, ...func(c *repository.Commit)) error
-
-	state State
 }
 
-type State struct {
-	Placeholders Placeholders
-	Repository   repository.Description
-	Emojis       []emoji.Emoji
-	Emoji        emoji.NullEmoji
-	Summary      string
-	Body         string
-	Amend        bool
+type (
+	Applier func(repository.Commit, ...func(c *repository.Commit)) error
+	Emojier func(...func(*emoji.Set)) *emoji.Set
+	Loader  func(io.Reader) (config.Config, error)
+	Opener  func(string) (io.Reader, error)
+)
+
+type Repoer interface {
+	Open() error
+	Describe() (repository.Description, error)
+}
+
+type Options struct {
+	ConfigFile string
+	DryRun     bool
+	Amend      bool
 }
 
 type Request struct {
@@ -35,64 +48,36 @@ type Request struct {
 	Author  repository.User
 }
 
-type Options struct {
-	DryRun bool
-	Amend  bool
-}
-
-type Placeholders struct {
-	Hash    string
-	Summary string
-	Body    string
-}
-
-//go:embed message.txt
-var PlaceholderMessage string
-
-const (
-	PlaceholderHash    string = "1234567890abcdef1234567890abcdef1234567890"
-	PlaceholderSummary string = "Capitalized, short (50 chars or less) summary"
-)
-
-type Repoer interface {
-	Open() error
-	Describe() (repository.Description, error)
-}
-
 func New() Commit {
 	return Commit{
 		Applier: repository.Apply,
-		Repoer:  repository.New(),
 		Emojier: emoji.New,
+		Loader:  config.Load,
+		Opener:  FileOpen(),
+		Repoer:  repository.New(),
 	}
 }
 
 func (c *Commit) Configure(opts Options) (*State, error) {
 	c.Options = opts
 
-	if err := c.Repoer.Open(); err != nil {
-		return nil, fmt.Errorf("unable to open repository: %w", err)
-	}
-
-	d, err := c.Repoer.Describe()
+	repo, err := getRepo(c.Repoer)
 	if err != nil {
-		return nil, fmt.Errorf("unable to describe repository: %w", err)
+		return nil, fmt.Errorf("unable to get repository: %w", err)
 	}
 
-	placeholders := Placeholders{
-		Hash:    PlaceholderHash,
-		Summary: PlaceholderSummary,
-		Body:    PlaceholderMessage,
+	cfg, err := getConfig(c.Opener, c.Loader, opts.ConfigFile)
+	if err != nil {
+		return nil, fmt.Errorf("unable to get config: %w", err)
 	}
 
-	c.state = State{
-		Placeholders: placeholders,
+	return &State{
+		Placeholders: placeholders(),
 		Emojis:       c.Emojier().Emojis,
-		Repository:   d,
-		Amend:        opts.Amend,
-	}
-
-	return &c.state, nil
+		Repository:   repo,
+		Config:       cfg,
+		Options:      opts,
+	}, nil
 }
 
 func (c *Commit) Apply(req *Request) error {
@@ -117,4 +102,48 @@ func (c *Commit) Apply(req *Request) error {
 	}
 
 	return nil
+}
+
+func FileOpen() func(string) (io.Reader, error) {
+	return func(file string) (io.Reader, error) {
+		var pathError *fs.PathError
+
+		fh, err := os.Open(os.ExpandEnv(file))
+		switch {
+		case err == nil:
+		case errors.As(err, &pathError):
+			return strings.NewReader(""), nil
+		default:
+			return nil, err
+		}
+
+		return fh, nil
+	}
+}
+
+func getRepo(repo Repoer) (repository.Description, error) {
+	if err := repo.Open(); err != nil {
+		return repository.Description{}, fmt.Errorf("unable to open repository: %w", err)
+	}
+
+	desc, err := repo.Describe()
+	if err != nil {
+		return repository.Description{}, fmt.Errorf("unable to describe repository: %w", err)
+	}
+
+	return desc, nil
+}
+
+func getConfig(open Opener, load Loader, file string) (config.Config, error) {
+	r, err := open(file)
+	if err != nil {
+		return config.Config{}, fmt.Errorf("unable to open config file: %v: %w", file, err)
+	}
+
+	cfg, err := load(r)
+	if err != nil {
+		return config.Config{}, fmt.Errorf("unable to load config file: %w", err)
+	}
+
+	return cfg, nil
 }

@@ -164,7 +164,9 @@ func TestModel(t *testing.T) {
 						Message: tt.args.message,
 					},
 				},
-				Amend: tt.args.amend,
+				Options: commit.Options{
+					Amend: tt.args.amend,
+				},
 			}
 
 			m := body.New(&c, tt.args.height)

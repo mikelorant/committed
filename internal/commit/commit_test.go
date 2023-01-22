@@ -2,9 +2,15 @@ package commit_test
 
 import (
 	"errors"
+	"fmt"
+	"io"
+	"os"
+	"path"
+	"strings"
 	"testing"
 
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
 
@@ -22,6 +28,14 @@ func (r *MockRepository) Open() error {
 
 func (r *MockRepository) Describe() (repository.Description, error) {
 	return repository.Description{}, r.descErr
+}
+
+type MockConfig struct {
+	err error
+}
+
+func (c *MockConfig) Load(fh io.Reader) (config.Config, error) {
+	return config.Config{}, c.err
 }
 
 type MockApply struct {
@@ -55,13 +69,21 @@ func MockNewEmoji(opts ...func(*emoji.Set)) *emoji.Set {
 	return &emoji.Set{}
 }
 
+func MockOpen(err error) func(string) (io.Reader, error) {
+	return func(file string) (io.Reader, error) {
+		return strings.NewReader(""), err
+	}
+}
+
 var errMock = errors.New("error")
 
 func TestConfigure(t *testing.T) {
 	type args struct {
-		opts    commit.Options
-		openErr error
-		descErr error
+		opts        commit.Options
+		repoOpenErr error
+		repoDescErr error
+		configErr   error
+		openErr     error
 	}
 
 	type want struct {
@@ -79,6 +101,7 @@ func TestConfigure(t *testing.T) {
 			want: want{
 				state: commit.State{
 					Placeholders: testPlaceholders(),
+					Config:       config.Config{},
 				},
 			},
 		},
@@ -92,40 +115,87 @@ func TestConfigure(t *testing.T) {
 			want: want{
 				state: commit.State{
 					Placeholders: testPlaceholders(),
-					Amend:        true,
+					Config:       config.Config{},
+					Options: commit.Options{
+						Amend: true,
+					},
+				},
+			},
+		},
+		{
+			name: "config_file",
+			args: args{
+				opts: commit.Options{
+					ConfigFile: "test",
+				},
+			},
+			want: want{
+				state: commit.State{
+					Placeholders: testPlaceholders(),
+					Config:       config.Config{},
+					Options: commit.Options{
+						ConfigFile: "test",
+					},
 				},
 			},
 		},
 		{
 			name: "open_error",
 			args: args{
-				openErr: errMock,
+				repoOpenErr: errMock,
 			},
 			want: want{
-				err: "unable to open repository: error",
+				err: "unable to get repository: unable to open repository: error",
 			},
 		},
 		{
 			name: "describe_error",
 			args: args{
-				descErr: errMock,
+				repoDescErr: errMock,
 			},
 			want: want{
-				err: "unable to describe repository: error",
+				err: "unable to get repository: unable to describe repository: error",
+			},
+		},
+		{
+			name: "open_error",
+			args: args{
+				opts: commit.Options{
+					ConfigFile: "test",
+				},
+				openErr: errMock,
+			},
+			want: want{
+				err: "unable to get config: unable to open config file: test: error",
+			},
+		},
+		{
+			name: "config_error",
+			args: args{
+				configErr: errMock,
+			},
+			want: want{
+				err: "unable to get config: unable to load config file: error",
 			},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			config := MockConfig{
+				err: tt.args.configErr,
+			}
+
 			repo := MockRepository{
-				openErr: tt.args.openErr,
-				descErr: tt.args.descErr,
+				openErr: tt.args.repoOpenErr,
+				descErr: tt.args.repoDescErr,
 			}
 
 			c := commit.Commit{
 				Repoer:  &repo,
+				Loader:  config.Load,
 				Emojier: MockNewEmoji,
+				Opener:  MockOpen(tt.args.openErr),
 			}
 
 			state, err := c.Configure(tt.args.opts)
@@ -259,6 +329,92 @@ func TestApply(t *testing.T) {
 			assert.Equal(t, tt.want.footer, a.commit.Footer)
 			assert.Equal(t, tt.want.amend, a.commit.Amend)
 			assert.Equal(t, tt.want.dryRun, a.commit.DryRun)
+		})
+	}
+}
+
+func TestFileOpen(t *testing.T) {
+	type args struct {
+		create bool
+		env    bool
+	}
+
+	type want struct {
+		err        error
+		returnType io.Reader
+	}
+
+	tests := []struct {
+		name string
+		args args
+		want want
+	}{
+		{
+			name: "default",
+			args: args{
+				create: true,
+			},
+			want: want{
+				returnType: &os.File{},
+			},
+		},
+		{
+			name: "default_env",
+			args: args{
+				create: true,
+				env:    true,
+			},
+			want: want{
+				returnType: &os.File{},
+			},
+		},
+		{
+			name: "path_error",
+			want: want{
+				returnType: &strings.Reader{},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var (
+				file string
+				dir  string
+			)
+
+			const env = "TEST_ENV"
+
+			tmpDir := t.TempDir()
+
+			if tt.args.env {
+				t.Setenv(env, tmpDir)
+			}
+
+			switch {
+			case tt.args.create && tt.args.env:
+				dir = fmt.Sprintf("$%v", env)
+			case tt.args.create:
+				dir = tmpDir
+			}
+
+			file = path.Join(dir, tt.name)
+
+			if tt.args.create {
+				f := path.Join(tmpDir, tt.name)
+				if _, err := os.Create(os.ExpandEnv(f)); err != nil {
+					t.Fail()
+					return
+				}
+			}
+
+			r, err := commit.FileOpen()(file)
+			if tt.want.err != nil {
+				assert.NotNil(t, err)
+				return
+			}
+			assert.Nil(t, err)
+			assert.IsType(t, tt.want.returnType, r)
 		})
 	}
 }

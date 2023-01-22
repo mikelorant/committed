@@ -34,7 +34,7 @@ func New(state *commit.State, h int) Model {
 		textArea: newTextArea(state.Placeholders.Body, defaultWidth),
 	}
 
-	if state.Amend && state.Repository.Head.Hash != "" {
+	if state.Options.Amend && state.Repository.Head.Hash != "" {
 		m.textArea.SetValue(commit.MessageToBody(state.Repository.Head.Message))
 	}
 

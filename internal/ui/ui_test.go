@@ -544,7 +544,9 @@ func testState() commit.State {
 				Shortcode:   ":art:",
 			},
 		},
-		Amend: true,
+		Options: commit.Options{
+			Amend: true,
+		},
 	}
 }
 

@@ -60,7 +60,7 @@ func New(state *commit.State) Model {
 		),
 	}
 
-	if state.Amend {
+	if state.Options.Amend {
 		m.Hash = state.Repository.Head.Hash
 		m.Date = state.Repository.Head.When.Format(dateTimeFormat)
 	}

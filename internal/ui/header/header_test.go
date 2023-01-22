@@ -51,7 +51,7 @@ func TestModel(t *testing.T) {
 				state: func(c *commit.State) {
 					c.Repository.Head.Hash = "1"
 					c.Repository.Head.Message = "summary"
-					c.Amend = true
+					c.Options.Amend = true
 				},
 			},
 			want: want{
@@ -66,7 +66,7 @@ func TestModel(t *testing.T) {
 				state: func(c *commit.State) {
 					c.Repository.Head.Hash = "1"
 					c.Repository.Head.Message = ":bug: summary"
-					c.Amend = true
+					c.Options.Amend = true
 				},
 			},
 			want: want{
@@ -82,7 +82,7 @@ func TestModel(t *testing.T) {
 				state: func(c *commit.State) {
 					c.Repository.Head.Hash = "1"
 					c.Repository.Head.Message = ":bug:"
-					c.Amend = true
+					c.Options.Amend = true
 				},
 			},
 		},
@@ -92,7 +92,7 @@ func TestModel(t *testing.T) {
 				state: func(c *commit.State) {
 					c.Repository.Head.Hash = "1"
 					c.Repository.Head.Message = "summary\n\nbody"
-					c.Amend = true
+					c.Options.Amend = true
 				},
 			},
 		},

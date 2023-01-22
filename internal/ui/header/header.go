@@ -61,7 +61,7 @@ func New(state *commit.State) Model {
 		),
 	}
 
-	if state.Amend && state.Repository.Head.Hash != "" {
+	if state.Options.Amend && state.Repository.Head.Hash != "" {
 		e := commit.MessageToEmoji(state.Repository.Head.Message)
 		if e.Valid {
 			m.Emoji = e.Emoji
