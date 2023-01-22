@@ -37,7 +37,10 @@ type App struct {
 	opts commit.Options
 }
 
-var defaultDryRun = true
+var (
+	defaultDryRun     = true
+	defaultConfigFile = "$HOME/.config/committed/config.yaml"
+)
 
 func NewRootCmd(a App) *cobra.Command {
 	cmd := &cobra.Command{
@@ -59,6 +62,7 @@ func NewRootCmd(a App) *cobra.Command {
 	cmd.AddCommand(NewVersionCmd())
 	cmd.SetVersionTemplate(verTmpl)
 	cmd.Flags().SortFlags = false
+	cmd.Flags().StringVarP(&a.opts.ConfigFile, "config", "", defaultConfigFile, "Config file location")
 	cmd.Flags().BoolVarP(&a.opts.DryRun, "dry-run", "", defaultDryRun, "Simulate applying a commit")
 	cmd.Flags().BoolVarP(&a.opts.Amend, "amend", "a", false, "Replace the tip of the current branch by creating a new commit")
 
