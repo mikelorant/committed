@@ -19,8 +19,8 @@ import (
 
 type Model struct {
 	Request       *commit.Request
-	state         state
-	previousState state
+	focus         focus
+	previousFocus focus
 	models        Models
 	quit          bool
 	signoff       bool
@@ -45,10 +45,10 @@ type keyResponse struct {
 	nilMsg bool
 }
 
-type state int
+type focus int
 
 const (
-	emptyComponent state = iota
+	emptyComponent focus = iota
 	authorComponent
 	emojiComponent
 	summaryComponent
@@ -74,7 +74,7 @@ const (
 
 func New() Model {
 	return Model{
-		state: emojiComponent,
+		focus: emojiComponent,
 	}
 }
 
@@ -157,7 +157,7 @@ func (m Model) View() string {
 		)
 	}
 
-	if m.state == helpComponent {
+	if m.focus == helpComponent {
 		return lipgloss.JoinVertical(lipgloss.Top,
 			m.models.info.View(),
 			m.models.help.View(),
@@ -186,35 +186,35 @@ func (m Model) View() string {
 func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 	switch msg.String() {
 	case "alt+1":
-		if m.state == authorComponent {
+		if m.focus == authorComponent {
 			return keyResponse{model: m, nilMsg: true}
 		}
-		m.state = authorComponent
+		m.focus = authorComponent
 	case "alt+2":
-		if m.state == emojiComponent {
+		if m.focus == emojiComponent {
 			return keyResponse{model: m, nilMsg: true}
 		}
-		m.state = emojiComponent
+		m.focus = emojiComponent
 	case "alt+3":
-		if m.state == summaryComponent {
+		if m.focus == summaryComponent {
 			return keyResponse{model: m, nilMsg: true}
 		}
-		m.state = summaryComponent
+		m.focus = summaryComponent
 	case "alt+4":
-		if m.state == bodyComponent {
+		if m.focus == bodyComponent {
 			return keyResponse{model: m, nilMsg: true}
 		}
-		m.state = bodyComponent
+		m.focus = bodyComponent
 	case "enter":
-		switch m.state {
+		switch m.focus {
 		case authorComponent:
 			m.models.info, _ = info.ToModel(m.models.info.Update(msg))
-			m.state = emojiComponent
+			m.focus = emojiComponent
 		case emojiComponent:
 			m.models.header, _ = header.ToModel(m.models.header.Update(msg))
-			m.state = summaryComponent
+			m.focus = summaryComponent
 		case summaryComponent:
-			m.state = bodyComponent
+			m.focus = bodyComponent
 		}
 	case "alt+enter":
 		if !m.validate() {
@@ -232,33 +232,33 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 	case "alt+t":
 		return keyResponse{model: m, cmd: theme.NextTint, end: true}
 	case "alt+/":
-		if m.state == helpComponent {
-			m.state = m.previousState
+		if m.focus == helpComponent {
+			m.focus = m.previousFocus
 			break
 		}
-		m.previousState = m.state
-		m.state = helpComponent
+		m.previousFocus = m.focus
+		m.focus = helpComponent
 	case "esc":
-		if m.state == helpComponent {
-			m.state = m.previousState
+		if m.focus == helpComponent {
+			m.focus = m.previousFocus
 		}
 	case "tab":
-		switch m.state {
+		switch m.focus {
 		case authorComponent:
-			m.state = emojiComponent
+			m.focus = emojiComponent
 		case emojiComponent:
-			m.state = summaryComponent
+			m.focus = summaryComponent
 		case summaryComponent:
-			m.state = bodyComponent
+			m.focus = bodyComponent
 		}
 	case "shift+tab":
-		switch m.state {
+		switch m.focus {
 		case emojiComponent:
-			m.state = authorComponent
+			m.focus = authorComponent
 		case summaryComponent:
-			m.state = emojiComponent
+			m.focus = emojiComponent
 		case bodyComponent:
-			m.state = summaryComponent
+			m.focus = summaryComponent
 		}
 	case "ctrl+c":
 		return keyResponse{model: m, cmd: tea.Quit, end: true}
@@ -281,7 +281,7 @@ func (m Model) resetModels() Model {
 }
 
 func (m Model) setModels() Model {
-	switch m.state {
+	switch m.focus {
 	case authorComponent:
 		m.models.info.Focus()
 		m.models.info.Expand = true
