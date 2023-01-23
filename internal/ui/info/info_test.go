@@ -20,7 +20,7 @@ func TestModel(t *testing.T) {
 	}
 
 	type want struct {
-		state func(m info.Model)
+		model func(m info.Model)
 	}
 
 	tests := []struct {
@@ -31,7 +31,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "default",
 			want: want{
-				state: func(m info.Model) {
+				model: func(m info.Model) {
 					assert.False(t, m.Focused())
 				},
 			},
@@ -46,7 +46,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m info.Model) {
+				model: func(m info.Model) {
 					assert.True(t, m.Focused())
 				},
 			},
@@ -63,7 +63,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m info.Model) {
+				model: func(m info.Model) {
 					assert.False(t, m.Focused())
 				},
 			},
@@ -78,7 +78,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m info.Model) {
+				model: func(m info.Model) {
 					assert.True(t, m.Focused())
 				},
 			},
@@ -144,7 +144,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m info.Model) {
+				model: func(m info.Model) {
 					assert.Equal(t, m.Author, testConfigUsers(2)[1])
 				},
 			},
@@ -182,8 +182,8 @@ func TestModel(t *testing.T) {
 				m = tt.args.model(m)
 			}
 
-			if tt.want.state != nil {
-				tt.want.state(m)
+			if tt.want.model != nil {
+				tt.want.model(m)
 			}
 
 			v := uitest.StripString(m.View())

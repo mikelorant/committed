@@ -36,7 +36,7 @@ func TestModel(t *testing.T) {
 	}
 
 	type want struct {
-		state func(m filterlist.Model)
+		model func(m filterlist.Model)
 	}
 
 	tests := []struct {
@@ -66,7 +66,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m filterlist.Model) {
+				model: func(m filterlist.Model) {
 					assert.Equal(t, true, m.Focused())
 				},
 			},
@@ -84,7 +84,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m filterlist.Model) {
+				model: func(m filterlist.Model) {
 					assert.Equal(t, false, m.Focused())
 				},
 			},
@@ -245,7 +245,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m filterlist.Model) {
+				model: func(m filterlist.Model) {
 					title := m.SelectedItem().(MockItem).title
 					assert.Equal(t, "item 1", title)
 				},
@@ -267,7 +267,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m filterlist.Model) {
+				model: func(m filterlist.Model) {
 					f := m.Filter()
 					assert.Equal(t, "", f)
 				},
@@ -294,7 +294,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m filterlist.Model) {
+				model: func(m filterlist.Model) {
 					title := m.SelectedItem().(MockItem).title
 					assert.Equal(t, "newitem 1", title)
 				},
@@ -318,7 +318,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m filterlist.Model) {
+				model: func(m filterlist.Model) {
 					f := m.Filter()
 					assert.Equal(t, "item", f)
 				},
@@ -335,8 +335,8 @@ func TestModel(t *testing.T) {
 				m = tt.args.model(m)
 			}
 
-			if tt.want.state != nil {
-				tt.want.state(m)
+			if tt.want.model != nil {
+				tt.want.model(m)
 			}
 
 			v := uitest.StripString(m.View())

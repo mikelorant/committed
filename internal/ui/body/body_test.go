@@ -23,7 +23,7 @@ func TestModel(t *testing.T) {
 	}
 
 	type want struct {
-		state func(m body.Model)
+		model func(m body.Model)
 	}
 
 	tests := []struct {
@@ -40,7 +40,7 @@ func TestModel(t *testing.T) {
 				body: "placeholder",
 			},
 			want: want{
-				state: func(m body.Model) {
+				model: func(m body.Model) {
 					m, _ = body.ToModel(m.Update(nil))
 					assert.Equal(t, "", m.Value())
 				},
@@ -56,7 +56,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m body.Model) {
+				model: func(m body.Model) {
 					assert.True(t, m.Focused())
 				},
 			},
@@ -73,7 +73,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m body.Model) {
+				model: func(m body.Model) {
 					assert.False(t, m.Focused())
 				},
 			},
@@ -86,7 +86,7 @@ func TestModel(t *testing.T) {
 				message: "summary\n\nbody",
 			},
 			want: want{
-				state: func(m body.Model) {
+				model: func(m body.Model) {
 					assert.Equal(t, "body", m.Value())
 				},
 			},
@@ -99,7 +99,7 @@ func TestModel(t *testing.T) {
 				message: "summary\n\nline 1\nline 2\nline 3\n",
 			},
 			want: want{
-				state: func(m body.Model) {
+				model: func(m body.Model) {
 					assert.Equal(t, "line 1\nline 2\nline 3", uitest.StripString(m.Value()))
 				},
 			},
@@ -118,7 +118,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m body.Model) {
+				model: func(m body.Model) {
 					assert.Equal(t, 3, m.Height)
 				},
 			},
@@ -137,7 +137,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m body.Model) {
+				model: func(m body.Model) {
 					assert.Equal(t, "before    after", m.Value())
 				},
 			},
@@ -145,7 +145,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "empty",
 			want: want{
-				state: func(m body.Model) {
+				model: func(m body.Model) {
 					assert.Equal(t, "", m.Value())
 				},
 			},
@@ -173,8 +173,8 @@ func TestModel(t *testing.T) {
 				m = tt.args.model(m)
 			}
 
-			if tt.want.state != nil {
-				tt.want.state(m)
+			if tt.want.model != nil {
+				tt.want.model(m)
 			}
 
 			v := uitest.StripString(m.View())

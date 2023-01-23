@@ -21,7 +21,7 @@ func TestModel(t *testing.T) {
 	}
 
 	type want struct {
-		state func(m header.Model)
+		model func(m header.Model)
 	}
 
 	tests := []struct {
@@ -40,7 +40,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m header.Model) {
+				model: func(m header.Model) {
 					assert.Equal(t, "", m.Summary())
 				},
 			},
@@ -55,7 +55,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m header.Model) {
+				model: func(m header.Model) {
 					assert.Equal(t, "summary", m.Summary())
 				},
 			},
@@ -70,7 +70,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m header.Model) {
+				model: func(m header.Model) {
 					assert.Equal(t, ":bug:", m.Emoji.Shortcode)
 					assert.Equal(t, "summary", m.Summary())
 				},
@@ -105,7 +105,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m header.Model) {
+				model: func(m header.Model) {
 					assert.True(t, m.Focused())
 				},
 			},
@@ -122,7 +122,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m header.Model) {
+				model: func(m header.Model) {
 					assert.False(t, m.Focused())
 				},
 			},
@@ -140,7 +140,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m header.Model) {
+				model: func(m header.Model) {
 					assert.False(t, m.Focused())
 				},
 			},
@@ -745,8 +745,8 @@ func TestModel(t *testing.T) {
 				m = tt.args.model(m)
 			}
 
-			if tt.want.state != nil {
-				tt.want.state(m)
+			if tt.want.model != nil {
+				tt.want.model(m)
 			}
 
 			v := uitest.StripString(m.View())

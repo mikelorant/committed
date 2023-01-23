@@ -21,7 +21,7 @@ func TestModel(t *testing.T) {
 	}
 
 	type want struct {
-		state func(m ui.Model)
+		model func(m ui.Model)
 	}
 
 	tests := []struct {
@@ -337,7 +337,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m ui.Model) {
+				model: func(m ui.Model) {
 					_, cmd := ToModel(m.Update(tea.KeyMsg{Type: tea.KeyCtrlC}))
 					assert.Equal(t, "tea.quitMsg", fmt.Sprintf("%T", cmd()))
 				},
@@ -355,7 +355,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m ui.Model) {
+				model: func(m ui.Model) {
 					req := commit.Request{
 						Summary: "test",
 						Author: repository.User{
@@ -381,7 +381,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m ui.Model) {
+				model: func(m ui.Model) {
 					req := commit.Request{
 						Emoji:   ":art:",
 						Summary: "test",
@@ -409,7 +409,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m ui.Model) {
+				model: func(m ui.Model) {
 					req := commit.Request{
 						Summary: "test",
 						Body:    "test",
@@ -436,7 +436,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m ui.Model) {
+				model: func(m ui.Model) {
 					req := commit.Request{
 						Summary: "test",
 						Footer:  "Signed-off-by: John Doe <john.doe@example.com>",
@@ -465,7 +465,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m ui.Model) {
+				model: func(m ui.Model) {
 					req := commit.Request{
 						Summary: "test",
 						Author: repository.User{
@@ -502,8 +502,8 @@ func TestModel(t *testing.T) {
 				m = tt.args.model(m)
 			}
 
-			if tt.want.state != nil {
-				tt.want.state(m)
+			if tt.want.model != nil {
+				tt.want.model(m)
 			}
 
 			v := uitest.StripString(m.View())

@@ -18,7 +18,7 @@ func TestModel(t *testing.T) {
 	}
 
 	type want struct {
-		state func(m footer.Model)
+		model func(m footer.Model)
 	}
 
 	tests := []struct {
@@ -35,7 +35,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m footer.Model) {
+				model: func(m footer.Model) {
 					u := repository.User{
 						Name:  "John Doe",
 						Email: "john.doe@example.com",
@@ -61,7 +61,7 @@ func TestModel(t *testing.T) {
 				},
 			},
 			want: want{
-				state: func(m footer.Model) {
+				model: func(m footer.Model) {
 					u := repository.User{
 						Name:  "John Doe",
 						Email: "john.doe@example.com",
@@ -76,7 +76,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "empty",
 			want: want{
-				state: func(m footer.Model) {
+				model: func(m footer.Model) {
 					u := repository.User{}
 
 					assert.Equal(t, u, m.Author)
@@ -100,8 +100,8 @@ func TestModel(t *testing.T) {
 				m = tt.args.model(m)
 			}
 
-			if tt.want.state != nil {
-				tt.want.state(m)
+			if tt.want.model != nil {
+				tt.want.model(m)
 			}
 
 			v := uitest.StripString(m.View())
