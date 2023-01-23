@@ -14,10 +14,10 @@ type Commit struct {
 	Emojier func(...func(*emoji.Set)) *emoji.Set
 	Applier func(repository.Commit, ...func(c *repository.Commit)) error
 
-	config Config
+	state State
 }
 
-type Config struct {
+type State struct {
 	Placeholders Placeholders
 	Repository   repository.Description
 	Emojis       []emoji.Emoji
@@ -67,7 +67,7 @@ func New() Commit {
 	}
 }
 
-func (c *Commit) Configure(opts Options) (*Config, error) {
+func (c *Commit) Configure(opts Options) (*State, error) {
 	c.Options = opts
 
 	if err := c.Repoer.Open(); err != nil {
@@ -85,14 +85,14 @@ func (c *Commit) Configure(opts Options) (*Config, error) {
 		Body:    PlaceholderMessage,
 	}
 
-	c.config = Config{
+	c.state = State{
 		Placeholders: placeholders,
 		Emojis:       c.Emojier().Emojis,
 		Repository:   d,
 		Amend:        opts.Amend,
 	}
 
-	return &c.config, nil
+	return &c.state, nil
 }
 
 func (c *Commit) Apply(req *Request) error {

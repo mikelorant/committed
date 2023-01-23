@@ -38,31 +38,31 @@ const (
 	filterHeight     = 3
 )
 
-func New(cfg *commit.Config) Model {
-	if len(cfg.Repository.Users) == 0 {
-		cfg.Repository.Users = []repository.User{{}}
+func New(state *commit.State) Model {
+	if len(state.Repository.Users) == 0 {
+		state.Repository.Users = []repository.User{{}}
 	}
 
 	m := Model{
-		Hash:         cfg.Placeholders.Hash,
-		LocalBranch:  cfg.Repository.Branch.Local,
-		RemoteBranch: cfg.Repository.Branch.Remote,
-		BranchRefs:   cfg.Repository.Branch.Refs,
-		Remotes:      cfg.Repository.Remotes,
+		Hash:         state.Placeholders.Hash,
+		LocalBranch:  state.Repository.Branch.Local,
+		RemoteBranch: state.Repository.Branch.Remote,
+		BranchRefs:   state.Repository.Branch.Refs,
+		Remotes:      state.Repository.Remotes,
 		Date:         time.Now().Format(dateTimeFormat),
-		Author:       cfg.Repository.Users[0],
-		Authors:      cfg.Repository.Users,
+		Author:       state.Repository.Users[0],
+		Authors:      state.Repository.Users,
 		styles:       defaultStyles(),
 		filterList: filterlist.New(
-			castToListItems(cfg.Repository.Users),
+			castToListItems(state.Repository.Users),
 			filterPromptText,
 			filterHeight,
 		),
 	}
 
-	if cfg.Amend {
-		m.Hash = cfg.Repository.Head.Hash
-		m.Date = cfg.Repository.Head.When.Format(dateTimeFormat)
+	if state.Amend {
+		m.Hash = state.Repository.Head.Hash
+		m.Date = state.Repository.Head.When.Format(dateTimeFormat)
 	}
 
 	return m

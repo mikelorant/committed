@@ -15,8 +15,8 @@ import (
 
 func TestModel(t *testing.T) {
 	type args struct {
-		config func(c *commit.Config)
-		model  func(m info.Model) info.Model
+		state func(c *commit.State)
+		model func(m info.Model) info.Model
 	}
 
 	type want struct {
@@ -86,7 +86,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "remote",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Repository.Branch.Remote = "origin/master"
 				},
 			},
@@ -94,7 +94,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "tags",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Repository.Branch.Refs = []string{"v1.0.0"}
 				},
 			},
@@ -102,7 +102,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "no_users",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Repository.Users = nil
 				},
 			},
@@ -110,7 +110,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "no_local",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Repository.Branch.Local = ""
 				},
 			},
@@ -118,8 +118,8 @@ func TestModel(t *testing.T) {
 		{
 			name: "multiple_users",
 			args: args{
-				config: func(c *commit.Config) {
-					c.Repository.Users = testConfigUsers(2)
+				state: func(c *commit.State) {
+					c.Repository.Users = testStateUsers(2)
 				},
 				model: func(m info.Model) info.Model {
 					m.Focus()
@@ -132,8 +132,8 @@ func TestModel(t *testing.T) {
 		{
 			name: "multiple_users_selected",
 			args: args{
-				config: func(c *commit.Config) {
-					c.Repository.Users = testConfigUsers(2)
+				state: func(c *commit.State) {
+					c.Repository.Users = testStateUsers(2)
 				},
 				model: func(m info.Model) info.Model {
 					m.Focus()
@@ -145,17 +145,17 @@ func TestModel(t *testing.T) {
 			},
 			want: want{
 				model: func(m info.Model) {
-					assert.Equal(t, m.Author, testConfigUsers(2)[1])
+					assert.Equal(t, m.Author, testStateUsers(2)[1])
 				},
 			},
 		},
 		{
 			name: "multiple_users_filtered",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Repository.Users = []repository.User{
-						testConfigUsers(3)[0],
-						testConfigUsers(3)[2],
+						testStateUsers(3)[0],
+						testStateUsers(3)[2],
 					}
 				},
 				model: func(m info.Model) info.Model {
@@ -171,9 +171,9 @@ func TestModel(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := testConfig()
-			if tt.args.config != nil {
-				tt.args.config(&c)
+			c := testState()
+			if tt.args.state != nil {
+				tt.args.state(&c)
 			}
 
 			m := info.New(&c)
@@ -192,8 +192,8 @@ func TestModel(t *testing.T) {
 	}
 }
 
-func testConfig() commit.Config {
-	return commit.Config{
+func testState() commit.State {
+	return commit.State{
 		Placeholders: commit.Placeholders{
 			Hash: "1",
 		},
@@ -201,7 +201,7 @@ func testConfig() commit.Config {
 			Branch: repository.Branch{
 				Local: "master",
 			},
-			Users: testConfigUsers(1),
+			Users: testStateUsers(1),
 			Head: repository.Head{
 				Hash: "1",
 				When: time.Date(2022, time.January, 1, 1, 0, 0, 0, time.UTC),
@@ -211,7 +211,7 @@ func testConfig() commit.Config {
 	}
 }
 
-func testConfigUsers(n int) []repository.User {
+func testStateUsers(n int) []repository.User {
 	return []repository.User{
 		{
 			Name:  "John Doe",

@@ -65,8 +65,8 @@ func TestConfigure(t *testing.T) {
 	}
 
 	type want struct {
-		cfg commit.Config
-		err string
+		state commit.State
+		err   string
 	}
 
 	tests := []struct {
@@ -77,7 +77,7 @@ func TestConfigure(t *testing.T) {
 		{
 			name: "default",
 			want: want{
-				cfg: commit.Config{
+				state: commit.State{
 					Placeholders: testPlaceholders(),
 				},
 			},
@@ -90,7 +90,7 @@ func TestConfigure(t *testing.T) {
 				},
 			},
 			want: want{
-				cfg: commit.Config{
+				state: commit.State{
 					Placeholders: testPlaceholders(),
 					Amend:        true,
 				},
@@ -128,14 +128,14 @@ func TestConfigure(t *testing.T) {
 				Emojier: MockNewEmoji,
 			}
 
-			cfg, err := c.Configure(tt.args.opts)
+			state, err := c.Configure(tt.args.opts)
 			if tt.want.err != "" {
 				assert.NotNil(t, err)
 				assert.Equal(t, tt.want.err, err.Error())
 				return
 			}
 			assert.Nil(t, err)
-			assert.Equal(t, &tt.want.cfg, cfg)
+			assert.Equal(t, &tt.want.state, state)
 		})
 	}
 }

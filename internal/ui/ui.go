@@ -78,12 +78,12 @@ func New() Model {
 	}
 }
 
-func (m *Model) Configure(cfg *commit.Config) {
+func (m *Model) Configure(state *commit.State) {
 	m.models = Models{
-		info:   info.New(cfg),
-		header: header.New(cfg),
-		body:   body.New(cfg, bodyDefaultHeight),
-		footer: footer.New(cfg),
+		info:   info.New(state),
+		header: header.New(state),
+		body:   body.New(state, bodyDefaultHeight),
+		footer: footer.New(state),
 		status: status.New(),
 		help:   help.New(),
 	}
@@ -331,7 +331,7 @@ func (m Model) updateModels(msg tea.Msg) (Model, tea.Cmd) {
 func (m Model) commit() Model {
 	m.quit = true
 
-	m.models.message = message.New(message.Config{
+	m.models.message = message.New(message.State{
 		Emoji:   m.models.header.Emoji,
 		Summary: m.models.header.Summary(),
 		Body:    m.models.body.Value(),

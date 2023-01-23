@@ -15,9 +15,9 @@ import (
 
 func TestModel(t *testing.T) {
 	type args struct {
-		env    map[string]string
-		config func(c *commit.Config)
-		model  func(m header.Model) header.Model
+		env   map[string]string
+		state func(c *commit.State)
+		model func(m header.Model) header.Model
 	}
 
 	type want struct {
@@ -35,7 +35,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "placeholder",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Placeholders.Summary = "placeholder"
 				},
 			},
@@ -48,7 +48,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "amend_summary",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Repository.Head.Hash = "1"
 					c.Repository.Head.Message = "summary"
 					c.Amend = true
@@ -63,7 +63,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "amend_emoji_summary",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Repository.Head.Hash = "1"
 					c.Repository.Head.Message = ":bug: summary"
 					c.Amend = true
@@ -79,7 +79,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "amend_emoji",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Repository.Head.Hash = "1"
 					c.Repository.Head.Message = ":bug:"
 					c.Amend = true
@@ -89,7 +89,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "amend_summary_multiline",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Repository.Head.Hash = "1"
 					c.Repository.Head.Message = "summary\n\nbody"
 					c.Amend = true
@@ -159,7 +159,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "expand_emojis",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Emojis = emoji.New().Emojis
 					c.Repository.Head.Message = "summary\n\nbody"
 				},
@@ -177,7 +177,7 @@ func TestModel(t *testing.T) {
 				env: map[string]string{
 					"COMMITTED_TERMINAL": "ttyd",
 				},
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Emojis = emoji.New().Emojis
 					c.Repository.Head.Message = "summary\n\nbody"
 				},
@@ -192,7 +192,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "filter_emoji",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Emojis = emoji.New().Emojis
 				},
 				model: func(m header.Model) header.Model {
@@ -209,7 +209,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "filter_emoji_no_match",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Emojis = emoji.New().Emojis
 				},
 				model: func(m header.Model) header.Model {
@@ -226,7 +226,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "select_emoji",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Emojis = emoji.New().Emojis
 				},
 				model: func(m header.Model) header.Model {
@@ -247,7 +247,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "select_emoji_down",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Emojis = emoji.New().Emojis
 				},
 				model: func(m header.Model) header.Model {
@@ -271,7 +271,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "select_emoji_down_up",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Emojis = emoji.New().Emojis
 				},
 				model: func(m header.Model) header.Model {
@@ -296,7 +296,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "select_emoji_page_down_page_up",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Emojis = emoji.New().Emojis
 				},
 				model: func(m header.Model) header.Model {
@@ -321,7 +321,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "select_emoji_page_down_last_page",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Emojis = emoji.New().Emojis
 				},
 				model: func(m header.Model) header.Model {
@@ -345,7 +345,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "select_emoji_page_down_last_page_page_up",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Emojis = emoji.New().Emojis
 				},
 				model: func(m header.Model) header.Model {
@@ -370,7 +370,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "select_emoji_page_down_last_page_exceeded",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Emojis = emoji.New().Emojis
 				},
 				model: func(m header.Model) header.Model {
@@ -394,7 +394,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "select_emoji_page_down_last_page_exceeded_page_up",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Emojis = emoji.New().Emojis
 				},
 				model: func(m header.Model) header.Model {
@@ -419,7 +419,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "select_emoji_filter",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Emojis = emoji.New().Emojis
 				},
 				model: func(m header.Model) header.Model {
@@ -442,7 +442,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "select_emoji_filter_clear",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Emojis = emoji.New().Emojis
 				},
 				model: func(m header.Model) header.Model {
@@ -467,7 +467,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "select_emoji_delete",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Emojis = emoji.New().Emojis
 				},
 				model: func(m header.Model) header.Model {
@@ -489,7 +489,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "emoji_empty_delete",
 			args: args{
-				config: func(c *commit.Config) {
+				state: func(c *commit.State) {
 					c.Emojis = emoji.New().Emojis
 				},
 				model: func(m header.Model) header.Model {
@@ -734,9 +734,9 @@ func TestModel(t *testing.T) {
 				t.Setenv(k, v)
 			}
 
-			c := testConfig()
-			if tt.args.config != nil {
-				tt.args.config(&c)
+			c := testState()
+			if tt.args.state != nil {
+				tt.args.state(&c)
 			}
 
 			m := header.New(&c)
@@ -755,8 +755,8 @@ func TestModel(t *testing.T) {
 	}
 }
 
-func testConfig() commit.Config {
-	return commit.Config{
+func testState() commit.State {
+	return commit.State{
 		Placeholders: commit.Placeholders{
 			Hash: "1",
 		},

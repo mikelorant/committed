@@ -15,12 +15,12 @@ import (
 )
 
 type Commiter interface {
-	Configure(opts commit.Options) (*commit.Config, error)
+	Configure(opts commit.Options) (*commit.State, error)
 	Apply(req *commit.Request) error
 }
 
 type UIer interface {
-	Configure(cfg *commit.Config)
+	Configure(cfg *commit.State)
 	Start() (*commit.Request, error)
 }
 
@@ -96,7 +96,7 @@ func NewApp() App {
 }
 
 func (a *App) configure(opts commit.Options) error {
-	cfg, err := a.Commiter.Configure(opts)
+	state, err := a.Commiter.Configure(opts)
 	switch {
 	case err == nil:
 	case errors.Is(err, git.ErrRepositoryNotExists):
@@ -107,7 +107,7 @@ func (a *App) configure(opts commit.Options) error {
 		return err
 	}
 
-	a.UIer.Configure(cfg)
+	a.UIer.Configure(state)
 
 	return nil
 }

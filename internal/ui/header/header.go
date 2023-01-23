@@ -47,26 +47,26 @@ const (
 	filterPromptText = "Choose an emoji:"
 )
 
-func New(cfg *commit.Config) Model {
+func New(state *commit.State) Model {
 	m := Model{
 		DefaultHeight: defaultHeight,
 		ExpandHeight:  expandHeight,
-		Emojis:        cfg.Emojis,
+		Emojis:        state.Emojis,
 		styles:        defaultStyles(),
-		summaryInput:  summaryInput(cfg.Placeholders.Summary),
+		summaryInput:  summaryInput(state.Placeholders.Summary),
 		filterList: filterlist.New(
-			castToListItems(cfg.Emojis),
+			castToListItems(state.Emojis),
 			filterPromptText,
 			filterHeight,
 		),
 	}
 
-	if cfg.Amend && cfg.Repository.Head.Hash != "" {
-		e := commit.MessageToEmoji(cfg.Repository.Head.Message)
+	if state.Amend && state.Repository.Head.Hash != "" {
+		e := commit.MessageToEmoji(state.Repository.Head.Message)
 		if e.Valid {
 			m.Emoji = e.Emoji
 		}
-		m.summaryInput.SetValue(commit.MessageToSummary(cfg.Repository.Head.Message))
+		m.summaryInput.SetValue(commit.MessageToSummary(state.Repository.Head.Message))
 	}
 
 	return m

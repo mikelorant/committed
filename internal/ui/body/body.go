@@ -27,15 +27,15 @@ const (
 	defaultWidth = 72
 )
 
-func New(cfg *commit.Config, h int) Model {
+func New(state *commit.State, h int) Model {
 	m := Model{
 		Height:   h,
 		styles:   defaultStyles(),
-		textArea: newTextArea(cfg.Placeholders.Body, defaultWidth),
+		textArea: newTextArea(state.Placeholders.Body, defaultWidth),
 	}
 
-	if cfg.Amend && cfg.Repository.Head.Hash != "" {
-		m.textArea.SetValue(commit.MessageToBody(cfg.Repository.Head.Message))
+	if state.Amend && state.Repository.Head.Hash != "" {
+		m.textArea.SetValue(commit.MessageToBody(state.Repository.Head.Message))
 	}
 
 	return m

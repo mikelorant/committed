@@ -493,7 +493,7 @@ func TestModel(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := testConfig()
+			c := testState()
 
 			m := ui.New()
 			m.Configure(&c)
@@ -512,8 +512,8 @@ func TestModel(t *testing.T) {
 	}
 }
 
-func testConfig() commit.Config {
-	return commit.Config{
+func testState() commit.State {
+	return commit.State{
 		Placeholders: commit.Placeholders{
 			Summary: "placeholder",
 			Body:    "placeholder",

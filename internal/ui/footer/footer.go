@@ -15,13 +15,13 @@ type Model struct {
 	Signoff bool
 }
 
-func New(cfg *commit.Config) Model {
-	if len(cfg.Repository.Users) == 0 {
-		cfg.Repository.Users = []repository.User{{}}
+func New(state *commit.State) Model {
+	if len(state.Repository.Users) == 0 {
+		state.Repository.Users = []repository.User{{}}
 	}
 
 	return Model{
-		Author: cfg.Repository.Users[0],
+		Author: state.Repository.Users[0],
 	}
 }
 

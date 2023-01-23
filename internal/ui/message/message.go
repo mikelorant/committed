@@ -16,19 +16,19 @@ type Model struct {
 	styles  Styles
 }
 
-type Config struct {
+type State struct {
 	Emoji   emoji.Emoji
 	Summary string
 	Body    string
 	Footer  string
 }
 
-func New(cfg Config) Model {
+func New(state State) Model {
 	return Model{
-		emoji:   cfg.Emoji,
-		summary: cfg.Summary,
-		body:    cfg.Body,
-		footer:  cfg.Footer,
+		emoji:   state.Emoji,
+		summary: state.Summary,
+		body:    state.Body,
+		footer:  state.Footer,
 		styles:  defaultStyles(),
 	}
 }

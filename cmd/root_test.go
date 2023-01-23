@@ -43,7 +43,7 @@ func (m MockLogger) String() string {
 	return strings.TrimSpace(string(out))
 }
 
-func (m *MockCommit) Configure(opts commit.Options) (*commit.Config, error) {
+func (m *MockCommit) Configure(opts commit.Options) (*commit.State, error) {
 	return nil, m.configErr
 }
 
@@ -51,7 +51,7 @@ func (m *MockCommit) Apply(req *commit.Request) error {
 	return m.applyErr
 }
 
-func (m *MockUI) Configure(cfg *commit.Config) {}
+func (m *MockUI) Configure(cfg *commit.State) {}
 
 func (m *MockUI) Start() (*commit.Request, error) {
 	return nil, m.err
