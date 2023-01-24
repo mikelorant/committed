@@ -12,11 +12,11 @@ type Styles struct {
 	counterLimit                 lipgloss.Style
 	counterBoundary              lipgloss.Style
 	emojiConnector               lipgloss.Style
-	filterListBoundary           lipgloss.Style
 	summaryInputPromptStyle      lipgloss.Style
 	summaryInputTextStyle        lipgloss.Style
 	summaryInputPlaceholderStyle lipgloss.Style
 	summaryInputCursorStyle      lipgloss.Style
+	spacer                       lipgloss.Style
 }
 
 const (
@@ -61,9 +61,6 @@ func defaultStyles() Styles {
 		Height(3).
 		Align(lipgloss.Right, lipgloss.Center)
 
-	s.filterListBoundary = lipgloss.NewStyle().
-		MarginTop(1)
-
 	s.summaryInputPromptStyle = lipgloss.NewStyle().
 		Foreground(colour.SummaryInputPromptStyle)
 
@@ -75,6 +72,9 @@ func defaultStyles() Styles {
 
 	s.summaryInputCursorStyle = lipgloss.NewStyle().
 		Foreground(colour.SummaryInputCursorStyle)
+
+	s.spacer = lipgloss.NewStyle().
+		Height(1)
 
 	return s
 }

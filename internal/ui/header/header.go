@@ -8,6 +8,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/fuzzy"
 	"github.com/mikelorant/committed/internal/ui/filterlist"
@@ -24,6 +25,7 @@ type Model struct {
 
 	focus     bool
 	component component
+	state     *commit.State
 	styles    Styles
 	height    int
 
@@ -52,6 +54,7 @@ func New(state *commit.State) Model {
 		DefaultHeight: defaultHeight,
 		ExpandHeight:  expandHeight,
 		Emojis:        state.Emojis,
+		state:         state,
 		styles:        defaultStyles(),
 		summaryInput:  summaryInput(state.Placeholders.Summary),
 		filterList: filterlist.New(
@@ -182,9 +185,15 @@ func (m Model) headerRow() string {
 		return lipgloss.NewStyle().Height(m.height).Render(subject)
 	}
 
-	fl := m.styles.filterListBoundary.Render(m.filterList.View())
+	top := subject
+	bottom := m.filterList.View()
+	spacer := m.styles.spacer.Render("")
 
-	expand := lipgloss.JoinVertical(lipgloss.Top, subject, fl)
+	if m.state.Config.View.EmojiSelector == config.EmojiSelectorAbove {
+		top, bottom = bottom, top
+	}
+
+	expand := lipgloss.JoinVertical(lipgloss.Top, top, spacer, bottom)
 
 	return lipgloss.NewStyle().Height(m.height).Render(expand)
 }

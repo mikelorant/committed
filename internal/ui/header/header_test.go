@@ -7,6 +7,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/ui/header"
 	"github.com/mikelorant/committed/internal/ui/uitest"
@@ -723,6 +724,36 @@ func TestModel(t *testing.T) {
 			want: want{
 				func(m header.Model) {
 					assert.Len(t, m.Summary(), 72)
+				},
+			},
+		},
+		{
+			name: "config_below",
+			args: args{
+				state: func(c *commit.State) {
+					c.Config.View.EmojiSelector = config.EmojiSelectorBelow
+				},
+				model: func(m header.Model) header.Model {
+					m.Focus()
+					m.SelectEmoji()
+					m.Expand = true
+					m, _ = header.ToModel(m.Update(nil))
+					return m
+				},
+			},
+		},
+		{
+			name: "config_above",
+			args: args{
+				state: func(c *commit.State) {
+					c.Config.View.EmojiSelector = config.EmojiSelectorAbove
+				},
+				model: func(m header.Model) header.Model {
+					m.Focus()
+					m.SelectEmoji()
+					m.Expand = true
+					m, _ = header.ToModel(m.Update(nil))
+					return m
 				},
 			},
 		},

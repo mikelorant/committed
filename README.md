@@ -119,6 +119,10 @@ view:
   # Values: author, emoji, summary
   # Default: emoji
   focus: emoji
+  # Emoji selector placement in relation to subject.
+  # Values: above, below
+  # Default: below
+  emojiSelector: below
 ```
 
 ## 🏆 Best Practises
