@@ -8,6 +8,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
 	"github.com/mikelorant/committed/internal/ui"
@@ -17,11 +18,12 @@ import (
 
 func TestModel(t *testing.T) {
 	type args struct {
-		model func(m ui.Model) ui.Model
+		state func(*commit.State)
+		model func(ui.Model) ui.Model
 	}
 
 	type want struct {
-		model func(m ui.Model)
+		model func(ui.Model)
 	}
 
 	tests := []struct {
@@ -489,11 +491,53 @@ func TestModel(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "config_author",
+			args: args{
+				state: func(s *commit.State) {
+					s.Config.View.Focus = config.FocusAuthor
+				},
+				model: func(m ui.Model) ui.Model {
+					m, _ = ToModel(m.Update(nil))
+					return m
+				},
+			},
+		},
+		{
+			name: "config_emoji",
+			args: args{
+				state: func(s *commit.State) {
+					s.Config.View.Focus = config.FocusEmoji
+				},
+				model: func(m ui.Model) ui.Model {
+					m, _ = ToModel(m.Update(nil))
+					m, _ = ToModel(uitest.SendString(m, "test"), nil)
+					return m
+				},
+			},
+		},
+		{
+			name: "config_summary",
+			args: args{
+				state: func(s *commit.State) {
+					s.Config.View.Focus = config.FocusSummary
+				},
+				model: func(m ui.Model) ui.Model {
+					m, _ = ToModel(m.Update(nil))
+					m, _ = ToModel(uitest.SendString(m, "test"), nil)
+					return m
+				},
+			},
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := testState()
+
+			if tt.args.state != nil {
+				tt.args.state(&c)
+			}
 
 			m := ui.New()
 			m.Configure(&c)

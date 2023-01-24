@@ -7,6 +7,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/ui/body"
 	"github.com/mikelorant/committed/internal/ui/footer"
 	"github.com/mikelorant/committed/internal/ui/header"
@@ -73,9 +74,7 @@ const (
 )
 
 func New() Model {
-	return Model{
-		focus: emojiComponent,
-	}
+	return Model{}
 }
 
 func (m *Model) Configure(state *commit.State) {
@@ -87,6 +86,8 @@ func (m *Model) Configure(state *commit.State) {
 		status: status.New(),
 		help:   help.New(),
 	}
+
+	m.defaultFocus(state.Config)
 }
 
 func (m Model) Start() (*commit.Request, error) {
@@ -351,4 +352,17 @@ func (m Model) commit() Model {
 
 func (m Model) validate() bool {
 	return m.models.header.Summary() != ""
+}
+
+func (m *Model) defaultFocus(cfg config.Config) {
+	switch cfg.View.Focus {
+	case config.FocusAuthor:
+		m.focus = authorComponent
+	case config.FocusEmoji:
+		m.focus = emojiComponent
+	case config.FocusSummary:
+		m.focus = summaryComponent
+	default:
+		m.focus = emojiComponent
+	}
 }

@@ -106,6 +106,21 @@ commits created with Committed. The limitations are:
 - Summary will be truncated if more than 72 characters.
 - Lines will not reflow when editing the body.
 
+## Configuration
+
+No configuration is necessary however there are some values that can be changed
+based on preference.
+
+Committed defaults to using a config file located at `$HOME/.config/committed/config.yaml`.
+
+```yaml
+view:
+  # Starting component focus.
+  # Values: author, emoji, summary
+  # Default: emoji
+  focus: emoji
+```
+
 ## Best Practises
 
 To create a well formed commit, these are some of the best practises that are
