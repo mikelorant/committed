@@ -167,6 +167,104 @@ func TestModel(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "users_mixed",
+			args: args{
+				state: func(c *commit.State) {
+					c.Repository.Users = []repository.User{
+						testStateUsers(3)[0],
+					}
+					c.Config.Authors = []repository.User{
+						testStateUsers(3)[1],
+					}
+				},
+				model: func(m info.Model) info.Model {
+					m.Focus()
+					m.Expand = true
+					m, _ = info.ToModel(m.Update(nil))
+					return m
+				},
+			},
+		},
+		{
+			name: "users_mixed_multiple",
+			args: args{
+				state: func(c *commit.State) {
+					c.Repository.Users = []repository.User{
+						testStateUsers(3)[0],
+					}
+					c.Config.Authors = []repository.User{
+						testStateUsers(3)[1],
+						testStateUsers(3)[2],
+					}
+				},
+				model: func(m info.Model) info.Model {
+					m.Focus()
+					m.Expand = true
+					m, _ = info.ToModel(m.Update(nil))
+					return m
+				},
+			},
+		},
+		{
+			name: "repository_user_only",
+			args: args{
+				model: func(m info.Model) info.Model {
+					m.Focus()
+					m.Expand = true
+					m, _ = info.ToModel(m.Update(nil))
+					return m
+				},
+			},
+		},
+		{
+			name: "config_user_only",
+			args: args{
+				state: func(c *commit.State) {
+					c.Repository.Users = nil
+					c.Config.Authors = []repository.User{
+						testStateUsers(3)[0],
+						testStateUsers(3)[1],
+					}
+				},
+				model: func(m info.Model) info.Model {
+					m.Focus()
+					m.Expand = true
+					m, _ = info.ToModel(m.Update(nil))
+					return m
+				},
+			},
+		},
+		{
+			name: "users_both_nil",
+			args: args{
+				state: func(c *commit.State) {
+					c.Repository.Users = nil
+					c.Config.Authors = nil
+				},
+				model: func(m info.Model) info.Model {
+					m.Focus()
+					m.Expand = true
+					m, _ = info.ToModel(m.Update(nil))
+					return m
+				},
+			},
+		},
+		{
+			name: "users_both_empty",
+			args: args{
+				state: func(c *commit.State) {
+					c.Repository.Users = []repository.User{}
+					c.Config.Authors = []repository.User{}
+				},
+				model: func(m info.Model) info.Model {
+					m.Focus()
+					m.Expand = true
+					m, _ = info.ToModel(m.Update(nil))
+					return m
+				},
+			},
+		},
 	}
 
 	for _, tt := range tests {

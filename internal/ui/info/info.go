@@ -39,8 +39,10 @@ const (
 )
 
 func New(state *commit.State) Model {
-	if len(state.Repository.Users) == 0 {
-		state.Repository.Users = []repository.User{{}}
+	authors := concatSlice(state.Repository.Users, state.Config.Authors)
+
+	if len(authors) == 0 {
+		authors = []repository.User{{}}
 	}
 
 	m := Model{
@@ -50,8 +52,8 @@ func New(state *commit.State) Model {
 		BranchRefs:   state.Repository.Branch.Refs,
 		Remotes:      state.Repository.Remotes,
 		Date:         time.Now().Format(dateTimeFormat),
-		Author:       state.Repository.Users[0],
-		Authors:      state.Repository.Users,
+		Author:       authors[0],
+		Authors:      authors,
 		styles:       defaultStyles(),
 		filterList: filterlist.New(
 			castToListItems(state.Repository.Users),
@@ -231,4 +233,9 @@ func containsPrefixes(str string, ps []string) bool {
 	}
 
 	return false
+}
+
+func concatSlice[T any](first []T, second []T) []T {
+	n := len(first)
+	return append(first[:n:n], second...)
 }

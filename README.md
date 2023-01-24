@@ -123,6 +123,11 @@ view:
   # Values: above, below
   # Default: below
   emojiSelector: below
+
+authors:
+  # List of extra authors.
+  - name: John Doe
+    email: john.doe@example.com
 ```
 
 ## 🏆 Best Practises
