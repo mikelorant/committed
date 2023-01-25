@@ -529,6 +529,30 @@ func TestModel(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "config_signoff_off",
+			args: args{
+				state: func(s *commit.State) {
+					s.Config.Commit.Signoff = false
+				},
+				model: func(m ui.Model) ui.Model {
+					m, _ = ToModel(m.Update(nil))
+					return m
+				},
+			},
+		},
+		{
+			name: "config_signoff_on",
+			args: args{
+				state: func(s *commit.State) {
+					s.Config.Commit.Signoff = true
+				},
+				model: func(m ui.Model) ui.Model {
+					m, _ = ToModel(m.Update(nil))
+					return m
+				},
+			},
+		},
 	}
 
 	for _, tt := range tests {

@@ -124,6 +124,12 @@ view:
   # Default: below
   emojiSelector: below
 
+commit:
+  # Enable author sign-off for commits.
+  # Values: true, false
+  # Default: false
+  signoff: false
+
 authors:
   # List of extra authors.
   - name: John Doe

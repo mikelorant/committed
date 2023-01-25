@@ -88,6 +88,7 @@ func (m *Model) Configure(state *commit.State) {
 	}
 
 	m.defaultFocus(state.Config)
+	m.signoff = state.Config.Commit.Signoff
 }
 
 func (m Model) Start() (*commit.Request, error) {
@@ -227,7 +228,6 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 		return keyResponse{model: m, cmd: tea.Quit, end: true}
 	case "alt+s":
 		m.signoff = !m.signoff
-		m.models.footer.ToggleSignoff()
 
 		return keyResponse{model: m, end: false, nilMsg: true}
 	case "alt+t":
@@ -276,6 +276,7 @@ func (m Model) resetModels() Model {
 	m.models.body.Blur()
 	m.models.body.Height = bodyDefaultHeight
 	m.models.footer.Author = m.models.info.Author
+	m.models.footer.Signoff = m.signoff
 	m.models.help.Blur()
 
 	return m

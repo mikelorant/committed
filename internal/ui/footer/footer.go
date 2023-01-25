@@ -16,12 +16,14 @@ type Model struct {
 }
 
 func New(state *commit.State) Model {
-	if len(state.Repository.Users) == 0 {
-		state.Repository.Users = []repository.User{{}}
+	authors := concatSlice(state.Repository.Users, state.Config.Authors)
+
+	if len(authors) == 0 {
+		authors = []repository.User{{}}
 	}
 
 	return Model{
-		Author: state.Repository.Users[0],
+		Author: authors[0],
 	}
 }
 
@@ -67,4 +69,9 @@ func (m Model) signoff() string {
 
 func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
 	return m.(Model), c
+}
+
+func concatSlice[T any](first []T, second []T) []T {
+	n := len(first)
+	return append(first[:n:n], second...)
 }
