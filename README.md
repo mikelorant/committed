@@ -141,6 +141,7 @@ authors:
 ```
 
 ## 🏆 Best Practises
+
 To create a well formed commit, these are some of the best practises that are
 often cited.
 
