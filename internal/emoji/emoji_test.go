@@ -17,6 +17,16 @@ var firstGitmojiEmoji = emoji.Emoji{
 	Shortcode:   ":art:",
 }
 
+var firstDevmojiEmoji = emoji.Emoji{
+	Name:        "feat",
+	Character:   "✨",
+	Description: "fix: a bug fix",
+	Characters:  1,
+	Codepoint:   "2728",
+	Hex:         "F0 9F 93 9D",
+	Shortcode:   ":sparkles:",
+}
+
 func TestNew(t *testing.T) {
 	type want struct {
 		len   int
@@ -50,8 +60,9 @@ func TestNew(t *testing.T) {
 			name:    "devmoji",
 			options: emoji.WithEmojiSet(emoji.DevmojiProfile),
 			want: want{
-				len:  0,
-				name: "gitmoji",
+				len:   19,
+				name:  "devmoji",
+				emoji: firstDevmojiEmoji,
 			},
 		},
 	}
@@ -62,6 +73,7 @@ func TestNew(t *testing.T) {
 
 			assert.Equal(t, tt.want.len, len(e.Emojis))
 			if len(e.Emojis) > 0 {
+				assert.Equal(t, tt.want.name, e.Name)
 				assert.Equal(t, tt.want.emoji, e.Emojis[0])
 			}
 		})

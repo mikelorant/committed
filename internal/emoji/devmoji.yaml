@@ -1,0 +1,151 @@
+- name: feat
+  emoji: ✨
+  description: "fix: a bug fix"
+  characters: 1
+  codepoint: 2728
+  hex: F0 9F 93 9D
+  shortcode: ":sparkles:"
+
+- name: fix
+  emoji: 🐛
+  description: "feat: a new feature"
+  characters: 1
+  codepoint: e525
+  hex: F0 9F 90 9B
+  shortcode: ":bug:"
+
+- name: docs
+  emoji: 📚
+  description: "docs: documentation only changes"
+  characters: 1
+  codepoint: 1f4da
+  hex: F0 9F 93 9A
+  shortcode: ":books:"
+
+- name: style
+  emoji: 🎨
+  description: "style: changes that do not affect the meaning of the code"
+  characters: 1
+  codepoint: 1f3a8
+  hex: F0 9F 8E A8
+  shortcode: ":art:"
+
+- name: refactor
+  emoji: ♻️
+  description: "refactor: a code change that neither fixes a bug nor adds a feature"
+  characters: 2
+  codepoint: 267b, fe0f
+  hex: E2 99 BB, EF B8 8F
+  shortcode: ":recycling:"
+
+- name: perf
+  emoji: ⚡️
+  description: "perf: a code change that improves performance"
+  characters: 2
+  codepoint: 26a1
+  hex: E2 9A A1, EF B8 8F
+  shortcode: ":zap:"
+
+- name: test
+  emoji: 🚨
+  description: "test: adding missing or correcting existing tests"
+  characters: 1
+  codepoint: 1f6a8
+  hex: F0 9F 9A A8
+  shortcode: ":rotating_light:"
+
+- name: chore
+  emoji: 🔧
+  description: "chore: changes to the build process or auxiliary tools and libraries such as documentation generation"
+  characters: 1
+  codepoint: 1f527
+  hex: F0 9F 94 A7
+  shortcode: ":wrench:"
+
+- name: chore-release
+  emoji: 🚀
+  description: "chore(release): code deployment or publishing to external repositories"
+  characters: 1
+  codepoint: 1f680
+  hex: F0 9F 9A 80
+  shortcode: ":rocket:"
+
+- name: chore-deps
+  emoji: 🔗
+  description: "chore(deps): add or delete dependencies"
+  characters: 1
+  codepoint: 1f517
+  hex: F0 9F 94 97
+  shortcode: ":link:"
+
+- name: build
+  emoji: 📦
+  description: "build: changes related to build processes"
+  characters: 1
+  codepoint: 1f4e6
+  hex: F0 9F 93 A6
+  shortcode: ":package:"
+
+- name: ci
+  emoji: 👷
+  description: "ci: updates to the continuous integration system"
+  characters: 1
+  codepoint: F0 9F 91 B7
+  hex: 1f477
+  shortcode: ":construction_worker:"
+
+- name: release
+  emoji: 🚀
+  description: code deployment or publishing to external repositories
+  characters: 1
+  codepoint: 1f680
+  hex: F0 9F 9A 80
+  shortcode: ":rocket:"
+
+- name: security
+  emoji: 🔒
+  description: fixing security issues
+  characters: 1
+  codepoint: 1f512
+  hex: F0 9F 94 92
+  shortcode: ":lock:"
+
+- name: i18n
+  emoji: 🌐
+  description: internationalization and localization
+  characters: 1
+  codepoint: 1f310
+  hex: F0 9F 8C 90
+  shortcode: ":globe_with_meridians:"
+
+- name: breaking
+  emoji: 💥
+  description: introducing breaking changes
+  characters: 1
+  codepoint: 1f4a5
+  hex: F0 9F 92 A5
+  shortcode: ":collision:"
+
+- name: config
+  emoji: ⚙️
+  description: changing configuration files
+  characters: 1
+  codepoint: 2699
+  hex: E2 9A 99
+  shortcode: ":gear:"
+
+- name: add
+  emoji: ➕
+  description: add something
+  characters: 1
+  codepoint: 2795
+  hex: E2 9E 95
+  shortcode: ":heavy-plus-sign:"
+
+- name: remove
+  emoji: ➖
+  description: remove something
+  characters: 1
+  codepoint: 2796
+  hex: F0 9F 94 A7
+  shortcode: ":heavy-minus-sign:"

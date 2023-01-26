@@ -38,12 +38,16 @@ type Profile int
 
 //go:embed gitmoji.yaml
 var gitmoji string
+
+//go:embed devmoji.yaml
 var devmoji string
 
 const (
 	gitmojiName = "gitmoji"
 	devmojiName = "devmoji"
+)
 
+const (
 	DefaultProfile Profile = iota
 	GitmojiProfile
 	DevmojiProfile
