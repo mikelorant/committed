@@ -73,7 +73,7 @@ func (c *Commit) Configure(opts Options) (*State, error) {
 
 	return &State{
 		Placeholders: placeholders(),
-		Emojis:       c.Emojier(),
+		Emojis:       getEmojis(c.Emojier, cfg),
 		Repository:   repo,
 		Config:       cfg,
 		Options:      opts,
@@ -146,4 +146,11 @@ func getConfig(open Opener, load Loader, file string) (config.Config, error) {
 	}
 
 	return cfg, nil
+}
+
+func getEmojis(emojier Emojier, cfg config.Config) *emoji.Set {
+	prof := EmojiConfigToEmojiProfile(cfg.View.EmojiSet)
+	fn := emoji.WithEmojiSet(prof)
+
+	return emojier(fn)
 }

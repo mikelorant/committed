@@ -66,13 +66,13 @@ func TestModel(t *testing.T) {
 			args: args{
 				state: func(c *commit.State) {
 					c.Repository.Head.Hash = "1"
-					c.Repository.Head.Message = ":bug: summary"
+					c.Repository.Head.Message = ":test: summary"
 					c.Options.Amend = true
 				},
 			},
 			want: want{
 				model: func(m header.Model) {
-					assert.Equal(t, ":bug:", m.Emoji.Shortcode)
+					assert.Equal(t, ":test:", m.Emoji.Shortcode)
 					assert.Equal(t, "summary", m.Summary())
 				},
 			},
@@ -82,7 +82,7 @@ func TestModel(t *testing.T) {
 			args: args{
 				state: func(c *commit.State) {
 					c.Repository.Head.Hash = "1"
-					c.Repository.Head.Message = ":bug:"
+					c.Repository.Head.Message = ":test:"
 					c.Options.Amend = true
 				},
 			},

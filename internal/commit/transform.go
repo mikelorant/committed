@@ -4,15 +4,16 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
 )
 
-func MessageToEmoji(msg string) emoji.NullEmoji {
+func MessageToEmoji(set *emoji.Set, msg string) emoji.NullEmoji {
 	ls := strings.Split(msg, "\n")
 	fw := strings.Split(ls[0], " ")[0]
 
-	return emoji.New().Find(fw)
+	return set.Find(fw)
 }
 
 func MessageToSummary(msg string) string {
@@ -71,6 +72,10 @@ func UserToAuthor(user repository.User) string {
 	}
 
 	return fmt.Sprintf("%s <%s>", user.Name, user.Email)
+}
+
+func EmojiConfigToEmojiProfile(e config.EmojiSet) emoji.Profile {
+	return emoji.Profile(int(e))
 }
 
 func hasSummary(msg string) bool {

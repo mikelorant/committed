@@ -123,6 +123,10 @@ view:
   # Values: above, below
   # Default: below
   emojiSelector: below
+  # Emoji set to use.
+  # Values: gitmoji, devmoji
+  # Default: gitmoji
+  emojiSet: gitmoji
 
 commit:
   # Enable author sign-off for commits.

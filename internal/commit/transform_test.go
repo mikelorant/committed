@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
 	"github.com/stretchr/testify/assert"
 )
@@ -67,7 +68,7 @@ func TestMessageToEmoji(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			e := commit.MessageToEmoji(tt.message)
+			e := commit.MessageToEmoji(emoji.New(), tt.message)
 			if !tt.want.valid {
 				assert.False(t, tt.want.valid)
 				assert.Empty(t, e.Emoji.Name)
