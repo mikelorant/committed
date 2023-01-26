@@ -27,6 +27,7 @@ type Model struct {
 	signoff       bool
 	err           error
 	ready         bool
+	emojiType     config.EmojiType
 }
 
 type Models struct {
@@ -89,6 +90,7 @@ func (m *Model) Configure(state *commit.State) {
 
 	m.defaultFocus(state.Config)
 	m.signoff = state.Config.Commit.Signoff
+	m.emojiType = state.Config.Commit.EmojiType
 }
 
 func (m Model) Start() (*commit.Request, error) {
@@ -333,8 +335,17 @@ func (m Model) updateModels(msg tea.Msg) (Model, tea.Cmd) {
 func (m Model) commit() Model {
 	m.quit = true
 
+	var emoji string
+
+	switch m.emojiType {
+	case config.EmojiTypeCharacter:
+		emoji = m.models.header.Emoji.Character
+	default:
+		emoji = m.models.header.Emoji.Shortcode
+	}
+
 	m.models.message = message.New(message.State{
-		Emoji:   m.models.header.Emoji.Shortcode,
+		Emoji:   emoji,
 		Summary: m.models.header.Summary(),
 		Body:    m.models.body.Value(),
 		Footer:  m.models.footer.Value(),
@@ -342,7 +353,7 @@ func (m Model) commit() Model {
 
 	m.Request = &commit.Request{
 		Author:  m.models.info.Author,
-		Emoji:   m.models.header.Emoji.Shortcode,
+		Emoji:   emoji,
 		Summary: m.models.header.Summary(),
 		Body:    m.models.body.Value(),
 		Footer:  m.models.footer.Value(),

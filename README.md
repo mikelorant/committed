@@ -129,6 +129,10 @@ view:
   emojiSet: gitmoji
 
 commit:
+  # Emoji format in commit.
+  # Values: shortcode, character
+  # Default: shortcode
+  emojiType: shortcode
   # Enable author sign-off for commits.
   # Values: true, false
   # Default: false

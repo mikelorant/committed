@@ -553,6 +553,66 @@ func TestModel(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "config_emoji_type_shortcode",
+			args: args{
+				state: func(s *commit.State) {
+					s.Config.Commit.EmojiType = config.EmojiTypeShortcode
+				},
+				model: func(m ui.Model) ui.Model {
+					m, _ = ToModel(m.Update(nil))
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyEnter}))
+					m, _ = ToModel(uitest.SendString(m, "test"), nil)
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyEnter, Alt: true}))
+
+					return m
+				},
+			},
+			want: want{
+				model: func(m ui.Model) {
+					req := commit.Request{
+						Emoji:   ":art:",
+						Summary: "test",
+						Author: repository.User{
+							Name:  "John Doe",
+							Email: "john.doe@example.com",
+						},
+					}
+
+					assert.Equal(t, &req, m.Request)
+				},
+			},
+		},
+		{
+			name: "config_emoji_type_character",
+			args: args{
+				state: func(s *commit.State) {
+					s.Config.Commit.EmojiType = config.EmojiTypeCharacter
+				},
+				model: func(m ui.Model) ui.Model {
+					m, _ = ToModel(m.Update(nil))
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyEnter}))
+					m, _ = ToModel(uitest.SendString(m, "test"), nil)
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyEnter, Alt: true}))
+
+					return m
+				},
+			},
+			want: want{
+				model: func(m ui.Model) {
+					req := commit.Request{
+						Emoji:   "🎨",
+						Summary: "test",
+						Author: repository.User{
+							Name:  "John Doe",
+							Email: "john.doe@example.com",
+						},
+					}
+
+					assert.Equal(t, &req, m.Request)
+				},
+			},
+		},
 	}
 
 	for _, tt := range tests {
