@@ -334,7 +334,7 @@ func (m Model) commit() Model {
 	m.quit = true
 
 	m.models.message = message.New(message.State{
-		Emoji:   m.models.header.Emoji,
+		Emoji:   m.models.header.Emoji.Shortcode,
 		Summary: m.models.header.Summary(),
 		Body:    m.models.body.Value(),
 		Footer:  m.models.footer.Value(),

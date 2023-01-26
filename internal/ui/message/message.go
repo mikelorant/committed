@@ -5,11 +5,10 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/mikelorant/committed/internal/emoji"
 )
 
 type Model struct {
-	emoji   emoji.Emoji
+	emoji   string
 	summary string
 	body    string
 	footer  string
@@ -17,7 +16,7 @@ type Model struct {
 }
 
 type State struct {
-	Emoji   emoji.Emoji
+	Emoji   string
 	Summary string
 	Body    string
 	Footer  string
@@ -44,8 +43,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m Model) View() string {
 	message := m.styles.summary.Render(m.summary)
-	if m.emoji.Shortcode != "" {
-		s := fmt.Sprintf("%s %s", m.emoji.Shortcode, m.summary)
+	if m.emoji != "" {
+		s := fmt.Sprintf("%s %s", m.emoji, m.summary)
 		message = m.styles.summary.Render(s)
 	}
 

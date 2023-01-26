@@ -4,14 +4,13 @@ import (
 	"testing"
 
 	"github.com/hexops/autogold/v2"
-	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/ui/message"
 	"github.com/mikelorant/committed/internal/ui/uitest"
 )
 
 func TestModel(t *testing.T) {
 	type args struct {
-		emoji   emoji.Emoji
+		emoji   string
 		summary string
 		body    string
 		footer  string
@@ -33,9 +32,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "emoji_summary",
 			args: args{
-				emoji: emoji.Emoji{
-					Shortcode: ":art:",
-				},
+				emoji:   ":art:",
 				summary: "summary",
 			},
 		},
@@ -63,9 +60,7 @@ func TestModel(t *testing.T) {
 		{
 			name: "all",
 			args: args{
-				emoji: emoji.Emoji{
-					Shortcode: ":art:",
-				},
+				emoji:   ":art:",
 				summary: "summary",
 				body:    "body",
 				footer:  "footer",
