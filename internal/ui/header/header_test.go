@@ -161,7 +161,7 @@ func TestModel(t *testing.T) {
 			name: "expand_emojis",
 			args: args{
 				state: func(c *commit.State) {
-					c.Emojis = emoji.New().Emojis
+					c.Emojis = emoji.New()
 					c.Repository.Head.Message = "summary\n\nbody"
 				},
 				model: func(m header.Model) header.Model {
@@ -179,7 +179,7 @@ func TestModel(t *testing.T) {
 					"COMMITTED_TERMINAL": "ttyd",
 				},
 				state: func(c *commit.State) {
-					c.Emojis = emoji.New().Emojis
+					c.Emojis = emoji.New()
 					c.Repository.Head.Message = "summary\n\nbody"
 				},
 				model: func(m header.Model) header.Model {
@@ -194,7 +194,7 @@ func TestModel(t *testing.T) {
 			name: "filter_emoji",
 			args: args{
 				state: func(c *commit.State) {
-					c.Emojis = emoji.New().Emojis
+					c.Emojis = emoji.New()
 				},
 				model: func(m header.Model) header.Model {
 					m.Focus()
@@ -211,7 +211,7 @@ func TestModel(t *testing.T) {
 			name: "filter_emoji_no_match",
 			args: args{
 				state: func(c *commit.State) {
-					c.Emojis = emoji.New().Emojis
+					c.Emojis = emoji.New()
 				},
 				model: func(m header.Model) header.Model {
 					m.Focus()
@@ -228,7 +228,7 @@ func TestModel(t *testing.T) {
 			name: "select_emoji",
 			args: args{
 				state: func(c *commit.State) {
-					c.Emojis = emoji.New().Emojis
+					c.Emojis = emoji.New()
 				},
 				model: func(m header.Model) header.Model {
 					m.Focus()
@@ -249,7 +249,7 @@ func TestModel(t *testing.T) {
 			name: "select_emoji_down",
 			args: args{
 				state: func(c *commit.State) {
-					c.Emojis = emoji.New().Emojis
+					c.Emojis = emoji.New()
 				},
 				model: func(m header.Model) header.Model {
 					m.Focus()
@@ -273,7 +273,7 @@ func TestModel(t *testing.T) {
 			name: "select_emoji_down_up",
 			args: args{
 				state: func(c *commit.State) {
-					c.Emojis = emoji.New().Emojis
+					c.Emojis = emoji.New()
 				},
 				model: func(m header.Model) header.Model {
 					m.Focus()
@@ -298,7 +298,7 @@ func TestModel(t *testing.T) {
 			name: "select_emoji_page_down_page_up",
 			args: args{
 				state: func(c *commit.State) {
-					c.Emojis = emoji.New().Emojis
+					c.Emojis = emoji.New()
 				},
 				model: func(m header.Model) header.Model {
 					m.Focus()
@@ -323,7 +323,7 @@ func TestModel(t *testing.T) {
 			name: "select_emoji_page_down_last_page",
 			args: args{
 				state: func(c *commit.State) {
-					c.Emojis = emoji.New().Emojis
+					c.Emojis = emoji.New()
 				},
 				model: func(m header.Model) header.Model {
 					m.Focus()
@@ -347,7 +347,7 @@ func TestModel(t *testing.T) {
 			name: "select_emoji_page_down_last_page_page_up",
 			args: args{
 				state: func(c *commit.State) {
-					c.Emojis = emoji.New().Emojis
+					c.Emojis = emoji.New()
 				},
 				model: func(m header.Model) header.Model {
 					m.Focus()
@@ -372,7 +372,7 @@ func TestModel(t *testing.T) {
 			name: "select_emoji_page_down_last_page_exceeded",
 			args: args{
 				state: func(c *commit.State) {
-					c.Emojis = emoji.New().Emojis
+					c.Emojis = emoji.New()
 				},
 				model: func(m header.Model) header.Model {
 					m.Focus()
@@ -396,7 +396,7 @@ func TestModel(t *testing.T) {
 			name: "select_emoji_page_down_last_page_exceeded_page_up",
 			args: args{
 				state: func(c *commit.State) {
-					c.Emojis = emoji.New().Emojis
+					c.Emojis = emoji.New()
 				},
 				model: func(m header.Model) header.Model {
 					m.Focus()
@@ -421,7 +421,7 @@ func TestModel(t *testing.T) {
 			name: "select_emoji_filter",
 			args: args{
 				state: func(c *commit.State) {
-					c.Emojis = emoji.New().Emojis
+					c.Emojis = emoji.New()
 				},
 				model: func(m header.Model) header.Model {
 					m.Focus()
@@ -444,7 +444,7 @@ func TestModel(t *testing.T) {
 			name: "select_emoji_filter_clear",
 			args: args{
 				state: func(c *commit.State) {
-					c.Emojis = emoji.New().Emojis
+					c.Emojis = emoji.New()
 				},
 				model: func(m header.Model) header.Model {
 					m.Focus()
@@ -469,7 +469,7 @@ func TestModel(t *testing.T) {
 			name: "select_emoji_delete",
 			args: args{
 				state: func(c *commit.State) {
-					c.Emojis = emoji.New().Emojis
+					c.Emojis = emoji.New()
 				},
 				model: func(m header.Model) header.Model {
 					m.Focus()
@@ -491,7 +491,7 @@ func TestModel(t *testing.T) {
 			name: "emoji_empty_delete",
 			args: args{
 				state: func(c *commit.State) {
-					c.Emojis = emoji.New().Emojis
+					c.Emojis = emoji.New()
 				},
 				model: func(m header.Model) header.Model {
 					m.Focus()
@@ -790,6 +790,15 @@ func testState() commit.State {
 	return commit.State{
 		Placeholders: commit.Placeholders{
 			Hash: "1",
+		},
+		Emojis: &emoji.Set{
+			Emojis: []emoji.Emoji{
+				{
+					Character:   "🎨",
+					Description: "test",
+					Shortcode:   ":test:",
+				},
+			},
 		},
 	}
 }

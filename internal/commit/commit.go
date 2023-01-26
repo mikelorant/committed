@@ -73,7 +73,7 @@ func (c *Commit) Configure(opts Options) (*State, error) {
 
 	return &State{
 		Placeholders: placeholders(),
-		Emojis:       c.Emojier().Emojis,
+		Emojis:       c.Emojier(),
 		Repository:   repo,
 		Config:       cfg,
 		Options:      opts,

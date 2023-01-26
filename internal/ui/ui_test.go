@@ -605,11 +605,13 @@ func testState() commit.State {
 				When: time.Date(2022, time.January, 1, 1, 0, 0, 0, time.UTC),
 			},
 		},
-		Emojis: []emoji.Emoji{
-			{
-				Character:   "🎨",
-				Description: "Improve structure / format of the code.",
-				Shortcode:   ":art:",
+		Emojis: &emoji.Set{
+			Emojis: []emoji.Emoji{
+				{
+					Character:   "🎨",
+					Description: "Improve structure / format of the code.",
+					Shortcode:   ":art:",
+				},
 			},
 		},
 		Options: commit.Options{

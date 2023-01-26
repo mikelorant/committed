@@ -53,12 +53,12 @@ func New(state *commit.State) Model {
 	m := Model{
 		DefaultHeight: defaultHeight,
 		ExpandHeight:  expandHeight,
-		Emojis:        state.Emojis,
+		Emojis:        state.Emojis.Emojis,
 		state:         state,
 		styles:        defaultStyles(),
 		summaryInput:  summaryInput(state.Placeholders.Summary),
 		filterList: filterlist.New(
-			castToListItems(state.Emojis),
+			castToListItems(state.Emojis.Emojis),
 			filterPromptText,
 			filterHeight,
 		),

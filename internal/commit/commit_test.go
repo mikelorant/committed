@@ -102,6 +102,7 @@ func TestConfigure(t *testing.T) {
 				state: commit.State{
 					Placeholders: testPlaceholders(),
 					Config:       config.Config{},
+					Emojis:       &emoji.Set{},
 				},
 			},
 		},
@@ -116,6 +117,7 @@ func TestConfigure(t *testing.T) {
 				state: commit.State{
 					Placeholders: testPlaceholders(),
 					Config:       config.Config{},
+					Emojis:       &emoji.Set{},
 					Options: commit.Options{
 						Amend: true,
 					},
@@ -133,6 +135,7 @@ func TestConfigure(t *testing.T) {
 				state: commit.State{
 					Placeholders: testPlaceholders(),
 					Config:       config.Config{},
+					Emojis:       &emoji.Set{},
 					Options: commit.Options{
 						ConfigFile: "test",
 					},

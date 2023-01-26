@@ -11,7 +11,7 @@ import (
 type State struct {
 	Placeholders Placeholders
 	Repository   repository.Description
-	Emojis       []emoji.Emoji
+	Emojis       *emoji.Set
 	Config       config.Config
 	Options      Options
 }
