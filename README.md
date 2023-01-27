@@ -207,28 +207,28 @@ Related links:
 
 The global shortcuts can be used within any view.
 
-| Command            | Key       |
-| :----------------- | :-------- |
-| Commit             | alt-enter |
-| Toggle sign-off    | alt-s     |
-| Toggle theme       | alt+t     |
-| Help               | alt-/     |
-| Focus author       | alt-1     |
-| Focus emoji        | alt-2     |
-| Focus summary      | alt-3     |
-| Focus body         | alt-4     |
-| Cancel             | control-c |
-| Next component     | tab       |
-| Previous component | shift-tab |
+| Command            | Key                                      |
+| :----------------- | :--------------------------------------- |
+| Commit             | <kbd>⌥ Option</kbd> + <kbd>⏎ Enter</kbd> |
+| Toggle sign-off    | <kbd>⌥ Option</kbd> + <kbd>S</kbd>       |
+| Toggle theme       | <kbd>⌥ Option</kbd> + <kbd>T</kbd>       |
+| Help               | <kbd>⌥ Option</kbd> + <kbd>/</kbd>       |
+| Focus author       | <kbd>⌥ Option</kbd> + <kbd>1</kbd>       |
+| Focus emoji        | <kbd>⌥ Option</kbd> + <kbd>2</kbd>       |
+| Focus summary      | <kbd>⌥ Option</kbd> + <kbd>3</kbd>       |
+| Focus body         | <kbd>⌥ Option</kbd> + <kbd>4</kbd>       |
+| Cancel             | <kbd>⌃ Control</kbd> + <kbd>C</kbd>      |
+| Next component     | <kbd>⇥ Tab</kbd>                         |
+| Previous component | <kbd>⇧ Shift</kbd> + <kbd>⇥ Tab</kbd>    |
 
 The emoji shortcuts are limited to the emoji view only.
 
-| Command       | Key       |
-| :------------ | :-------- |
-| Clear emoji   | delete    |
-| Reset filter  | escape    |
-| Next page     | page down |
-| Previous page | page up   |
+| Command       | Key                    |
+| :------------ | :--------------------- |
+| Clear emoji   | <kbd>⌫ Delete</kbd>    |
+| Reset filter  | <kbd>⎋ Escape</kbd>    |
+| Next page     | <kbd>⇟ Page Down</kbd> |
+| Previous page | <kbd>⇞ Page Up</kbd>   |
 
 ## 🔍 Views [⭡](#committed)
 
