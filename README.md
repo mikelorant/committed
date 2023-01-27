@@ -148,6 +148,11 @@ view:
   # Default: adaptive
   colour: adaptive
 
+  # Terminal compatibility.
+  # Values: default, ttyd
+  # Default: default
+  compatibility: default
+
 commit:
   # Emoji format in commit.
   # Values: shortcode, character

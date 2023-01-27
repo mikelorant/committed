@@ -58,7 +58,7 @@ func New(state *commit.State) Model {
 		styles:        defaultStyles(state.Theme),
 		summaryInput:  summaryInput(state),
 		filterList: filterlist.New(
-			castToListItems(state.Emojis.Emojis),
+			castToListItems(state.Emojis.Emojis, WithCompatibility(state.Config.View.Compatibility)),
 			filterPromptText,
 			filterHeight,
 			state,
@@ -136,7 +136,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		items := make([]list.Item, len(ranks))
 		for i, rank := range ranks {
-			items[i] = castToListItems(m.Emojis)[rank]
+			compat := WithCompatibility(m.state.Config.View.Compatibility)
+			items[i] = castToListItems(m.Emojis, compat)[rank]
 		}
 		m.filterList.SetItems(items)
 	}

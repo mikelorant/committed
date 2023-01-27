@@ -2,20 +2,17 @@ package header
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/mattn/go-runewidth"
+	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/fuzzy"
 )
 
-const (
-	ttydTerminal = "ttyd"
-)
-
 type listItem struct {
-	emoji emoji.Emoji
+	emoji         emoji.Emoji
+	compatibility config.Compatibility
 }
 
 type fuzzyItem struct {
@@ -25,8 +22,8 @@ type fuzzyItem struct {
 func (i listItem) Title() string {
 	var space string
 
-	switch os.Getenv("COMMITTED_TERMINAL") {
-	case ttydTerminal:
+	switch i.compatibility {
+	case config.CompatibilityTtyd:
 		space = " "
 	default:
 		if runewidth.StringWidth(i.emoji.Character) == 1 {
@@ -51,11 +48,20 @@ func (i fuzzyItem) Terms() []string {
 	}
 }
 
-func castToListItems(emojis []emoji.Emoji) []list.Item {
+func WithCompatibility(c config.Compatibility) func(*listItem) {
+	return func(i *listItem) {
+		i.compatibility = c
+	}
+}
+
+func castToListItems(emojis []emoji.Emoji, opts ...func(*listItem)) []list.Item {
 	res := make([]list.Item, len(emojis))
 	for i, e := range emojis {
 		var item listItem
 		item.emoji = e
+		for _, o := range opts {
+			o(&item)
+		}
 		res[i] = item
 	}
 

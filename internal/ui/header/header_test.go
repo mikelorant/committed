@@ -17,7 +17,6 @@ import (
 
 func TestModel(t *testing.T) {
 	type args struct {
-		env   map[string]string
 		state func(c *commit.State)
 		model func(m header.Model) header.Model
 	}
@@ -174,14 +173,12 @@ func TestModel(t *testing.T) {
 			},
 		},
 		{
-			name: "expand_emojis_env",
+			name: "expand_emojis_ttyd",
 			args: args{
-				env: map[string]string{
-					"COMMITTED_TERMINAL": "ttyd",
-				},
 				state: func(c *commit.State) {
 					c.Emojis = emoji.New()
 					c.Repository.Head.Message = "summary\n\nbody"
+					c.Config.View.Compatibility = config.CompatibilityTtyd
 				},
 				model: func(m header.Model) header.Model {
 					m.Focus()
@@ -762,10 +759,6 @@ func TestModel(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			for k, v := range tt.args.env {
-				t.Setenv(k, v)
-			}
-
 			c := testState()
 			if tt.args.state != nil {
 				tt.args.state(&c)
