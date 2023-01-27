@@ -7,9 +7,7 @@ commits by showing you the layout in the same format as `git log`.
 
 ![demo](docs/demo.gif)
 
-[![Highlights](https://img.shields.io/badge/-Highlights-ff0000)](#-highlights-) [![Purpose](https://img.shields.io/badge/-Purpose-ff8000)](#-purpose-) [![Limitations](https://img.shields.io/badge/-Limitations-ffff00)](#-limitations-) [![Installation](https://img.shields.io/badge/-Installation-80ff00)](#-installation-) [![Usage](https://img.shields.io/badge/-Usage-00aa00)](#-usage-) [![Configuration](https://img.shields.io/badge/-Configuration-00bb80)](#-configuration-) [![Best Practises](https://img.shields.io/badge/-Best_Practises-00ffff)](#-best-practises-) [![Shortcuts](https://img.shields.io/badge/-Shortcuts-0080ff)](#-shortcuts-) [![Views](https://img.shields.io/badge/-Views-0000ff)](#-views-) [![Authors](https://img.shields.io/badge/-Authors-8000ff)](#-authors-) [![License](https://img.shields.io/badge/-License-ff00ff)](#-license-) [![Thanks](https://img.shields.io/badge/-Thanks-ff0080)](#-thanks-)
-
-#
+# [![Highlights](https://img.shields.io/badge/-Highlights-ff0000)](#-highlights-) [![Purpose](https://img.shields.io/badge/-Purpose-ff8000)](#-purpose-) [![Limitations](https://img.shields.io/badge/-Limitations-ffff00)](#-limitations-) [![Installation](https://img.shields.io/badge/-Installation-80ff00)](#-installation-) [![Usage](https://img.shields.io/badge/-Usage-00aa00)](#-usage-) [![Configuration](https://img.shields.io/badge/-Configuration-00bb80)](#-configuration-) [![Best Practises](https://img.shields.io/badge/-Best_Practises-00ffff)](#-best-practises-) [![Shortcuts](https://img.shields.io/badge/-Shortcuts-0080ff)](#-shortcuts-) [![Views](https://img.shields.io/badge/-Views-0000ff)](#-views-) [![Authors](https://img.shields.io/badge/-Authors-8000ff)](#-authors-) [![License](https://img.shields.io/badge/-License-ff00ff)](#-license-) [![Thanks](https://img.shields.io/badge/-Thanks-ff0080)](#-thanks-)
 
 ## 💡 Highlights [⭡](#committed)
 
