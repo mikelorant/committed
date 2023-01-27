@@ -7,7 +7,11 @@ commits by showing you the layout in the same format as `git log`.
 
 ![demo](docs/demo.gif)
 
-## 💡 Highlights
+[![Highlights](https://img.shields.io/badge/-Highlights-ff0000)](#-highlights-) [![Purpose](https://img.shields.io/badge/-Purpose-ff8000)](#-purpose-) [![Limitations](https://img.shields.io/badge/-Limitations-ffff00)](#-limitations-) [![Installation](https://img.shields.io/badge/-Installation-80ff00)](#-installation-) [![Usage](https://img.shields.io/badge/-Usage-00aa00)](#-usage-) [![Configuration](https://img.shields.io/badge/-Configuration-00bb80)](#-configuration-) [![Best Practises](https://img.shields.io/badge/-Best_Practises-00ffff)](#-best-practises-) [![Shortcuts](https://img.shields.io/badge/-Shortcuts-0080ff)](#-shortcuts-) [![Views](https://img.shields.io/badge/-Views-0000ff)](#-views-) [![Authors](https://img.shields.io/badge/-Authors-8000ff)](#-authors-) [![License](https://img.shields.io/badge/-License-ff00ff)](#-license-) [![Thanks](https://img.shields.io/badge/-Thanks-ff0080)](#-thanks-)
+
+#
+
+## 💡 Highlights [⭡](#committed)
 
 - Built-in multiline editor
 - Emoji selector
@@ -18,7 +22,7 @@ commits by showing you the layout in the same format as `git log`.
 - Formats body width to 72 characters
 - Best practise recommendations
 
-## 💬 Purpose
+## 💬 Purpose [⭡](#committed)
 
 The benefits of high quality commits are well documented however the tooling to
 follow these practises has been lacking. In most cases you are either providing
@@ -44,7 +48,7 @@ rather than accepting what has already been written.
 These capabilities all contribute to helping create a commit message that is
 useful.
 
-## ⚠️ Limitations
+## ⚠ Limitations [⭡](#committed)
 
 Terminals render emojis differently and this makes alignment of borders
 complicated and difficult. It is an ongoing process to improve the compatibility
@@ -62,7 +66,7 @@ update the list.
 | WezTerm        | Compatible              |
 | Kitty          | Border alignment issues |
 
-## 💾 Installation
+## 💾 Installation [⭡](#committed)
 
 Install Committed with Homebrew.
 
@@ -70,7 +74,7 @@ Install Committed with Homebrew.
 brew install mikelorant/taps/committed
 ```
 
-## 🎛️ Usage
+## 🎛 Usage [⭡](#committed)
 
 ```text
 Committed is a WYSIWYG Git commit editor
@@ -106,7 +110,7 @@ commits created with Committed. The limitations are:
 - Summary will be truncated if more than 72 characters.
 - Lines will not reflow when editing the body.
 
-## ⚙️ Configuration
+## ⚙ Configuration [⭡](#committed)
 
 No configuration is necessary however there are some values that can be changed
 based on preference.
@@ -163,7 +167,7 @@ authors:
     email: john.doe@example.com
 ```
 
-## 🏆 Best Practises
+## 🏆 Best Practises [⭡](#committed)
 
 To create a well formed commit, these are some of the best practises that are
 often cited.
@@ -199,7 +203,7 @@ Related links:
 - [Joel Parker Henderson](https://github.com/joelparkerhenderson/git-commit-message)
 - [Chris Beams](https://cbea.ms/git-commit/)
 
-## ⌨️ Shortcuts
+## ⌨ Shortcuts [⭡](#committed)
 
 The global shortcuts can be used within any view.
 
@@ -226,7 +230,7 @@ The emoji shortcuts are limited to the emoji view only.
 | Next page     | page down |
 | Previous page | page up   |
 
-## 🔍 Views
+## 🔍 Views [⭡](#committed)
 
 ### Main
 
@@ -391,15 +395,15 @@ Date:   Mon Jan 2 15:04:05 2006 -0700
  3 files changed, 2 insertions(+), 1 deletions(-)
 ```
 
-## ✏️ Authors
+## ✏️ Authors [⭡](#committed)
 
 - [@mikelorant](https://www.github.com/mikelorant)
 
-## 🎫 License
+## 🎫 License [⭡](#committed)
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
-## 👍 Thanks
+## 👍 Thanks [⭡](#committed)
 
 Thanks to [Carlos Cuesta](https://github.com/carloscuesta) for creating [gitmoji](https://gitmoji.dev/) and [gitmoji-cli](https://github.com/carloscuesta/gitmoji-cli) which was the
 inspiration for this project.
