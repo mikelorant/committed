@@ -395,7 +395,7 @@ Date:   Mon Jan 2 15:04:05 2006 -0700
  3 files changed, 2 insertions(+), 1 deletions(-)
 ```
 
-## ✏️ Authors [⭡](#committed)
+## ✏ Authors [⭡](#committed)
 
 - [@mikelorant](https://www.github.com/mikelorant)
 
