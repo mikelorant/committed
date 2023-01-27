@@ -3,6 +3,7 @@ package theme_test
 import (
 	"testing"
 
+	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/ui/theme"
 	"github.com/stretchr/testify/assert"
 )
@@ -28,7 +29,7 @@ func TestNew(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			th := theme.New()
+			th := theme.New(config.ColourAdaptive)
 
 			var ids []string
 			for i := 0; i < len(th.ListTints()); i++ {
@@ -79,7 +80,7 @@ func TestNextTint(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			th := theme.New()
+			th := theme.New(config.ColourAdaptive)
 
 			for i := 0; i < tt.count; i++ {
 				th.NextTint()
@@ -111,7 +112,7 @@ func TestListTints(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			th := theme.New()
+			th := theme.New(config.ColourAdaptive)
 
 			got := th.ListTints()
 			assert.Equal(t, tt.want, got)
@@ -139,7 +140,7 @@ func TestGetTint(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			th := theme.New()
+			th := theme.New(config.ColourAdaptive)
 
 			_ = th.SetTint(tt.id)
 			got := th.GetTint()
@@ -176,7 +177,7 @@ func TestSetTint(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			th := theme.New()
+			th := theme.New(config.ColourAdaptive)
 
 			ok := th.SetTint(tt.id)
 			if !tt.want.ok {

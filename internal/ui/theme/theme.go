@@ -4,6 +4,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	tint "github.com/lrstanley/bubbletint"
+	"github.com/mikelorant/committed/internal/config"
 )
 
 type Theme struct {
@@ -12,15 +13,24 @@ type Theme struct {
 
 type Msg int
 
-func New() Theme {
+func New(clr config.Colour) Theme {
 	var reg *tint.Registry
 	var t []tint.Tint
 
-	switch lipgloss.HasDarkBackground() {
-	case true:
+	switch clr {
+	case config.ColourDark:
+		lipgloss.SetHasDarkBackground(true)
 		t = darkTints()
-	case false:
+	case config.ColourLight:
+		lipgloss.SetHasDarkBackground(false)
 		t = lightTints()
+	default:
+		switch lipgloss.HasDarkBackground() {
+		case true:
+			t = darkTints()
+		case false:
+			t = lightTints()
+		}
 	}
 
 	reg = tint.NewRegistry(t[0], t[1:]...)

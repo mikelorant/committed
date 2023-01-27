@@ -9,7 +9,7 @@ func (m *Model) defaults(cfg config.Config) {
 	m.defaultEmojiType(cfg.Commit.EmojiType)
 	m.defaultFocus(cfg.View.Focus)
 	m.defaultSignoff(cfg.Commit.Signoff)
-	m.defaultTheme(cfg.View.Theme)
+	m.defaultTheme(cfg.View.Theme, cfg.View.Colour)
 }
 
 func (m *Model) defaultEmojiType(et config.EmojiType) {
@@ -33,9 +33,9 @@ func (m *Model) defaultSignoff(signoff bool) {
 	m.signoff = signoff
 }
 
-func (m *Model) defaultTheme(t string) {
-	th := theme.New()
-	th.SetTint(t)
+func (m *Model) defaultTheme(th string, clr config.Colour) {
+	t := theme.New(clr)
+	t.SetTint(th)
 
-	m.state.Theme = th
+	m.state.Theme = t
 }

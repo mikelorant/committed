@@ -141,6 +141,11 @@ view:
   # Light default: builtin_light
   theme: builtin_dark
 
+  # Colour profile for displaying themes.
+  # Values: adaptive, dark, light
+  # Default: adaptive
+  colour: adaptive
+
 commit:
   # Emoji format in commit.
   # Values: shortcode, character

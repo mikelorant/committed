@@ -7,6 +7,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/repository"
 	"github.com/mikelorant/committed/internal/ui/info"
 	"github.com/mikelorant/committed/internal/ui/theme"
@@ -306,7 +307,7 @@ func testState() commit.State {
 				When: time.Date(2022, time.January, 1, 1, 0, 0, 0, time.UTC),
 			},
 		},
-		Theme: theme.New(),
+		Theme: theme.New(config.ColourAdaptive),
 		Options: commit.Options{
 			Amend: true,
 		},

@@ -5,6 +5,7 @@ import (
 
 	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/repository"
 	"github.com/mikelorant/committed/internal/ui/footer"
 	"github.com/mikelorant/committed/internal/ui/theme"
@@ -91,7 +92,7 @@ func TestModel(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			state := &commit.State{
-				Theme: theme.New(),
+				Theme: theme.New(config.ColourAdaptive),
 			}
 			if tt.args.author.Name != "" && tt.args.author.Email != "" {
 				state.Repository.Users = []repository.User{tt.args.author}

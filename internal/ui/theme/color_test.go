@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/ui/theme"
 
 	"github.com/stretchr/testify/assert"
@@ -111,7 +112,7 @@ func TestBody(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			th := theme.New()
+			th := theme.New(config.ColourAdaptive)
 			body := th.Body()
 
 			assert.Equal(t, tt.body.Boundary, toColour(body.Boundary), "Boundary")
@@ -149,7 +150,7 @@ func TestFilterList(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			th := theme.New()
+			th := theme.New(config.ColourAdaptive)
 			filterlist := th.FilterList()
 
 			assert.Equal(t, tt.filterlist.Boundary, toColour(filterlist.Boundary), "Boundary")
@@ -182,7 +183,7 @@ func TestFooter(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			th := theme.New()
+			th := theme.New(config.ColourAdaptive)
 			footer := th.Footer()
 
 			assert.Equal(t, tt.footer.View, toColour(footer.View), "Boundary")
@@ -217,7 +218,7 @@ func TestHeader(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			th := theme.New()
+			th := theme.New(config.ColourAdaptive)
 			header := th.Header()
 
 			assert.Equal(t, tt.header.EmojiBoundary, toColour(header.EmojiBoundary), "EmojiBoundary")
@@ -252,7 +253,7 @@ func TestHelp(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			th := theme.New()
+			th := theme.New(config.ColourAdaptive)
 			help := th.Help()
 
 			assert.Equal(t, tt.help.Boundary, toColour(help.Boundary), "Boundary")
@@ -286,7 +287,7 @@ func TestInfo(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			th := theme.New()
+			th := theme.New(config.ColourAdaptive)
 			info := th.Info()
 
 			assert.Equal(t, tt.info.HashText, toColour(info.HashText), "HashText")
@@ -322,7 +323,7 @@ func TestMessage(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			th := theme.New()
+			th := theme.New(config.ColourAdaptive)
 			message := th.Message()
 
 			assert.Equal(t, tt.message.Summary, toColour(message.Summary), "Summary")
@@ -350,7 +351,7 @@ func TestShortcut(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			th := theme.New()
+			th := theme.New(config.ColourAdaptive)
 			shortcut := th.Shortcut()
 
 			assert.Equal(t, tt.shortcut.Key, toColour(shortcut.Key), "Key")

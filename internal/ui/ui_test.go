@@ -675,7 +675,7 @@ func testState() commit.State {
 				},
 			},
 		},
-		Theme: theme.New(),
+		Theme: theme.New(config.ColourAdaptive),
 		Options: commit.Options{
 			Amend: true,
 		},

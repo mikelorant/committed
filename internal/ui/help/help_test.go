@@ -5,6 +5,7 @@ import (
 
 	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/ui/help"
 	"github.com/mikelorant/committed/internal/ui/theme"
 	"github.com/mikelorant/committed/internal/ui/uitest"
@@ -95,7 +96,7 @@ func TestModel(t *testing.T) {
 			help.Content = tt.args.content
 
 			state := &commit.State{
-				Theme: theme.New(),
+				Theme: theme.New(config.ColourAdaptive),
 			}
 
 			m := help.New(state)

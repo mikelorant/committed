@@ -6,6 +6,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/repository"
 	"github.com/mikelorant/committed/internal/ui/body"
 	"github.com/mikelorant/committed/internal/ui/theme"
@@ -165,7 +166,7 @@ func TestModel(t *testing.T) {
 						Message: tt.args.message,
 					},
 				},
-				Theme: theme.New(),
+				Theme: theme.New(config.ColourAdaptive),
 				Options: commit.Options{
 					Amend: tt.args.amend,
 				},
