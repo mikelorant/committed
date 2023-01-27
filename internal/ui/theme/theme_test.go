@@ -91,3 +91,107 @@ func TestNextTint(t *testing.T) {
 		})
 	}
 }
+
+func TestListTints(t *testing.T) {
+	tests := []struct {
+		name string
+		want []string
+	}{
+		{
+			name: "default",
+			want: []string{
+				"builtin_dark",
+				"dracula",
+				"gruvbox_dark",
+				"nord",
+				"retrowave",
+				"solarized_dark_higher_contrast",
+				"tokyo_night",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			reg := theme.Tint()
+			reg.SetTintID(reg.TintIDs()[0])
+
+			got := theme.ListTints()
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func TestGetTint(t *testing.T) {
+	tests := []struct {
+		name string
+		id   string
+		want string
+	}{
+		{
+			name: "valid",
+			id:   "builtin_dark",
+			want: "builtin_dark",
+		},
+		{
+			name: "invalid",
+			id:   "invalid",
+			want: "builtin_dark",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			reg := theme.Tint()
+			reg.SetTintID(reg.TintIDs()[0])
+
+			_ = theme.SetTint(tt.id)
+			got := theme.GetTint()
+
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func TestSetTint(t *testing.T) {
+	type want struct {
+		id string
+		ok bool
+	}
+
+	tests := []struct {
+		name string
+		id   string
+		want want
+	}{
+		{
+			name: "valid",
+			id:   "dracula",
+			want: want{
+				id: "dracula",
+				ok: true,
+			},
+		},
+		{
+			name: "invalid",
+			id:   "test",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			reg := theme.Tint()
+			reg.SetTintID(reg.TintIDs()[0])
+
+			ok := theme.SetTint(tt.id)
+			if !tt.want.ok {
+				assert.False(t, ok)
+				return
+			}
+			assert.True(t, ok)
+
+			got := theme.GetTint()
+			assert.Equal(t, tt.want.id, got)
+		})
+	}
+}

@@ -119,20 +119,34 @@ view:
   # Values: author, emoji, summary
   # Default: emoji
   focus: emoji
+
   # Emoji selector placement in relation to subject.
   # Values: above, below
   # Default: below
   emojiSelector: below
+
   # Emoji set to use.
   # Values: gitmoji, devmoji
   # Default: gitmoji
   emojiSet: gitmoji
+
+  # Theme to display. Dark and light backgrounds have different themes.
+  # Dark values:
+  #   builtin_dark, dracula, gruvbox_dark, nord, retrowave,
+  #   solarized_dark_higher_contrast, tokyo_night
+  # Dark default: builtin_dark
+  # Light values:
+  #   builtin_light, gruvbox_light, builtin_solarized_light,
+  #   builtin_tango_light, tokyo_night_light
+  # Light default: builtin_light
+  theme: builtin_dark
 
 commit:
   # Emoji format in commit.
   # Values: shortcode, character
   # Default: shortcode
   emojiType: shortcode
+
   # Enable author sign-off for commits.
   # Values: true, false
   # Default: false

@@ -79,6 +79,8 @@ func New() Model {
 }
 
 func (m *Model) Configure(state *commit.State) {
+	m.defaults(state.Config)
+
 	m.models = Models{
 		info:   info.New(state),
 		header: header.New(state),
@@ -87,10 +89,6 @@ func (m *Model) Configure(state *commit.State) {
 		status: status.New(),
 		help:   help.New(),
 	}
-
-	m.defaultFocus(state.Config)
-	m.signoff = state.Config.Commit.Signoff
-	m.emojiType = state.Config.Commit.EmojiType
 }
 
 func (m Model) Start() (*commit.Request, error) {
@@ -364,17 +362,4 @@ func (m Model) commit() Model {
 
 func (m Model) validate() bool {
 	return m.models.header.Summary() != ""
-}
-
-func (m *Model) defaultFocus(cfg config.Config) {
-	switch cfg.View.Focus {
-	case config.FocusAuthor:
-		m.focus = authorComponent
-	case config.FocusEmoji:
-		m.focus = emojiComponent
-	case config.FocusSummary:
-		m.focus = summaryComponent
-	default:
-		m.focus = emojiComponent
-	}
 }

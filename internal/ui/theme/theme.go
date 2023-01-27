@@ -66,3 +66,21 @@ func NextTint() tea.Msg {
 
 	return msg
 }
+
+func ListTints() []string {
+	var tints []string
+
+	for _, t := range registry.Tints() {
+		tints = append(tints, t.ID())
+	}
+
+	return tints
+}
+
+func GetTint() string {
+	return registry.ID()
+}
+
+func SetTint(id string) bool {
+	return registry.SetTintID(id)
+}
