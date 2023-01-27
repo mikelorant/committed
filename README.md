@@ -62,7 +62,7 @@ update the list.
 | WezTerm        | Compatible              |
 | Kitty          | Border alignment issues |
 
-## 🔨 Installation
+## 💾 Installation
 
 Install Committed with Homebrew.
 
