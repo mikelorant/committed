@@ -27,6 +27,16 @@ var firstDevmojiEmoji = emoji.Emoji{
 	Shortcode:   ":sparkles:",
 }
 
+var firstEmojiLogEmoji = emoji.Emoji{
+	Name:        "new",
+	Character:   "📦",
+	Description: "Use when you add something entirely.",
+	Characters:  1,
+	Codepoint:   "1f4e6",
+	Hex:         "F0 9F 93 A6",
+	Shortcode:   ":package:",
+}
+
 func TestNew(t *testing.T) {
 	type want struct {
 		len   int
@@ -63,6 +73,15 @@ func TestNew(t *testing.T) {
 				len:   19,
 				name:  "devmoji",
 				emoji: firstDevmojiEmoji,
+			},
+		},
+		{
+			name:    "emojilog",
+			options: emoji.WithEmojiSet(emoji.EmojiLogProfile),
+			want: want{
+				len:   7,
+				name:  "emojilog",
+				emoji: firstEmojiLogEmoji,
 			},
 		},
 	}

@@ -126,7 +126,7 @@ view:
   emojiSelector: below
 
   # Emoji set to use.
-  # Values: gitmoji, devmoji
+  # Values: gitmoji, devmoji, emojilog
   # Default: gitmoji
   emojiSet: gitmoji
 

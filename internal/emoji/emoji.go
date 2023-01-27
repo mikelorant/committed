@@ -42,15 +42,20 @@ var gitmoji string
 //go:embed devmoji.yaml
 var devmoji string
 
+//go:embed emojilog.yaml
+var emojiLog string
+
 const (
-	gitmojiName = "gitmoji"
-	devmojiName = "devmoji"
+	gitmojiName  = "gitmoji"
+	devmojiName  = "devmoji"
+	emojiLogName = "emojilog"
 )
 
 const (
 	DefaultProfile Profile = iota
 	GitmojiProfile
 	DevmojiProfile
+	EmojiLogProfile
 )
 
 func New(opts ...func(*Set)) *Set {
@@ -112,6 +117,9 @@ func (es *Set) load(p Profile) {
 	case DevmojiProfile:
 		es.Name = devmojiName
 		es.rawEmojis = devmoji
+	case EmojiLogProfile:
+		es.Name = emojiLogName
+		es.rawEmojis = emojiLog
 	default:
 		es.Name = gitmojiName
 		es.rawEmojis = gitmoji

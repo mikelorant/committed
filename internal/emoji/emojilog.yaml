@@ -1,0 +1,55 @@
+- name: new
+  emoji: 📦
+  description: "Use when you add something entirely."
+  characters: 1
+  codepoint: 1f4e6
+  hex: F0 9F 93 A6
+  shortcode: ":package:"
+
+- name: improve
+  emoji: 👌
+  description: "Use when you improve/enhance piece of code."
+  characters: 1
+  codepoint: 1f44c
+  hex: F0 9F 91 8C
+  shortcode: ":ok_hand:"
+
+- name: fix
+  emoji: 🐛
+  description: "Use when you fix a bug."
+  characters: 1
+  codepoint: e525
+  hex: F0 9F 90 9B
+  shortcode: ":bug:"
+
+- name: doc
+  emoji: 📖
+  description: "Use when you add documentation."
+  characters: 1
+  codepoint: 1f4d6
+  hex: F0 9F 93 96
+  shortcode: ":book:"
+
+- name: release
+  emoji: 🚀
+  description: "Use when you release a new version."
+  characters: 1
+  codepoint: 1f680
+  hex: F0 9F 9A 80
+  shortcode: ":rocket:"
+
+- name: test
+  emoji: 🤖
+  description: "Use when it's related to testing."
+  characters: 1
+  codepoint: 1f916
+  hex: F0 9F A4 96
+  shortcode: ":robot:"
+
+- name: breaking
+  emoji: ‼️
+  description: "Use when releasing a change that breaks previous versions."
+  characters: 2
+  codepoint: 203c, fe0f
+  hex: E2 80 BC, EF B8 8F
+  shortcode: ":bangbang:"
