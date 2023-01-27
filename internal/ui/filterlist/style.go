@@ -28,10 +28,10 @@ const (
 	paginatorActiveDot = "●"
 )
 
-func defaultStyles() Styles {
+func defaultStyles(th theme.Theme) Styles {
 	var s Styles
 
-	colour := theme.FilterList()
+	colour := th.FilterList()
 
 	s.boundary = lipgloss.NewStyle().
 		MarginLeft(4).

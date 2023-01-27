@@ -8,6 +8,7 @@ import (
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/repository"
 	"github.com/mikelorant/committed/internal/ui/body"
+	"github.com/mikelorant/committed/internal/ui/theme"
 	"github.com/mikelorant/committed/internal/ui/uitest"
 	"github.com/stretchr/testify/assert"
 )
@@ -164,6 +165,7 @@ func TestModel(t *testing.T) {
 						Message: tt.args.message,
 					},
 				},
+				Theme: theme.New(),
 				Options: commit.Options{
 					Amend: tt.args.amend,
 				},

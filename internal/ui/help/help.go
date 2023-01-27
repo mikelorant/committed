@@ -5,11 +5,13 @@ import (
 
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Model struct {
 	focus    bool
+	state    *commit.State
 	styles   Styles
 	viewport viewport.Model
 }
@@ -22,10 +24,11 @@ const (
 	defaultHeight = 23
 )
 
-func New() Model {
+func New(state *commit.State) Model {
 	return Model{
-		styles:   defaultStyles(),
-		viewport: newViewport(defaultWidth, defaultHeight),
+		state:    state,
+		styles:   defaultStyles(state.Theme),
+		viewport: newViewport(defaultWidth, defaultHeight, state),
 	}
 }
 
@@ -40,8 +43,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	//nolint:gocritic
 	switch msg.(type) {
 	case theme.Msg:
-		m.styles = defaultStyles()
-		styleViewport(&m.viewport)
+		m.styles = defaultStyles(m.state.Theme)
+		styleViewport(&m.viewport, m.state)
 	}
 
 	if m.focus {
@@ -71,15 +74,15 @@ func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
 	return m.(Model), c
 }
 
-func newViewport(w, h int) viewport.Model {
+func newViewport(w, h int, state *commit.State) viewport.Model {
 	vp := viewport.New(w, h)
 	vp.SetContent(Content)
 
-	styleViewport(&vp)
+	styleViewport(&vp, state)
 
 	return vp
 }
 
-func styleViewport(vp *viewport.Model) {
-	vp.Style = defaultStyles().viewport
+func styleViewport(vp *viewport.Model, state *commit.State) {
+	vp.Style = defaultStyles(state.Theme).viewport
 }

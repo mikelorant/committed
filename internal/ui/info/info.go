@@ -29,6 +29,7 @@ type Model struct {
 	Authors       []repository.User
 
 	focus      bool
+	state      *commit.State
 	styles     Styles
 	filterList filterlist.Model
 }
@@ -54,11 +55,13 @@ func New(state *commit.State) Model {
 		Date:         time.Now().Format(dateTimeFormat),
 		Author:       authors[0],
 		Authors:      authors,
-		styles:       defaultStyles(),
+		state:        state,
+		styles:       defaultStyles(state.Theme),
 		filterList: filterlist.New(
 			castToListItems(state.Repository.Users),
 			filterPromptText,
 			filterHeight,
+			state,
 		),
 	}
 
@@ -93,7 +96,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	//nolint:gocritic
 	switch msg.(type) {
 	case theme.Msg:
-		m.styles = defaultStyles()
+		m.styles = defaultStyles(m.state.Theme)
 	}
 
 	switch {

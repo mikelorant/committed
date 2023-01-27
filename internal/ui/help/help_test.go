@@ -4,7 +4,9 @@ import (
 	"testing"
 
 	"github.com/hexops/autogold/v2"
+	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/ui/help"
+	"github.com/mikelorant/committed/internal/ui/theme"
 	"github.com/mikelorant/committed/internal/ui/uitest"
 	"github.com/stretchr/testify/assert"
 )
@@ -92,7 +94,11 @@ func TestModel(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			help.Content = tt.args.content
 
-			m := help.New()
+			state := &commit.State{
+				Theme: theme.New(),
+			}
+
+			m := help.New(state)
 
 			if tt.args.model != nil {
 				m = tt.args.model(m)

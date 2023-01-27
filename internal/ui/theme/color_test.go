@@ -111,7 +111,8 @@ func TestBody(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			body := theme.Body()
+			th := theme.New()
+			body := th.Body()
 
 			assert.Equal(t, tt.body.Boundary, toColour(body.Boundary), "Boundary")
 			assert.Equal(t, tt.body.TextAreaPlaceholder, toColour(body.TextAreaPlaceholder), "TextAreaPlaceholder")
@@ -148,7 +149,8 @@ func TestFilterList(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			filterlist := theme.FilterList()
+			th := theme.New()
+			filterlist := th.FilterList()
 
 			assert.Equal(t, tt.filterlist.Boundary, toColour(filterlist.Boundary), "Boundary")
 			assert.Equal(t, tt.filterlist.ListNormalTitle, toColour(filterlist.ListNormalTitle), "ListNormalTitle")
@@ -180,7 +182,8 @@ func TestFooter(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			footer := theme.Footer()
+			th := theme.New()
+			footer := th.Footer()
 
 			assert.Equal(t, tt.footer.View, toColour(footer.View), "Boundary")
 		})
@@ -214,7 +217,8 @@ func TestHeader(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			header := theme.Header()
+			th := theme.New()
+			header := th.Header()
 
 			assert.Equal(t, tt.header.EmojiBoundary, toColour(header.EmojiBoundary), "EmojiBoundary")
 			assert.Equal(t, tt.header.SummaryBoundary, toColour(header.SummaryBoundary), "SummaryBoundary")
@@ -248,7 +252,8 @@ func TestHelp(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			help := theme.Help()
+			th := theme.New()
+			help := th.Help()
 
 			assert.Equal(t, tt.help.Boundary, toColour(help.Boundary), "Boundary")
 		})
@@ -281,7 +286,8 @@ func TestInfo(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			info := theme.Info()
+			th := theme.New()
+			info := th.Info()
 
 			assert.Equal(t, tt.info.HashText, toColour(info.HashText), "HashText")
 			assert.Equal(t, tt.info.HashValue, toColour(info.HashValue), "HashValue")
@@ -316,7 +322,8 @@ func TestMessage(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			message := theme.Message()
+			th := theme.New()
+			message := th.Message()
 
 			assert.Equal(t, tt.message.Summary, toColour(message.Summary), "Summary")
 			assert.Equal(t, tt.message.Body, toColour(message.Body), "Body")
@@ -343,7 +350,8 @@ func TestShortcut(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			shortcut := theme.Shortcut()
+			th := theme.New()
+			shortcut := th.Shortcut()
 
 			assert.Equal(t, tt.shortcut.Key, toColour(shortcut.Key), "Key")
 			assert.Equal(t, tt.shortcut.Label, toColour(shortcut.Label), "Label")

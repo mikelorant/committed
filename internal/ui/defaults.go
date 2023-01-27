@@ -33,7 +33,9 @@ func (m *Model) defaultSignoff(signoff bool) {
 	m.signoff = signoff
 }
 
-func (m *Model) defaultTheme(th string) {
-	theme.Tint()
-	theme.SetTint(th)
+func (m *Model) defaultTheme(t string) {
+	th := theme.New()
+	th.SetTint(t)
+
+	m.state.Theme = th
 }

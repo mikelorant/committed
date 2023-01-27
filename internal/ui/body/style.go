@@ -14,10 +14,10 @@ type Styles struct {
 	textAreaCursorStyle lipgloss.Style
 }
 
-func defaultStyles() Styles {
+func defaultStyles(th theme.Theme) Styles {
 	var s Styles
 
-	colour := theme.Body()
+	colour := th.Body()
 
 	s.boundary = lipgloss.NewStyle().
 		Width(74).

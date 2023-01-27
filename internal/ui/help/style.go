@@ -10,10 +10,10 @@ type Styles struct {
 	viewport lipgloss.Style
 }
 
-func defaultStyles() Styles {
+func defaultStyles(th theme.Theme) Styles {
 	var s Styles
 
-	colour := theme.Help()
+	colour := th.Help()
 
 	s.boundary = lipgloss.NewStyle().
 		Width(74).

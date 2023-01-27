@@ -10,6 +10,7 @@ import (
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/ui/header"
+	"github.com/mikelorant/committed/internal/ui/theme"
 	"github.com/mikelorant/committed/internal/ui/uitest"
 	"github.com/stretchr/testify/assert"
 )
@@ -800,5 +801,6 @@ func testState() commit.State {
 				},
 			},
 		},
+		Theme: theme.New(),
 	}
 }

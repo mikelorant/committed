@@ -6,12 +6,14 @@ import (
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
+	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type State struct {
 	Placeholders Placeholders
 	Repository   repository.Description
 	Emojis       *emoji.Set
+	Theme        theme.Theme
 	Config       config.Config
 	Options      Options
 }

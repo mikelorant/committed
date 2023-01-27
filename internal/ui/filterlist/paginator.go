@@ -4,19 +4,19 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
-	"github.com/mikelorant/committed/internal/ui/theme"
+	"github.com/mikelorant/committed/internal/commit"
 )
 
-func verticalPaginator(pos, total int) string {
-	return strings.Join(dots(pos, total), "\n")
+func verticalPaginator(pos, total int, state *commit.State) string {
+	return strings.Join(dots(pos, total, state), "\n")
 }
 
-func horizontalPaginator(pos, total int) string {
-	return strings.Join(dots(pos, total), "")
+func horizontalPaginator(pos, total int, state *commit.State) string {
+	return strings.Join(dots(pos, total, state), "")
 }
 
-func dots(pos, total int) []string {
-	colour := theme.FilterList()
+func dots(pos, total int, state *commit.State) []string {
+	colour := state.Theme.FilterList()
 
 	dots := make([]string, total)
 	for i := range dots {

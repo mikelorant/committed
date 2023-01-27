@@ -1,86 +1,91 @@
 package theme
 
 import (
-	"sync"
-
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	tint "github.com/lrstanley/bubbletint"
 )
 
+type Theme struct {
+	Registry *tint.Registry
+}
+
 type Msg int
 
-var (
-	registry *tint.Registry
-	once     sync.Once
-)
-
-var darkTints = []tint.Tint{
-	tint.TintBuiltinDark,
-	tint.TintGruvboxDark,
-	tint.TintSolarizedDarkHigherContrast,
-	tint.TintRetrowave,
-	tint.TintDracula,
-	tint.TintNord,
-	tint.TintTokyoNight,
-}
-
-var lightTints = []tint.Tint{
-	tint.TintBuiltinLight,
-	tint.TintGruvboxLight,
-	tint.TintBuiltinSolarizedLight,
-	tint.TintBuiltinTangoLight,
-	tint.TintTokyoNightLight,
-}
-
-func Tint() *tint.Registry {
+func New() Theme {
+	var reg *tint.Registry
 	var t []tint.Tint
 
-	once.Do(func() {
-		switch lipgloss.HasDarkBackground() {
-		case true:
-			t = darkTints
-		case false:
-			t = lightTints
-		}
+	switch lipgloss.HasDarkBackground() {
+	case true:
+		t = darkTints()
+	case false:
+		t = lightTints()
+	}
 
-		registry = tint.NewRegistry(t[0], t[1:]...)
-	})
+	reg = tint.NewRegistry(t[0], t[1:]...)
 
-	return registry
+	return Theme{
+		Registry: reg,
+	}
 }
 
 //nolint:ireturn
-func NextTint() tea.Msg {
-	var msg Msg
+func (t *Theme) NextTint() {
+	l := len(t.ListTints())
+	ids := t.ListTints()
 
-	l := len(registry.TintIDs())
-	ids := registry.TintIDs()
-
-	if registry.ID() == ids[l-1] {
-		registry.SetTintID(ids[0])
-		return msg
+	if t.GetTint() == ids[l-1] {
+		t.SetTint(ids[0])
+		return
 	}
 
-	registry.NextTint()
-
-	return msg
+	t.Registry.NextTint()
 }
 
-func ListTints() []string {
+func (t *Theme) ListTints() []string {
 	var tints []string
 
-	for _, t := range registry.Tints() {
-		tints = append(tints, t.ID())
+	for _, tint := range t.Registry.Tints() {
+		tints = append(tints, tint.ID())
 	}
 
 	return tints
 }
 
-func GetTint() string {
-	return registry.ID()
+func (t *Theme) GetTint() string {
+	return t.Registry.ID()
 }
 
-func SetTint(id string) bool {
-	return registry.SetTintID(id)
+func (t *Theme) SetTint(id string) bool {
+	return t.Registry.SetTintID(id)
+}
+
+//nolint:ireturn
+func UpdateTheme() tea.Msg {
+	var msg Msg
+
+	return msg
+}
+
+func darkTints() []tint.Tint {
+	return []tint.Tint{
+		tint.TintBuiltinDark,
+		tint.TintGruvboxDark,
+		tint.TintSolarizedDarkHigherContrast,
+		tint.TintRetrowave,
+		tint.TintDracula,
+		tint.TintNord,
+		tint.TintTokyoNight,
+	}
+}
+
+func lightTints() []tint.Tint {
+	return []tint.Tint{
+		tint.TintBuiltinLight,
+		tint.TintGruvboxLight,
+		tint.TintBuiltinSolarizedLight,
+		tint.TintBuiltinTangoLight,
+		tint.TintTokyoNightLight,
+	}
 }

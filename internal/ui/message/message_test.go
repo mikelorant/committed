@@ -5,6 +5,7 @@ import (
 
 	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/internal/ui/message"
+	"github.com/mikelorant/committed/internal/ui/theme"
 	"github.com/mikelorant/committed/internal/ui/uitest"
 )
 
@@ -71,6 +72,7 @@ func TestModel(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := message.State{
+				Theme:   theme.New(),
 				Emoji:   tt.args.emoji,
 				Summary: tt.args.summary,
 				Body:    tt.args.body,

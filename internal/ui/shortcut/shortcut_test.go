@@ -4,7 +4,9 @@ import (
 	"testing"
 
 	"github.com/hexops/autogold/v2"
+	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/ui/shortcut"
+	"github.com/mikelorant/committed/internal/ui/theme"
 	"github.com/mikelorant/committed/internal/ui/uitest"
 )
 
@@ -174,9 +176,14 @@ func TestModel(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			state := &commit.State{
+				Theme: theme.New(),
+			}
+
 			m := shortcut.New(shortcut.Shortcuts{
 				Modifiers:   tt.args.modifiers,
 				KeyBindings: tt.args.keybindings,
+				State:       state,
 			})
 
 			m, _ = shortcut.ToModel(m.Update(nil))

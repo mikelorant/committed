@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTint(t *testing.T) {
+func TestNew(t *testing.T) {
 	tests := []struct {
 		name string
 		ids  []string
@@ -28,12 +28,11 @@ func TestTint(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			reg := theme.Tint()
-			reg.SetTintID(reg.TintIDs()[0])
+			th := theme.New()
 
 			var ids []string
-			for i := 0; i < len(reg.TintIDs()); i++ {
-				ids = append(ids, reg.TintIDs()[i])
+			for i := 0; i < len(th.ListTints()); i++ {
+				ids = append(ids, th.ListTints()[i])
 			}
 
 			assert.Equal(t, tt.ids, ids)
@@ -80,14 +79,13 @@ func TestNextTint(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			reg := theme.Tint()
-			reg.SetTintID(reg.TintIDs()[0])
+			th := theme.New()
 
 			for i := 0; i < tt.count; i++ {
-				theme.NextTint()
+				th.NextTint()
 			}
 
-			assert.Equal(t, tt.id, reg.ID())
+			assert.Equal(t, tt.id, th.GetTint())
 		})
 	}
 }
@@ -113,10 +111,9 @@ func TestListTints(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			reg := theme.Tint()
-			reg.SetTintID(reg.TintIDs()[0])
+			th := theme.New()
 
-			got := theme.ListTints()
+			got := th.ListTints()
 			assert.Equal(t, tt.want, got)
 		})
 	}
@@ -142,11 +139,10 @@ func TestGetTint(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			reg := theme.Tint()
-			reg.SetTintID(reg.TintIDs()[0])
+			th := theme.New()
 
-			_ = theme.SetTint(tt.id)
-			got := theme.GetTint()
+			_ = th.SetTint(tt.id)
+			got := th.GetTint()
 
 			assert.Equal(t, tt.want, got)
 		})
@@ -180,17 +176,16 @@ func TestSetTint(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			reg := theme.Tint()
-			reg.SetTintID(reg.TintIDs()[0])
+			th := theme.New()
 
-			ok := theme.SetTint(tt.id)
+			ok := th.SetTint(tt.id)
 			if !tt.want.ok {
 				assert.False(t, ok)
 				return
 			}
 			assert.True(t, ok)
 
-			got := theme.GetTint()
+			got := th.GetTint()
 			assert.Equal(t, tt.want.id, got)
 		})
 	}

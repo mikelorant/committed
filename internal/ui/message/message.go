@@ -5,6 +5,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Model struct {
@@ -20,6 +21,7 @@ type State struct {
 	Summary string
 	Body    string
 	Footer  string
+	Theme   theme.Theme
 }
 
 func New(state State) Model {
@@ -28,7 +30,7 @@ func New(state State) Model {
 		summary: state.Summary,
 		body:    state.Body,
 		footer:  state.Footer,
-		styles:  defaultStyles(),
+		styles:  defaultStyles(state.Theme),
 	}
 }
 

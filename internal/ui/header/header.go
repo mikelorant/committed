@@ -55,12 +55,13 @@ func New(state *commit.State) Model {
 		ExpandHeight:  expandHeight,
 		Emojis:        state.Emojis.Emojis,
 		state:         state,
-		styles:        defaultStyles(),
-		summaryInput:  summaryInput(state.Placeholders.Summary),
+		styles:        defaultStyles(state.Theme),
+		summaryInput:  summaryInput(state),
 		filterList: filterlist.New(
 			castToListItems(state.Emojis.Emojis),
 			filterPromptText,
 			filterHeight,
+			state,
 		),
 	}
 
@@ -103,8 +104,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	//nolint:gocritic
 	switch msg.(type) {
 	case theme.Msg:
-		m.styles = defaultStyles()
-		styleSummaryInput(&m.summaryInput)
+		m.styles = defaultStyles(m.state.Theme)
+		styleSummaryInput(&m.summaryInput, m.state)
 	}
 
 	m.height = m.DefaultHeight
@@ -212,7 +213,7 @@ func (m Model) counter() string {
 		i += 3
 	}
 
-	c := counterStyle(i).Render(fmt.Sprintf("%d", i))
+	c := counterStyle(i, m.state.Theme).Render(fmt.Sprintf("%d", i))
 	d := m.styles.counterDivider
 	t := m.styles.counterLimit.Render(fmt.Sprintf("%d", subjectLimit))
 
@@ -223,20 +224,20 @@ func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
 	return m.(Model), c
 }
 
-func summaryInput(str string) textinput.Model {
+func summaryInput(state *commit.State) textinput.Model {
 	ti := textinput.New()
 	ti.Prompt = ""
-	ti.Placeholder = str
+	ti.Placeholder = state.Placeholders.Summary
 	ti.CharLimit = 72
 	ti.Width = 59
 
-	styleSummaryInput(&ti)
+	styleSummaryInput(&ti, state)
 
 	return ti
 }
 
-func styleSummaryInput(si *textinput.Model) {
-	s := defaultStyles()
+func styleSummaryInput(si *textinput.Model, state *commit.State) {
+	s := defaultStyles(state.Theme)
 
 	si.PromptStyle = s.summaryInputPromptStyle
 	si.TextStyle = s.summaryInputTextStyle

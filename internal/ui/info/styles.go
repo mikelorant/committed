@@ -33,10 +33,10 @@ type Styles struct {
 	dateValue lipgloss.Style
 }
 
-func defaultStyles() Styles {
+func defaultStyles(th theme.Theme) Styles {
 	var s Styles
 
-	colour := theme.Info()
+	colour := th.Info()
 
 	s.infoBoundary = lipgloss.NewStyle().
 		MarginBottom(1)

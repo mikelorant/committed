@@ -7,6 +7,7 @@ import (
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/repository"
 	"github.com/mikelorant/committed/internal/ui/footer"
+	"github.com/mikelorant/committed/internal/ui/theme"
 	"github.com/mikelorant/committed/internal/ui/uitest"
 	"github.com/stretchr/testify/assert"
 )
@@ -89,12 +90,14 @@ func TestModel(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var c commit.State
+			state := &commit.State{
+				Theme: theme.New(),
+			}
 			if tt.args.author.Name != "" && tt.args.author.Email != "" {
-				c.Repository.Users = []repository.User{tt.args.author}
+				state.Repository.Users = []repository.User{tt.args.author}
 			}
 
-			m := footer.New(&c)
+			m := footer.New(state)
 
 			if tt.args.model != nil {
 				m = tt.args.model(m)

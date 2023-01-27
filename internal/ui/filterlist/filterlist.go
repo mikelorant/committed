@@ -5,6 +5,7 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
@@ -15,6 +16,7 @@ type Model struct {
 	CharLimit  int
 
 	focus        bool
+	state        *commit.State
 	styles       Styles
 	list         list.Model
 	textInput    textinput.Model
@@ -27,13 +29,14 @@ const (
 	defaultCharLimit = 20
 )
 
-func New(items []list.Item, prompt string, h int) Model {
+func New(items []list.Item, prompt string, h int, state *commit.State) Model {
 	m := Model{
 		PromptText: prompt,
 		Height:     h,
 		Width:      defaultWidth,
 		CharLimit:  defaultCharLimit,
-		styles:     defaultStyles(),
+		state:      state,
+		styles:     defaultStyles(state.Theme),
 		items:      items,
 	}
 
@@ -87,7 +90,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	//nolint:gocritic
 	switch msg.(type) {
 	case theme.Msg:
-		m.styles = defaultStyles()
+		m.styles = defaultStyles(m.state.Theme)
 		m.styleTextInput(&m.textInput)
 		m.styleList(&m.list)
 		m.styleListDelegate(&m.list)
@@ -179,7 +182,7 @@ func (m *Model) styleListDelegate(l *list.Model) {
 }
 
 func (m Model) stylePaginatorColumn() string {
-	return verticalPaginator(m.list.Paginator.Page, m.list.Paginator.TotalPages)
+	return verticalPaginator(m.list.Paginator.Page, m.list.Paginator.TotalPages, m.state)
 }
 
 func (m Model) newTextInput() textinput.Model {

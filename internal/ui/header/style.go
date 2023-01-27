@@ -26,10 +26,10 @@ const (
 	maximumCounter = 50
 )
 
-func defaultStyles() Styles {
+func defaultStyles(th theme.Theme) Styles {
 	var s Styles
 
-	colour := theme.Header()
+	colour := th.Header()
 
 	s.emojiBoundary = lipgloss.NewStyle().
 		Width(4).
@@ -79,10 +79,10 @@ func defaultStyles() Styles {
 	return s
 }
 
-func counterStyle(i int) lipgloss.Style {
+func counterStyle(i int, th theme.Theme) lipgloss.Style {
 	var clr lipgloss.TerminalColor
 
-	colour := theme.Header()
+	colour := th.Header()
 
 	switch {
 	case i > emptyCounter && i < minimumCounter:

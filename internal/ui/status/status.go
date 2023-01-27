@@ -4,22 +4,27 @@ import (
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/ui/shortcut"
 )
 
 type Model struct {
 	Shortcuts shortcut.Shortcuts
 	shortcut  shortcut.Model
+	state     *commit.State
 }
 
-func New() Model {
+func New(state *commit.State) Model {
 	ds := shortcut.Shortcuts{
 		Modifiers:   defaultModifiers(),
 		KeyBindings: defaultKeyBindings(),
+		State:       state,
 	}
 
 	return Model{
-		shortcut: shortcut.New(ds),
+		Shortcuts: ds,
+		shortcut:  shortcut.New(ds),
+		state:     state,
 	}
 }
 
@@ -29,6 +34,7 @@ func (m Model) Init() tea.Cmd {
 
 //nolint:ireturn
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	m.Shortcuts.State = m.state
 	m.shortcut.Shortcuts = m.Shortcuts
 	m.shortcut, _ = shortcut.ToModel(m.shortcut.Update(nil))
 

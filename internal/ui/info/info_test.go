@@ -9,6 +9,7 @@ import (
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/repository"
 	"github.com/mikelorant/committed/internal/ui/info"
+	"github.com/mikelorant/committed/internal/ui/theme"
 	"github.com/mikelorant/committed/internal/ui/uitest"
 	"github.com/stretchr/testify/assert"
 )
@@ -305,6 +306,7 @@ func testState() commit.State {
 				When: time.Date(2022, time.January, 1, 1, 0, 0, 0, time.UTC),
 			},
 		},
+		Theme: theme.New(),
 		Options: commit.Options{
 			Amend: true,
 		},

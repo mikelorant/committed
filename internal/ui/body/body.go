@@ -17,6 +17,7 @@ type Model struct {
 	Width  int
 
 	focus    bool
+	state    *commit.State
 	styles   Styles
 	textArea textarea.Model
 }
@@ -30,8 +31,9 @@ const (
 func New(state *commit.State, h int) Model {
 	m := Model{
 		Height:   h,
-		styles:   defaultStyles(),
-		textArea: newTextArea(state.Placeholders.Body, defaultWidth),
+		state:    state,
+		styles:   defaultStyles(state.Theme),
+		textArea: newTextArea(state.Placeholders.Body, defaultWidth, state),
 	}
 
 	if state.Options.Amend && state.Repository.Head.Hash != "" {
@@ -66,8 +68,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	//nolint:gocritic
 	switch msg.(type) {
 	case theme.Msg:
-		m.styles = defaultStyles()
-		styleTextArea(&m.textArea)
+		m.styles = defaultStyles(m.state.Theme)
+		styleTextArea(&m.textArea, m.state)
 		switch m.textArea.Focused() {
 		case true:
 			cmd = m.textArea.Focus()
@@ -125,7 +127,7 @@ func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
 	return m.(Model), c
 }
 
-func newTextArea(ph string, w int) textarea.Model {
+func newTextArea(ph string, w int, state *commit.State) textarea.Model {
 	ta := textarea.New()
 	ta.Placeholder = ph
 	ta.Prompt = ""
@@ -133,13 +135,13 @@ func newTextArea(ph string, w int) textarea.Model {
 	ta.CharLimit = 0
 	ta.SetWidth(w)
 
-	styleTextArea(&ta)
+	styleTextArea(&ta, state)
 
 	return ta
 }
 
-func styleTextArea(ta *textarea.Model) {
-	s := defaultStyles()
+func styleTextArea(ta *textarea.Model, state *commit.State) {
+	s := defaultStyles(state.Theme)
 
 	ta.FocusedStyle.CursorLine = s.textAreaFocusedText
 	ta.FocusedStyle.Placeholder = s.textAreaPlaceholder

@@ -5,16 +5,19 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Model struct {
 	Shortcuts Shortcuts
+	state     *commit.State
 	styles    Styles
 	view      string
 }
 
 type Shortcuts struct {
+	State       *commit.State
 	KeyBindings []KeyBinding
 	Modifiers   []Modifier
 }
@@ -32,7 +35,8 @@ const (
 func New(s Shortcuts) Model {
 	return Model{
 		Shortcuts: s,
-		styles:    defaultStyles(),
+		state:     s.State,
+		styles:    defaultStyles(s.State.Theme),
 	}
 }
 
@@ -45,7 +49,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	//nolint:gocritic
 	switch msg.(type) {
 	case theme.Msg:
-		m.styles = defaultStyles()
+		m.styles = defaultStyles(m.Shortcuts.State.Theme)
 	}
 
 	m.view = m.shortcutRow()
@@ -58,10 +62,37 @@ func (m Model) View() string {
 }
 
 func (m Model) shortcutRow() string {
-	l := newKeySet(AlignLeft, m.Shortcuts.Modifiers, m.Shortcuts.KeyBindings, true)
-	r := newKeySet(AlignRight, m.Shortcuts.Modifiers, m.Shortcuts.KeyBindings, true)
-	ml := newKeySet(AlignLeft, m.Shortcuts.Modifiers, modifierToKeyBinding(AlignLeft, m.Shortcuts.Modifiers), false)
-	mr := newKeySet(AlignRight, m.Shortcuts.Modifiers, modifierToKeyBinding(AlignRight, m.Shortcuts.Modifiers), false)
+	l := newKeySet(keySetConfig{
+		align:       AlignLeft,
+		modifiers:   m.Shortcuts.Modifiers,
+		keyBindings: m.Shortcuts.KeyBindings,
+		decorate:    true,
+		state:       m.Shortcuts.State,
+	})
+
+	r := newKeySet(keySetConfig{
+		align:       AlignRight,
+		modifiers:   m.Shortcuts.Modifiers,
+		keyBindings: m.Shortcuts.KeyBindings,
+		decorate:    true,
+		state:       m.Shortcuts.State,
+	})
+
+	ml := newKeySet(keySetConfig{
+		align:       AlignLeft,
+		modifiers:   m.Shortcuts.Modifiers,
+		keyBindings: modifierToKeyBinding(AlignLeft, m.Shortcuts.Modifiers, m.Shortcuts.State),
+		decorate:    false,
+		state:       m.Shortcuts.State,
+	})
+
+	mr := newKeySet(keySetConfig{
+		align:       AlignRight,
+		modifiers:   m.Shortcuts.Modifiers,
+		keyBindings: modifierToKeyBinding(AlignRight, m.Shortcuts.Modifiers, m.Shortcuts.State),
+		decorate:    false,
+		state:       m.Shortcuts.State,
+	})
 
 	var left, right []string
 
@@ -90,7 +121,7 @@ func (m Model) joinShortcutRow(left, right []string) string {
 	return m.styles.boundary.Render(block)
 }
 
-func modifierToKeyBinding(a int, ms []Modifier) []KeyBinding {
+func modifierToKeyBinding(a int, ms []Modifier, state *commit.State) []KeyBinding {
 	var ss []KeyBinding
 
 	for _, v := range ms {
@@ -101,7 +132,7 @@ func modifierToKeyBinding(a int, ms []Modifier) []KeyBinding {
 		}
 
 		if strings.TrimSpace(v.Label) != "" {
-			label = defaultStyles().modifierPlus.String()
+			label = defaultStyles(state.Theme).modifierPlus.String()
 		}
 
 		kb := KeyBinding{

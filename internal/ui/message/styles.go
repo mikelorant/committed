@@ -12,10 +12,10 @@ type Styles struct {
 	footer  lipgloss.Style
 }
 
-func defaultStyles() Styles {
+func defaultStyles(th theme.Theme) Styles {
 	var s Styles
 
-	colour := theme.Message()
+	colour := th.Message()
 
 	s.message = lipgloss.NewStyle().
 		MarginLeft(4).

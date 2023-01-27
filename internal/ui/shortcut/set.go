@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mikelorant/committed/internal/commit"
 )
 
 type KeyBinding struct {
@@ -27,16 +28,26 @@ type keySet struct {
 	decorate    bool
 	height      int
 	width       int
+	state       *commit.State
 	styles      Styles
 }
 
-func newKeySet(a int, ms []Modifier, kbs []KeyBinding, d bool) []string {
+type keySetConfig struct {
+	align       int
+	modifiers   []Modifier
+	keyBindings []KeyBinding
+	decorate    bool
+	state       *commit.State
+}
+
+func newKeySet(ksc keySetConfig) []string {
 	ks := keySet{
-		align:       a,
-		modifiers:   ms,
-		keybindings: kbs,
-		decorate:    d,
-		styles:      defaultStyles(),
+		align:       ksc.align,
+		modifiers:   ksc.modifiers,
+		keybindings: ksc.keyBindings,
+		decorate:    ksc.decorate,
+		styles:      defaultStyles(ksc.state.Theme),
+		state:       ksc.state,
 	}
 	ks.keySetDimensions()
 	ks.initKeySet()

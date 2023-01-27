@@ -17,10 +17,10 @@ type Styles struct {
 	angleBracket lipgloss.Style
 }
 
-func defaultStyles() Styles {
+func defaultStyles(th theme.Theme) Styles {
 	var s Styles
 
-	colour := theme.Shortcut()
+	colour := th.Shortcut()
 
 	s.boundary = lipgloss.NewStyle().
 		MarginBottom(1)

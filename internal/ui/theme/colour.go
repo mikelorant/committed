@@ -85,118 +85,102 @@ type shortcut struct {
 }
 
 //nolint:revive
-func Body() body {
-	tint := Tint()
-
+func (t *Theme) Body() body {
 	return body{
-		Boundary:            tint.Fg(),
-		TextAreaPlaceholder: ToAdaptive(tint.BrightBlack()),
-		TextAreaPrompt:      tint.Fg(),
-		TextAreaFocusedText: tint.Fg(),
-		TextAreaBlurredText: tint.Fg(),
-		TextAreaCursorStyle: tint.Fg(),
+		Boundary:            t.Registry.Fg(),
+		TextAreaPlaceholder: ToAdaptive(t.Registry.BrightBlack()),
+		TextAreaPrompt:      t.Registry.Fg(),
+		TextAreaFocusedText: t.Registry.Fg(),
+		TextAreaBlurredText: t.Registry.Fg(),
+		TextAreaCursorStyle: t.Registry.Fg(),
 	}
 }
 
 //nolint:revive
-func FilterList() filterlist {
-	tint := Tint()
-
+func (t *Theme) FilterList() filterlist {
 	return filterlist{
-		Boundary:                  tint.Fg(),
-		ListNormalTitle:           tint.Fg(),
-		ListSelectedTitle:         ToAdaptive(tint.Cyan()),
-		ListNoItems:               ToAdaptive(tint.BrightBlack()),
-		TextInputPromptMark:       ToAdaptive(tint.Green()),
-		TextInputPromptText:       tint.Fg(),
-		PaginatorDots:             ToAdaptive(tint.Cyan()),
-		TextInputPromptStyle:      tint.Fg(),
-		TextInputTextStyle:        tint.Fg(),
-		TextInputPlaceholderStyle: ToAdaptive(tint.BrightBlack()),
-		TextInputCursorStyle:      tint.Fg(),
+		Boundary:                  t.Registry.Fg(),
+		ListNormalTitle:           t.Registry.Fg(),
+		ListSelectedTitle:         ToAdaptive(t.Registry.Cyan()),
+		ListNoItems:               ToAdaptive(t.Registry.BrightBlack()),
+		TextInputPromptMark:       ToAdaptive(t.Registry.Green()),
+		TextInputPromptText:       t.Registry.Fg(),
+		PaginatorDots:             ToAdaptive(t.Registry.Cyan()),
+		TextInputPromptStyle:      t.Registry.Fg(),
+		TextInputTextStyle:        t.Registry.Fg(),
+		TextInputPlaceholderStyle: ToAdaptive(t.Registry.BrightBlack()),
+		TextInputCursorStyle:      t.Registry.Fg(),
 	}
 }
 
 //nolint:revive
-func Footer() footer {
-	tint := Tint()
-
+func (t *Theme) Footer() footer {
 	return footer{
-		View: tint.Fg(),
+		View: t.Registry.Fg(),
 	}
 }
 
 //nolint:revive
-func Header() header {
-	tint := Tint()
-
+func (t *Theme) Header() header {
 	return header{
-		EmojiBoundary:                tint.Fg(),
-		SummaryBoundary:              tint.Fg(),
-		CounterDivider:               tint.Fg(),
-		CounterLimit:                 tint.Fg(),
-		SummaryInputPromptStyle:      tint.Fg(),
-		SummaryInputTextStyle:        tint.Fg(),
-		SummaryInputPlaceholderStyle: ToAdaptive(tint.BrightBlack()),
-		SummaryInputCursorStyle:      tint.Fg(),
-		CounterDefault:               tint.Fg(),
-		CounterLow:                   ToAdaptive(tint.Yellow()),
-		CounterNormal:                ToAdaptive(tint.Green()),
-		CounterWarning:               ToAdaptive(tint.Yellow()),
-		CounterHigh:                  ToAdaptive(tint.BrightRed()),
+		EmojiBoundary:                t.Registry.Fg(),
+		SummaryBoundary:              t.Registry.Fg(),
+		CounterDivider:               t.Registry.Fg(),
+		CounterLimit:                 t.Registry.Fg(),
+		SummaryInputPromptStyle:      t.Registry.Fg(),
+		SummaryInputTextStyle:        t.Registry.Fg(),
+		SummaryInputPlaceholderStyle: ToAdaptive(t.Registry.BrightBlack()),
+		SummaryInputCursorStyle:      t.Registry.Fg(),
+		CounterDefault:               t.Registry.Fg(),
+		CounterLow:                   ToAdaptive(t.Registry.Yellow()),
+		CounterNormal:                ToAdaptive(t.Registry.Green()),
+		CounterWarning:               ToAdaptive(t.Registry.Yellow()),
+		CounterHigh:                  ToAdaptive(t.Registry.BrightRed()),
 	}
 }
 
 //nolint:revive
-func Help() help {
-	tint := Tint()
-
+func (t *Theme) Help() help {
 	return help{
-		Boundary: tint.Fg(),
-		Viewport: tint.Fg(),
+		Boundary: t.Registry.Fg(),
+		Viewport: t.Registry.Fg(),
 	}
 }
 
 //nolint:revive
-func Info() info {
-	tint := Tint()
-
+func (t *Theme) Info() info {
 	return info{
-		HashText:            ToAdaptive(tint.Yellow()),
-		HashValue:           ToAdaptive(tint.Yellow()),
-		BranchHead:          ToAdaptive(tint.BrightCyan()),
-		BranchLocal:         ToAdaptive(tint.BrightGreen()),
-		BranchGrouping:      ToAdaptive(tint.Yellow()),
-		BranchRemote:        ToAdaptive(tint.BrightRed()),
-		Colon:               tint.Fg(),
-		AuthorAngledBracket: tint.Fg(),
-		AuthorText:          tint.Fg(),
-		AuthorValue:         tint.Fg(),
-		DateText:            tint.Fg(),
-		DateValue:           tint.Fg(),
+		HashText:            ToAdaptive(t.Registry.Yellow()),
+		HashValue:           ToAdaptive(t.Registry.Yellow()),
+		BranchHead:          ToAdaptive(t.Registry.BrightCyan()),
+		BranchLocal:         ToAdaptive(t.Registry.BrightGreen()),
+		BranchGrouping:      ToAdaptive(t.Registry.Yellow()),
+		BranchRemote:        ToAdaptive(t.Registry.BrightRed()),
+		Colon:               t.Registry.Fg(),
+		AuthorAngledBracket: t.Registry.Fg(),
+		AuthorText:          t.Registry.Fg(),
+		AuthorValue:         t.Registry.Fg(),
+		DateText:            t.Registry.Fg(),
+		DateValue:           t.Registry.Fg(),
 	}
 }
 
 //nolint:revive
-func Message() message {
-	tint := Tint()
-
+func (t *Theme) Message() message {
 	return message{
-		Summary: tint.Fg(),
-		Body:    tint.Fg(),
-		Footer:  tint.Fg(),
+		Summary: t.Registry.Fg(),
+		Body:    t.Registry.Fg(),
+		Footer:  t.Registry.Fg(),
 	}
 }
 
 //nolint:revive
-func Shortcut() shortcut {
-	tint := Tint()
-
+func (t *Theme) Shortcut() shortcut {
 	return shortcut{
-		Key:          ToAdaptive(tint.Cyan()),
-		Label:        ToAdaptive(tint.Green()),
-		Plus:         tint.Fg(),
-		AngleBracket: tint.Fg(),
+		Key:          ToAdaptive(t.Registry.Cyan()),
+		Label:        ToAdaptive(t.Registry.Green()),
+		Plus:         t.Registry.Fg(),
+		AngleBracket: t.Registry.Fg(),
 	}
 }
 

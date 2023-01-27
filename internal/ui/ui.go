@@ -20,6 +20,7 @@ import (
 
 type Model struct {
 	Request       *commit.Request
+	state         *commit.State
 	focus         focus
 	previousFocus focus
 	models        Models
@@ -79,6 +80,7 @@ func New() Model {
 }
 
 func (m *Model) Configure(state *commit.State) {
+	m.state = state
 	m.defaults(state.Config)
 
 	m.models = Models{
@@ -86,8 +88,8 @@ func (m *Model) Configure(state *commit.State) {
 		header: header.New(state),
 		body:   body.New(state, bodyDefaultHeight),
 		footer: footer.New(state),
-		status: status.New(),
-		help:   help.New(),
+		status: status.New(state),
+		help:   help.New(state),
 	}
 }
 
@@ -231,7 +233,8 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 
 		return keyResponse{model: m, end: false, nilMsg: true}
 	case "alt+t":
-		return keyResponse{model: m, cmd: theme.NextTint, end: true}
+		m.state.Theme.NextTint()
+		return keyResponse{model: m, cmd: theme.UpdateTheme, end: true}
 	case "alt+/":
 		if m.focus == helpComponent {
 			m.focus = m.previousFocus
@@ -347,6 +350,7 @@ func (m Model) commit() Model {
 		Summary: m.models.header.Summary(),
 		Body:    m.models.body.Value(),
 		Footer:  m.models.footer.Value(),
+		Theme:   m.state.Theme,
 	})
 
 	m.Request = &commit.Request{

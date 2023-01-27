@@ -7,12 +7,13 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/repository"
-	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Model struct {
 	Author  repository.User
 	Signoff bool
+
+	state *commit.State
 }
 
 func New(state *commit.State) Model {
@@ -24,6 +25,7 @@ func New(state *commit.State) Model {
 
 	return Model{
 		Author: authors[0],
+		state:  state,
 	}
 }
 
@@ -37,7 +39,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	colour := theme.Footer()
+	colour := m.state.Theme.Footer()
 
 	return lipgloss.NewStyle().
 		Width(74).
