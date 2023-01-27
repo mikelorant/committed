@@ -398,3 +398,20 @@ Date:   Mon Jan 2 15:04:05 2006 -0700
 ## 🎫 License
 
 [MIT](https://choosealicense.com/licenses/mit/)
+
+## 👍 Thanks
+
+Thanks to [Carlos Cuesta](https://github.com/carloscuesta) for creating [gitmoji](https://gitmoji.dev/) and [gitmoji-cli](https://github.com/carloscuesta/gitmoji-cli) which was the
+inspiration for this project.
+
+Thanks to [Ahmad Awais](https://github.com/ahmadawais) for [Emoji-Log](https://github.com/ahmadawais/Emoji-Log) and [Folke Lemaitre](https://github.com/folke) for [Devmoji](https://github.com/folke/devmoji).
+
+Many thanks to [David Ackroyd](https://github.com/dackroyd) and [Matt Hope](https://github.com/matthope) for all their guidance with Go.
+Without their expertise I would never had the capability to build Committed.
+
+Thanks to all the developers from [Charm](https://github.com/charmbracelet) for their amazing set of libraries.
+Committed would never have looked the way it does without [Bubble Tea](https://github.com/charmbracelet/bubbletea), [Lipgloss](https://github.com/charmbracelet/lipgloss)
+and [Bubbles](https://github.com/charmbracelet/bubbles).
+
+Thanks to [Tim Pope](https://github.com/tpope) for his Git commit recommendations which was a core
+component in the interface design.
