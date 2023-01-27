@@ -3,16 +3,13 @@ package cmd
 import (
 	_ "embed"
 	"log"
+	"runtime/debug"
 	"text/template"
 
 	"github.com/spf13/cobra"
 )
 
-var (
-	ReleaseVersion = "snapshot"
-	ReleaseDate    = "unknown"
-	ReleaseCommit  = "none"
-)
+var version = "snapshot"
 
 //go:embed version.gotmpl
 var verTmpl string
@@ -32,9 +29,28 @@ func NewVersionCmd() *cobra.Command {
 }
 
 func annotations() map[string]string {
+	var (
+		date   = "unknown"
+		commit = "none"
+	)
+
+	info, ok := debug.ReadBuildInfo()
+	if !ok {
+		log.Fatalf("unable to read build info")
+	}
+
+	for _, s := range info.Settings {
+		switch {
+		case s.Key == "vcs.time":
+			date = s.Value
+		case s.Key == "vcs.revision":
+			commit = s.Value
+		}
+	}
+
 	return map[string]string{
-		"version": ReleaseVersion,
-		"date":    ReleaseDate,
-		"commit":  ReleaseCommit,
+		"version": version,
+		"date":    date,
+		"commit":  commit,
 	}
 }

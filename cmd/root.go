@@ -37,16 +37,11 @@ type App struct {
 	opts commit.Options
 }
 
-var (
-	defaultDryRun     = true
-	defaultConfigFile = "$HOME/.config/committed/config.yaml"
-)
-
 func NewRootCmd(a App) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:         "committed",
 		Short:       "Committed is a WYSIWYG Git commit editor",
-		Version:     ReleaseVersion,
+		Version:     version,
 		Annotations: annotations(),
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			return a.configure(a.opts)
@@ -58,6 +53,11 @@ func NewRootCmd(a App) *cobra.Command {
 			return a.apply()
 		},
 	}
+
+	var (
+		defaultDryRun     = isDryRun()
+		defaultConfigFile = "$HOME/.config/committed/config.yaml"
+	)
 
 	cmd.AddCommand(NewVersionCmd())
 	cmd.SetVersionTemplate(verTmpl)

@@ -1,7 +1,7 @@
-//go:build release
+//go:build !release
 
 package cmd
 
 func isDryRun() bool {
-	return false
+	return true
 }

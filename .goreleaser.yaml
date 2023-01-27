@@ -9,9 +9,7 @@ builds:
     ldflags:
       - -s
       - -w
-      - -X github.com/mikelorant/committed/cmd.ReleaseVersion={{.Version}}
-      - -X github.com/mikelorant/committed/cmd.ReleaseDate={{.Date}}
-      - -X github.com/mikelorant/committed/cmd.ReleaseCommit={{.ShortCommit}}
+      - -X github.com/mikelorant/committed/cmd.ReleaseVersion={{.version}}
     tags:
       - release
 
