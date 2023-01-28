@@ -11,14 +11,16 @@ commits by showing you the layout in the same format as `git log`.
 
 ## 💡 Highlights [⭡](#committed)
 
-- Built-in multiline editor
-- Emoji selector
-- Author profile switching
-- Inline text interface
-- Subject line counter
-- Appends sign-off
-- Formats body width to 72 characters
-- Best practise recommendations
+- Built-in **multiline editor** with rich capabilities.
+- Custom **emoji selector** providing popular sets to choose from.
+- **Switch author** before applying the commit.
+- Inline **text interface** mimics the Git log output.
+- Dynamic **subject line counter**.
+- Toggle appending **sign-off** required by many open source projects.
+- Automatically **hard wraps** body to 72 characters.
+- Best practise **recommendations**.
+- Import and **amend** previous commit.
+- **Adaptive colours** with **light** and **dark** themes.
 
 ## 🐾 First Steps [⭡](#committed)
 
@@ -84,8 +86,8 @@ update the list.
 
 Install Committed with Homebrew.
 
-```bash
-brew install mikelorant/taps/committed
+```shell
+$ brew install mikelorant/taps/committed
 ```
 
 ## 🎛 Usage [⭡](#committed)
