@@ -5,9 +5,9 @@
 Committed is a WYSIWYG Git commit editor that helps improve the quality of your
 commits by showing you the layout in the same format as `git log`.
 
-![demo](docs/demo.gif)
+## [![Highlights](https://img.shields.io/badge/-💡_Highlights-ff0000)](#-highlights-) [![First Steps](https://img.shields.io/badge/-🐾_First_Steps-ffa500)](#-first-steps-) [![Installation](https://img.shields.io/badge/-💾_Installation-ffff00)](#-installation-) [![Usage](https://img.shields.io/badge/-🎛_Usage-008000)](#-usage-) [![Configuration](https://img.shields.io/badge/-⚙️_Configuration-0000ff)](#-configuration-) [![Best Practises](https://img.shields.io/badge/-🏆_Best_Practises-4b0082)](#-best-practises-) [![Shortcuts](https://img.shields.io/badge/-⌨️_Shortcuts-ee82ee)](#-shortcuts-)
 
-# [![Highlights](https://img.shields.io/badge/-Highlights-ff0000)](#-highlights-) [![Purpose](https://img.shields.io/badge/-Purpose-ff8000)](#-purpose-) [![Limitations](https://img.shields.io/badge/-Limitations-ffff00)](#-limitations-) [![Installation](https://img.shields.io/badge/-Installation-80ff00)](#-installation-) [![Usage](https://img.shields.io/badge/-Usage-00aa00)](#-usage-) [![Configuration](https://img.shields.io/badge/-Configuration-00bb80)](#-configuration-) [![Best Practises](https://img.shields.io/badge/-Best_Practises-00ffff)](#-best-practises-) [![Shortcuts](https://img.shields.io/badge/-Shortcuts-0080ff)](#-shortcuts-) [![Authors](https://img.shields.io/badge/-Authors-8000ff)](#-authors-) [![License](https://img.shields.io/badge/-License-ff00ff)](#-license-) [![Thanks](https://img.shields.io/badge/-Thanks-ff0080)](#-thanks-)
+![demo](docs/demo.gif)
 
 ## 💡 Highlights [⭡](#committed)
 
@@ -46,7 +46,7 @@ rather than accepting what has already been written.
 These capabilities all contribute to helping create a commit message that is
 useful.
 
-## ⚠ Limitations [⭡](#committed)
+## ⚠️ Limitations [⭡](#committed)
 
 Terminals render emojis differently and this makes alignment of borders
 complicated and difficult. It is an ongoing process to improve the compatibility
@@ -233,7 +233,7 @@ The emoji shortcuts are limited to the emoji view only.
 | Next page     | <kbd>⇟ Page Down</kbd> |
 | Previous page | <kbd>⇞ Page Up</kbd>   |
 
-## ✏ Authors [⭡](#committed)
+## ✏️ Authors [⭡](#committed)
 
 - [@mikelorant](https://www.github.com/mikelorant)
 
