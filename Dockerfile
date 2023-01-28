@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1.4
+
 FROM golang:1.19.4-alpine3.17 as base
 WORKDIR /usr/src/app
 RUN --mount=type=cache,target=/var/cache/apk \
@@ -43,4 +45,34 @@ RUN git config --global user.email "you@example.com" && \
     git config --global user.name "Your Name" && \
     git init
 
-ENTRYPOINT ["committed"]
+FROM mikelorant/vhs as vhs
+
+RUN apt-get -y install git
+
+COPY --from=build /usr/local/bin/committed /usr/local/bin
+
+ENV VHS_NO_SANDBOX="true"
+ENV TERM=xterm-256color
+
+RUN git config --global user.email "john.doe@example.com" && \
+    git config --global user.name "John Doe" && \
+    git init
+
+RUN mkdir -p /root/.config/committed
+COPY <<EOF /root/.config/committed/config.yaml
+view:
+  compatibility: ttyd
+  ignoreGlobalAuthor: true
+
+authors:
+  - name: John Doe
+    email: john.doe@example.com
+  - name: John Doe
+    email: jdoe@example.org
+  - name: John Doe
+    email: jd@example.net
+EOF
+
+COPY scripts ./
+
+ENTRYPOINT ["bash"]

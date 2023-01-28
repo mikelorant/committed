@@ -2,13 +2,7 @@
 # - Use ttyd 1.7.2 which resolves missing cursor.
 # - Use current build of vhs to resolve width issues.
 # - Modify high-voltage with basic version. (emoji.yaml)
-# - Copy $HOME/.config/committed/config.yaml to current directory.
-# - Modify config to use:
-#     view.compatibility = ttyd (config.yaml)
-#     authors:
-#       - name: John Doe
-#         email: jdoe@example.org
-# - Comment out user in Git config. (~/.gitconfig)
+# - Copy scripts/demo.yaml to current directory.
 # - Build release: go build -tags release
 
 Output demo.gif

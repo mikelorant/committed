@@ -1,0 +1,9 @@
+view:
+    compatibility: ttyd
+    ignoreGlobalAuthor: true
+
+authors:
+  - name: John Doe
+    email: john.doe@example.com
+  - name: John Doe
+    email: jdoe@example.org
