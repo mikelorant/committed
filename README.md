@@ -134,18 +134,6 @@ Flags:
 Use "committed [command] --help" for more information about a command.
 ```
 
-To create and apply a commit run `committed` without any arguments. Shell or Git
-aliases can be used to tailor this to your preferred workflow.
-
-To amend an existing commit use `committed --amend`. There are certain
-limitations when amending commits and it is recommended only for use with
-commits created with Committed. The limitations are:
-
-- Emoji character or shortcode must be in the existing data set.
-- Trailers will be imported into the body.
-- Summary will be truncated if more than 72 characters.
-- Lines will not reflow when editing the body.
-
 ## ⚙ Configuration [⭡](#committed)
 
 No configuration is necessary however there are some values that can be changed
