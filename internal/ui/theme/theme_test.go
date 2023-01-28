@@ -10,11 +10,13 @@ import (
 
 func TestNew(t *testing.T) {
 	tests := []struct {
-		name string
-		ids  []string
+		name   string
+		colour config.Colour
+		ids    []string
 	}{
 		{
-			name: "ids",
+			name:   "adaptive",
+			colour: config.ColourAdaptive,
 			ids: []string{
 				"builtin_dark",
 				"dracula",
@@ -25,11 +27,35 @@ func TestNew(t *testing.T) {
 				"tokyo_night",
 			},
 		},
+		{
+			name:   "dark",
+			colour: config.ColourDark,
+			ids: []string{
+				"builtin_dark",
+				"dracula",
+				"gruvbox_dark",
+				"nord",
+				"retrowave",
+				"solarized_dark_higher_contrast",
+				"tokyo_night",
+			},
+		},
+		{
+			name:   "light",
+			colour: config.ColourLight,
+			ids: []string{
+				"builtin_light",
+				"builtin_solarized_light",
+				"builtin_tango_light",
+				"gruvbox_light",
+				"tokyo_night_light",
+			},
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			th := theme.New(config.ColourAdaptive)
+			th := theme.New(tt.colour)
 
 			var ids []string
 			for i := 0; i < len(th.ListTints()); i++ {
@@ -49,32 +75,32 @@ func TestNextTint(t *testing.T) {
 	}{
 		{
 			name: "first",
-			id:   "builtin_dark",
+			id:   "builtin_light",
 		},
 		{
 			name:  "one",
 			count: 1,
-			id:    "dracula",
+			id:    "builtin_solarized_light",
 		},
 		{
 			name:  "three",
 			count: 3,
-			id:    "nord",
+			id:    "gruvbox_light",
 		},
 		{
 			name:  "last",
-			count: 6,
-			id:    "tokyo_night",
+			count: 4,
+			id:    "tokyo_night_light",
 		},
 		{
 			name:  "last_plus_one",
-			count: 7,
-			id:    "builtin_dark",
+			count: 5,
+			id:    "builtin_light",
 		},
 		{
 			name:  "last_plus_two",
-			count: 8,
-			id:    "dracula",
+			count: 6,
+			id:    "builtin_solarized_light",
 		},
 	}
 
@@ -99,13 +125,11 @@ func TestListTints(t *testing.T) {
 		{
 			name: "default",
 			want: []string{
-				"builtin_dark",
-				"dracula",
-				"gruvbox_dark",
-				"nord",
-				"retrowave",
-				"solarized_dark_higher_contrast",
-				"tokyo_night",
+				"builtin_light",
+				"builtin_solarized_light",
+				"builtin_tango_light",
+				"gruvbox_light",
+				"tokyo_night_light",
 			},
 		},
 	}
@@ -128,13 +152,13 @@ func TestGetTint(t *testing.T) {
 	}{
 		{
 			name: "valid",
-			id:   "builtin_dark",
-			want: "builtin_dark",
+			id:   "builtin_light",
+			want: "builtin_light",
 		},
 		{
 			name: "invalid",
 			id:   "invalid",
-			want: "builtin_dark",
+			want: "builtin_light",
 		},
 	}
 
@@ -163,15 +187,18 @@ func TestSetTint(t *testing.T) {
 	}{
 		{
 			name: "valid",
-			id:   "dracula",
+			id:   "builtin_tango_light",
 			want: want{
-				id: "dracula",
+				id: "builtin_tango_light",
 				ok: true,
 			},
 		},
 		{
 			name: "invalid",
 			id:   "test",
+			want: want{
+				id: "builtin_light",
+			},
 		},
 	}
 
@@ -182,6 +209,8 @@ func TestSetTint(t *testing.T) {
 			ok := th.SetTint(tt.id)
 			if !tt.want.ok {
 				assert.False(t, ok)
+				got := th.GetTint()
+				assert.Equal(t, tt.want.id, got)
 				return
 			}
 			assert.True(t, ok)
