@@ -1,0 +1,66 @@
+version: '3'
+
+tasks:
+  build:
+    desc: Build app.
+    cmds:
+      - go build -v -race
+
+  check:
+    desc: Format, lint and test app.
+    cmds:
+      - task: fmt
+      - task: lint
+      - task: test
+
+  test:
+    desc: Test app.
+    cmds:
+      - go test ./...
+
+  lint:
+    desc: Run Go, Docker and Markdown linters.
+    cmds:
+      - golangci-lint run ./...
+      - hadolint --failure-threshold error Dockerfile
+      - markdownlint --disable MD013 MD025 MD033 -- README.md
+
+  fmt:
+    desc: Format Go files.
+    cmds:
+      - gofumpt -l -w .
+
+  release:
+    desc: Build release version.
+    cmds:
+      - go build -v -tags release
+
+  clean:
+    desc: Remove cache and temporary files.
+    cmds:
+      - go clean -testcache
+      - rm -f committed
+      - rm -f coverage.txt
+      - rm -rf dist
+
+  module:update:
+    desc: Update Go modules.
+    cmds:
+      - go get -u
+
+  module:tidy:
+    desc: Tidy Go modules.
+    cmds:
+      - go mod tidy
+
+  coverage:
+    desc: Generate Go coverage report.
+    cmds:
+      - go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+      - go tool cover -func=coverage.txt
+      - rm coverage.txt
+
+  docker:build:
+    desc: Build app image.
+    cmds:
+      - docker build --rm --tag committed .
