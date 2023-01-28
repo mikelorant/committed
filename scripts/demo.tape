@@ -1,14 +1,4 @@
 # Requirements:
-# - Use ttyd 1.7.2 which resolves missing cursor.
-# - Use current build of vhs to resolve width issues.
-# - Modify high-voltage with basic version. (emoji.yaml)
-# - Copy $HOME/.config/committed/config.yaml to current directory.
-# - Modify config to use:
-#     view.compatibility = ttyd (config.yaml)
-#     authors:
-#       - name: John Doe
-#         email: jdoe@example.org
-# - Comment out user in Git config. (~/.gitconfig)
 # - Build release: go build -tags release
 
 Output demo.gif
@@ -18,20 +8,16 @@ Set Height 760
 Set Padding 18
 Set FontSize 16
 Set Theme "Builtin Dark"
+Set LetterSpacing 0
 
 Hide
 # Sets up a fake commit.
-# Sleep 1s
-# Type "echo 1 >> test"
-# Sleep 0.3 Enter Sleep 0.3
-# Type "git add test"
-# Sleep 0.3 Enter Sleep 0.3
-# Type "export LIPGLOSS_TERMINAL=ttyd"
-# Sleep 0.3 Enter Sleep 0.3
-# Type "alias committed='./committed --config ./demo.yaml'"
-# Sleep 0.3 Enter Sleep 0.3
-# Type "clear"
-# Sleep 0.3 Enter Sleep 0.3
+Type "cd /tmp"                                                  Enter Wait
+Type "git init"                                                 Enter Wait
+Type "git commit --allow-empty --allow-empty-message --no-edit" Enter Wait
+Type "touch test"                                               Enter Wait
+Type "git add test"                                             Enter Wait
+Type "clear"                                                    Enter Wait
 
 Show
 Sleep 1s

@@ -1,0 +1,20 @@
+FROM ghcr.io/mikelorant/committed:latest AS committed
+
+FROM ghcr.io/charmbracelet/vhs:v0.9.0
+ENV TERM=xterm-256color
+RUN --mount=type=cache,target=/var/cache/apt \
+    --mount=type=cache,target=/var/lib/apt \
+    apt-get update && \
+    apt-get install --yes \
+      git
+COPY --from=committed /usr/local/bin/committed /usr/local/bin/
+RUN git config --global user.email "john.doe@example.com" && \
+    git config --global user.name "John Doe" && \
+    git config --global init.defaultBranch main
+COPY <<EOF /root/.config/committed/config.yaml
+authors:
+  - name: John Doe
+    email: jdoe@example.org
+view:
+    compatibility: unicode9
+EOF

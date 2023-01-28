@@ -65,3 +65,9 @@ tasks:
     desc: Build app image.
     cmds:
       - docker build --rm --tag committed .
+
+  docker:record:
+    desc: Record demo video.
+    cmds:
+      - docker build --file Dockerfile.demo --tag committed:demo .
+      - docker run --interactive --tty --rm --volume ./docs:/vhs --volume ./scripts:/tapes committed:demo /tapes/demo.tape
