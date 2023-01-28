@@ -24,19 +24,39 @@ commits by showing you the layout in the same format as `git log`.
 
 ## 🐾 First Steps [⭡](#committed)
 
-Install using Homebrew.
+1. Install using Homebrew.
 
 ```shell
 $ brew install mikelorant/taps/committed
 ```
 
-Run within a Git repository.
+2. Before creating and applying a commit you will need to stage the files you wish
+   to add with the `git add` command.
+
+3. Committed replaces the `git commit` command and all you need to do to commit
+   your change is to run:
 
 ```shell
 $ committed
 ```
 
-The status bar will show you how to navigate, apply or cancel a commit.
+It is also possible to amend your previous commit with:
+
+```shell
+$ committed --amend
+```
+
+Once the UI has appeared take note of the keyboard shortcuts shown at the bottom
+of the interface.
+
+```text
+ Alt + <enter> Commit <s> Sign-off </> Help                Summary <tab>
+Ctrl +     <c> Cancel                                       Author <tab> + Shift
+```
+
+These shortcuts will help you apply or cancel a commit and navigate between the
+different components. Pressing enter on most components will automatically
+switch you to the next one.
 
 ## 💬 Purpose [⭡](#committed)
 
@@ -250,6 +270,33 @@ The emoji shortcuts are limited to the emoji view only.
 | Reset filter  | <kbd>⎋ Escape</kbd>    |
 | Next page     | <kbd>⇟ Page Down</kbd> |
 | Previous page | <kbd>⇞ Page Up</kbd>   |
+
+## 📚 Tips
+
+### Aliases
+
+Shell or Git aliases can be used to tailor Committed to your preferred workflow.
+An example Git alias is as follows:
+
+```shell
+$ git config --global alias.co '! committed'
+```
+
+You can then commit changes with:
+
+```shell
+$ git co
+```
+
+### Amend
+
+There are certain limitations when amending commits and it is recommended only
+for use with commits created with Committed. The limitations are:
+
+- Emoji character or shortcode must be in the existing data set.
+- Trailers will be imported into the body.
+- Summary will be truncated if more than 72 characters.
+- Lines will not reflow when editing the body.
 
 ## ✏️ Authors [⭡](#committed)
 
