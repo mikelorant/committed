@@ -236,28 +236,28 @@ Related links:
 
 The global shortcuts can be used within any view.
 
-| Command            | Key                                      |
-| :----------------- | :--------------------------------------- |
-| Commit             | <kbd>⌥ Option</kbd> + <kbd>⏎ Enter</kbd> |
-| Toggle sign-off    | <kbd>⌥ Option</kbd> + <kbd>S</kbd>       |
-| Toggle theme       | <kbd>⌥ Option</kbd> + <kbd>T</kbd>       |
-| Help               | <kbd>⌥ Option</kbd> + <kbd>/</kbd>       |
-| Focus author       | <kbd>⌥ Option</kbd> + <kbd>1</kbd>       |
-| Focus emoji        | <kbd>⌥ Option</kbd> + <kbd>2</kbd>       |
-| Focus summary      | <kbd>⌥ Option</kbd> + <kbd>3</kbd>       |
-| Focus body         | <kbd>⌥ Option</kbd> + <kbd>4</kbd>       |
-| Cancel             | <kbd>⌃ Control</kbd> + <kbd>C</kbd>      |
-| Next component     | <kbd>⇥ Tab</kbd>                         |
-| Previous component | <kbd>⇧ Shift</kbd> + <kbd>⇥ Tab</kbd>    |
+| Key Binding                              | Command            |
+| :--------------------------------------- | ------------------ |
+| <kbd>⌥ Option</kbd> + <kbd>⏎ Enter</kbd> | Commit             |
+| <kbd>⌥ Option</kbd> + <kbd>S</kbd>       | Toggle sign-off    |
+| <kbd>⌥ Option</kbd> + <kbd>T</kbd>       | Toggle theme       |
+| <kbd>⌥ Option</kbd> + <kbd>/</kbd>       | Help               |
+| <kbd>⌥ Option</kbd> + <kbd>1</kbd>       | Focus author       |
+| <kbd>⌥ Option</kbd> + <kbd>2</kbd>       | Focus emoji        |
+| <kbd>⌥ Option</kbd> + <kbd>3</kbd>       | Focus summary      |
+| <kbd>⌥ Option</kbd> + <kbd>4</kbd>       | Focus body         |
+| <kbd>⌃ Control</kbd> + <kbd>C</kbd>      | Cancel             |
+| <kbd>⇥ Tab</kbd>                         | Next component     |
+| <kbd>⇧ Shift</kbd> + <kbd>⇥ Tab</kbd>    | Previous component |
 
 The emoji shortcuts are limited to the emoji view only.
 
-| Command       | Key                    |
-| :------------ | :--------------------- |
-| Clear emoji   | <kbd>⌫ Delete</kbd>    |
-| Reset filter  | <kbd>⎋ Escape</kbd>    |
-| Next page     | <kbd>⇟ Page Down</kbd> |
-| Previous page | <kbd>⇞ Page Up</kbd>   |
+| Key Binding            | Command       |
+| :--------------------- | ------------- |
+| <kbd>⌫ Delete</kbd>    | Clear emoji   |
+| <kbd>⎋ Escape</kbd>    | Reset filter  |
+| <kbd>⇟ Page Down</kbd> | Next page     |
+| <kbd>⇞ Page Up</kbd>   | Previous page |
 
 ## 📚 Tips
 
