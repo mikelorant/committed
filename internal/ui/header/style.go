@@ -16,6 +16,9 @@ type Styles struct {
 	summaryInputTextStyle        lipgloss.Style
 	summaryInputPlaceholderStyle lipgloss.Style
 	summaryInputCursorStyle      lipgloss.Style
+	commitTypeBoundary           lipgloss.Style
+	commitTypeNew                lipgloss.Style
+	commitTypeAmend              lipgloss.Style
 	spacer                       lipgloss.Style
 }
 
@@ -41,12 +44,11 @@ func defaultStyles(th theme.Theme) Styles {
 		BorderForeground(colour.EmojiBoundary)
 
 	s.summaryBoundary = lipgloss.NewStyle().
-		Width(61).
+		Width(53).
 		Height(1).
-		MarginRight(1).
 		Align(lipgloss.Left, lipgloss.Center).
 		Padding(0, 0, 0, 1).
-		BorderStyle(lipgloss.NormalBorder()).
+		BorderStyle(rightJoinBorder()).
 		BorderForeground(colour.SummaryBoundary)
 
 	s.counterDivider = lipgloss.NewStyle().
@@ -57,9 +59,11 @@ func defaultStyles(th theme.Theme) Styles {
 		Foreground(colour.CounterLimit)
 
 	s.counterBoundary = lipgloss.NewStyle().
-		Width(5).
-		Height(3).
-		Align(lipgloss.Right, lipgloss.Center)
+		Width(7).
+		Height(1).
+		PaddingRight(1).
+		Align(lipgloss.Right, lipgloss.Center).
+		Border(lipgloss.NormalBorder(), true, true, true, false)
 
 	s.summaryInputPromptStyle = lipgloss.NewStyle().
 		Foreground(colour.SummaryInputPromptStyle)
@@ -72,6 +76,19 @@ func defaultStyles(th theme.Theme) Styles {
 
 	s.summaryInputCursorStyle = lipgloss.NewStyle().
 		Foreground(colour.SummaryInputCursorStyle)
+
+	s.commitTypeBoundary = lipgloss.NewStyle().
+		Width(5).
+		Align(lipgloss.Right).
+		Border(lipgloss.HiddenBorder())
+
+	s.commitTypeNew = lipgloss.NewStyle().
+		Foreground(colour.CommitTypeNew).
+		SetString("New")
+
+	s.commitTypeAmend = lipgloss.NewStyle().
+		Foreground(colour.CommitTypeAmend).
+		SetString("Amend")
 
 	s.spacer = lipgloss.NewStyle().
 		Height(1)
@@ -105,4 +122,17 @@ func counterStyle(i int, th theme.Theme) lipgloss.Style {
 	return lipgloss.NewStyle().
 		Foreground(clr).
 		Bold(bold)
+}
+
+func rightJoinBorder() lipgloss.Border {
+	return lipgloss.Border{
+		Top:         "─",
+		Bottom:      "─",
+		Left:        "│",
+		Right:       "│",
+		TopLeft:     "┌",
+		TopRight:    "┬",
+		BottomLeft:  "└",
+		BottomRight: "┴",
+	}
 }

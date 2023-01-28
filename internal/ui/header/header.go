@@ -181,7 +181,7 @@ func (m Model) Summary() string {
 }
 
 func (m Model) headerRow() string {
-	subject := lipgloss.JoinHorizontal(lipgloss.Top, m.emoji(), m.summary(), m.counter())
+	subject := lipgloss.JoinHorizontal(lipgloss.Top, m.emoji(), m.summary(), m.counter(), m.commitType())
 
 	if !m.Expand {
 		return lipgloss.NewStyle().Height(m.height).Render(subject)
@@ -221,6 +221,14 @@ func (m Model) counter() string {
 	return m.styles.counterBoundary.Render(fmt.Sprintf("%v%v%v", c, d, t))
 }
 
+func (m Model) commitType() string {
+	if m.state.Options.Amend {
+		return m.styles.commitTypeBoundary.Render(m.styles.commitTypeAmend.String())
+	}
+
+	return m.styles.commitTypeBoundary.Render(m.styles.commitTypeNew.String())
+}
+
 func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
 	return m.(Model), c
 }
@@ -230,7 +238,7 @@ func summaryInput(state *commit.State) textinput.Model {
 	ti.Prompt = ""
 	ti.Placeholder = state.Placeholders.Summary
 	ti.CharLimit = 72
-	ti.Width = 59
+	ti.Width = 50
 
 	styleSummaryInput(&ti, state)
 

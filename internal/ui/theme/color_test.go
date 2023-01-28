@@ -57,6 +57,8 @@ type header struct {
 	CounterNormal                Colour
 	CounterWarning               Colour
 	CounterHigh                  Colour
+	CommitTypeNew                Colour
+	CommitTypeAmend              Colour
 }
 
 type help struct {
@@ -212,6 +214,8 @@ func TestHeader(t *testing.T) {
 				CounterNormal:                Colour{Dark: "#00bb00", Light: "#bb00bb"},
 				CounterWarning:               Colour{Dark: "#bbbb00", Light: "#0000bb"},
 				CounterHigh:                  Colour{Dark: "#ff5555", Light: "#55ffff"},
+				CommitTypeNew:                Colour{Dark: "#00bb00", Light: "#bb00bb"},
+				CommitTypeAmend:              Colour{Dark: "#bbbb00", Light: "#0000bb"},
 			},
 		},
 	}
@@ -234,6 +238,8 @@ func TestHeader(t *testing.T) {
 			assert.Equal(t, tt.header.CounterNormal, toColour(header.CounterNormal), "CounterNormal")
 			assert.Equal(t, tt.header.CounterWarning, toColour(header.CounterWarning), "CounterWarning")
 			assert.Equal(t, tt.header.CounterHigh, toColour(header.CounterHigh), "CounterHigh")
+			assert.Equal(t, tt.header.CommitTypeNew, toColour(header.CommitTypeNew), "CommitTypeNew")
+			assert.Equal(t, tt.header.CommitTypeAmend, toColour(header.CommitTypeAmend), "CommitTypeAmend")
 		})
 	}
 }
