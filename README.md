@@ -259,7 +259,7 @@ The emoji shortcuts are limited to the emoji view only.
 | <kbd>⇟ Page Down</kbd> | Next page     |
 | <kbd>⇞ Page Up</kbd>   | Previous page |
 
-## 📚 Tips
+## 📚 Tips [⭡](#committed)
 
 ### Aliases
 
