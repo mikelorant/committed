@@ -7,8 +7,9 @@ import (
 )
 
 type User struct {
-	Name  string
-	Email string
+	Name    string
+	Email   string
+	Default bool
 }
 
 func (r *Repository) Users() ([]User, error) {

@@ -247,6 +247,46 @@ func TestConfig(t *testing.T) {
 			}},
 		},
 		{
+			name: "default_author_one",
+			data: "authors: [{name: John Doe, email: john.doe@example.com, default: true}]",
+			config: config.Config{Authors: []repository.User{
+				{Name: "John Doe", Email: "john.doe@example.com", Default: true},
+			}},
+		},
+		{
+			name: "default_author_second",
+			data: `authors: [
+				{name: John Doe, email: john.doe@example.com},
+				{name: John Doe, email: jdoe@example.org, default: true}
+				]`,
+			config: config.Config{Authors: []repository.User{
+				{Name: "John Doe", Email: "john.doe@example.com"},
+				{Name: "John Doe", Email: "jdoe@example.org", Default: true},
+			}},
+		},
+		{
+			name: "default_author_multiple",
+			data: `authors: [
+				{name: John Doe, email: john.doe@example.com, default: true},
+				{name: John Doe, email: jdoe@example.org, default: true}
+			]`,
+			config: config.Config{Authors: []repository.User{
+				{Name: "John Doe", Email: "john.doe@example.com", Default: true},
+				{Name: "John Doe", Email: "jdoe@example.org", Default: true},
+			}},
+		},
+		{
+			name: "default_author_none",
+			data: `authors: [
+				{name: John Doe, email: john.doe@example.com},
+				{name: John Doe, email: jdoe@example.org}
+			]`,
+			config: config.Config{Authors: []repository.User{
+				{Name: "John Doe", Email: "john.doe@example.com"},
+				{Name: "John Doe", Email: "jdoe@example.org"},
+			}},
+		},
+		{
 			name: "all",
 			data: heredoc.Doc(`
 				view:
