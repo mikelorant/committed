@@ -20,6 +20,22 @@ commits by showing you the layout in the same format as `git log`.
 - Formats body width to 72 characters
 - Best practise recommendations
 
+## 🐾 First Steps [⭡](#committed)
+
+Install using Homebrew.
+
+```shell
+$ brew install mikelorant/taps/committed
+```
+
+Run within a Git repository.
+
+```shell
+$ committed
+```
+
+The status bar will show you how to navigate, apply or cancel a commit.
+
 ## 💬 Purpose [⭡](#committed)
 
 The benefits of high quality commits are well documented however the tooling to
