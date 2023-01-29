@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	fixtures "github.com/go-git/go-git-fixtures/v4"
 	"github.com/go-git/go-git/v5"
 	"github.com/mikelorant/committed/internal/repository"
 	"github.com/stretchr/testify/assert"
@@ -80,14 +81,16 @@ func TestDescribe(t *testing.T) {
 		remoteErr   error
 		headErr     error
 		branchErr   error
+		worktreeErr error
 	}
 
 	type want struct {
-		users   []repository.User
-		remotes []string
-		head    repository.Head
-		branch  repository.Branch
-		err     error
+		users    []repository.User
+		remotes  []string
+		head     repository.Head
+		branch   repository.Branch
+		worktree repository.Worktree
+		err      error
 	}
 
 	tests := []struct {
@@ -149,6 +152,16 @@ func TestDescribe(t *testing.T) {
 				err: errMockDescribe,
 			},
 		},
+		{
+			name: "error_worktree",
+			args: args{
+				worktreeErr: errMockDescribe,
+				localBranch: "master",
+			},
+			want: want{
+				err: errMockDescribe,
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -159,6 +172,7 @@ func TestDescribe(t *testing.T) {
 				Remoter:      MockRepositoryRemote{err: tt.args.remoteErr},
 				Header:       MockRepositoryHead{headErr: tt.args.headErr},
 				Brancher:     MockRepositoryBranch{local: tt.args.localBranch, headErr: tt.args.branchErr},
+				Worktreer:    MockRepositoryWorktree{fixture: fixtures.Basic().One(), err: tt.args.worktreeErr},
 			}
 
 			d, err := r.Describe()

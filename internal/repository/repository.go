@@ -30,6 +30,10 @@ type Brancher interface {
 	References() (storer.ReferenceIter, error)
 }
 
+type Worktreer interface {
+	Worktree() (*git.Worktree, error)
+}
+
 type Repository struct {
 	Opener       func(string, *git.PlainOpenOptions) (*git.Repository, error)
 	GlobalConfig func(config.Scope) (*config.Config, error)
@@ -37,13 +41,15 @@ type Repository struct {
 	Remoter      Remoter
 	Header       Header
 	Brancher     Brancher
+	Worktreer    Worktreer
 }
 
 type Description struct {
-	Users   []User
-	Remotes []string
-	Head    Head
-	Branch  Branch
+	Users    []User
+	Remotes  []string
+	Head     Head
+	Branch   Branch
+	Worktree Worktree
 }
 
 const repositoryPath string = "."
@@ -73,6 +79,7 @@ func (r *Repository) Open() error {
 	r.Remoter = repo
 	r.Header = repo
 	r.Brancher = repo
+	r.Worktreer = repo
 
 	return nil
 }
@@ -98,10 +105,16 @@ func (r *Repository) Describe() (Description, error) {
 		return Description{}, fmt.Errorf("unable to get branch: %w", err)
 	}
 
+	wt, err := r.Worktree()
+	if err != nil {
+		return Description{}, fmt.Errorf("unable to get worktree: %w", err)
+	}
+
 	return Description{
-		Users:   us,
-		Remotes: rs,
-		Head:    h,
-		Branch:  b,
+		Users:    us,
+		Remotes:  rs,
+		Head:     h,
+		Branch:   b,
+		Worktree: wt,
 	}, nil
 }
