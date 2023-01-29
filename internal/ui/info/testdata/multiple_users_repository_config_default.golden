@@ -1,10 +1,10 @@
 commit 1 (HEAD -> master)
-author: John Doe <john.doe@example.com>
+author: John Doe <jd@example.net>
 date:   Sat Jan 1 01:00:00 2022 +0000
 
     ┌──────────────────────────────────────────────────────────────────────────┐
-    │? Choose an author: example.org                                         ● │
-    │❯ John Doe <jdoe@example.org>                                             │
-    │                                                                          │
+    │? Choose an author:                                                     ● │
+    │❯ John Doe <jd@example.net>                                               │
+    │  John Doe <john.doe@example.com>                                         │
     │                                                                          │
     └──────────────────────────────────────────────────────────────────────────┘

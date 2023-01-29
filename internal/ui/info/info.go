@@ -40,7 +40,7 @@ const (
 )
 
 func New(state *commit.State) Model {
-	authors := concatSlice(state.Repository.Users, state.Config.Authors)
+	authors := commit.SortUsersByDefault(concatSlice(state.Repository.Users, state.Config.Authors)...)
 
 	if len(authors) == 0 {
 		authors = []repository.User{{}}

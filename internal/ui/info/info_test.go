@@ -121,7 +121,7 @@ func TestModel(t *testing.T) {
 			name: "multiple_users",
 			args: args{
 				state: func(c *commit.State) {
-					c.Repository.Users = testStateUsers(2)
+					c.Repository.Users = testRepositoryUsers(2)
 				},
 				model: func(m info.Model) info.Model {
 					m.Focus()
@@ -135,7 +135,7 @@ func TestModel(t *testing.T) {
 			name: "multiple_users_selected",
 			args: args{
 				state: func(c *commit.State) {
-					c.Repository.Users = testStateUsers(2)
+					c.Repository.Users = testRepositoryUsers(2)
 				},
 				model: func(m info.Model) info.Model {
 					m.Focus()
@@ -147,7 +147,7 @@ func TestModel(t *testing.T) {
 			},
 			want: want{
 				model: func(m info.Model) {
-					assert.Equal(t, m.Author, testStateUsers(2)[1])
+					assert.Equal(t, m.Author, testRepositoryUsers(2)[1])
 				},
 			},
 		},
@@ -155,16 +155,13 @@ func TestModel(t *testing.T) {
 			name: "multiple_users_filtered",
 			args: args{
 				state: func(c *commit.State) {
-					c.Repository.Users = []repository.User{
-						testStateUsers(3)[0],
-						testStateUsers(3)[2],
-					}
+					c.Repository.Users = testRepositoryUsers(2)
 				},
 				model: func(m info.Model) info.Model {
 					m.Focus()
 					m.Expand = true
 					m, _ = info.ToModel(m.Update(nil))
-					m, _ = info.ToModel(uitest.SendString(m, "test"), nil)
+					m, _ = info.ToModel(uitest.SendString(m, "example.org"), nil)
 					return m
 				},
 			},
@@ -173,12 +170,7 @@ func TestModel(t *testing.T) {
 			name: "users_mixed",
 			args: args{
 				state: func(c *commit.State) {
-					c.Repository.Users = []repository.User{
-						testStateUsers(3)[0],
-					}
-					c.Config.Authors = []repository.User{
-						testStateUsers(3)[1],
-					}
+					c.Config.Authors = testConfigUsers(1)
 				},
 				model: func(m info.Model) info.Model {
 					m.Focus()
@@ -192,13 +184,8 @@ func TestModel(t *testing.T) {
 			name: "users_mixed_multiple",
 			args: args{
 				state: func(c *commit.State) {
-					c.Repository.Users = []repository.User{
-						testStateUsers(3)[0],
-					}
-					c.Config.Authors = []repository.User{
-						testStateUsers(3)[1],
-						testStateUsers(3)[2],
-					}
+					c.Repository.Users = testRepositoryUsers(2)
+					c.Config.Authors = testConfigUsers(2)
 				},
 				model: func(m info.Model) info.Model {
 					m.Focus()
@@ -224,10 +211,7 @@ func TestModel(t *testing.T) {
 			args: args{
 				state: func(c *commit.State) {
 					c.Repository.Users = nil
-					c.Config.Authors = []repository.User{
-						testStateUsers(3)[0],
-						testStateUsers(3)[1],
-					}
+					c.Config.Authors = testConfigUsers(1)
 				},
 				model: func(m info.Model) info.Model {
 					m.Focus()
@@ -258,6 +242,55 @@ func TestModel(t *testing.T) {
 				state: func(c *commit.State) {
 					c.Repository.Users = []repository.User{}
 					c.Config.Authors = []repository.User{}
+				},
+				model: func(m info.Model) info.Model {
+					m.Focus()
+					m.Expand = true
+					m, _ = info.ToModel(m.Update(nil))
+					return m
+				},
+			},
+		},
+		{
+			name: "multiple_users_config_default",
+			args: args{
+				state: func(c *commit.State) {
+					c.Repository.Users = nil
+					c.Config.Authors = testConfigUsers(2)
+					c.Config.Authors[1].Default = true
+				},
+				model: func(m info.Model) info.Model {
+					m.Focus()
+					m.Expand = true
+					m, _ = info.ToModel(m.Update(nil))
+					return m
+				},
+			},
+		},
+		{
+			name: "multiple_users_repository_config_default",
+			args: args{
+				state: func(c *commit.State) {
+					c.Repository.Users = testRepositoryUsers(1)
+					c.Config.Authors = testConfigUsers(1)
+					c.Config.Authors[0].Default = true
+				},
+				model: func(m info.Model) info.Model {
+					m.Focus()
+					m.Expand = true
+					m, _ = info.ToModel(m.Update(nil))
+					return m
+				},
+			},
+		},
+		{
+			name: "multiple_users_repository_config_default_multiple",
+			args: args{
+				state: func(c *commit.State) {
+					c.Repository.Users = testRepositoryUsers(2)
+					c.Config.Authors = testConfigUsers(2)
+					c.Config.Authors[0].Default = true
+					c.Config.Authors[1].Default = true
 				},
 				model: func(m info.Model) info.Model {
 					m.Focus()
@@ -301,7 +334,7 @@ func testState() commit.State {
 			Branch: repository.Branch{
 				Local: "master",
 			},
-			Users: testStateUsers(1),
+			Users: testRepositoryUsers(1),
 			Head: repository.Head{
 				Hash: "1",
 				When: time.Date(2022, time.January, 1, 1, 0, 0, 0, time.UTC),
@@ -314,7 +347,7 @@ func testState() commit.State {
 	}
 }
 
-func testStateUsers(n int) []repository.User {
+func testRepositoryUsers(n int) []repository.User {
 	return []repository.User{
 		{
 			Name:  "John Doe",
@@ -324,9 +357,18 @@ func testStateUsers(n int) []repository.User {
 			Name:  "John Doe",
 			Email: "jdoe@example.org",
 		},
+	}[0:n]
+}
+
+func testConfigUsers(n int) []repository.User {
+	return []repository.User{
 		{
 			Name:  "John Doe",
-			Email: "jdoe@test",
+			Email: "jd@example.net",
+		},
+		{
+			Name:  "John Doe",
+			Email: "j@example.id",
 		},
 	}[0:n]
 }
