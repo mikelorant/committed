@@ -287,3 +287,213 @@ func TestUserToAuthor(t *testing.T) {
 		})
 	}
 }
+
+func TestSortUsersByDefault(t *testing.T) {
+	type args struct {
+		repositoryUsers []repository.User
+		configUsers     []repository.User
+	}
+
+	tests := []struct {
+		name  string
+		args  args
+		users []repository.User
+	}{
+		{
+			name: "empty",
+		},
+		{
+			name: "nil",
+			args: args{
+				repositoryUsers: nil,
+				configUsers:     nil,
+			},
+		},
+		{
+			name: "one_repository_user",
+			args: args{
+				repositoryUsers: []repository.User{
+					{Name: "John Doe", Email: "john.doe@example.com"},
+				},
+			},
+			users: []repository.User{
+				{Name: "John Doe", Email: "john.doe@example.com"},
+			},
+		},
+		{
+			name: "two_repository_user",
+			args: args{
+				repositoryUsers: []repository.User{
+					{Name: "John Doe", Email: "john.doe@example.com"},
+					{Name: "John Doe", Email: "jdoe@example.org"},
+				},
+			},
+			users: []repository.User{
+				{Name: "John Doe", Email: "john.doe@example.com"},
+				{Name: "John Doe", Email: "jdoe@example.org"},
+			},
+		},
+		{
+			name: "one_config_users",
+			args: args{
+				configUsers: []repository.User{
+					{Name: "John Doe", Email: "john.doe@example.com"},
+				},
+			},
+			users: []repository.User{
+				{Name: "John Doe", Email: "john.doe@example.com"},
+			},
+		},
+		{
+			name: "two_config_users",
+			args: args{
+				configUsers: []repository.User{
+					{Name: "John Doe", Email: "john.doe@example.com"},
+					{Name: "John Doe", Email: "jdoe@example.org"},
+				},
+			},
+			users: []repository.User{
+				{Name: "John Doe", Email: "john.doe@example.com"},
+				{Name: "John Doe", Email: "jdoe@example.org"},
+			},
+		},
+		{
+			name: "repository_config_users",
+			args: args{
+				repositoryUsers: []repository.User{
+					{Name: "John Doe", Email: "john.doe@example.com"},
+				},
+				configUsers: []repository.User{
+					{Name: "John Doe", Email: "jdoe@example.org"},
+				},
+			},
+			users: []repository.User{
+				{Name: "John Doe", Email: "john.doe@example.com"},
+				{Name: "John Doe", Email: "jdoe@example.org"},
+			},
+		},
+		{
+			name: "repository_config_users_multiple",
+			args: args{
+				repositoryUsers: []repository.User{
+					{Name: "John Doe", Email: "john.doe@example.com"},
+					{Name: "John Doe", Email: "jdoe@example.org"},
+				},
+				configUsers: []repository.User{
+					{Name: "John Doe", Email: "jd@example.net"},
+					{Name: "John Doe", Email: "j@example.id"},
+				},
+			},
+			users: []repository.User{
+				{Name: "John Doe", Email: "john.doe@example.com"},
+				{Name: "John Doe", Email: "jdoe@example.org"},
+				{Name: "John Doe", Email: "jd@example.net"},
+				{Name: "John Doe", Email: "j@example.id"},
+			},
+		},
+		{
+			name: "one_config_user_default",
+			args: args{
+				configUsers: []repository.User{
+					{Name: "John Doe", Email: "john.doe@example.com", Default: true},
+				},
+			},
+			users: []repository.User{
+				{Name: "John Doe", Email: "john.doe@example.com", Default: true},
+			},
+		},
+		{
+			name: "two_config_users_default",
+			args: args{
+				configUsers: []repository.User{
+					{Name: "John Doe", Email: "john.doe@example.com"},
+					{Name: "John Doe", Email: "jdoe@example.org", Default: true},
+				},
+			},
+			users: []repository.User{
+				{Name: "John Doe", Email: "jdoe@example.org", Default: true},
+				{Name: "John Doe", Email: "john.doe@example.com"},
+			},
+		},
+		{
+			name: "two_config_users_default_both",
+			args: args{
+				configUsers: []repository.User{
+					{Name: "John Doe", Email: "john.doe@example.com", Default: true},
+					{Name: "John Doe", Email: "jdoe@example.org", Default: true},
+				},
+			},
+			users: []repository.User{
+				{Name: "John Doe", Email: "john.doe@example.com", Default: true},
+				{Name: "John Doe", Email: "jdoe@example.org", Default: true},
+			},
+		},
+		{
+			name: "repository_config_users_default",
+			args: args{
+				repositoryUsers: []repository.User{
+					{Name: "John Doe", Email: "john.doe@example.com"},
+				},
+				configUsers: []repository.User{
+					{Name: "John Doe", Email: "jdoe@example.org", Default: true},
+				},
+			},
+			users: []repository.User{
+				{Name: "John Doe", Email: "jdoe@example.org", Default: true},
+				{Name: "John Doe", Email: "john.doe@example.com"},
+			},
+		},
+		{
+			name: "repository_config_users_default_multiple",
+			args: args{
+				repositoryUsers: []repository.User{
+					{Name: "John Doe", Email: "john.doe@example.com"},
+					{Name: "John Doe", Email: "jdoe@example.org"},
+				},
+				configUsers: []repository.User{
+					{Name: "John Doe", Email: "jd@example.net"},
+					{Name: "John Doe", Email: "j@example.id", Default: true},
+				},
+			},
+			users: []repository.User{
+				{Name: "John Doe", Email: "j@example.id", Default: true},
+				{Name: "John Doe", Email: "john.doe@example.com"},
+				{Name: "John Doe", Email: "jdoe@example.org"},
+				{Name: "John Doe", Email: "jd@example.net"},
+			},
+		},
+		{
+			name: "repository_config_users_default_all",
+			args: args{
+				repositoryUsers: []repository.User{
+					{Name: "John Doe", Email: "john.doe@example.com"},
+					{Name: "John Doe", Email: "jdoe@example.org"},
+				},
+				configUsers: []repository.User{
+					{Name: "John Doe", Email: "jd@example.net", Default: true},
+					{Name: "John Doe", Email: "j@example.id", Default: true},
+				},
+			},
+			users: []repository.User{
+				{Name: "John Doe", Email: "jd@example.net", Default: true},
+				{Name: "John Doe", Email: "j@example.id", Default: true},
+				{Name: "John Doe", Email: "john.doe@example.com"},
+				{Name: "John Doe", Email: "jdoe@example.org"},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			us := concatSlice(tt.args.repositoryUsers, tt.args.configUsers)
+			users := commit.SortUsersByDefault(us...)
+
+			assert.Equal(t, tt.users, users)
+		})
+	}
+}
+
+func concatSlice[T any](first []T, second []T) []T {
+	n := len(first)
+	return append(first[:n:n], second...)
+}

@@ -78,6 +78,22 @@ func EmojiConfigToEmojiProfile(e config.EmojiSet) emoji.Profile {
 	return emoji.Profile(int(e))
 }
 
+func SortUsersByDefault(us ...repository.User) []repository.User {
+	var usersDefault []repository.User
+	var usersNormal []repository.User
+
+	for _, u := range us {
+		switch {
+		case u.Default:
+			usersDefault = append(usersDefault, u)
+		default:
+			usersNormal = append(usersNormal, u)
+		}
+	}
+
+	return concatSlice(usersDefault, usersNormal)
+}
+
 func hasSummary(msg string) bool {
 	ls := strings.Split(msg, "\n")
 
@@ -98,4 +114,9 @@ func hasSummary(msg string) bool {
 	}
 
 	return false
+}
+
+func concatSlice[T any](first []T, second []T) []T {
+	n := len(first)
+	return append(first[:n:n], second...)
 }
