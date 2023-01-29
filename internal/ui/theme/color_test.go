@@ -57,6 +57,9 @@ type header struct {
 	CounterNormal                Colour
 	CounterWarning               Colour
 	CounterHigh                  Colour
+	ReadyError                   Colour
+	ReadyIncomplete              Colour
+	ReadyOK                      Colour
 	CommitTypeNew                Colour
 	CommitTypeAmend              Colour
 }
@@ -214,6 +217,9 @@ func TestHeader(t *testing.T) {
 				CounterNormal:                Colour{Dark: "#00bb00", Light: "#bb00bb"},
 				CounterWarning:               Colour{Dark: "#bbbb00", Light: "#0000bb"},
 				CounterHigh:                  Colour{Dark: "#ff5555", Light: "#55ffff"},
+				ReadyError:                   Colour{Dark: "#ff5555", Light: "#55ffff"},
+				ReadyIncomplete:              Colour{Dark: "#bbbb00", Light: "#0000bb"},
+				ReadyOK:                      Colour{Dark: "#00bb00", Light: "#bb00bb"},
 				CommitTypeNew:                Colour{Dark: "#00bb00", Light: "#bb00bb"},
 				CommitTypeAmend:              Colour{Dark: "#bbbb00", Light: "#0000bb"},
 			},

@@ -16,7 +16,10 @@ type Styles struct {
 	summaryInputTextStyle        lipgloss.Style
 	summaryInputPlaceholderStyle lipgloss.Style
 	summaryInputCursorStyle      lipgloss.Style
-	commitTypeBoundary           lipgloss.Style
+	readyCommitTypeBoundary      lipgloss.Style
+	readyError                   lipgloss.Style
+	readyIncomplete              lipgloss.Style
+	readyOK                      lipgloss.Style
 	commitTypeNew                lipgloss.Style
 	commitTypeAmend              lipgloss.Style
 	spacer                       lipgloss.Style
@@ -28,6 +31,8 @@ const (
 	warningCounter = 40
 	maximumCounter = 50
 )
+
+const readyDot = "●"
 
 func defaultStyles(th theme.Theme) Styles {
 	var s Styles
@@ -46,9 +51,10 @@ func defaultStyles(th theme.Theme) Styles {
 	s.summaryBoundary = lipgloss.NewStyle().
 		Width(53).
 		Height(1).
+		MarginRight(1).
 		Align(lipgloss.Left, lipgloss.Center).
 		Padding(0, 0, 0, 1).
-		BorderStyle(rightJoinBorder()).
+		BorderStyle(lipgloss.NormalBorder()).
 		BorderForeground(colour.SummaryBoundary)
 
 	s.counterDivider = lipgloss.NewStyle().
@@ -59,11 +65,10 @@ func defaultStyles(th theme.Theme) Styles {
 		Foreground(colour.CounterLimit)
 
 	s.counterBoundary = lipgloss.NewStyle().
-		Width(7).
-		Height(1).
-		PaddingRight(1).
-		Align(lipgloss.Right, lipgloss.Center).
-		Border(lipgloss.NormalBorder(), true, true, true, false)
+		Width(5).
+		Height(3).
+		MarginRight(1).
+		Align(lipgloss.Right, lipgloss.Center)
 
 	s.summaryInputPromptStyle = lipgloss.NewStyle().
 		Foreground(colour.SummaryInputPromptStyle)
@@ -77,13 +82,29 @@ func defaultStyles(th theme.Theme) Styles {
 	s.summaryInputCursorStyle = lipgloss.NewStyle().
 		Foreground(colour.SummaryInputCursorStyle)
 
-	s.commitTypeBoundary = lipgloss.NewStyle().
-		Width(5).
-		Align(lipgloss.Right).
-		Border(lipgloss.HiddenBorder())
+	s.readyCommitTypeBoundary = lipgloss.NewStyle().
+		Width(7).
+		Height(3).
+		Align(lipgloss.Right, lipgloss.Center)
+
+	s.readyError = lipgloss.NewStyle().
+		Foreground(colour.ReadyError).
+		MarginRight(1).
+		SetString(readyDot)
+
+	s.readyIncomplete = lipgloss.NewStyle().
+		Foreground(colour.ReadyIncomplete).
+		MarginRight(1).
+		SetString(readyDot)
+
+	s.readyOK = lipgloss.NewStyle().
+		Foreground(colour.ReadyOK).
+		MarginRight(1).
+		SetString(readyDot)
 
 	s.commitTypeNew = lipgloss.NewStyle().
 		Foreground(colour.CommitTypeNew).
+		Align(lipgloss.Right).
 		SetString("New")
 
 	s.commitTypeAmend = lipgloss.NewStyle().
@@ -122,17 +143,4 @@ func counterStyle(i int, th theme.Theme) lipgloss.Style {
 	return lipgloss.NewStyle().
 		Foreground(clr).
 		Bold(bold)
-}
-
-func rightJoinBorder() lipgloss.Border {
-	return lipgloss.Border{
-		Top:         "─",
-		Bottom:      "─",
-		Left:        "│",
-		Right:       "│",
-		TopLeft:     "┌",
-		TopRight:    "┬",
-		BottomLeft:  "└",
-		BottomRight: "┴",
-	}
 }

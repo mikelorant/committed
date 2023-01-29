@@ -49,6 +49,9 @@ type header struct {
 	CounterNormal                lipgloss.TerminalColor
 	CounterWarning               lipgloss.TerminalColor
 	CounterHigh                  lipgloss.TerminalColor
+	ReadyError                   lipgloss.TerminalColor
+	ReadyIncomplete              lipgloss.TerminalColor
+	ReadyOK                      lipgloss.TerminalColor
 	CommitTypeNew                lipgloss.TerminalColor
 	CommitTypeAmend              lipgloss.TerminalColor
 }
@@ -138,6 +141,9 @@ func (t *Theme) Header() header {
 		CounterNormal:                ToAdaptive(t.Registry.Green()),
 		CounterWarning:               ToAdaptive(t.Registry.Yellow()),
 		CounterHigh:                  ToAdaptive(t.Registry.BrightRed()),
+		ReadyError:                   ToAdaptive(t.Registry.BrightRed()),
+		ReadyIncomplete:              ToAdaptive(t.Registry.Yellow()),
+		ReadyOK:                      ToAdaptive(t.Registry.Green()),
 		CommitTypeNew:                ToAdaptive(t.Registry.Green()),
 		CommitTypeAmend:              ToAdaptive(t.Registry.Yellow()),
 	}

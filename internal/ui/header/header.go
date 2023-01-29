@@ -7,6 +7,7 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/go-git/go-git/v5"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
@@ -181,13 +182,11 @@ func (m Model) Summary() string {
 }
 
 func (m Model) headerRow() string {
-	subject := lipgloss.JoinHorizontal(lipgloss.Top, m.emoji(), m.summary(), m.counter(), m.commitType())
-
 	if !m.Expand {
-		return lipgloss.NewStyle().Height(m.height).Render(subject)
+		return lipgloss.NewStyle().Height(m.height).Render(m.subject())
 	}
 
-	top := subject
+	top := m.subject()
 	bottom := m.filterList.View()
 	spacer := m.styles.spacer.Render("")
 
@@ -198,6 +197,16 @@ func (m Model) headerRow() string {
 	expand := lipgloss.JoinVertical(lipgloss.Top, top, spacer, bottom)
 
 	return lipgloss.NewStyle().Height(m.height).Render(expand)
+}
+
+func (m Model) subject() string {
+	return lipgloss.JoinHorizontal(
+		lipgloss.Top,
+		m.emoji(),
+		m.summary(),
+		m.counter(),
+		m.readyCommitType(),
+	)
 }
 
 func (m Model) emoji() string {
@@ -221,12 +230,39 @@ func (m Model) counter() string {
 	return m.styles.counterBoundary.Render(fmt.Sprintf("%v%v%v", c, d, t))
 }
 
-func (m Model) commitType() string {
-	if m.state.Options.Amend {
-		return m.styles.commitTypeBoundary.Render(m.styles.commitTypeAmend.String())
+func (m Model) readyCommitType() string {
+	rct := lipgloss.JoinHorizontal(lipgloss.Top, m.ready(), m.commitType())
+
+	return m.styles.readyCommitTypeBoundary.Render(rct)
+}
+
+func (m Model) ready() string {
+	switch {
+	case !m.isStaged() && !m.state.Options.Amend:
+		return m.styles.readyError.String()
+	case len(m.Summary()) < 1:
+		return m.styles.readyIncomplete.String()
 	}
 
-	return m.styles.commitTypeBoundary.Render(m.styles.commitTypeNew.String())
+	return m.styles.readyOK.String()
+}
+
+func (m Model) commitType() string {
+	if m.state.Options.Amend {
+		return m.styles.commitTypeAmend.String()
+	}
+
+	return m.styles.commitTypeNew.String()
+}
+
+func (m Model) isStaged() bool {
+	for _, s := range m.state.Repository.Worktree.Status {
+		if !(s.Staging == git.Unmodified || s.Staging == git.Untracked) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
