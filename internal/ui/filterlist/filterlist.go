@@ -119,6 +119,10 @@ func (m Model) View() string {
 	p := m.styles.paginatorBoundary.Render(m.stylePaginatorColumn())
 	ep := lipgloss.JoinHorizontal(lipgloss.Top, e, p)
 
+	if m.focus || !m.state.Config.View.HighlightActive {
+		return m.styles.focusBoundary.Height(m.Height - 1).Render(ep)
+	}
+
 	return m.styles.boundary.Height(m.Height - 1).Render(ep)
 }
 

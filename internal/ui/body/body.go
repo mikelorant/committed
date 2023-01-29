@@ -92,6 +92,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
+	if m.focus || !m.state.Config.View.HighlightActive {
+		return m.styles.focusBoundary.Height(m.Height).Render(m.textArea.View())
+	}
+
 	return m.styles.boundary.Height(m.Height).Render(m.textArea.View())
 }
 

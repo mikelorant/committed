@@ -81,6 +81,26 @@ func TestLoad(t *testing.T) {
 			config: config.Config{View: config.View{Focus: config.FocusUnset}},
 		},
 		{
+			name:   "highlight_empty",
+			data:   "view: {highlightActive:}",
+			config: config.Config{View: config.View{HighlightActive: false}},
+		},
+		{
+			name:   "highlight_true",
+			data:   "view: {highlightActive: true}",
+			config: config.Config{View: config.View{HighlightActive: true}},
+		},
+		{
+			name:   "highlight_false",
+			data:   "view: {highlightActive: false}",
+			config: config.Config{View: config.View{HighlightActive: false}},
+		},
+		{
+			name: "highlight_invalid",
+			data: "view: {highlightActive: invalid}",
+			err:  new(yaml.TypeError),
+		},
+		{
 			name:   "compatibility_empty",
 			data:   "view: {compatibility:}",
 			config: config.Config{View: config.View{Compatibility: config.CompatibilityUnset}},
@@ -603,6 +623,16 @@ func TestSave(t *testing.T) {
 			name:   "signoff_true",
 			config: func(c *config.Config) { c.Commit.Signoff = true },
 			data:   "commit: {signoff: true}",
+		},
+		{
+			name:   "highlightactive_false",
+			config: func(c *config.Config) { c.View.HighlightActive = false },
+			data:   "{}",
+		},
+		{
+			name:   "highlightactive_true",
+			config: func(c *config.Config) { c.View.HighlightActive = true },
+			data:   "view: {highlightActive: true}",
 		},
 		{
 			name: "error",

@@ -16,12 +16,13 @@ type Config struct {
 }
 
 type View struct {
-	Focus         Focus         `yaml:"focus,omitempty,flow"`
-	EmojiSet      EmojiSet      `yaml:"emojiSet,omitempty,flow"`
-	EmojiSelector EmojiSelector `yaml:"emojiSelector,omitempty,flow"`
-	Compatibility Compatibility `yaml:"compatibility,omitempty,flow"`
-	Theme         string        `yaml:"theme,omitempty,flow"`
-	Colour        Colour        `yaml:"colour,omitempty,flow"`
+	Focus           Focus         `yaml:"focus,omitempty,flow"`
+	EmojiSet        EmojiSet      `yaml:"emojiSet,omitempty,flow"`
+	EmojiSelector   EmojiSelector `yaml:"emojiSelector,omitempty,flow"`
+	Compatibility   Compatibility `yaml:"compatibility,omitempty,flow"`
+	Theme           string        `yaml:"theme,omitempty,flow"`
+	Colour          Colour        `yaml:"colour,omitempty,flow"`
+	HighlightActive bool          `yaml:"highlightActive,omitempty,flow"`
 }
 
 type Commit struct {

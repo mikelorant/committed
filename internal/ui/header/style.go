@@ -8,7 +8,9 @@ import (
 
 type Styles struct {
 	emojiBoundary                lipgloss.Style
+	emojiFocusBoundary           lipgloss.Style
 	summaryBoundary              lipgloss.Style
+	summaryFocusBoundary         lipgloss.Style
 	counterDivider               lipgloss.Style
 	counterLimit                 lipgloss.Style
 	counterBoundary              lipgloss.Style
@@ -49,6 +51,9 @@ func defaultStyles(th theme.Theme) Styles {
 		BorderStyle(lipgloss.NormalBorder()).
 		BorderForeground(clr.EmojiBoundary)
 
+	s.emojiFocusBoundary = s.emojiBoundary.Copy().
+		BorderForeground(clr.EmojiFocusBoundary)
+
 	s.summaryBoundary = lipgloss.NewStyle().
 		Width(53).
 		Height(1).
@@ -57,6 +62,9 @@ func defaultStyles(th theme.Theme) Styles {
 		Padding(0, 0, 0, 1).
 		BorderStyle(lipgloss.NormalBorder()).
 		BorderForeground(clr.SummaryBoundary)
+
+	s.summaryFocusBoundary = s.summaryBoundary.Copy().
+		BorderForeground(clr.SummaryFocusBoundary)
 
 	s.counterDivider = lipgloss.NewStyle().
 		Foreground(clr.CounterDivider).

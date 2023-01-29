@@ -13,6 +13,7 @@ import (
 
 type body struct {
 	Boundary            lipgloss.TerminalColor
+	FocusBoundary       lipgloss.TerminalColor
 	TextAreaPlaceholder lipgloss.TerminalColor
 	TextAreaPrompt      lipgloss.TerminalColor
 	TextAreaFocusedText lipgloss.TerminalColor
@@ -22,6 +23,7 @@ type body struct {
 
 type filterlist struct {
 	Boundary                  lipgloss.TerminalColor
+	FocusBoundary             lipgloss.TerminalColor
 	ListNormalTitle           lipgloss.TerminalColor
 	ListSelectedTitle         lipgloss.TerminalColor
 	ListNoItems               lipgloss.TerminalColor
@@ -40,7 +42,9 @@ type footer struct {
 
 type header struct {
 	EmojiBoundary                lipgloss.TerminalColor
+	EmojiFocusBoundary           lipgloss.TerminalColor
 	SummaryBoundary              lipgloss.TerminalColor
+	SummaryFocusBoundary         lipgloss.TerminalColor
 	CounterDivider               lipgloss.TerminalColor
 	CounterLimit                 lipgloss.TerminalColor
 	SummaryInputPromptStyle      lipgloss.TerminalColor
@@ -109,7 +113,8 @@ func (c *Colour) Body() body {
 	clr := c.registry
 
 	return body{
-		Boundary:            clr.Fg(),
+		Boundary:            ToAdaptive(clr.BrightBlack()),
+		FocusBoundary:       clr.Fg(),
 		TextAreaPlaceholder: ToAdaptive(clr.BrightBlack()),
 		TextAreaPrompt:      clr.Fg(),
 		TextAreaFocusedText: clr.Fg(),
@@ -123,7 +128,8 @@ func (c *Colour) FilterList() filterlist {
 	clr := c.registry
 
 	return filterlist{
-		Boundary:                  clr.Fg(),
+		Boundary:                  ToAdaptive(clr.BrightBlack()),
+		FocusBoundary:             clr.Fg(),
 		ListNormalTitle:           clr.Fg(),
 		ListSelectedTitle:         ToAdaptive(clr.Cyan()),
 		ListNoItems:               ToAdaptive(clr.BrightBlack()),
@@ -151,8 +157,10 @@ func (c *Colour) Header() header {
 	clr := c.registry
 
 	return header{
-		EmojiBoundary:                clr.Fg(),
-		SummaryBoundary:              clr.Fg(),
+		EmojiBoundary:                ToAdaptive(clr.BrightBlack()),
+		EmojiFocusBoundary:           clr.Fg(),
+		SummaryBoundary:              ToAdaptive(clr.BrightBlack()),
+		SummaryFocusBoundary:         clr.Fg(),
 		CounterDivider:               clr.Fg(),
 		CounterLimit:                 clr.Fg(),
 		SummaryInputPromptStyle:      clr.Fg(),

@@ -19,6 +19,7 @@ type Colour struct {
 
 type body struct {
 	Boundary            Colour
+	FocusBoundary       Colour
 	TextAreaPlaceholder Colour
 	TextAreaPrompt      Colour
 	TextAreaFocusedText Colour
@@ -28,6 +29,7 @@ type body struct {
 
 type filterlist struct {
 	Boundary                  Colour
+	FocusBoundary             Colour
 	ListNormalTitle           Colour
 	ListSelectedTitle         Colour
 	ListNoItems               Colour
@@ -46,7 +48,9 @@ type footer struct {
 
 type header struct {
 	EmojiBoundary                Colour
+	EmojiFocusBoundary           Colour
 	SummaryBoundary              Colour
+	SummaryFocusBoundary         Colour
 	CounterDivider               Colour
 	CounterLimit                 Colour
 	SummaryInputPromptStyle      Colour
@@ -108,7 +112,8 @@ func TestBody(t *testing.T) {
 		{
 			name: "body",
 			body: body{
-				Boundary:            Colour{Dark: "#bbbbbb"},
+				Boundary:            Colour{Dark: "#555555", Light: "#555555"},
+				FocusBoundary:       Colour{Dark: "#bbbbbb"},
 				TextAreaPlaceholder: Colour{Dark: "#555555", Light: "#555555"},
 				TextAreaPrompt:      Colour{Dark: "#bbbbbb"},
 				TextAreaFocusedText: Colour{Dark: "#bbbbbb"},
@@ -127,6 +132,7 @@ func TestBody(t *testing.T) {
 			clr := colour.New(theme.New(config.ColourAdaptive)).Body()
 
 			assert.Equal(t, tt.body.Boundary, toColour(clr.Boundary), "Boundary")
+			assert.Equal(t, tt.body.FocusBoundary, toColour(clr.FocusBoundary), "FocusBoundary")
 			assert.Equal(t, tt.body.TextAreaPlaceholder, toColour(clr.TextAreaPlaceholder), "TextAreaPlaceholder")
 			assert.Equal(t, tt.body.TextAreaPrompt, toColour(clr.TextAreaPrompt), "TextAreaPrompt")
 			assert.Equal(t, tt.body.TextAreaFocusedText, toColour(clr.TextAreaFocusedText), "TextAreaFocusedText")
@@ -146,7 +152,8 @@ func TestFilterList(t *testing.T) {
 		{
 			name: "filterlist",
 			filterlist: filterlist{
-				Boundary:                  Colour{Dark: "#bbbbbb"},
+				Boundary:                  Colour{Dark: "#555555", Light: "#555555"},
+				FocusBoundary:             Colour{Dark: "#bbbbbb"},
 				ListNormalTitle:           Colour{Dark: "#bbbbbb"},
 				ListSelectedTitle:         Colour{Dark: "#00bbbb", Light: "#bb0000"},
 				ListNoItems:               Colour{Dark: "#555555", Light: "#555555"},
@@ -170,6 +177,7 @@ func TestFilterList(t *testing.T) {
 			clr := colour.New(theme.New(config.ColourAdaptive)).FilterList()
 
 			assert.Equal(t, tt.filterlist.Boundary, toColour(clr.Boundary), "Boundary")
+			assert.Equal(t, tt.filterlist.FocusBoundary, toColour(clr.FocusBoundary), "FocusBoundary")
 			assert.Equal(t, tt.filterlist.ListNormalTitle, toColour(clr.ListNormalTitle), "ListNormalTitle")
 			assert.Equal(t, tt.filterlist.ListSelectedTitle, toColour(clr.ListSelectedTitle), "ListSelectedTitle")
 			assert.Equal(t, tt.filterlist.ListNoItems, toColour(clr.ListNoItems), "ListNoItems")
@@ -222,8 +230,10 @@ func TestHeader(t *testing.T) {
 		{
 			name: "Header",
 			header: header{
-				EmojiBoundary:                Colour{Dark: "#bbbbbb"},
-				SummaryBoundary:              Colour{Dark: "#bbbbbb"},
+				EmojiBoundary:                Colour{Dark: "#555555", Light: "#555555"},
+				EmojiFocusBoundary:           Colour{Dark: "#bbbbbb"},
+				SummaryBoundary:              Colour{Dark: "#555555", Light: "#555555"},
+				SummaryFocusBoundary:         Colour{Dark: "#bbbbbb"},
 				CounterDivider:               Colour{Dark: "#bbbbbb"},
 				CounterLimit:                 Colour{Dark: "#bbbbbb"},
 				SummaryInputPromptStyle:      Colour{Dark: "#bbbbbb"},
@@ -253,7 +263,9 @@ func TestHeader(t *testing.T) {
 			clr := colour.New(theme.New(config.ColourAdaptive)).Header()
 
 			assert.Equal(t, tt.header.EmojiBoundary, toColour(clr.EmojiBoundary), "EmojiBoundary")
+			assert.Equal(t, tt.header.EmojiFocusBoundary, toColour(clr.EmojiFocusBoundary), "EmojiFocusBoundary")
 			assert.Equal(t, tt.header.SummaryBoundary, toColour(clr.SummaryBoundary), "SummaryBoundary")
+			assert.Equal(t, tt.header.SummaryFocusBoundary, toColour(clr.SummaryFocusBoundary), "SummaryFocusBoundary")
 			assert.Equal(t, tt.header.CounterDivider, toColour(clr.CounterDivider), "CounterDivider")
 			assert.Equal(t, tt.header.CounterLimit, toColour(clr.CounterLimit), "CounterLimit")
 			assert.Equal(t, tt.header.SummaryInputPromptStyle, toColour(clr.SummaryInputPromptStyle), "SummaryInputPromptStyle")

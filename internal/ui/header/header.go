@@ -218,10 +218,18 @@ func (m Model) subject() string {
 }
 
 func (m Model) emoji() string {
+	if (m.focus && m.component == emojiComponent) || !m.state.Config.View.HighlightActive {
+		return m.styles.emojiFocusBoundary.Render(m.Emoji.Character)
+	}
+
 	return m.styles.emojiBoundary.Render(m.Emoji.Character)
 }
 
 func (m Model) summary() string {
+	if (m.focus && m.component == summaryComponent) || !m.state.Config.View.HighlightActive {
+		return m.styles.summaryFocusBoundary.Render(m.summaryInput.View())
+	}
+
 	return m.styles.summaryBoundary.Render(m.summaryInput.View())
 }
 

@@ -201,6 +201,11 @@ view:
   # Default: default
   compatibility: default
 
+  # Highlight active component.
+  # Value: true, false
+  # Default: false
+  highlightActive: false
+
 commit:
   # Emoji format in commit.
   # Values: shortcode, character

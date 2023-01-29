@@ -8,6 +8,7 @@ import (
 
 type Styles struct {
 	boundary            lipgloss.Style
+	focusBoundary       lipgloss.Style
 	textAreaPlaceholder lipgloss.Style
 	textAreaPrompt      lipgloss.Style
 	textAreaFocusedText lipgloss.Style
@@ -29,6 +30,9 @@ func defaultStyles(th theme.Theme) Styles {
 		BorderStyle(lipgloss.NormalBorder()).
 		BorderForeground(clr.Boundary).
 		Padding(0, 1, 0, 1)
+
+	s.focusBoundary = s.boundary.Copy().
+		BorderForeground(clr.FocusBoundary)
 
 	s.textAreaPlaceholder = lipgloss.NewStyle().
 		Foreground(clr.TextAreaPlaceholder)

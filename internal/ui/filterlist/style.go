@@ -8,6 +8,7 @@ import (
 
 type Styles struct {
 	boundary                  lipgloss.Style
+	focusBoundary             lipgloss.Style
 	listItemPrompt            lipgloss.Border
 	listNormalTitle           lipgloss.Style
 	listSelectedTitle         lipgloss.Style
@@ -38,6 +39,9 @@ func defaultStyles(th theme.Theme) Styles {
 		MarginLeft(4).
 		BorderStyle(lipgloss.NormalBorder()).
 		BorderForeground(clr.Boundary)
+
+	s.focusBoundary = s.boundary.Copy().
+		BorderForeground(clr.FocusBoundary)
 
 	s.paginatorBoundary = lipgloss.NewStyle().
 		MarginRight(1)
