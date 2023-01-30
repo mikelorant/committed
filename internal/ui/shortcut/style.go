@@ -7,8 +7,6 @@ import (
 
 type Styles struct {
 	boundary     lipgloss.Style
-	blockLeft    lipgloss.Style
-	blockRight   lipgloss.Style
 	columnLeft   lipgloss.Style
 	columnRight  lipgloss.Style
 	key          lipgloss.Style
@@ -24,14 +22,6 @@ func defaultStyles(th theme.Theme) Styles {
 
 	s.boundary = lipgloss.NewStyle().
 		MarginBottom(1)
-
-	s.blockLeft = lipgloss.NewStyle().
-		Width(50).
-		Align(lipgloss.Left)
-
-	s.blockRight = lipgloss.NewStyle().
-		Width(30).
-		Align(lipgloss.Right)
 
 	s.columnRight = lipgloss.NewStyle().
 		MarginLeft(1)

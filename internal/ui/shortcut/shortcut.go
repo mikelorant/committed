@@ -110,11 +110,13 @@ func (m Model) shortcutRow() string {
 }
 
 func (m Model) joinShortcutRow(left, right []string) string {
+	const lineWidth = 80
+
 	hleft := lipgloss.JoinHorizontal(lipgloss.Top, left...)
 	hright := lipgloss.JoinHorizontal(lipgloss.Top, right...)
 
-	bleft := m.styles.blockLeft.Render(hleft)
-	bright := m.styles.blockRight.Render(hright)
+	bleft := lipgloss.PlaceHorizontal(lipgloss.Width(hleft), lipgloss.Left, hleft)
+	bright := lipgloss.PlaceHorizontal(lineWidth-lipgloss.Width(hleft), lipgloss.Right, hright)
 
 	block := lipgloss.JoinHorizontal(lipgloss.Top, bleft, bright)
 
