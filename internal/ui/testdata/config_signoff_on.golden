@@ -28,5 +28,5 @@ date:   Sat Jan 1 01:00:00 2022 +0000
 
       Signed-off-by: John Doe <john.doe@example.com>
 
- Alt + <enter> Commit <s> Sign-off </> Help                Summary <tab>
+ Alt + <enter> Commit <a> Amend <s> Sign-off </> Help      Summary <tab>
 Ctrl +     <c> Cancel                                       Author <tab> + Shift

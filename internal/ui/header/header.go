@@ -178,6 +178,14 @@ func (m *Model) SetSummary(str string) {
 	m.summaryInput.SetValue(str)
 }
 
+func (m *Model) ResetSummary() {
+	m.summaryInput.Reset()
+}
+
+func (m *Model) CursorStartSummary() {
+	m.summaryInput.CursorStart()
+}
+
 func (m *Model) ToggleAmend() {
 	m.Amend = !m.Amend
 }

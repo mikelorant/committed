@@ -8,6 +8,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/config"
+	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/ui/body"
 	"github.com/mikelorant/committed/internal/ui/footer"
 	"github.com/mikelorant/committed/internal/ui/header"
@@ -25,9 +26,12 @@ type Model struct {
 	previousFocus focus
 	models        Models
 	quit          bool
+	amend         bool
 	signoff       bool
 	err           error
 	ready         bool
+	currentSave   savedState
+	previousSave  savedState
 	emojiType     config.EmojiType
 }
 
@@ -39,6 +43,13 @@ type Models struct {
 	status  status.Model
 	help    help.Model
 	message message.Model
+}
+
+type savedState struct {
+	amend   bool
+	emoji   emoji.Emoji
+	summary string
+	body    string
 }
 
 type keyResponse struct {
@@ -92,14 +103,18 @@ func (m *Model) Configure(state *commit.State) {
 		help:   help.New(state),
 	}
 
-	if state.Options.Amend && state.Repository.Head.Hash != "" {
-		if e := commit.MessageToEmoji(state.Emojis, state.Repository.Head.Message); e.Valid {
-			m.models.header.Emoji = e.Emoji
-		}
-		m.models.header.SetSummary(commit.MessageToSummary(state.Repository.Head.Message))
-		m.models.header.Amend = state.Options.Amend
-		m.models.body.SetValue(commit.MessageToBody(state.Repository.Head.Message))
+	m.amend = state.Options.Amend
+
+	switch m.amend {
+	case true:
+		m.currentSave = defaultAmendSave(state)
+		m.previousSave = savedState{}
+	case false:
+		m.currentSave = savedState{}
+		m.previousSave = defaultAmendSave(state)
 	}
+
+	m.restoreModel(m.currentSave)
 }
 
 func (m Model) Start() (*commit.Request, error) {
@@ -237,6 +252,15 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 		m = m.commit()
 
 		return keyResponse{model: m, cmd: tea.Quit, end: true}
+	case "alt+a":
+		m.amend = !m.amend
+
+		m.swapSave()
+
+		m.models.header.CursorStartSummary()
+		m.models.body.CursorStart()
+
+		return keyResponse{model: m, end: false, nilMsg: true}
 	case "alt+s":
 		m.signoff = !m.signoff
 
@@ -375,4 +399,33 @@ func (m Model) commit() Model {
 
 func (m Model) validate() bool {
 	return m.models.header.Summary() != ""
+}
+
+func (m *Model) restoreModel(save savedState) {
+	m.models.header.Amend = save.amend
+	m.models.header.Emoji = save.emoji
+	m.models.header.SetSummary(save.summary)
+	m.models.body.SetValue(save.body)
+}
+
+func (m *Model) backupModel() savedState {
+	var save savedState
+
+	save.amend = m.models.header.Amend
+	save.emoji = m.models.header.Emoji
+	save.summary = m.models.header.Summary()
+	save.body = m.models.body.RawValue()
+
+	return save
+}
+
+func (m *Model) swapSave() {
+	m.currentSave = m.backupModel()
+
+	m.models.header.ResetSummary()
+	m.models.body.Reset()
+
+	m.currentSave, m.previousSave = m.previousSave, m.currentSave
+
+	m.restoreModel(m.currentSave)
 }

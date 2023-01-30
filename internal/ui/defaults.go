@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/ui/theme"
 )
@@ -38,4 +39,17 @@ func (m *Model) defaultTheme(th string, clr config.Colour) {
 	t.SetTint(th)
 
 	m.state.Theme = t
+}
+
+func defaultAmendSave(st *commit.State) savedState {
+	var save savedState
+
+	save.amend = true
+	if e := commit.MessageToEmoji(st.Emojis, st.Repository.Head.Message); e.Valid {
+		save.emoji = e.Emoji
+	}
+	save.summary = commit.MessageToSummary(st.Repository.Head.Message)
+	save.body = commit.MessageToBody(st.Repository.Head.Message)
+
+	return save
 }

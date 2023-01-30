@@ -119,8 +119,23 @@ func (m Model) Value() string {
 	return res
 }
 
+func (m Model) RawValue() string {
+	return m.textArea.Value()
+}
+
 func (m *Model) SetValue(str string) {
 	m.textArea.SetValue(str)
+}
+
+func (m *Model) Reset() {
+	m.textArea.Reset()
+}
+
+func (m *Model) CursorStart() {
+	m.textArea.CursorStart()
+	for i := 1; i < m.textArea.LineCount(); i++ {
+		m.textArea.CursorUp()
+	}
 }
 
 func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
