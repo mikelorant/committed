@@ -91,6 +91,15 @@ func (m *Model) Configure(state *commit.State) {
 		status: status.New(state),
 		help:   help.New(state),
 	}
+
+	if state.Options.Amend && state.Repository.Head.Hash != "" {
+		if e := commit.MessageToEmoji(state.Emojis, state.Repository.Head.Message); e.Valid {
+			m.models.header.Emoji = e.Emoji
+		}
+		m.models.header.SetSummary(commit.MessageToSummary(state.Repository.Head.Message))
+		m.models.header.Amend = state.Options.Amend
+		m.models.body.SetValue(commit.MessageToBody(state.Repository.Head.Message))
+	}
 }
 
 func (m Model) Start() (*commit.Request, error) {

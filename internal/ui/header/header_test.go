@@ -49,10 +49,11 @@ func TestModel(t *testing.T) {
 		{
 			name: "amend_summary",
 			args: args{
-				state: func(c *commit.State) {
-					c.Repository.Head.Hash = "1"
-					c.Repository.Head.Message = "summary"
-					c.Options.Amend = true
+				model: func(m header.Model) header.Model {
+					m.SetSummary("summary")
+					m.Amend = true
+
+					return m
 				},
 			},
 			want: want{
@@ -64,10 +65,12 @@ func TestModel(t *testing.T) {
 		{
 			name: "amend_emoji_summary",
 			args: args{
-				state: func(c *commit.State) {
-					c.Repository.Head.Hash = "1"
-					c.Repository.Head.Message = ":test: summary"
-					c.Options.Amend = true
+				model: func(m header.Model) header.Model {
+					m.Emoji = emoji.Emoji{Character: "🎨", Description: "test", Shortcode: ":test:"}
+					m.SetSummary("summary")
+					m.Amend = true
+
+					return m
 				},
 			},
 			want: want{
@@ -80,20 +83,11 @@ func TestModel(t *testing.T) {
 		{
 			name: "amend_emoji",
 			args: args{
-				state: func(c *commit.State) {
-					c.Repository.Head.Hash = "1"
-					c.Repository.Head.Message = ":test:"
-					c.Options.Amend = true
-				},
-			},
-		},
-		{
-			name: "amend_summary_multiline",
-			args: args{
-				state: func(c *commit.State) {
-					c.Repository.Head.Hash = "1"
-					c.Repository.Head.Message = "summary\n\nbody"
-					c.Options.Amend = true
+				model: func(m header.Model) header.Model {
+					m.Emoji = emoji.Emoji{Character: "🎨", Description: "test", Shortcode: ":test:"}
+					m.Amend = true
+
+					return m
 				},
 			},
 		},
@@ -782,9 +776,6 @@ func TestModel(t *testing.T) {
 
 func testState() commit.State {
 	return commit.State{
-		Placeholders: commit.Placeholders{
-			Hash: "1",
-		},
 		Emojis: &emoji.Set{
 			Emojis: []emoji.Emoji{
 				{

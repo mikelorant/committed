@@ -7,7 +7,6 @@ import (
 	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/config"
-	"github.com/mikelorant/committed/internal/repository"
 	"github.com/mikelorant/committed/internal/ui/body"
 	"github.com/mikelorant/committed/internal/ui/theme"
 	"github.com/mikelorant/committed/internal/ui/uitest"
@@ -16,12 +15,9 @@ import (
 
 func TestModel(t *testing.T) {
 	type args struct {
-		body    string
-		height  int
-		amend   bool
-		hash    string
-		message string
-		model   func(m body.Model) body.Model
+		body   string
+		height int
+		model  func(m body.Model) body.Model
 	}
 
 	type want struct {
@@ -81,11 +77,12 @@ func TestModel(t *testing.T) {
 			},
 		},
 		{
-			name: "amend",
+			name: "body",
 			args: args{
-				amend:   true,
-				hash:    "1",
-				message: "summary\n\nbody",
+				model: func(m body.Model) body.Model {
+					m.SetValue("body")
+					return m
+				},
 			},
 			want: want{
 				model: func(m body.Model) {
@@ -94,11 +91,12 @@ func TestModel(t *testing.T) {
 			},
 		},
 		{
-			name: "amend_multiline",
+			name: "body_multiline",
 			args: args{
-				amend:   true,
-				hash:    "1",
-				message: "summary\n\nline 1\nline 2\nline 3\n",
+				model: func(m body.Model) body.Model {
+					m.SetValue("line 1\nline 2\nline 3\n")
+					return m
+				},
 			},
 			want: want{
 				model: func(m body.Model) {
@@ -109,12 +107,10 @@ func TestModel(t *testing.T) {
 		{
 			name: "dimensions",
 			args: args{
-				height:  10,
-				amend:   true,
-				hash:    "1",
-				message: "summary\n\nbody",
+				height: 10,
 				model: func(m body.Model) body.Model {
 					m.Height = 3
+					m.SetValue("body")
 					m, _ = body.ToModel(m.Update(m))
 					return m
 				},
@@ -160,16 +156,7 @@ func TestModel(t *testing.T) {
 				Placeholders: commit.Placeholders{
 					Body: tt.args.body,
 				},
-				Repository: repository.Description{
-					Head: repository.Head{
-						Hash:    tt.args.hash,
-						Message: tt.args.message,
-					},
-				},
 				Theme: theme.New(config.ColourAdaptive),
-				Options: commit.Options{
-					Amend: tt.args.amend,
-				},
 			}
 
 			m := body.New(&c, tt.args.height)

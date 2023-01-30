@@ -36,10 +36,6 @@ func New(state *commit.State, h int) Model {
 		textArea: newTextArea(state.Placeholders.Body, defaultWidth, state),
 	}
 
-	if state.Options.Amend && state.Repository.Head.Hash != "" {
-		m.textArea.SetValue(commit.MessageToBody(state.Repository.Head.Message))
-	}
-
 	return m
 }
 
@@ -121,6 +117,10 @@ func (m Model) Value() string {
 	m.textArea.Cursor.SetMode(cursor.CursorBlink)
 
 	return res
+}
+
+func (m *Model) SetValue(str string) {
+	m.textArea.SetValue(str)
 }
 
 func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {

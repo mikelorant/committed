@@ -23,6 +23,7 @@ type Model struct {
 	Placeholder   string
 	Emoji         emoji.Emoji
 	Emojis        []emoji.Emoji
+	Amend         bool
 
 	focus     bool
 	component component
@@ -64,14 +65,6 @@ func New(state *commit.State) Model {
 			filterHeight,
 			state,
 		),
-	}
-
-	if state.Options.Amend && state.Repository.Head.Hash != "" {
-		e := commit.MessageToEmoji(state.Emojis, state.Repository.Head.Message)
-		if e.Valid {
-			m.Emoji = e.Emoji
-		}
-		m.summaryInput.SetValue(commit.MessageToSummary(state.Repository.Head.Message))
 	}
 
 	return m
@@ -181,6 +174,14 @@ func (m Model) Summary() string {
 	return m.summaryInput.Value()
 }
 
+func (m *Model) SetSummary(str string) {
+	m.summaryInput.SetValue(str)
+}
+
+func (m *Model) ToggleAmend() {
+	m.Amend = !m.Amend
+}
+
 func (m Model) headerRow() string {
 	if !m.Expand {
 		return lipgloss.NewStyle().Height(m.height).Render(m.subject())
@@ -238,7 +239,7 @@ func (m Model) readyCommitType() string {
 
 func (m Model) ready() string {
 	switch {
-	case !m.isStaged() && !m.state.Options.Amend:
+	case !m.isStaged() && !m.Amend:
 		return m.styles.readyError.String()
 	case len(m.Summary()) < 1:
 		return m.styles.readyIncomplete.String()
@@ -248,7 +249,7 @@ func (m Model) ready() string {
 }
 
 func (m Model) commitType() string {
-	if m.state.Options.Amend {
+	if m.Amend {
 		return m.styles.commitTypeAmend.String()
 	}
 
