@@ -220,6 +220,7 @@ func TestApply(t *testing.T) {
 		body    string
 		footer  string
 		author  repository.User
+		amend   bool
 		options commit.Options
 	}
 
@@ -271,9 +272,7 @@ func TestApply(t *testing.T) {
 		{
 			name: "amend",
 			args: args{
-				options: commit.Options{
-					Amend: true,
-				},
+				amend: true,
 			},
 			want: want{
 				amend: true,
@@ -282,8 +281,8 @@ func TestApply(t *testing.T) {
 		{
 			name: "amend_dryrun",
 			args: args{
+				amend: true,
 				options: commit.Options{
-					Amend:  true,
 					DryRun: true,
 				},
 			},
@@ -312,6 +311,7 @@ func TestApply(t *testing.T) {
 				Body:    tt.args.body,
 				Footer:  tt.args.footer,
 				Author:  tt.args.author,
+				Amend:   tt.args.amend,
 			}
 
 			c := commit.Commit{

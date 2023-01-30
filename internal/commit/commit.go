@@ -46,6 +46,7 @@ type Request struct {
 	Body    string
 	Footer  string
 	Author  repository.User
+	Amend   bool
 }
 
 func New() Commit {
@@ -93,7 +94,7 @@ func (c *Commit) Apply(req *Request) error {
 	}
 
 	opts := []func(c *repository.Commit){
-		repository.WithAmend(c.Options.Amend),
+		repository.WithAmend(req.Amend),
 		repository.WithDryRun(c.Options.DryRun),
 	}
 

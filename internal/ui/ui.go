@@ -392,6 +392,7 @@ func (m Model) commit() Model {
 		Summary: m.models.header.Summary(),
 		Body:    m.models.body.Value(),
 		Footer:  m.models.footer.Value(),
+		Amend:   m.amend,
 	}
 
 	return m

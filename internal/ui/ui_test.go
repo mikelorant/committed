@@ -365,6 +365,7 @@ func TestModel(t *testing.T) {
 							Name:  "John Doe",
 							Email: "john.doe@example.com",
 						},
+						Amend: true,
 					}
 
 					assert.Equal(t, &req, m.Request)
@@ -392,6 +393,7 @@ func TestModel(t *testing.T) {
 							Name:  "John Doe",
 							Email: "john.doe@example.com",
 						},
+						Amend: true,
 					}
 
 					assert.Equal(t, &req, m.Request)
@@ -420,6 +422,7 @@ func TestModel(t *testing.T) {
 							Name:  "John Doe",
 							Email: "john.doe@example.com",
 						},
+						Amend: true,
 					}
 
 					assert.Equal(t, &req, m.Request)
@@ -447,6 +450,7 @@ func TestModel(t *testing.T) {
 							Name:  "John Doe",
 							Email: "john.doe@example.com",
 						},
+						Amend: true,
 					}
 
 					assert.Equal(t, &req, m.Request)
@@ -475,6 +479,7 @@ func TestModel(t *testing.T) {
 							Name:  "John Doe",
 							Email: "jdoe@example.org",
 						},
+						Amend: true,
 					}
 
 					assert.Equal(t, &req, m.Request)
@@ -578,6 +583,7 @@ func TestModel(t *testing.T) {
 							Name:  "John Doe",
 							Email: "john.doe@example.com",
 						},
+						Amend: true,
 					}
 
 					assert.Equal(t, &req, m.Request)
@@ -608,6 +614,7 @@ func TestModel(t *testing.T) {
 							Name:  "John Doe",
 							Email: "john.doe@example.com",
 						},
+						Amend: true,
 					}
 
 					assert.Equal(t, &req, m.Request)
