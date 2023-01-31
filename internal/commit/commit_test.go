@@ -499,7 +499,7 @@ func TestApply(t *testing.T) {
 			},
 		},
 		{
-			name: "save",
+			name: "snapshot_save",
 			args: args{
 				req: &commit.Request{
 					Emoji:   ":art:",
@@ -526,7 +526,7 @@ func TestApply(t *testing.T) {
 			},
 		},
 		{
-			name: "snap_save_error",
+			name: "snapshot_save_error",
 			args: args{
 				req:         &commit.Request{},
 				snapSaveErr: errMock,

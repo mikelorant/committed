@@ -140,6 +140,7 @@ func defaultKeyBindings() []shortcut.KeyBinding {
 		{Modifier: shortcut.ControlModifier, Key: "h", Label: "Help"},
 		{Modifier: shortcut.AltModifier, Key: "enter", Label: "Commit"},
 		{Modifier: shortcut.AltModifier, Key: "a", Label: "Amend"},
+		{Modifier: shortcut.AltModifier, Key: "l", Label: "Load"},
 		{Modifier: shortcut.AltModifier, Key: "s", Label: "Sign-off"},
 	}
 }

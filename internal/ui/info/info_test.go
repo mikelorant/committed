@@ -15,6 +15,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const dateTimeFormat = "Mon Jan 2 15:04:05 2006 -0700"
+
 func TestModel(t *testing.T) {
 	type args struct {
 		state func(c *commit.State)
@@ -310,6 +312,7 @@ func TestModel(t *testing.T) {
 			}
 
 			m := info.New(&c)
+			m.Date = time.Date(2022, time.January, 1, 1, 0, 0, 0, time.UTC).Format(dateTimeFormat)
 
 			if tt.args.model != nil {
 				m = tt.args.model(m)

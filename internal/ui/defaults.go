@@ -54,3 +54,17 @@ func defaultAmendSave(st *commit.State) savedState {
 
 	return s
 }
+
+func (m Model) snapshotToSave() savedState {
+	s := savedState{
+		amend:   m.state.Snapshot.Amend,
+		summary: m.state.Snapshot.Summary,
+		body:    m.state.Snapshot.Body,
+	}
+
+	if e := m.state.Emojis.Find(m.state.Snapshot.Emoji); e.Valid {
+		s.emoji = e.Emoji
+	}
+
+	return s
+}

@@ -3,6 +3,7 @@ package ui
 import (
 	"fmt"
 	"os"
+	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -21,6 +22,7 @@ import (
 
 type Model struct {
 	Request       *commit.Request
+	Date          time.Time
 	state         *commit.State
 	focus         focus
 	previousFocus focus
@@ -95,7 +97,9 @@ const (
 )
 
 func New() Model {
-	return Model{}
+	return Model{
+		Date: time.Now(),
+	}
 }
 
 func (m *Model) Configure(state *commit.State) {
@@ -110,6 +114,9 @@ func (m *Model) Configure(state *commit.State) {
 		status: status.New(state),
 		help:   help.New(state),
 	}
+
+	dateTimeFormat := "Mon Jan 2 15:04:05 2006 -0700"
+	m.models.info.Date = m.Date.Format(dateTimeFormat)
 
 	m.amend = state.Options.Amend
 
@@ -269,6 +276,13 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 		m.models.body.CursorStart()
 
 		return keyResponse{model: m, end: false, nilMsg: true}
+	case "alt+l":
+		if m.setSave() {
+			m.models.header.CursorStartSummary()
+			m.models.body.CursorStart()
+		}
+
+		return keyResponse{model: m, end: false, nilMsg: true}
 	case "alt+s":
 		m.signoff = !m.signoff
 
@@ -403,6 +417,7 @@ func (m Model) commit(q quit) Model {
 		Emoji:   emoji,
 		Summary: m.models.header.Summary(),
 		Body:    m.models.body.Value(),
+		RawBody: m.models.body.RawValue(),
 		Footer:  m.models.footer.Value(),
 		Amend:   m.amend,
 	}
@@ -438,6 +453,29 @@ func (m *Model) backupModel() savedState {
 	return save
 }
 
+func (m *Model) setSave() bool {
+	save := m.snapshotToSave()
+
+	switch {
+	case m.currentSave.amend && save.amend:
+		m.loadSave(save)
+		return true
+	case m.previousSave.amend && save.amend:
+		m.swapSave()
+		m.loadSave(save)
+		return true
+	case (save.body != "" || save.emoji.Name != "" || save.summary != "") && !m.currentSave.amend:
+		m.loadSave(save)
+		return true
+	case (save.body != "" || save.emoji.Name != "" || save.summary != "") && !m.previousSave.amend:
+		m.swapSave()
+		m.loadSave(save)
+		return true
+	}
+
+	return false
+}
+
 func (m *Model) swapSave() {
 	m.currentSave = m.backupModel()
 
@@ -447,4 +485,11 @@ func (m *Model) swapSave() {
 	m.currentSave, m.previousSave = m.previousSave, m.currentSave
 
 	m.restoreModel(m.currentSave)
+}
+
+func (m *Model) loadSave(st savedState) {
+	m.models.header.ResetSummary()
+	m.models.body.Reset()
+
+	m.restoreModel(st)
 }

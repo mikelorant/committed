@@ -28,5 +28,5 @@ date:   Sat Jan 1 01:00:00 2022 +0000
     │  ~                                                                       │
     └──────────────────────────────────────────────────────────────────────────┘
 
- Alt + <enter> Commit <a> Amend <s> Sign-off                  Body <tab>
+ Alt + <enter> Commit <a> Amend <l> Load <s> Sign-off         Body <tab>
 Ctrl +     <c> Cancel <h> Help                               Emoji <tab> + Shift

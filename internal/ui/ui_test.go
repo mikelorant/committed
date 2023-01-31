@@ -421,6 +421,7 @@ func TestModel(t *testing.T) {
 						Apply:   true,
 						Summary: "test",
 						Body:    "test",
+						RawBody: "test",
 						Author: repository.User{
 							Name:  "John Doe",
 							Email: "john.doe@example.com",
@@ -628,6 +629,106 @@ func TestModel(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "amend_empty",
+			args: args{
+				state: func(s *commit.State) {
+					s.Repository.Head.Message = ":art: summary\n\nbody\n"
+					s.Options.Amend = false
+				},
+				model: func(m ui.Model) ui.Model {
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}, Alt: true}))
+
+					return m
+				},
+			},
+		},
+		{
+			name: "amend_existing",
+			args: args{
+				state: func(s *commit.State) {
+					s.Repository.Head.Message = ":art: summary\n\nbody\n"
+					s.Options.Amend = false
+				},
+				model: func(m ui.Model) ui.Model {
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyEnter}))
+					m, _ = ToModel(uitest.SendString(m, "test"), nil)
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyEnter}))
+					m, _ = ToModel(uitest.SendString(m, "test"), nil)
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}, Alt: true}))
+
+					return m
+				},
+			},
+		},
+		{
+			name: "snapshot_load_from_new_to_amend",
+			args: args{
+				state: func(s *commit.State) {
+					s.Snapshot.Summary = "amend"
+					s.Snapshot.Amend = true
+					s.Options.Amend = false
+				},
+				model: func(m ui.Model) ui.Model {
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyEnter}))
+					m, _ = ToModel(uitest.SendString(m, "new"), nil)
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'l'}, Alt: true}))
+					return m
+				},
+			},
+			want: want{},
+		},
+		{
+			name: "snapshot_load_from_new_to_amend_to_new",
+			args: args{
+				state: func(s *commit.State) {
+					s.Snapshot.Summary = "amend"
+					s.Snapshot.Amend = true
+					s.Options.Amend = false
+				},
+				model: func(m ui.Model) ui.Model {
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyEnter}))
+					m, _ = ToModel(uitest.SendString(m, "new"), nil)
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'l'}, Alt: true}))
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}, Alt: true}))
+					return m
+				},
+			},
+			want: want{},
+		},
+		{
+			name: "snapshot_load_from_amend_to_new",
+			args: args{
+				state: func(s *commit.State) {
+					s.Repository.Head.Message = "summary"
+					s.Snapshot.Amend = true
+					s.Options.Amend = true
+				},
+				model: func(m ui.Model) ui.Model {
+					m, _ = ToModel(m.Update(nil))
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}, Alt: true}))
+
+					return m
+				},
+			},
+		},
+		{
+			name: "snapshot_load_from_amend_to_new_to_amend",
+			args: args{
+				state: func(s *commit.State) {
+					s.Repository.Head.Message = "amend"
+					s.Snapshot.Amend = true
+					s.Options.Amend = true
+				},
+				model: func(m ui.Model) ui.Model {
+					m, _ = ToModel(m.Update(nil))
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}, Alt: true}))
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}, Alt: true}))
+
+					return m
+				},
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -639,6 +740,7 @@ func TestModel(t *testing.T) {
 			}
 
 			m := ui.New()
+			m.Date = time.Date(2022, time.January, 1, 1, 0, 0, 0, time.UTC)
 			m.Configure(&c)
 
 			if tt.args.model != nil {

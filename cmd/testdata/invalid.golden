@@ -9,11 +9,12 @@ Available Commands:
   version      Print the version information
 
 Flags:
-      --config string   Config file location (default "$HOME/.config/committed/config.yaml")
-      --dry-run         Simulate applying a commit (default true)
-  -a, --amend           Replace the tip of the current branch by creating a new commit
-  -h, --help            help for committed
-  -v, --version         version for committed
+      --config string     Config file location (default "$HOME/.config/committed/config.yaml")
+      --snapshot string   Snapshot file location (default "$HOME/.local/state/committed/snapshot.yaml")
+      --dry-run           Simulate applying a commit (default true)
+  -a, --amend             Replace the tip of the current branch by creating a new commit
+  -h, --help              help for committed
+  -v, --version           version for committed
 
 Use "committed [command] --help" for more information about a command.
 
