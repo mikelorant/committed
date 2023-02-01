@@ -7,9 +7,9 @@ import (
 )
 
 type User struct {
-	Name    string
-	Email   string
-	Default bool
+	Name    string `yaml:"name,omitempty"`
+	Email   string `yaml:"email,omitempty"`
+	Default bool   `yaml:"default,omitempty"`
 }
 
 func (r *Repository) Users() ([]User, error) {
