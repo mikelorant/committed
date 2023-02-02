@@ -37,16 +37,41 @@ func (e *EmojiSet) UnmarshalYAML(value *yaml.Node) error {
 	return nil
 }
 
+func (e *EmojiSet) MarshalYAML() (interface{}, error) {
+	return []string{
+		"",
+		"gitmoji",
+		"devmoji",
+		"emojilog",
+	}[*e], nil
+}
+
 func (e *EmojiType) UnmarshalYAML(value *yaml.Node) error {
 	*e = ParseEmojiType(value.Value)
 
 	return nil
 }
 
+func (e *EmojiType) MarshalYAML() (interface{}, error) {
+	return []string{
+		"",
+		"shortcode",
+		"character",
+	}[*e], nil
+}
+
 func (e *EmojiSelector) UnmarshalYAML(value *yaml.Node) error {
 	*e = ParseEmojiSelector(value.Value)
 
 	return nil
+}
+
+func (e *EmojiSelector) MarshalYAML() (interface{}, error) {
+	return []string{
+		"",
+		"below",
+		"above",
+	}[*e], nil
 }
 
 func ParseEmojiSet(str string) EmojiSet {
