@@ -10,23 +10,23 @@ import (
 )
 
 type Config struct {
-	View    View              `yaml:"view"`
-	Commit  Commit            `yaml:"commit"`
-	Authors []repository.User `yaml:"authors"`
+	View    View              `yaml:"view,omitempty"`
+	Commit  Commit            `yaml:"commit,omitempty"`
+	Authors []repository.User `yaml:"authors,omitempty"`
 }
 
 type View struct {
-	Focus         Focus         `yaml:"focus"`
-	EmojiSet      EmojiSet      `yaml:"emojiSet"`
-	EmojiSelector EmojiSelector `yaml:"emojiSelector"`
-	Compatibility Compatibility `yaml:"compatibility"`
-	Theme         string        `yaml:"theme"`
-	Colour        Colour        `yaml:"colour"`
+	Focus         Focus         `yaml:"focus,omitempty"`
+	EmojiSet      EmojiSet      `yaml:"emojiSet,omitempty"`
+	EmojiSelector EmojiSelector `yaml:"emojiSelector,omitempty"`
+	Compatibility Compatibility `yaml:"compatibility,omitempty"`
+	Theme         string        `yaml:"theme,omitempty"`
+	Colour        Colour        `yaml:"colour,omitempty"`
 }
 
 type Commit struct {
-	EmojiType EmojiType `yaml:"emojiType"`
-	Signoff   bool      `yaml:"signoff"`
+	EmojiType EmojiType `yaml:"emojiType,omitempty"`
+	Signoff   bool      `yaml:"signoff,omitempty"`
 }
 
 func (c *Config) Load(fh io.Reader) (Config, error) {
