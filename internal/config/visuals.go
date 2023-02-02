@@ -82,6 +82,7 @@ func (c *Colour) MarshalYAML() (interface{}, error) {
 
 func ParseFocus(str string) Focus {
 	focus := map[string]Focus{
+		"":        FocusUnset,
 		"author":  FocusAuthor,
 		"emoji":   FocusEmoji,
 		"summary": FocusSummary,
