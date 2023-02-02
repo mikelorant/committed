@@ -1,12 +1,8 @@
 package commit
 
 import (
-	"errors"
 	"fmt"
 	"io"
-	"io/fs"
-	"os"
-	"strings"
 
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
@@ -103,23 +99,6 @@ func (c *Commit) Apply(req *Request) error {
 	}
 
 	return nil
-}
-
-func FileOpen() func(string) (io.Reader, error) {
-	return func(file string) (io.Reader, error) {
-		var pathError *fs.PathError
-
-		fh, err := os.Open(os.ExpandEnv(file))
-		switch {
-		case err == nil:
-		case errors.As(err, &pathError):
-			return strings.NewReader(""), nil
-		default:
-			return nil, err
-		}
-
-		return fh, nil
-	}
 }
 
 func getRepo(repo Repoer) (repository.Description, error) {

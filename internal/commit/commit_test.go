@@ -2,10 +2,7 @@ package commit_test
 
 import (
 	"errors"
-	"fmt"
 	"io"
-	"os"
-	"path"
 	"strings"
 	"testing"
 
@@ -332,92 +329,6 @@ func TestApply(t *testing.T) {
 			assert.Equal(t, tt.want.footer, a.commit.Footer)
 			assert.Equal(t, tt.want.amend, a.commit.Amend)
 			assert.Equal(t, tt.want.dryRun, a.commit.DryRun)
-		})
-	}
-}
-
-func TestFileOpen(t *testing.T) {
-	type args struct {
-		create bool
-		env    bool
-	}
-
-	type want struct {
-		err        error
-		returnType io.Reader
-	}
-
-	tests := []struct {
-		name string
-		args args
-		want want
-	}{
-		{
-			name: "default",
-			args: args{
-				create: true,
-			},
-			want: want{
-				returnType: &os.File{},
-			},
-		},
-		{
-			name: "default_env",
-			args: args{
-				create: true,
-				env:    true,
-			},
-			want: want{
-				returnType: &os.File{},
-			},
-		},
-		{
-			name: "path_error",
-			want: want{
-				returnType: &strings.Reader{},
-			},
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			var (
-				file string
-				dir  string
-			)
-
-			const env = "TEST_ENV"
-
-			tmpDir := t.TempDir()
-
-			if tt.args.env {
-				t.Setenv(env, tmpDir)
-			}
-
-			switch {
-			case tt.args.create && tt.args.env:
-				dir = fmt.Sprintf("$%v", env)
-			case tt.args.create:
-				dir = tmpDir
-			}
-
-			file = path.Join(dir, tt.name)
-
-			if tt.args.create {
-				f := path.Join(tmpDir, tt.name)
-				if _, err := os.Create(os.ExpandEnv(f)); err != nil {
-					t.Fail()
-					return
-				}
-			}
-
-			r, err := commit.FileOpen()(file)
-			if tt.want.err != nil {
-				assert.NotNil(t, err)
-				return
-			}
-			assert.Nil(t, err)
-			assert.IsType(t, tt.want.returnType, r)
 		})
 	}
 }
