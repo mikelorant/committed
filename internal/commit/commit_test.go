@@ -15,8 +15,11 @@ import (
 )
 
 type MockRepository struct {
-	openErr error
-	descErr error
+	commit repository.Commit
+
+	openErr  error
+	descErr  error
+	applyErr error
 }
 
 func (r *MockRepository) Open() error {
@@ -27,33 +30,26 @@ func (r *MockRepository) Describe() (repository.Description, error) {
 	return repository.Description{}, r.descErr
 }
 
+func (r *MockRepository) Apply(c repository.Commit, opts ...func(c *repository.Commit)) error {
+	r.commit = c
+
+	for _, o := range opts {
+		o(&r.commit)
+	}
+
+	if r.applyErr != nil {
+		return r.applyErr
+	}
+
+	return nil
+}
+
 type MockConfig struct {
 	err error
 }
 
 func (c *MockConfig) Load(fh io.Reader) (config.Config, error) {
 	return config.Config{}, c.err
-}
-
-type MockApply struct {
-	commit repository.Commit
-	err    error
-}
-
-func (a *MockApply) Apply() func(c repository.Commit, opts ...func(c *repository.Commit)) error {
-	return func(c repository.Commit, opts ...func(c *repository.Commit)) error {
-		a.commit = c
-
-		for _, o := range opts {
-			o(&a.commit)
-		}
-
-		if a.err != nil {
-			return a.err
-		}
-
-		return nil
-	}
 }
 
 func MockNewRepository(err error) func() (*repository.Repository, error) {
@@ -81,6 +77,7 @@ func TestConfigure(t *testing.T) {
 		repoDescErr error
 		configErr   error
 		openErr     error
+		loadErr     error
 	}
 
 	type want struct {
@@ -182,7 +179,7 @@ func TestConfigure(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			config := MockConfig{
+			cfg := MockConfig{
 				err: tt.args.configErr,
 			}
 
@@ -192,10 +189,10 @@ func TestConfigure(t *testing.T) {
 			}
 
 			c := commit.Commit{
-				Repoer:  &repo,
-				Loader:  config.Load,
-				Emojier: MockNewEmoji,
-				Opener:  MockOpen(tt.args.openErr),
+				Repoer:   &repo,
+				Configer: &cfg,
+				Emojier:  MockNewEmoji,
+				Opener:   MockOpen(tt.args.openErr),
 			}
 
 			state, err := c.Configure(tt.args.opts)
@@ -212,14 +209,15 @@ func TestConfigure(t *testing.T) {
 
 func TestApply(t *testing.T) {
 	type args struct {
-		emoji   string
-		summary string
-		body    string
-		footer  string
-		author  repository.User
-		amend   bool
-		options commit.Options
-		apply   bool
+		apply    bool
+		emoji    string
+		summary  string
+		body     string
+		footer   string
+		author   repository.User
+		amend    bool
+		options  commit.Options
+		applyErr error
 	}
 
 	type want struct {
@@ -296,7 +294,8 @@ func TestApply(t *testing.T) {
 		{
 			name: "invalid",
 			args: args{
-				apply: true,
+				apply:    true,
+				applyErr: errMock,
 			},
 			want: want{
 				err: errMock,
@@ -306,8 +305,8 @@ func TestApply(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := MockApply{
-				err: tt.want.err,
+			repo := MockRepository{
+				applyErr: tt.args.applyErr,
 			}
 
 			req := &commit.Request{
@@ -322,7 +321,7 @@ func TestApply(t *testing.T) {
 
 			c := commit.Commit{
 				Options: tt.args.options,
-				Applier: a.Apply(),
+				Repoer:  &repo,
 			}
 
 			err := c.Apply(req)
@@ -332,12 +331,12 @@ func TestApply(t *testing.T) {
 				return
 			}
 			assert.Nil(t, err)
-			assert.Equal(t, tt.want.author, a.commit.Author)
-			assert.Equal(t, tt.want.subject, a.commit.Subject)
-			assert.Equal(t, tt.want.body, a.commit.Body)
-			assert.Equal(t, tt.want.footer, a.commit.Footer)
-			assert.Equal(t, tt.want.amend, a.commit.Amend)
-			assert.Equal(t, tt.want.dryRun, a.commit.DryRun)
+			assert.Equal(t, tt.want.author, repo.commit.Author)
+			assert.Equal(t, tt.want.subject, repo.commit.Subject)
+			assert.Equal(t, tt.want.body, repo.commit.Body)
+			assert.Equal(t, tt.want.footer, repo.commit.Footer)
+			assert.Equal(t, tt.want.amend, repo.commit.Amend)
+			assert.Equal(t, tt.want.dryRun, repo.commit.DryRun)
 		})
 	}
 }

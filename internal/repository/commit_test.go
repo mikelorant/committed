@@ -9,16 +9,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type MockRunner struct {
+type MockShell struct {
 	command string
 	args    []string
 
 	err error
 }
 
-var errMock = errors.New("error")
-
-func (r *MockRunner) Runner() func(w io.Writer, command string, args []string) error {
+func (r *MockShell) Run() func(w io.Writer, command string, args []string) error {
 	return func(w io.Writer, command string, args []string) error {
 		r.command = command
 		r.args = args
@@ -30,6 +28,8 @@ func (r *MockRunner) Runner() func(w io.Writer, command string, args []string) e
 		return nil
 	}
 }
+
+var errMock = errors.New("error")
 
 func TestApply(t *testing.T) {
 	type args struct {
@@ -163,22 +163,23 @@ func TestApply(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			r := MockRunner{
+			var repo repository.Repository
+
+			shell := MockShell{
 				err: tt.want.err,
 			}
 
-			c := tt.args.commit
-			c.Runner = r.Runner()
+			repo.Runner = shell.Run()
 
-			err := repository.Apply(c, tt.args.opts...)
+			err := repo.Apply(tt.args.commit, tt.args.opts...)
 			if tt.want.err != nil {
 				assert.NotNil(t, err)
 				assert.ErrorContains(t, err, tt.want.err.Error())
 				return
 			}
 			assert.Nil(t, err)
-			assert.Equal(t, tt.want.cmd, r.command)
-			assert.Equal(t, tt.want.args, r.args)
+			assert.Equal(t, tt.want.cmd, shell.command)
+			assert.Equal(t, tt.want.args, shell.args)
 		})
 	}
 }

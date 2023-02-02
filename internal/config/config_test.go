@@ -396,7 +396,7 @@ func TestConfig(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cfg, err := config.Load(strings.NewReader(tt.data))
+			cfg, err := new(config.Config).Load(strings.NewReader(tt.data))
 			if tt.err != nil {
 				assert.NotNil(t, err)
 				assert.ErrorAs(t, err, &typeError)

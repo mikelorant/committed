@@ -29,16 +29,16 @@ type Commit struct {
 	Signoff   bool      `yaml:"signoff"`
 }
 
-func Load(fh io.Reader) (Config, error) {
-	var c Config
+func (c *Config) Load(fh io.Reader) (Config, error) {
+	var cfg Config
 
-	err := yaml.NewDecoder(fh).Decode(&c)
+	err := yaml.NewDecoder(fh).Decode(&cfg)
 	switch {
 	case err == nil:
 	case errors.Is(err, io.EOF):
 	default:
-		return c, fmt.Errorf("unable to decode config: %w", err)
+		return cfg, fmt.Errorf("unable to decode config: %w", err)
 	}
 
-	return c, nil
+	return cfg, nil
 }

@@ -42,14 +42,15 @@ func (m *Model) defaultTheme(th string, clr config.Colour) {
 }
 
 func defaultAmendSave(st *commit.State) savedState {
-	var save savedState
-
-	save.amend = true
-	if e := commit.MessageToEmoji(st.Emojis, st.Repository.Head.Message); e.Valid {
-		save.emoji = e.Emoji
+	s := savedState{
+		amend:   true,
+		summary: commit.MessageToSummary(st.Repository.Head.Message),
+		body:    commit.MessageToBody(st.Repository.Head.Message),
 	}
-	save.summary = commit.MessageToSummary(st.Repository.Head.Message)
-	save.body = commit.MessageToBody(st.Repository.Head.Message)
 
-	return save
+	if e := commit.MessageToEmoji(st.Emojis, st.Repository.Head.Message); e.Valid {
+		s.emoji = e.Emoji
+	}
+
+	return s
 }

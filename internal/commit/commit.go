@@ -10,24 +10,27 @@ import (
 )
 
 type Commit struct {
-	Options Options
-	Applier Applier
-	Emojier Emojier
-	Loader  Loader
-	Opener  Opener
-	Repoer  Repoer
+	Options  Options
+	Emojier  Emojier
+	Configer Configer
+	Opener   Opener
+	Repoer   Repoer
 }
 
 type (
 	Applier func(repository.Commit, ...func(c *repository.Commit)) error
 	Emojier func(...func(*emoji.Set)) *emoji.Set
-	Loader  func(io.Reader) (config.Config, error)
 	Opener  func(string) (io.Reader, error)
 )
 
 type Repoer interface {
 	Open() error
 	Describe() (repository.Description, error)
+	Apply(repository.Commit, ...func(c *repository.Commit)) error
+}
+
+type Configer interface {
+	Load(io.Reader) (config.Config, error)
 }
 
 type Options struct {
@@ -48,11 +51,10 @@ type Request struct {
 
 func New() Commit {
 	return Commit{
-		Applier: repository.Apply,
-		Emojier: emoji.New,
-		Loader:  config.Load,
-		Opener:  FileOpen(),
-		Repoer:  repository.New(),
+		Emojier:  emoji.New,
+		Repoer:   repository.New(),
+		Configer: new(config.Config),
+		Opener:   FileOpen(),
 	}
 }
 
@@ -64,7 +66,7 @@ func (c *Commit) Configure(opts Options) (*State, error) {
 		return nil, fmt.Errorf("unable to get repository: %w", err)
 	}
 
-	cfg, err := getConfig(c.Opener, c.Loader, opts.ConfigFile)
+	cfg, err := getConfig(c.Opener, c.Configer, opts.ConfigFile)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get config: %w", err)
 	}
@@ -99,7 +101,7 @@ func (c *Commit) Apply(req *Request) error {
 		repository.WithDryRun(c.Options.DryRun),
 	}
 
-	if err := c.Applier(com, opts...); err != nil {
+	if err := c.Repoer.Apply(com, opts...); err != nil {
 		return fmt.Errorf("unable to apply commit: %w", err)
 	}
 
@@ -119,13 +121,13 @@ func getRepo(repo Repoer) (repository.Description, error) {
 	return desc, nil
 }
 
-func getConfig(open Opener, load Loader, file string) (config.Config, error) {
+func getConfig(open Opener, configer Configer, file string) (config.Config, error) {
 	r, err := open(file)
 	if err != nil {
 		return config.Config{}, fmt.Errorf("unable to open config file: %v: %w", file, err)
 	}
 
-	cfg, err := load(r)
+	cfg, err := configer.Load(r)
 	if err != nil {
 		return config.Config{}, fmt.Errorf("unable to load config file: %w", err)
 	}

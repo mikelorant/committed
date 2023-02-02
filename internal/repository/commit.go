@@ -2,10 +2,7 @@ package repository
 
 import (
 	"fmt"
-	"io"
 	"os"
-
-	"github.com/mikelorant/committed/internal/shell"
 )
 
 type Commit struct {
@@ -15,21 +12,16 @@ type Commit struct {
 	Footer  string
 	Amend   bool
 	DryRun  bool
-	Runner  func(w io.Writer, command string, args []string) error
 }
 
 const command = "git"
 
-func Apply(c Commit, opts ...func(c *Commit)) error {
+func (r *Repository) Apply(c Commit, opts ...func(c *Commit)) error {
 	for _, o := range opts {
 		o(&c)
 	}
 
-	if c.Runner == nil {
-		c.Runner = shell.Run
-	}
-
-	if err := c.Runner(os.Stdout, command, build(c)); err != nil {
+	if err := r.Runner(os.Stdout, command, build(c)); err != nil {
 		return fmt.Errorf("unable to run command: %w", err)
 	}
 
