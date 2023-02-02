@@ -42,3 +42,13 @@ func (c *Config) Load(fh io.Reader) (Config, error) {
 
 	return cfg, nil
 }
+
+func (c *Config) Save(fh io.WriteCloser, cfg Config) error {
+	err := yaml.NewEncoder(fh).Encode(&cfg)
+	if err != nil {
+		return fmt.Errorf("unable to encode config: %w", err)
+	}
+	defer fh.Close()
+
+	return nil
+}

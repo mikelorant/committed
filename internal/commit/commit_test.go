@@ -45,17 +45,29 @@ func (r *MockRepository) Apply(c repository.Commit, opts ...func(c *repository.C
 }
 
 type MockConfig struct {
-	err error
+	cfg  config.Config
+	file config.Config
+
+	loadErr error
+	saveErr error
 }
 
 func (c *MockConfig) Load(fh io.Reader) (config.Config, error) {
-	return config.Config{}, c.err
+	return c.cfg, c.loadErr
 }
 
-func MockNewRepository(err error) func() (*repository.Repository, error) {
-	return func() (*repository.Repository, error) {
-		return nil, err
-	}
+func (c *MockConfig) Save(fh io.WriteCloser, cfg config.Config) error {
+	c.file = cfg
+
+	return c.saveErr
+}
+
+type DiscardCloser struct {
+	io.Writer
+}
+
+func (d DiscardCloser) Close() error {
+	return nil
 }
 
 func MockNewEmoji(opts ...func(*emoji.Set)) *emoji.Set {
@@ -68,20 +80,34 @@ func MockOpen(err error) func(string) (io.Reader, error) {
 	}
 }
 
+func MockCreate(err error) func(file string) (io.WriteCloser, error) {
+	return func(file string) (io.WriteCloser, error) {
+		if err != nil {
+			return DiscardCloser{}, err
+		}
+
+		return DiscardCloser{}, nil
+	}
+}
+
 var errMock = errors.New("error")
 
 func TestConfigure(t *testing.T) {
 	type args struct {
 		opts        commit.Options
+		cfg         config.Config
 		repoOpenErr error
 		repoDescErr error
 		configErr   error
 		openErr     error
+		createErr   error
 		loadErr     error
+		saveErr     error
 	}
 
 	type want struct {
 		state commit.State
+		cfg   config.Config
 		err   string
 	}
 
@@ -114,6 +140,50 @@ func TestConfigure(t *testing.T) {
 					Emojis:       &emoji.Set{},
 					Options: commit.Options{
 						Amend: true,
+					},
+				},
+			},
+		},
+		{
+			name: "dryrun",
+			args: args{
+				opts: commit.Options{
+					Amend: true,
+				},
+			},
+			want: want{
+				state: commit.State{
+					Placeholders: testPlaceholders(),
+					Config:       config.Config{},
+					Emojis:       &emoji.Set{},
+					Options: commit.Options{
+						Amend: true,
+					},
+				},
+			},
+		},
+		{
+			name: "save",
+			args: args{
+				cfg: config.Config{
+					View: config.View{
+						Focus: config.FocusAuthor,
+					},
+				},
+			},
+			want: want{
+				state: commit.State{
+					Placeholders: testPlaceholders(),
+					Config: config.Config{
+						View: config.View{
+							Focus: config.FocusAuthor,
+						},
+					},
+					Emojis: &emoji.Set{},
+				},
+				cfg: config.Config{
+					View: config.View{
+						Focus: config.FocusAuthor,
 					},
 				},
 			},
@@ -175,12 +245,32 @@ func TestConfigure(t *testing.T) {
 				err: "unable to get config: unable to load config file: error",
 			},
 		},
+		{
+			name: "create_error",
+			args: args{
+				createErr: errMock,
+			},
+			want: want{
+				err: "unable to set config: unable to create config: error",
+			},
+		},
+		{
+			name: "save_error",
+			args: args{
+				saveErr: errMock,
+			},
+			want: want{
+				err: "unable to set config: unable to save config: error",
+			},
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			cfg := MockConfig{
-				err: tt.args.configErr,
+				cfg:     tt.args.cfg,
+				loadErr: tt.args.configErr,
+				saveErr: tt.args.saveErr,
 			}
 
 			repo := MockRepository{
@@ -192,6 +282,7 @@ func TestConfigure(t *testing.T) {
 				Repoer:   &repo,
 				Configer: &cfg,
 				Emojier:  MockNewEmoji,
+				Creator:  MockCreate(tt.args.createErr),
 				Opener:   MockOpen(tt.args.openErr),
 			}
 
@@ -203,21 +294,25 @@ func TestConfigure(t *testing.T) {
 			}
 			assert.Nil(t, err)
 			assert.Equal(t, &tt.want.state, state)
+			assert.Equal(t, tt.want.cfg, cfg.file)
 		})
 	}
 }
 
 func TestApply(t *testing.T) {
 	type args struct {
-		apply    bool
-		emoji    string
-		summary  string
-		body     string
-		footer   string
-		author   repository.User
-		amend    bool
-		options  commit.Options
-		applyErr error
+		apply     bool
+		emoji     string
+		summary   string
+		body      string
+		footer    string
+		author    repository.User
+		amend     bool
+		options   commit.Options
+		createErr error
+		saveErr   error
+		applyErr  error
+		nilReq    bool
 	}
 
 	type want struct {
@@ -292,6 +387,24 @@ func TestApply(t *testing.T) {
 			},
 		},
 		{
+			name: "save",
+			args: args{
+				apply: false,
+			},
+		},
+		{
+			name: "skip_apply",
+			args: args{
+				apply: false,
+			},
+		},
+		{
+			name: "no_request",
+			args: args{
+				nilReq: true,
+			},
+		},
+		{
 			name: "invalid",
 			args: args{
 				apply:    true,
@@ -319,9 +432,14 @@ func TestApply(t *testing.T) {
 				Amend:   tt.args.amend,
 			}
 
+			if tt.args.nilReq {
+				req = nil
+			}
+
 			c := commit.Commit{
 				Options: tt.args.options,
 				Repoer:  &repo,
+				Creator: MockCreate(tt.args.createErr),
 			}
 
 			err := c.Apply(req)

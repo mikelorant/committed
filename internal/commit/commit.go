@@ -15,12 +15,14 @@ type Commit struct {
 	Configer Configer
 	Opener   Opener
 	Repoer   Repoer
+	Creator  Creator
 }
 
 type (
 	Applier func(repository.Commit, ...func(c *repository.Commit)) error
 	Emojier func(...func(*emoji.Set)) *emoji.Set
 	Opener  func(string) (io.Reader, error)
+	Creator func(string) (io.WriteCloser, error)
 )
 
 type Repoer interface {
@@ -31,6 +33,7 @@ type Repoer interface {
 
 type Configer interface {
 	Load(io.Reader) (config.Config, error)
+	Save(io.WriteCloser, config.Config) error
 }
 
 type Options struct {
@@ -55,6 +58,7 @@ func New() Commit {
 		Repoer:   repository.New(),
 		Configer: new(config.Config),
 		Opener:   FileOpen(),
+		Creator:  FileCreate(),
 	}
 }
 
@@ -69,6 +73,12 @@ func (c *Commit) Configure(opts Options) (*State, error) {
 	cfg, err := getConfig(c.Opener, c.Configer, opts.ConfigFile)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get config: %w", err)
+	}
+
+	if !FileExists(opts.ConfigFile) {
+		if err := setConfig(c.Creator, c.Configer, opts.ConfigFile, cfg); err != nil {
+			return nil, fmt.Errorf("unable to set config: %w", err)
+		}
 	}
 
 	return &State{
@@ -133,6 +143,19 @@ func getConfig(open Opener, configer Configer, file string) (config.Config, erro
 	}
 
 	return cfg, nil
+}
+
+func setConfig(create Creator, configer Configer, file string, cfg config.Config) error {
+	w, err := create(file)
+	if err != nil {
+		return fmt.Errorf("unable to create config: %w", err)
+	}
+
+	if err := configer.Save(w, cfg); err != nil {
+		return fmt.Errorf("unable to save config: %w", err)
+	}
+
+	return nil
 }
 
 func getEmojis(emojier Emojier, cfg config.Config) *emoji.Set {
