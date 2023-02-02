@@ -206,32 +206,32 @@ func TestModel(t *testing.T) {
 			},
 		},
 		{
-			name: "alt+slash",
+			name: "ctrl+h",
 			args: args{
 				model: func(m ui.Model) ui.Model {
-					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'/'}, Alt: true}))
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyCtrlH}))
 					return m
 				},
 			},
 		},
 		{
-			name: "alt+slash_twice",
+			name: "ctrl+h_twice",
 			args: args{
 				model: func(m ui.Model) ui.Model {
-					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'/'}, Alt: true}))
-					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'/'}, Alt: true}))
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyCtrlH}))
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyCtrlH}))
 					return m
 				},
 			},
 		},
 		{
-			name: "alt+slash_twice_body",
+			name: "ctrl+h_twice_body",
 			args: args{
 				model: func(m ui.Model) ui.Model {
 					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'4'}, Alt: true}))
 					m, _ = ToModel(uitest.SendString(m, "test"), nil)
-					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'/'}, Alt: true}))
-					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'/'}, Alt: true}))
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyCtrlH}))
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyCtrlH}))
 					return m
 				},
 			},
@@ -240,7 +240,7 @@ func TestModel(t *testing.T) {
 			name: "escape_help",
 			args: args{
 				model: func(m ui.Model) ui.Model {
-					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'/'}, Alt: true}))
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyCtrlH}))
 					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyEscape}))
 					return m
 				},

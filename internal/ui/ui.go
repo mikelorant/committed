@@ -268,7 +268,7 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 	case "alt+t":
 		m.state.Theme.NextTint()
 		return keyResponse{model: m, cmd: theme.UpdateTheme, end: true}
-	case "alt+/":
+	case "ctrl+h":
 		if m.focus == helpComponent {
 			m.focus = m.previousFocus
 			break

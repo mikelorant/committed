@@ -137,9 +137,9 @@ func defaultModifiers() []shortcut.Modifier {
 func defaultKeyBindings() []shortcut.KeyBinding {
 	return []shortcut.KeyBinding{
 		{Modifier: shortcut.ControlModifier, Key: "c", Label: "Cancel"},
+		{Modifier: shortcut.ControlModifier, Key: "h", Label: "Help"},
 		{Modifier: shortcut.AltModifier, Key: "enter", Label: "Commit"},
 		{Modifier: shortcut.AltModifier, Key: "a", Label: "Amend"},
 		{Modifier: shortcut.AltModifier, Key: "s", Label: "Sign-off"},
-		{Modifier: shortcut.AltModifier, Key: "/", Label: "Help"},
 	}
 }
