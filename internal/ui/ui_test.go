@@ -360,6 +360,7 @@ func TestModel(t *testing.T) {
 			want: want{
 				model: func(m ui.Model) {
 					req := commit.Request{
+						Apply:   true,
 						Summary: "test",
 						Author: repository.User{
 							Name:  "John Doe",
@@ -387,6 +388,7 @@ func TestModel(t *testing.T) {
 			want: want{
 				model: func(m ui.Model) {
 					req := commit.Request{
+						Apply:   true,
 						Emoji:   ":art:",
 						Summary: "test",
 						Author: repository.User{
@@ -416,6 +418,7 @@ func TestModel(t *testing.T) {
 			want: want{
 				model: func(m ui.Model) {
 					req := commit.Request{
+						Apply:   true,
 						Summary: "test",
 						Body:    "test",
 						Author: repository.User{
@@ -444,6 +447,7 @@ func TestModel(t *testing.T) {
 			want: want{
 				model: func(m ui.Model) {
 					req := commit.Request{
+						Apply:   true,
 						Summary: "test",
 						Footer:  "Signed-off-by: John Doe <john.doe@example.com>",
 						Author: repository.User{
@@ -474,6 +478,7 @@ func TestModel(t *testing.T) {
 			want: want{
 				model: func(m ui.Model) {
 					req := commit.Request{
+						Apply:   true,
 						Summary: "test",
 						Author: repository.User{
 							Name:  "John Doe",
@@ -577,6 +582,7 @@ func TestModel(t *testing.T) {
 			want: want{
 				model: func(m ui.Model) {
 					req := commit.Request{
+						Apply:   true,
 						Emoji:   ":art:",
 						Summary: "test",
 						Author: repository.User{
@@ -608,6 +614,7 @@ func TestModel(t *testing.T) {
 			want: want{
 				model: func(m ui.Model) {
 					req := commit.Request{
+						Apply:   true,
 						Emoji:   "🎨",
 						Summary: "test",
 						Author: repository.User{

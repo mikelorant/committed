@@ -219,6 +219,7 @@ func TestApply(t *testing.T) {
 		author  repository.User
 		amend   bool
 		options commit.Options
+		apply   bool
 	}
 
 	type want struct {
@@ -239,6 +240,7 @@ func TestApply(t *testing.T) {
 		{
 			name: "normal",
 			args: args{
+				apply:   true,
 				emoji:   ":art:",
 				summary: "summary",
 				body:    "body",
@@ -258,6 +260,7 @@ func TestApply(t *testing.T) {
 		{
 			name: "dryrun",
 			args: args{
+				apply: true,
 				options: commit.Options{
 					DryRun: true,
 				},
@@ -269,6 +272,7 @@ func TestApply(t *testing.T) {
 		{
 			name: "amend",
 			args: args{
+				apply: true,
 				amend: true,
 			},
 			want: want{
@@ -278,6 +282,7 @@ func TestApply(t *testing.T) {
 		{
 			name: "amend_dryrun",
 			args: args{
+				apply: true,
 				amend: true,
 				options: commit.Options{
 					DryRun: true,
@@ -290,6 +295,9 @@ func TestApply(t *testing.T) {
 		},
 		{
 			name: "invalid",
+			args: args{
+				apply: true,
+			},
 			want: want{
 				err: errMock,
 			},
@@ -303,6 +311,7 @@ func TestApply(t *testing.T) {
 			}
 
 			req := &commit.Request{
+				Apply:   tt.args.apply,
 				Emoji:   tt.args.emoji,
 				Summary: tt.args.summary,
 				Body:    tt.args.body,

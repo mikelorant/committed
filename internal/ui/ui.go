@@ -25,7 +25,7 @@ type Model struct {
 	focus         focus
 	previousFocus focus
 	models        Models
-	quit          bool
+	quit          quit
 	amend         bool
 	signoff       bool
 	err           error
@@ -68,6 +68,14 @@ const (
 	summaryComponent
 	bodyComponent
 	helpComponent
+)
+
+type quit int
+
+const (
+	unsetQuit quit = iota
+	applyQuit
+	cancelQuit
 )
 
 const (
@@ -178,7 +186,7 @@ func (m Model) View() string {
 		return ""
 	}
 
-	if m.quit {
+	if m.quit == applyQuit {
 		return lipgloss.JoinVertical(lipgloss.Top,
 			m.models.info.View(),
 			m.models.message.View(),
@@ -249,7 +257,7 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 			break
 		}
 
-		m = m.commit()
+		m = m.commit(applyQuit)
 
 		return keyResponse{model: m, cmd: tea.Quit, end: true}
 	case "alt+a":
@@ -298,6 +306,8 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 			m.focus = summaryComponent
 		}
 	case "ctrl+c":
+		m = m.commit(cancelQuit)
+
 		return keyResponse{model: m, cmd: tea.Quit, end: true}
 	}
 
@@ -366,8 +376,8 @@ func (m Model) updateModels(msg tea.Msg) (Model, tea.Cmd) {
 	return m, tea.Batch(cmds...)
 }
 
-func (m Model) commit() Model {
-	m.quit = true
+func (m Model) commit(q quit) Model {
+	m.quit = q
 
 	var emoji string
 
@@ -378,13 +388,15 @@ func (m Model) commit() Model {
 		emoji = m.models.header.Emoji.Shortcode
 	}
 
-	m.models.message = message.New(message.State{
-		Emoji:   emoji,
-		Summary: m.models.header.Summary(),
-		Body:    m.models.body.Value(),
-		Footer:  m.models.footer.Value(),
-		Theme:   m.state.Theme,
-	})
+	if m.quit == applyQuit {
+		m.models.message = message.New(message.State{
+			Emoji:   emoji,
+			Summary: m.models.header.Summary(),
+			Body:    m.models.body.Value(),
+			Footer:  m.models.footer.Value(),
+			Theme:   m.state.Theme,
+		})
+	}
 
 	m.Request = &commit.Request{
 		Author:  m.models.info.Author,
@@ -393,6 +405,12 @@ func (m Model) commit() Model {
 		Body:    m.models.body.Value(),
 		Footer:  m.models.footer.Value(),
 		Amend:   m.amend,
+	}
+
+	if m.quit == applyQuit {
+		m.Request.Apply = true
+
+		return m
 	}
 
 	return m

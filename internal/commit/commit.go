@@ -37,6 +37,7 @@ type Options struct {
 }
 
 type Request struct {
+	Apply   bool
 	Emoji   string
 	Summary string
 	Body    string
@@ -87,6 +88,10 @@ func (c *Commit) Apply(req *Request) error {
 		Subject: EmojiSummaryToSubject(req.Emoji, req.Summary),
 		Body:    req.Body,
 		Footer:  req.Footer,
+	}
+
+	if !req.Apply {
+		return nil
 	}
 
 	opts := []func(c *repository.Commit){
