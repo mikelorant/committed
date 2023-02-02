@@ -16,28 +16,12 @@ type Commit struct {
 
 const command = "git"
 
-func (r *Repository) Apply(c Commit, opts ...func(c *Commit)) error {
-	for _, o := range opts {
-		o(&c)
-	}
-
+func (r *Repository) Apply(c Commit) error {
 	if err := r.Runner(os.Stdout, command, build(c)); err != nil {
 		return fmt.Errorf("unable to run command: %w", err)
 	}
 
 	return nil
-}
-
-func WithAmend(b bool) func(c *Commit) {
-	return func(c *Commit) {
-		c.Amend = b
-	}
-}
-
-func WithDryRun(b bool) func(c *Commit) {
-	return func(c *Commit) {
-		c.DryRun = b
-	}
 }
 
 func build(c Commit) []string {

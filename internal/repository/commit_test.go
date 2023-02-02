@@ -114,9 +114,7 @@ func TestApply(t *testing.T) {
 				commit: repository.Commit{
 					Author:  "John Doe <john.doe@example.com",
 					Subject: ":art: summary",
-				},
-				opts: []func(c *repository.Commit){
-					repository.WithAmend(true),
+					Amend:   true,
 				},
 			},
 			want: want{
@@ -135,9 +133,7 @@ func TestApply(t *testing.T) {
 				commit: repository.Commit{
 					Author:  "John Doe <john.doe@example.com",
 					Subject: ":art: summary",
-				},
-				opts: []func(c *repository.Commit){
-					repository.WithDryRun(true),
+					DryRun:  true,
 				},
 			},
 			want: want{
@@ -171,7 +167,7 @@ func TestApply(t *testing.T) {
 
 			repo.Runner = shell.Run()
 
-			err := repo.Apply(tt.args.commit, tt.args.opts...)
+			err := repo.Apply(tt.args.commit)
 			if tt.want.err != nil {
 				assert.NotNil(t, err)
 				assert.ErrorContains(t, err, tt.want.err.Error())

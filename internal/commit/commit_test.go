@@ -15,7 +15,7 @@ import (
 )
 
 type MockRepository struct {
-	commit repository.Commit
+	com repository.Commit
 
 	openErr  error
 	descErr  error
@@ -30,12 +30,8 @@ func (r *MockRepository) Describe() (repository.Description, error) {
 	return repository.Description{}, r.descErr
 }
 
-func (r *MockRepository) Apply(c repository.Commit, opts ...func(c *repository.Commit)) error {
-	r.commit = c
-
-	for _, o := range opts {
-		o(&r.commit)
-	}
+func (r *MockRepository) Apply(c repository.Commit) error {
+	r.com = c
 
 	if r.applyErr != nil {
 		return r.applyErr
@@ -301,14 +297,7 @@ func TestConfigure(t *testing.T) {
 
 func TestApply(t *testing.T) {
 	type args struct {
-		apply     bool
-		emoji     string
-		summary   string
-		body      string
-		footer    string
-		author    repository.User
-		amend     bool
-		options   commit.Options
+		req       *commit.Request
 		createErr error
 		saveErr   error
 		applyErr  error
@@ -316,13 +305,8 @@ func TestApply(t *testing.T) {
 	}
 
 	type want struct {
-		author  string
-		subject string
-		body    string
-		footer  string
-		amend   bool
-		dryRun  bool
-		err     error
+		cfg repository.Commit
+		err error
 	}
 
 	tests := []struct {
@@ -333,69 +317,85 @@ func TestApply(t *testing.T) {
 		{
 			name: "normal",
 			args: args{
-				apply:   true,
-				emoji:   ":art:",
-				summary: "summary",
-				body:    "body",
-				footer:  "Signed-off-by: John Doe <john.doe@example.com>",
-				author: repository.User{
-					Name:  "John Doe",
-					Email: "john.doe@example.com",
+				req: &commit.Request{
+					Apply:   true,
+					Emoji:   ":art:",
+					Summary: "summary",
+					Body:    "body",
+					Footer:  "Signed-off-by: John Doe <john.doe@example.com>",
+					Author: repository.User{
+						Name:  "John Doe",
+						Email: "john.doe@example.com",
+					},
 				},
 			},
 			want: want{
-				author:  "John Doe <john.doe@example.com>",
-				subject: ":art: summary",
-				body:    "body",
-				footer:  "Signed-off-by: John Doe <john.doe@example.com>",
+				cfg: repository.Commit{
+					Author:  "John Doe <john.doe@example.com>",
+					Subject: ":art: summary",
+					Body:    "body",
+					Footer:  "Signed-off-by: John Doe <john.doe@example.com>",
+				},
 			},
 		},
 		{
 			name: "dryrun",
 			args: args{
-				apply: true,
-				options: commit.Options{
+				req: &commit.Request{
+					Apply:  true,
 					DryRun: true,
 				},
 			},
 			want: want{
-				dryRun: true,
+				cfg: repository.Commit{
+					DryRun: true,
+				},
 			},
 		},
 		{
 			name: "amend",
 			args: args{
-				apply: true,
-				amend: true,
+				req: &commit.Request{
+					Apply: true,
+					Amend: true,
+				},
 			},
 			want: want{
-				amend: true,
+				cfg: repository.Commit{
+					Amend: true,
+				},
 			},
 		},
 		{
 			name: "amend_dryrun",
 			args: args{
-				apply: true,
-				amend: true,
-				options: commit.Options{
+				req: &commit.Request{
+					Apply:  true,
+					Amend:  true,
 					DryRun: true,
 				},
 			},
 			want: want{
-				amend:  true,
-				dryRun: true,
+				cfg: repository.Commit{
+					Amend:  true,
+					DryRun: true,
+				},
 			},
 		},
 		{
 			name: "save",
 			args: args{
-				apply: false,
+				req: &commit.Request{
+					Apply: false,
+				},
 			},
 		},
 		{
 			name: "skip_apply",
 			args: args{
-				apply: false,
+				req: &commit.Request{
+					Apply: false,
+				},
 			},
 		},
 		{
@@ -407,7 +407,9 @@ func TestApply(t *testing.T) {
 		{
 			name: "invalid",
 			args: args{
-				apply:    true,
+				req: &commit.Request{
+					Apply: true,
+				},
 				applyErr: errMock,
 			},
 			want: want{
@@ -422,22 +424,12 @@ func TestApply(t *testing.T) {
 				applyErr: tt.args.applyErr,
 			}
 
-			req := &commit.Request{
-				Apply:   tt.args.apply,
-				Emoji:   tt.args.emoji,
-				Summary: tt.args.summary,
-				Body:    tt.args.body,
-				Footer:  tt.args.footer,
-				Author:  tt.args.author,
-				Amend:   tt.args.amend,
-			}
-
+			req := tt.args.req
 			if tt.args.nilReq {
 				req = nil
 			}
 
 			c := commit.Commit{
-				Options: tt.args.options,
 				Repoer:  &repo,
 				Creator: MockCreate(tt.args.createErr),
 			}
@@ -449,12 +441,7 @@ func TestApply(t *testing.T) {
 				return
 			}
 			assert.Nil(t, err)
-			assert.Equal(t, tt.want.author, repo.commit.Author)
-			assert.Equal(t, tt.want.subject, repo.commit.Subject)
-			assert.Equal(t, tt.want.body, repo.commit.Body)
-			assert.Equal(t, tt.want.footer, repo.commit.Footer)
-			assert.Equal(t, tt.want.amend, repo.commit.Amend)
-			assert.Equal(t, tt.want.dryRun, repo.commit.DryRun)
+			assert.Equal(t, tt.want.cfg, repo.com)
 		})
 	}
 }

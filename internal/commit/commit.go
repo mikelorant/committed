@@ -28,7 +28,7 @@ type (
 type Repoer interface {
 	Open() error
 	Describe() (repository.Description, error)
-	Apply(repository.Commit, ...func(c *repository.Commit)) error
+	Apply(repository.Commit) error
 }
 
 type Configer interface {
@@ -50,6 +50,7 @@ type Request struct {
 	Footer  string
 	Author  repository.User
 	Amend   bool
+	DryRun  bool
 }
 
 func New() Commit {
@@ -100,18 +101,15 @@ func (c *Commit) Apply(req *Request) error {
 		Subject: EmojiSummaryToSubject(req.Emoji, req.Summary),
 		Body:    req.Body,
 		Footer:  req.Footer,
+		Amend:   req.Amend,
+		DryRun:  req.DryRun,
 	}
 
 	if !req.Apply {
 		return nil
 	}
 
-	opts := []func(c *repository.Commit){
-		repository.WithAmend(req.Amend),
-		repository.WithDryRun(c.Options.DryRun),
-	}
-
-	if err := c.Repoer.Apply(com, opts...); err != nil {
+	if err := c.Repoer.Apply(com); err != nil {
 		return fmt.Errorf("unable to apply commit: %w", err)
 	}
 
