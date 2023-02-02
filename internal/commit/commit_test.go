@@ -10,6 +10,7 @@ import (
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
+	"github.com/mikelorant/committed/internal/snapshot"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -58,6 +59,30 @@ func (c *MockConfig) Save(fh io.WriteCloser, cfg config.Config) error {
 	return c.saveErr
 }
 
+type MockSnapshot struct {
+	snap    snapshot.Snapshot
+	saveErr error
+	loadErr error
+}
+
+func (s *MockSnapshot) Load(fh io.Reader) (snapshot.Snapshot, error) {
+	if s.loadErr != nil {
+		return snapshot.Snapshot{}, s.loadErr
+	}
+
+	return s.snap, nil
+}
+
+func (s *MockSnapshot) Save(w io.WriteCloser, snap snapshot.Snapshot) error {
+	if s.saveErr != nil {
+		return s.saveErr
+	}
+
+	s.snap = snap
+
+	return nil
+}
+
 type DiscardCloser struct {
 	io.Writer
 }
@@ -92,6 +117,7 @@ func TestConfigure(t *testing.T) {
 	type args struct {
 		opts        commit.Options
 		cfg         config.Config
+		snap        snapshot.Snapshot
 		repoOpenErr error
 		repoDescErr error
 		configErr   error
@@ -99,6 +125,7 @@ func TestConfigure(t *testing.T) {
 		createErr   error
 		loadErr     error
 		saveErr     error
+		snapLoadErr error
 	}
 
 	type want struct {
@@ -203,6 +230,44 @@ func TestConfigure(t *testing.T) {
 			},
 		},
 		{
+			name: "snapshot_file",
+			args: args{
+				opts: commit.Options{
+					SnapshotFile: "test",
+				},
+				snap: snapshot.Snapshot{
+					Emoji:   ":art:",
+					Summary: "summary",
+					Body:    "body",
+					Footer:  "footer",
+					Author: repository.User{
+						Name:  "John Doe",
+						Email: "john.doe@example.com",
+					},
+				},
+			},
+			want: want{
+				state: commit.State{
+					Placeholders: testPlaceholders(),
+					Config:       config.Config{},
+					Emojis:       &emoji.Set{},
+					Snapshot: snapshot.Snapshot{
+						Emoji:   ":art:",
+						Summary: "summary",
+						Body:    "body",
+						Footer:  "footer",
+						Author: repository.User{
+							Name:  "John Doe",
+							Email: "john.doe@example.com",
+						},
+					},
+					Options: commit.Options{
+						SnapshotFile: "test",
+					},
+				},
+			},
+		},
+		{
 			name: "open_error",
 			args: args{
 				repoOpenErr: errMock,
@@ -259,6 +324,15 @@ func TestConfigure(t *testing.T) {
 				err: "unable to set config: unable to save config: error",
 			},
 		},
+		{
+			name: "snapshot_load_error",
+			args: args{
+				snapLoadErr: errMock,
+			},
+			want: want{
+				err: "unable to get snapshot: unable to load snapshot: error",
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -269,17 +343,23 @@ func TestConfigure(t *testing.T) {
 				saveErr: tt.args.saveErr,
 			}
 
+			snap := MockSnapshot{
+				snap:    tt.args.snap,
+				loadErr: tt.args.snapLoadErr,
+			}
+
 			repo := MockRepository{
 				openErr: tt.args.repoOpenErr,
 				descErr: tt.args.repoDescErr,
 			}
 
 			c := commit.Commit{
-				Repoer:   &repo,
-				Configer: &cfg,
-				Emojier:  MockNewEmoji,
-				Creator:  MockCreate(tt.args.createErr),
-				Opener:   MockOpen(tt.args.openErr),
+				Repoer:      &repo,
+				Snapshotter: &snap,
+				Configer:    &cfg,
+				Emojier:     MockNewEmoji,
+				Creator:     MockCreate(tt.args.createErr),
+				Opener:      MockOpen(tt.args.openErr),
 			}
 
 			state, err := c.Configure(tt.args.opts)
@@ -297,16 +377,18 @@ func TestConfigure(t *testing.T) {
 
 func TestApply(t *testing.T) {
 	type args struct {
-		req       *commit.Request
-		createErr error
-		saveErr   error
-		applyErr  error
-		nilReq    bool
+		req         *commit.Request
+		createErr   error
+		saveErr     error
+		applyErr    error
+		snapSaveErr error
+		nilReq      bool
 	}
 
 	type want struct {
-		cfg repository.Commit
-		err error
+		cfg      repository.Commit
+		snapshot snapshot.Snapshot
+		err      string
 	}
 
 	tests := []struct {
@@ -413,7 +495,44 @@ func TestApply(t *testing.T) {
 				applyErr: errMock,
 			},
 			want: want{
-				err: errMock,
+				err: "unable to apply commit: error",
+			},
+		},
+		{
+			name: "save",
+			args: args{
+				req: &commit.Request{
+					Emoji:   ":art:",
+					Summary: "summary",
+					Body:    "body",
+					Footer:  "Signed-off-by: John Doe <john.doe@example.com>",
+					Author: repository.User{
+						Name:  "John Doe",
+						Email: "john.doe@example.com",
+					},
+				},
+			},
+			want: want{
+				snapshot: snapshot.Snapshot{
+					Emoji:   ":art:",
+					Summary: "summary",
+					Body:    "body",
+					Footer:  "Signed-off-by: John Doe <john.doe@example.com>",
+					Author: repository.User{
+						Name:  "John Doe",
+						Email: "john.doe@example.com",
+					},
+				},
+			},
+		},
+		{
+			name: "snap_save_error",
+			args: args{
+				req:         &commit.Request{},
+				snapSaveErr: errMock,
+			},
+			want: want{
+				err: "unable to set snapshot: unable to save snapshot: error",
 			},
 		},
 	}
@@ -424,20 +543,25 @@ func TestApply(t *testing.T) {
 				applyErr: tt.args.applyErr,
 			}
 
+			snap := MockSnapshot{
+				saveErr: tt.args.snapSaveErr,
+			}
+
 			req := tt.args.req
 			if tt.args.nilReq {
 				req = nil
 			}
 
 			c := commit.Commit{
-				Repoer:  &repo,
-				Creator: MockCreate(tt.args.createErr),
+				Repoer:      &repo,
+				Snapshotter: &snap,
+				Creator:     MockCreate(tt.args.createErr),
 			}
 
 			err := c.Apply(req)
-			if tt.want.err != nil {
+			if tt.want.err != "" {
 				assert.NotNil(t, err)
-				assert.ErrorContains(t, err, tt.want.err.Error())
+				assert.ErrorContains(t, err, tt.want.err)
 				return
 			}
 			assert.Nil(t, err)

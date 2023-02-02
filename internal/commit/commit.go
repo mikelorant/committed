@@ -7,15 +7,18 @@ import (
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
+	"github.com/mikelorant/committed/internal/snapshot"
 )
 
 type Commit struct {
-	Options  Options
-	Emojier  Emojier
-	Configer Configer
-	Opener   Opener
-	Repoer   Repoer
-	Creator  Creator
+	Options     Options
+	Emojier     Emojier
+	Configer    Configer
+	Snapshotter Snapshotter
+	Opener      Opener
+	Repoer      Repoer
+	Creator     Creator
+	Saver       Saver
 }
 
 type (
@@ -23,6 +26,7 @@ type (
 	Emojier func(...func(*emoji.Set)) *emoji.Set
 	Opener  func(string) (io.Reader, error)
 	Creator func(string) (io.WriteCloser, error)
+	Saver   func(io.WriteCloser, snapshot.Snapshot) error
 )
 
 type Repoer interface {
@@ -36,10 +40,16 @@ type Configer interface {
 	Save(io.WriteCloser, config.Config) error
 }
 
+type Snapshotter interface {
+	Load(io.Reader) (snapshot.Snapshot, error)
+	Save(io.WriteCloser, snapshot.Snapshot) error
+}
+
 type Options struct {
-	ConfigFile string
-	DryRun     bool
-	Amend      bool
+	ConfigFile   string
+	SnapshotFile string
+	DryRun       bool
+	Amend        bool
 }
 
 type Request struct {
@@ -47,6 +57,7 @@ type Request struct {
 	Emoji   string
 	Summary string
 	Body    string
+	RawBody string
 	Footer  string
 	Author  repository.User
 	Amend   bool
@@ -55,11 +66,12 @@ type Request struct {
 
 func New() Commit {
 	return Commit{
-		Emojier:  emoji.New,
-		Repoer:   repository.New(),
-		Configer: new(config.Config),
-		Opener:   FileOpen(),
-		Creator:  FileCreate(),
+		Emojier:     emoji.New,
+		Repoer:      repository.New(),
+		Configer:    new(config.Config),
+		Snapshotter: new(snapshot.Snapshot),
+		Opener:      FileOpen(),
+		Creator:     FileCreate(),
 	}
 }
 
@@ -82,11 +94,17 @@ func (c *Commit) Configure(opts Options) (*State, error) {
 		}
 	}
 
+	snap, err := getSnapshot(c.Opener, c.Snapshotter, opts.SnapshotFile)
+	if err != nil {
+		return nil, fmt.Errorf("unable to get snapshot: %w", err)
+	}
+
 	return &State{
 		Placeholders: placeholders(),
 		Emojis:       getEmojis(c.Emojier, cfg),
 		Repository:   repo,
 		Config:       cfg,
+		Snapshot:     snap,
 		Options:      opts,
 	}, nil
 }
@@ -105,7 +123,20 @@ func (c *Commit) Apply(req *Request) error {
 		DryRun:  req.DryRun,
 	}
 
+	snap := snapshot.Snapshot{
+		Emoji:   req.Emoji,
+		Summary: req.Summary,
+		Body:    req.RawBody,
+		Footer:  req.Footer,
+		Author:  req.Author,
+		Amend:   req.Amend,
+	}
+
 	if !req.Apply {
+		if err := setSnapshot(c.Creator, c.Snapshotter, c.Options.SnapshotFile, snap); err != nil {
+			return fmt.Errorf("unable to set snapshot: %w", err)
+		}
+
 		return nil
 	}
 
@@ -151,6 +182,33 @@ func setConfig(create Creator, configer Configer, file string, cfg config.Config
 
 	if err := configer.Save(w, cfg); err != nil {
 		return fmt.Errorf("unable to save config: %w", err)
+	}
+
+	return nil
+}
+
+func getSnapshot(open Opener, snapshotter Snapshotter, file string) (snapshot.Snapshot, error) {
+	r, err := open(file)
+	if err != nil {
+		return snapshot.Snapshot{}, fmt.Errorf("unable to open snapshot: %v: %w", file, err)
+	}
+
+	snap, err := snapshotter.Load(r)
+	if err != nil {
+		return snapshot.Snapshot{}, fmt.Errorf("unable to load snapshot: %w", err)
+	}
+
+	return snap, nil
+}
+
+func setSnapshot(create Creator, snapshotter Snapshotter, file string, snap snapshot.Snapshot) error {
+	w, err := create(file)
+	if err != nil {
+		return fmt.Errorf("unable to create snapshot: %w", err)
+	}
+
+	if err := snapshotter.Save(w, snap); err != nil {
+		return fmt.Errorf("unable to save snapshot: %w", err)
 	}
 
 	return nil

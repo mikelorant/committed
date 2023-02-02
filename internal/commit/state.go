@@ -6,6 +6,7 @@ import (
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
+	"github.com/mikelorant/committed/internal/snapshot"
 	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
@@ -15,6 +16,7 @@ type State struct {
 	Emojis       *emoji.Set
 	Theme        theme.Theme
 	Config       config.Config
+	Snapshot     snapshot.Snapshot
 	Options      Options
 }
 
