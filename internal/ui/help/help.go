@@ -1,8 +1,6 @@
 package help
 
 import (
-	_ "embed"
-
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/mikelorant/committed/internal/commit"
@@ -15,9 +13,6 @@ type Model struct {
 	styles   Styles
 	viewport viewport.Model
 }
-
-//go:embed help.txt
-var Content string
 
 const (
 	defaultWidth  = 72
@@ -70,13 +65,17 @@ func (m Model) Focused() bool {
 	return m.focus
 }
 
+func (m *Model) SetContent(str string) {
+	m.viewport.SetContent(str)
+}
+
 func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
 	return m.(Model), c
 }
 
 func newViewport(w, h int, state *commit.State) viewport.Model {
 	vp := viewport.New(w, h)
-	vp.SetContent(Content)
+	vp.SetContent(state.Placeholders.Help)
 
 	styleViewport(&vp, state)
 

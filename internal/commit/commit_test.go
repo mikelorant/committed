@@ -575,5 +575,6 @@ func testPlaceholders() commit.Placeholders {
 		Hash:    commit.PlaceholderHash,
 		Summary: commit.PlaceholderSummary,
 		Body:    commit.PlaceholderMessage,
+		Help:    commit.PlaceholderHelp,
 	}
 }

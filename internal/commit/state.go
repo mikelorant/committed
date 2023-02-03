@@ -24,6 +24,7 @@ type Placeholders struct {
 	Hash    string
 	Summary string
 	Body    string
+	Help    string
 }
 
 type Config struct {
@@ -35,6 +36,9 @@ type Config struct {
 //go:embed message.txt
 var PlaceholderMessage string
 
+//go:embed help.txt
+var PlaceholderHelp string
+
 const (
 	PlaceholderHash    string = "1234567890abcdef1234567890abcdef1234567890"
 	PlaceholderSummary string = "Capitalized, short (50 chars or less) summary"
@@ -45,5 +49,6 @@ func placeholders() Placeholders {
 		Hash:    PlaceholderHash,
 		Summary: PlaceholderSummary,
 		Body:    PlaceholderMessage,
+		Help:    PlaceholderHelp,
 	}
 }

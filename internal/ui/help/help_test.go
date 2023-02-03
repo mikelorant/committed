@@ -93,13 +93,12 @@ func TestModel(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			help.Content = tt.args.content
-
 			state := &commit.State{
 				Theme: theme.New(config.ColourAdaptive),
 			}
 
 			m := help.New(state)
+			m.SetContent(tt.args.content)
 
 			if tt.args.model != nil {
 				m = tt.args.model(m)
