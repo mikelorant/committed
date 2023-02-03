@@ -40,6 +40,8 @@ var errMockHead = errors.New("error")
 var mockTime = time.Date(2022, time.January, 1, 1, 0, 0, 0, time.UTC)
 
 func TestHead(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		head            repository.Head
 		headErr         error
@@ -124,7 +126,11 @@ func TestHead(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			var r repository.Repository
 
 			r.Header = MockRepositoryHead{

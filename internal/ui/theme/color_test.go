@@ -98,6 +98,8 @@ type shortcut struct {
 }
 
 func TestBody(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name string
 		body body
@@ -116,7 +118,11 @@ func TestBody(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			th := theme.New(config.ColourAdaptive)
 			body := th.Body()
 
@@ -131,6 +137,8 @@ func TestBody(t *testing.T) {
 }
 
 func TestFilterList(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name       string
 		filterlist filterlist
@@ -154,7 +162,11 @@ func TestFilterList(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			th := theme.New(config.ColourAdaptive)
 			filterlist := th.FilterList()
 
@@ -174,6 +186,8 @@ func TestFilterList(t *testing.T) {
 }
 
 func TestFooter(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name   string
 		footer footer
@@ -187,7 +201,11 @@ func TestFooter(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			th := theme.New(config.ColourAdaptive)
 			footer := th.Footer()
 
@@ -197,6 +215,8 @@ func TestFooter(t *testing.T) {
 }
 
 func TestHeader(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name   string
 		header header
@@ -227,7 +247,11 @@ func TestHeader(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			th := theme.New(config.ColourAdaptive)
 			header := th.Header()
 
@@ -251,6 +275,8 @@ func TestHeader(t *testing.T) {
 }
 
 func TestHelp(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name string
 		help help
@@ -264,7 +290,11 @@ func TestHelp(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			th := theme.New(config.ColourAdaptive)
 			help := th.Help()
 
@@ -274,6 +304,8 @@ func TestHelp(t *testing.T) {
 }
 
 func TestInfo(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name string
 		info info
@@ -298,7 +330,11 @@ func TestInfo(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			th := theme.New(config.ColourAdaptive)
 			info := th.Info()
 
@@ -319,6 +355,8 @@ func TestInfo(t *testing.T) {
 }
 
 func TestMessage(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name    string
 		message message
@@ -334,7 +372,11 @@ func TestMessage(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			th := theme.New(config.ColourAdaptive)
 			message := th.Message()
 
@@ -346,6 +388,8 @@ func TestMessage(t *testing.T) {
 }
 
 func TestShortcut(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name     string
 		shortcut shortcut
@@ -362,7 +406,11 @@ func TestShortcut(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			th := theme.New(config.ColourAdaptive)
 			shortcut := th.Shortcut()
 

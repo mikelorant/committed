@@ -20,6 +20,8 @@ func (m MockRepositoryRemote) Remotes() ([]*git.Remote, error) {
 }
 
 func TestRemote(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		remotes []string
 		err     error
@@ -75,7 +77,11 @@ func TestRemote(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			var r repository.Repository
 
 			m := memory.NewStorage()

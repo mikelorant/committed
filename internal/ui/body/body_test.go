@@ -14,6 +14,8 @@ import (
 )
 
 func TestModel(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		body   string
 		height int
@@ -151,7 +153,11 @@ func TestModel(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			c := commit.State{
 				Placeholders: commit.Placeholders{
 					Body: tt.args.body,

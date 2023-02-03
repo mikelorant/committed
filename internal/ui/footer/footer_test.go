@@ -14,6 +14,8 @@ import (
 )
 
 func TestModel(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		author repository.User
 		model  func(m footer.Model) footer.Model
@@ -90,7 +92,11 @@ func TestModel(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			state := &commit.State{
 				Theme: theme.New(config.ColourAdaptive),
 			}

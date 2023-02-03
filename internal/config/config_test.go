@@ -14,6 +14,8 @@ import (
 var typeError *yaml.TypeError
 
 func TestConfig(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name   string
 		data   string
@@ -395,7 +397,11 @@ func TestConfig(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			cfg, err := new(config.Config).Load(strings.NewReader(tt.data))
 			if tt.err != nil {
 				assert.NotNil(t, err)

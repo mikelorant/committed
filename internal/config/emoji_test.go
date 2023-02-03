@@ -9,6 +9,8 @@ import (
 )
 
 func TestUnmarshallYAMLEmojiSet(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name  string
 		input string
@@ -22,7 +24,11 @@ func TestUnmarshallYAMLEmojiSet(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			var got config.EmojiSet
 
 			yaml.Unmarshal([]byte(tt.input), &got)
@@ -32,6 +38,8 @@ func TestUnmarshallYAMLEmojiSet(t *testing.T) {
 }
 
 func TestUnmarshallYAMLEmojiSelector(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name  string
 		input string
@@ -44,7 +52,11 @@ func TestUnmarshallYAMLEmojiSelector(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			var got config.EmojiSelector
 
 			yaml.Unmarshal([]byte(tt.input), &got)
@@ -54,6 +66,8 @@ func TestUnmarshallYAMLEmojiSelector(t *testing.T) {
 }
 
 func TestUnmarshallYAMLEmojiType(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name  string
 		input string
@@ -66,7 +80,11 @@ func TestUnmarshallYAMLEmojiType(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			var got config.EmojiType
 
 			yaml.Unmarshal([]byte(tt.input), &got)
@@ -76,6 +94,8 @@ func TestUnmarshallYAMLEmojiType(t *testing.T) {
 }
 
 func TestMarshallYAMLEmojiSet(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name  string
 		input config.EmojiSet
@@ -89,7 +109,11 @@ func TestMarshallYAMLEmojiSet(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			got, _ := yaml.Marshal(&tt.input)
 			assert.Equal(t, tt.want, string(got), tt.name)
 		})
@@ -97,6 +121,8 @@ func TestMarshallYAMLEmojiSet(t *testing.T) {
 }
 
 func TestMarshallYAMLEmojiSelector(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name  string
 		input config.EmojiSelector
@@ -109,7 +135,11 @@ func TestMarshallYAMLEmojiSelector(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			got, _ := yaml.Marshal(&tt.input)
 			assert.Equal(t, tt.want, string(got), tt.name)
 		})
@@ -117,6 +147,8 @@ func TestMarshallYAMLEmojiSelector(t *testing.T) {
 }
 
 func TestMarshallYAMLEmojiType(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name  string
 		input config.EmojiType
@@ -129,7 +161,11 @@ func TestMarshallYAMLEmojiType(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			got, _ := yaml.Marshal(&tt.input)
 			assert.Equal(t, tt.want, string(got), tt.name)
 		})

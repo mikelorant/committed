@@ -9,6 +9,8 @@ import (
 )
 
 func TestNew(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name   string
 		colour config.Colour
@@ -54,7 +56,11 @@ func TestNew(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			th := theme.New(tt.colour)
 
 			var ids []string
@@ -68,6 +74,8 @@ func TestNew(t *testing.T) {
 }
 
 func TestNextTint(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name  string
 		count int
@@ -105,7 +113,11 @@ func TestNextTint(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			th := theme.New(config.ColourAdaptive)
 
 			for i := 0; i < tt.count; i++ {
@@ -118,6 +130,8 @@ func TestNextTint(t *testing.T) {
 }
 
 func TestListTints(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name string
 		want []string
@@ -137,7 +151,11 @@ func TestListTints(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			th := theme.New(config.ColourAdaptive)
 
 			got := th.ListTints()
@@ -147,6 +165,8 @@ func TestListTints(t *testing.T) {
 }
 
 func TestGetTint(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name string
 		id   string
@@ -165,7 +185,11 @@ func TestGetTint(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			th := theme.New(config.ColourAdaptive)
 
 			_ = th.SetTint(tt.id)
@@ -177,6 +201,8 @@ func TestGetTint(t *testing.T) {
 }
 
 func TestSetTint(t *testing.T) {
+	t.Parallel()
+
 	type want struct {
 		id string
 		ok bool
@@ -205,7 +231,11 @@ func TestSetTint(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			th := theme.New(config.ColourAdaptive)
 
 			ok := th.SetTint(tt.id)

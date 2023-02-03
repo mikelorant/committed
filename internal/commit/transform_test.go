@@ -10,6 +10,8 @@ import (
 )
 
 func TestMessageToEmoji(t *testing.T) {
+	t.Parallel()
+
 	type want struct {
 		valid bool
 		name  string
@@ -67,7 +69,11 @@ func TestMessageToEmoji(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			e := commit.MessageToEmoji(emoji.New(), tt.message)
 			if !tt.want.valid {
 				assert.False(t, tt.want.valid)
@@ -81,6 +87,8 @@ func TestMessageToEmoji(t *testing.T) {
 }
 
 func TestMessageToSummary(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name    string
 		message string
@@ -129,7 +137,11 @@ func TestMessageToSummary(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			s := commit.MessageToSummary(tt.message)
 			if tt.summary == "" {
 				assert.Empty(t, s)
@@ -142,6 +154,8 @@ func TestMessageToSummary(t *testing.T) {
 }
 
 func TestMessageToBody(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name    string
 		message string
@@ -178,7 +192,11 @@ func TestMessageToBody(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			b := commit.MessageToBody(tt.message)
 			if tt.body == "" {
 				assert.Empty(t, b)
@@ -191,6 +209,8 @@ func TestMessageToBody(t *testing.T) {
 }
 
 func TestEmojiSummaryToSubject(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		emoji   string
 		summary string
@@ -222,7 +242,11 @@ func TestEmojiSummaryToSubject(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			s := commit.EmojiSummaryToSubject(tt.args.emoji, tt.args.summary)
 			if tt.subject == "" {
 				assert.Empty(t, s)
@@ -235,6 +259,8 @@ func TestEmojiSummaryToSubject(t *testing.T) {
 }
 
 func TestUserToAuthor(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		name  string
 		email string
@@ -271,7 +297,11 @@ func TestUserToAuthor(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			u := repository.User{
 				Name:  tt.args.name,
 				Email: tt.args.email,
@@ -289,6 +319,8 @@ func TestUserToAuthor(t *testing.T) {
 }
 
 func TestSortUsersByDefault(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		repositoryUsers []repository.User
 		configUsers     []repository.User
@@ -484,7 +516,11 @@ func TestSortUsersByDefault(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			us := concatSlice(tt.args.repositoryUsers, tt.args.configUsers)
 			users := commit.SortUsersByDefault(us...)
 

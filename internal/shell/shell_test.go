@@ -38,6 +38,8 @@ var (
 )
 
 func TestRun(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		command string
 		args    []string
@@ -103,7 +105,11 @@ func TestRun(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			buf := &badBuffer{
 				err: tt.args.err,
 			}

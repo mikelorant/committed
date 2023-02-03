@@ -38,6 +38,8 @@ var firstEmojiLogEmoji = emoji.Emoji{
 }
 
 func TestNew(t *testing.T) {
+	t.Parallel()
+
 	type want struct {
 		len   int
 		name  string
@@ -87,7 +89,11 @@ func TestNew(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			e := emoji.New(tt.options)
 
 			assert.Equal(t, tt.want.len, len(e.Emojis))
@@ -100,6 +106,8 @@ func TestNew(t *testing.T) {
 }
 
 func TestFind(t *testing.T) {
+	t.Parallel()
+
 	type want struct {
 		valid     bool
 		name      string
@@ -145,7 +153,11 @@ func TestFind(t *testing.T) {
 	es := emoji.New()
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			got := es.Find(tt.input)
 			if !tt.want.valid {
 				assert.False(t, got.Valid)
@@ -160,6 +172,8 @@ func TestFind(t *testing.T) {
 }
 
 func TestFindByCharacter(t *testing.T) {
+	t.Parallel()
+
 	type want struct {
 		valid bool
 		name  string
@@ -198,7 +212,11 @@ func TestFindByCharacter(t *testing.T) {
 	es := emoji.New()
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			got := es.FindByCharacter(tt.input)
 			if !tt.want.valid {
 				assert.False(t, got.Valid)
@@ -211,6 +229,8 @@ func TestFindByCharacter(t *testing.T) {
 }
 
 func TestFindByShortcode(t *testing.T) {
+	t.Parallel()
+
 	type want struct {
 		valid bool
 		name  string
@@ -246,7 +266,11 @@ func TestFindByShortcode(t *testing.T) {
 	es := emoji.New()
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			got := es.FindByShortcode(tt.input)
 			if !tt.want.valid {
 				assert.False(t, got.Valid)
@@ -259,6 +283,8 @@ func TestFindByShortcode(t *testing.T) {
 }
 
 func TestHas(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name  string
 		input string
@@ -271,7 +297,11 @@ func TestHas(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			got := emoji.Has(tt.input)
 			assert.Equal(t, tt.want, got)
 		})
@@ -279,6 +309,8 @@ func TestHas(t *testing.T) {
 }
 
 func TestHasEmoji(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name  string
 		input string
@@ -297,7 +329,11 @@ func TestHasEmoji(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			got := emoji.HasCharacter(tt.input)
 			assert.Equal(t, tt.want, got)
 		})
@@ -305,6 +341,8 @@ func TestHasEmoji(t *testing.T) {
 }
 
 func TestHasShortcode(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name  string
 		input string
@@ -324,7 +362,11 @@ func TestHasShortcode(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			got := emoji.HasShortcode(tt.input)
 			assert.Equal(t, tt.want, got)
 		})

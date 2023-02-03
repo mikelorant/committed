@@ -16,6 +16,8 @@ import (
 )
 
 func TestModel(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		state func(c *commit.State)
 		model func(m header.Model) header.Model
@@ -752,7 +754,11 @@ func TestModel(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			c := testState()
 			if tt.args.state != nil {
 				tt.args.state(&c)

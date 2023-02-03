@@ -74,6 +74,8 @@ func (m MockRepositoryBranch) References() (storer.ReferenceIter, error) {
 }
 
 func TestBranch(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		local     string
 		remote    string
@@ -179,7 +181,11 @@ func TestBranch(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			var r repository.Repository
 
 			r.Brancher = MockRepositoryBranch{

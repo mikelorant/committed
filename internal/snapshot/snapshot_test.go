@@ -32,6 +32,8 @@ func (t *errorReadWriteCloser) Write(p []byte) (n int, err error) {
 var errMock = errors.New("error")
 
 func TestLoad(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		reader io.Reader
 	}
@@ -103,7 +105,11 @@ func TestLoad(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			var s snapshot.Snapshot
 
 			snap, err := s.Load(tt.args.reader)
@@ -120,6 +126,8 @@ func TestLoad(t *testing.T) {
 }
 
 func TestSave(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		writer   io.ReadWriteCloser
 		snapshot snapshot.Snapshot
@@ -191,7 +199,11 @@ func TestSave(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			var s snapshot.Snapshot
 
 			err := s.Save(tt.args.writer, tt.args.snapshot)

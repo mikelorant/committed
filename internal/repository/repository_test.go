@@ -22,6 +22,8 @@ func MockOpen(err error) func(string, *git.PlainOpenOptions) (*git.Repository, e
 }
 
 func TestOpen(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		err error
 	}
@@ -59,7 +61,11 @@ func TestOpen(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			repo := repository.New()
 			repo.Opener = MockOpen(tt.args.err)
 

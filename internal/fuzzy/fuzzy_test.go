@@ -16,6 +16,8 @@ func (m MockItem) Terms() []string {
 }
 
 func TestRank(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name       string
 		inputTerm  string
@@ -113,7 +115,11 @@ func TestRank(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			it := castToFuzzyItems(tt.inputTerms)
 			got := fuzzy.Rank(tt.inputTerm, it)
 			assert.Equal(t, tt.want, got)

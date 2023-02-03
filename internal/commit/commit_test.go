@@ -114,6 +114,8 @@ func MockCreate(err error) func(file string) (io.WriteCloser, error) {
 var errMock = errors.New("error")
 
 func TestConfigure(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		opts        commit.Options
 		cfg         config.Config
@@ -336,7 +338,11 @@ func TestConfigure(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			cfg := MockConfig{
 				cfg:     tt.args.cfg,
 				loadErr: tt.args.configErr,
@@ -376,6 +382,8 @@ func TestConfigure(t *testing.T) {
 }
 
 func TestApply(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		req         *commit.Request
 		createErr   error
@@ -538,7 +546,11 @@ func TestApply(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			repo := MockRepository{
 				applyErr: tt.args.applyErr,
 			}

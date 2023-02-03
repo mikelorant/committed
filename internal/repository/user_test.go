@@ -38,6 +38,8 @@ func MockGlobalConfig(name, email string, err error) func(scope config.Scope) (*
 var errMockUser = errors.New("error")
 
 func TestUser(t *testing.T) {
+	t.Parallel()
+
 	type userSet struct {
 		user repository.User
 		err  error
@@ -163,7 +165,11 @@ func TestUser(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			var r repository.Repository
 
 			r.Configer = MockRepositoryUser{

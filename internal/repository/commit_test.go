@@ -32,6 +32,8 @@ func (r *MockShell) Run() func(w io.Writer, command string, args []string) error
 var errMock = errors.New("error")
 
 func TestApply(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		commit repository.Commit
 		opts   []func(c *repository.Commit)
@@ -158,7 +160,11 @@ func TestApply(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			var repo repository.Repository
 
 			shell := MockShell{

@@ -9,6 +9,8 @@ import (
 )
 
 func TestUnmarshallYAMLFocus(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name  string
 		input string
@@ -22,7 +24,11 @@ func TestUnmarshallYAMLFocus(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			var got config.Focus
 
 			yaml.Unmarshal([]byte(tt.input), &got)
@@ -32,6 +38,8 @@ func TestUnmarshallYAMLFocus(t *testing.T) {
 }
 
 func TestUnmarshallYAMLCompatibility(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name  string
 		input string
@@ -45,7 +53,11 @@ func TestUnmarshallYAMLCompatibility(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			var got config.Compatibility
 
 			yaml.Unmarshal([]byte(tt.input), &got)
@@ -55,6 +67,8 @@ func TestUnmarshallYAMLCompatibility(t *testing.T) {
 }
 
 func TestUnmarshallYAMLColour(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name  string
 		input string
@@ -68,7 +82,11 @@ func TestUnmarshallYAMLColour(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			var got config.Colour
 
 			yaml.Unmarshal([]byte(tt.input), &got)
@@ -78,6 +96,8 @@ func TestUnmarshallYAMLColour(t *testing.T) {
 }
 
 func TestMarshallYAMLFocus(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name  string
 		input config.Focus
@@ -91,7 +111,11 @@ func TestMarshallYAMLFocus(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			got, _ := yaml.Marshal(&tt.input)
 			assert.Equal(t, tt.want, string(got), tt.name)
 		})
@@ -99,6 +123,8 @@ func TestMarshallYAMLFocus(t *testing.T) {
 }
 
 func TestMarshallYAMLCompatibility(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name  string
 		input config.Compatibility
@@ -112,7 +138,11 @@ func TestMarshallYAMLCompatibility(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			got, _ := yaml.Marshal(&tt.input)
 			assert.Equal(t, tt.want, string(got), tt.name)
 		})
@@ -120,6 +150,8 @@ func TestMarshallYAMLCompatibility(t *testing.T) {
 }
 
 func TestMarshallYAMLColour(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name  string
 		input config.Colour
@@ -133,7 +165,11 @@ func TestMarshallYAMLColour(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			got, _ := yaml.Marshal(&tt.input)
 			assert.Equal(t, tt.want, string(got), tt.name)
 		})

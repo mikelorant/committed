@@ -18,6 +18,8 @@ import (
 const dateTimeFormat = "Mon Jan 2 15:04:05 2006 -0700"
 
 func TestModel(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		state func(c *commit.State)
 		model func(m info.Model) info.Model
@@ -305,7 +307,11 @@ func TestModel(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			c := testState()
 			if tt.args.state != nil {
 				tt.args.state(&c)
