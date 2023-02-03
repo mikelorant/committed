@@ -237,7 +237,7 @@ Related links:
 The global shortcuts can be used within any view.
 
 | Key Binding                              | Command            |
-| :--------------------------------------- | ------------------ |
+| :--------------------------------------- | :----------------- |
 | <kbd>⌥ Option</kbd> + <kbd>⏎ Enter</kbd> | Commit             |
 | <kbd>⌥ Option</kbd> + <kbd>S</kbd>       | Toggle sign-off    |
 | <kbd>⌥ Option</kbd> + <kbd>T</kbd>       | Toggle theme       |
@@ -253,7 +253,7 @@ The global shortcuts can be used within any view.
 The emoji shortcuts are limited to the emoji view only.
 
 | Key Binding            | Command       |
-| :--------------------- | ------------- |
+| :--------------------- | :------------ |
 | <kbd>⌫ Delete</kbd>    | Clear emoji   |
 | <kbd>⎋ Escape</kbd>    | Reset filter  |
 | <kbd>⇟ Page Down</kbd> | Next page     |
