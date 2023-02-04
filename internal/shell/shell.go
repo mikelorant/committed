@@ -31,8 +31,6 @@ func Run(w io.Writer, command string, args []string) error {
 			return fmt.Errorf("unable to copy commit output: %w", err)
 		}
 
-		//nolint:errorlint
-		pathError = err.(*fs.PathError)
 		if pathError.Path != "/dev/ptmx" {
 			return fmt.Errorf("unable to copy commit output: %v: %w", pathError.Path, pathError.Err)
 		}
