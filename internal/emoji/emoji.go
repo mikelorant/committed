@@ -56,6 +56,7 @@ const (
 	GitmojiProfile
 	DevmojiProfile
 	EmojiLogProfile
+	ProfileCount
 )
 
 func New(opts ...func(*Set)) *Set {
@@ -94,6 +95,33 @@ func (es *Set) FindByCharacter(str string) NullEmoji {
 	}
 
 	return NullEmoji{}
+}
+
+func ToString(p Profile) string {
+	return []string{
+		"default",
+		"gitmoji",
+		"devmoj",
+		"emoji-log",
+	}[int(p)]
+}
+
+func ToURL(p Profile) string {
+	return []string{
+		"https://gitmoji.dev/",
+		"https://gitmoji.dev/",
+		"https://github.com/folke/devmoji",
+		"https://github.com/ahmadawais/emoji-log",
+	}[int(p)]
+}
+
+func (es *Set) ListProfiles() []Profile {
+	ps := make([]Profile, ProfileCount)
+	for i := 0; i < int(ProfileCount); i++ {
+		ps[i] = Profile(i)
+	}
+
+	return ps
 }
 
 func (es *Set) FindByShortcode(str string) NullEmoji {

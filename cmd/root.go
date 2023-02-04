@@ -3,14 +3,14 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"io"
 	"log"
 	"os"
 
-	"github.com/mikelorant/committed/internal/commit"
-	"github.com/mikelorant/committed/internal/ui"
-
 	"github.com/go-git/go-git/v5"
 	cc "github.com/ivanpirog/coloredcobra"
+	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -32,6 +32,7 @@ type App struct {
 	Commiter Commiter
 	UIer     UIer
 	Logger   Logger
+	Writer   io.Writer
 
 	req  *commit.Request
 	opts commit.Options
@@ -61,6 +62,7 @@ func NewRootCmd(a App) *cobra.Command {
 	)
 
 	cmd.AddCommand(NewVersionCmd())
+	cmd.AddCommand(NewListCmd(a.Writer))
 	cmd.SetVersionTemplate(verTmpl)
 	cmd.Flags().SortFlags = false
 	cmd.Flags().StringVarP(&a.opts.ConfigFile, "config", "", defaultConfigFile, "Config file location")
@@ -93,11 +95,13 @@ func NewApp() App {
 	c := commit.New()
 	u := ui.New()
 	l := log.Default()
+	w := os.Stdout
 
 	return App{
 		Commiter: &c,
 		UIer:     &u,
 		Logger:   l,
+		Writer:   w,
 	}
 }
 

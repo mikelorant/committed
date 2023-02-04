@@ -1,0 +1,15 @@
+List settings with profiles or IDs
+
+Usage:
+  list [command]
+
+Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  emojis      List emoji profiles
+  help        Help about any command
+  themes      List theme IDs
+
+Flags:
+  -h, --help   help for list
+
+Use "list [command] --help" for more information about a command.

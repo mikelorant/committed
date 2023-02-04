@@ -24,8 +24,8 @@ func New(clr config.Colour) Theme {
 }
 
 func (t *Theme) Next() {
-	ids := t.List()
-	l := len(t.List())
+	ids := t.ListID()
+	l := len(t.ListID())
 
 	switch {
 	case t.ID == ids[l-1]:
@@ -47,7 +47,7 @@ func (t *Theme) Set(id string) bool {
 	return true
 }
 
-func (t *Theme) List() []string {
+func (t *Theme) ListID() []string {
 	var ts []string
 
 	for _, t := range t.Registry.Tints() {
@@ -55,6 +55,10 @@ func (t *Theme) List() []string {
 	}
 
 	return ts
+}
+
+func (t *Theme) List() []tint.Tint {
+	return t.Registry.Tints()
 }
 
 func tints(clr config.Colour) []tint.Tint {

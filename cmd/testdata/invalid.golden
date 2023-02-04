@@ -6,6 +6,7 @@ Usage:
 Available Commands:
   completion   Generate the autocompletion script for the specified shell
   help         Help about any command
+  list         List settings with profiles or IDs
   version      Print the version information
 
 Flags:

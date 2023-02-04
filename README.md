@@ -30,8 +30,8 @@ commits by showing you the layout in the same format as `git log`.
 brew install mikelorant/committed/committed
 ```
 
-2. Before creating and applying a commit you will need to stage the files you wish
-   to add with the `git add` command.
+2. Before creating and applying a commit you will need to stage the files you
+   wish to add with the `git add` command.
 
 3. Committed replaces the `git commit` command and all you need to do to commit
    your change is to run:
@@ -88,9 +88,9 @@ useful.
 
 ### Option Key
 
-The option key needs to be set to send the `meta` or `esc+` keycode. Terminals such
-as macOS Terminal or iTerm2 may not have this as default. If not set correctly it will
-not be possible to apply a commit.
+The option key needs to be set to send the `meta` or `esc+` keycode. Terminals
+such as macOS Terminal or iTerm2 may not have this as default. If not set
+correctly it will not be possible to apply a commit.
 
 To make these changes following the instructions below.
 
@@ -140,14 +140,18 @@ Usage:
 Available Commands:
   completion   Generate the autocompletion script for the specified shell
   help         Help about any command
+  list         List settings with profiles or IDs
   version      Print the version information
 
 Flags:
-      --config string   Config file location (default "$HOME/.config/committed/config.yaml")
-      --dry-run         Simulate applying a commit (default true)
-  -a, --amend           Replace the tip of the current branch by creating a new commit
-  -h, --help            help for committed
-  -v, --version         version for committed
+      --config string     Config file location (default
+                          "$HOME/.config/committed/config.yaml")
+      --snapshot string   Snapshot file location (default
+                          "$HOME/.local/state/committed/snapshot.yaml")
+      --dry-run           Simulate applying a commit (default true)
+  -a, --amend             Replace the tip of the current branch by creating a new commit
+  -h, --help              help for committed
+  -v, --version           version for committed
 
 Use "committed [command] --help" for more information about a command.
 ```
@@ -213,6 +217,43 @@ authors:
   - name: John Doe
     email: john.doe@example.com
 ```
+
+### Themes
+
+There are a number of themes available that modify the colours. By default, the
+background colour is detected which changes the choices of themes. This
+detection can be disabled by setting the colour profile in the configuration.
+The first theme of each set is the default theme applied.
+
+#### Dark Themes
+
+| Name                                                         | ID                             |
+| :----------------------------------------------------------- | :----------------------------- |
+| Builtin Dark                                                 | builtin_dark                   |
+| [Dracula](https://draculatheme.com/)                         | dracula                        |
+| [Gruvbox Dark](https://github.com/morhetz/gruvbox)           | gruvbox_dark                   |
+| [Nord](https://www.nordtheme.com/)                           | nord                           |
+| Retrowave                                                    | retrowave                      |
+| [Solarized Dark Higher Contrast](https://ethanschoonover.com/solarized/) | solarized_dark_higher_contrast |
+| [Tokyo Night](https://github.com/enkia/tokyo-night-vscode-theme) | tokyo_night                    |
+
+#### Light Theme
+
+| Name                                                                      | ID                      |
+| :------------------------------------------------------------------------ | :---------------------- |
+| Builtin Light                                                             | builtin_light           |
+| [Builtin Solarized Light](https://ethanschoonover.com/solarized/)         | builtin_solarized_light |
+| [Builtin Tango Light](http://tango.freedesktop.org/Tango_Desktop_Project) | builtin_tango_light     |
+| [Gruvbox Light](https://github.com/morhetz/gruvbox)                       | gruvbox_light           |
+| [Tokyo Night Light](https://github.com/enkia/tokyo-night-vscode-theme)    | tokyo_night_light       |
+
+### Emoji Profiles
+
+Popular emoji sets can be set as the default profile:
+
+- [Gitmoji](https://gitmoji.dev/)
+- [Devmoji](https://github.com/folke/devmoji)
+- [Emoji-Log](https://github.com/ahmadawais/emoji-log)
 
 ## 🏆 Best Practises [⭡](#committed)
 

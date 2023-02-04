@@ -64,8 +64,8 @@ func TestNew(t *testing.T) {
 			th := theme.New(tt.colour)
 
 			var ids []string
-			for i := 0; i < len(th.List()); i++ {
-				ids = append(ids, th.List()[i])
+			for i := 0; i < len(th.ListID()); i++ {
+				ids = append(ids, th.ListID()[i])
 			}
 
 			assert.Equal(t, tt.ids, ids)
@@ -158,7 +158,7 @@ func TestList(t *testing.T) {
 
 			th := theme.New(config.ColourAdaptive)
 
-			got := th.List()
+			got := th.ListID()
 			assert.Equal(t, tt.want, got)
 		})
 	}
