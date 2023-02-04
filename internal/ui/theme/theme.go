@@ -1,10 +1,13 @@
 package theme
 
 import (
+	"io"
+
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	tint "github.com/lrstanley/bubbletint"
 	"github.com/mikelorant/committed/internal/config"
+	"github.com/muesli/termenv"
 )
 
 type Theme struct {
@@ -25,7 +28,7 @@ func New(clr config.Colour) Theme {
 		lipgloss.SetHasDarkBackground(false)
 		t = lightTints()
 	default:
-		switch lipgloss.HasDarkBackground() {
+		switch termenv.NewOutput(io.Discard).HasDarkBackground() {
 		case true:
 			t = darkTints()
 		case false:
