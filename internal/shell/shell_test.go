@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 	"io/fs"
+	"strings"
 	"testing"
 
 	"github.com/mikelorant/committed/internal/shell"
@@ -20,6 +21,7 @@ func (b *badBuffer) Write(p []byte) (int, error) {
 	if b.err != nil {
 		return 0, b.err
 	}
+
 	return b.buf.Write(p)
 }
 
@@ -28,11 +30,10 @@ func (b *badBuffer) Read(p []byte) (int, error) {
 }
 
 var (
-	errMockRun           = errors.New("unable to exec command")
-	errMockRead          = errors.New("unable to copy commit output")
-	errMockReadPathError = &fs.PathError{
+	errMock         = errors.New("error")
+	errMockCopyPath = &fs.PathError{
 		Path: "/dev/pmtx",
-		Err:  errMockRead,
+		Err:  errMock,
 	}
 )
 
@@ -40,12 +41,11 @@ func TestRun(t *testing.T) {
 	type args struct {
 		command string
 		args    []string
+		err     error
 	}
-
 	type want struct {
-		output  string
-		runErr  error
-		readErr error
+		err string
+		out string
 	}
 
 	tests := []struct {
@@ -57,71 +57,67 @@ func TestRun(t *testing.T) {
 			name: "valid",
 			args: args{
 				command: "echo",
-				args:    []string{"hello world"},
+				args:    []string{"test"},
 			},
 			want: want{
-				output: "hello world\r\n",
+				out: "test",
+			},
+		},
+		{
+			name: "invalid",
+			args: args{
+				command: "invalid",
+			},
+			want: want{
+				err: "executable file not found in $PATH",
 			},
 		},
 		{
 			name: "empty",
 			want: want{
-				runErr: errMockRun,
+				err: "no command",
 			},
 		},
 		{
-			name: "run_error",
-			args: args{
-				command: "no_command",
-			},
-			want: want{
-				runErr: errMockRun,
-			},
-		},
-		{
-			name: "copy_error",
+			name: "error_copy",
 			args: args{
 				command: "echo",
-				args:    []string{"hello world"},
+				args:    []string{"test"},
+				err:     errMock,
 			},
 			want: want{
-				readErr: errMockRead,
+				err: "unable to copy commit output: error",
 			},
 		},
 		{
-			name: "copy_path_error",
+			name: "error_copy_path",
 			args: args{
 				command: "echo",
-				args:    []string{"hello world"},
+				args:    []string{"test"},
+				err:     errMockCopyPath,
 			},
 			want: want{
-				readErr: errMockReadPathError,
+				err: "unable to copy commit output: /dev/pmtx: error",
 			},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			w := badBuffer{
-				err: tt.want.readErr,
+			buf := &badBuffer{
+				err: tt.args.err,
 			}
 
-			err := shell.Run(&w, tt.args.command, tt.args.args)
-			switch {
-			case tt.want.runErr != nil:
-				assert.NotNil(t, err)
-				assert.ErrorContains(t, err, tt.want.runErr.Error())
-				return
-			case tt.want.readErr != nil:
-				assert.NotNil(t, err)
-				assert.ErrorContains(t, err, tt.want.readErr.Error())
+			err := shell.Run(buf, tt.args.command, tt.args.args)
+			if tt.want.err != "" {
+				assert.Error(t, err)
+				assert.ErrorContains(t, err, tt.want.err)
 				return
 			}
-			assert.Nil(t, err)
+			assert.NoError(t, err)
 
-			b, err := io.ReadAll(&w)
-			assert.Nil(t, err)
-			assert.Equal(t, tt.want.output, string(b))
+			out, _ := io.ReadAll(buf)
+			assert.Equal(t, tt.want.out, strings.TrimSpace(string(out)))
 		})
 	}
 }
