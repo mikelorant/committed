@@ -36,6 +36,9 @@ type NullEmoji struct {
 
 type Profile int
 
+//go:embed committed.yaml
+var committed string
+
 //go:embed gitmoji.yaml
 var gitmoji string
 
@@ -46,13 +49,15 @@ var devmoji string
 var emojiLog string
 
 const (
-	gitmojiName  = "gitmoji"
-	devmojiName  = "devmoji"
-	emojiLogName = "emojilog"
+	committedName = "committed"
+	gitmojiName   = "gitmoji"
+	devmojiName   = "devmoji"
+	emojiLogName  = "emojilog"
 )
 
 const (
 	DefaultProfile Profile = iota
+	CommittedProfile
 	GitmojiProfile
 	DevmojiProfile
 	EmojiLogProfile
@@ -139,6 +144,9 @@ func (es *Set) FindByShortcode(str string) NullEmoji {
 
 func (es *Set) load(p Profile) {
 	switch p {
+	case CommittedProfile:
+		es.Name = committedName
+		es.rawEmojis = committed
 	case GitmojiProfile:
 		es.Name = gitmojiName
 		es.rawEmojis = gitmoji

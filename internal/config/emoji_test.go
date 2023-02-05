@@ -182,9 +182,10 @@ func TestIndexEmojiSet(t *testing.T) {
 		want  int
 	}{
 		{name: "unset", input: config.EmojiSet(config.EmojiSetUnset), want: 1},
-		{name: "gitmoji", input: config.EmojiSet(config.EmojiSetGitmoji), want: 1},
-		{name: "devmoji", input: config.EmojiSet(config.EmojiSetDevmoji), want: 2},
-		{name: "emojilog", input: config.EmojiSet(config.EmojiSetEmojiLog), want: 3},
+		{name: "committed", input: config.EmojiSet(config.EmojiSetCommitted), want: 1},
+		{name: "gitmoji", input: config.EmojiSet(config.EmojiSetGitmoji), want: 2},
+		{name: "devmoji", input: config.EmojiSet(config.EmojiSetDevmoji), want: 3},
+		{name: "emojilog", input: config.EmojiSet(config.EmojiSetEmojiLog), want: 4},
 	}
 
 	for _, tt := range tests {

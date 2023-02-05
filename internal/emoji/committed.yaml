@@ -1,0 +1,207 @@
+- name: bug
+  emoji: 🐛
+  description: "[FIX] Fix bug."
+  characters: 1
+  codepoint: e525
+  hex: F0 9F 90 9B
+  shortcode: ":bug:"
+
+- name: pencil
+  emoji: ✏️
+  description: "[FIX] Fix typo."
+  characters: 2
+  codepoint: 270f, fe0f
+  hex: E2 9C 8F, EF B8 8F
+  shortcode: ":pencil2:"
+  variant: true
+
+- name: police-car-light
+  emoji: 🚨
+  description: "[FIX] Resolve linter warnings."
+  characters: 1
+  codepoint: 1f6a8
+  hex: F0 9F 9A A8
+  shortcode: ":rotating_light:"
+
+- name: gem
+  emoji: 💎
+  description: "[IMPROVE] General improvement."
+  characters: 1
+  codepoint: 1f48e
+  hex: F0 9F 92 8E
+  shortcode: ":gem:"
+
+- name: sparkles
+  emoji: ✨
+  description: "[IMPROVE] Add new feature."
+  characters: 1
+  codepoint: 2728
+  hex: F0 9F 93 9D
+  shortcode: ":sparkles:"
+
+- name: zap
+  emoji: ⚡️
+  description: "[IMPROVE] Improve performance."
+  characters: 2
+  codepoint: 26a1
+  hex: E2 9A A1, EF B8 8F
+  shortcode: ":zap:"
+  variant: true
+
+- name: construction
+  emoji: 🚧
+  description: "[IMPROVE] Work in progress."
+  characters: 1
+  codepoint: 1f6a7
+  hex: F0 9F 9A A7
+  shortcode: ":construction:"
+
+- name: book
+  emoji: 📖
+  description: "[DOCUMENT] Documentation related."
+  characters: 1
+  codepoint: 1f4d6
+  hex: F0 9F 93 96
+  shortcode: ":book:"
+
+- name: speech-balloon
+  emoji: 💬
+  description: "[DOCUMENT] Comment related."
+  characters: 1
+  codepoint: 1f4ac
+  hex: F0 9F 92 AC
+  shortcode: ":speech_balloon:"
+
+- name: gear
+  emoji: ⚙️
+  description: "[CONFIGURE] General configuration related."
+  characters: 1
+  codepoint: 2699, fe0f
+  hex: E2 9A 99, EF B8 8F
+  shortcode: ":gear:"
+  variant: true
+
+- name: spouting-whale
+  emoji: 🐳
+  description: "[CONFIGURE] Container configuration related."
+  characters: 1
+  codepoint: 1f433
+  hex: F0 9F 90 B3
+  shortcode: ":whale:"
+
+- name: cloud
+  emoji: ☁️
+  characters: 2
+  codepoint: 2601, fe0f
+  description: "[CONFIGURE] Cloud configuration related."
+  hex: E2 98 81, EF B8 8F
+  shortcode: ":cloud:"
+  variant: true
+
+- name: recycling
+  emoji: ♻️
+  description: "[REFACTOR] Refactor code."
+  characters: 2
+  codepoint: 267b, fe0f
+  hex: E2 99 BB, EF B8 8F
+  shortcode: ":recycling:"
+  variant: true
+
+- name: delivery-truck
+  emoji: 🚚
+  description: "[REFACTOR] Move files."
+  characters: 1
+  codepoint: 1f69a
+  hex: F0 9F 9A 9A
+  shortcode: ":truck:"
+
+- name: fire
+  emoji: 🔥
+  description: "[REFACTOR] Remove code or files."
+  characters: 1
+  codepoint: e11d
+  hex: F0 9F 94 A5
+  shortcode: ":fire:"
+
+- name: eye
+  emoji: 👁
+  description: "[OBSERVABILITY] Logging, metrics or tracing related."
+  characters: 1
+  codepoint: 1f441
+  hex: F0 9F 91 81
+  shortcode: ":eye:"
+
+- name: test-tube
+  emoji: 🧪
+  description: "[TEST] Testing related."
+  characters: 1
+  codepoint: 1f9ea
+  hex: F0 9F A7 AA
+  shortcode: ":test_tube:"
+
+- name: locked
+  emoji: 🔒
+  description: "[SECUITY] Security related."
+  characters: 1
+  codepoint: 1f512
+  hex: F0 9F 94 92
+  shortcode: ":lock:"
+
+- name: robot-face
+  emoji: 🤖
+  description: "[AUTOMATION] Continuous intergration related."
+  characters: 1
+  codepoint: 1f916
+  hex: F0 9F A4 96
+  shortcode: ":robot_face:"
+
+- name: rocket
+  emoji: 🚀
+  description: "[AUTOMATION] Deployment related."
+  characters: 1
+  codepoint: 1f680
+  hex: F0 9F 9A 80
+  shortcode: ":rocket:"
+
+- name: bust-in-silhouette
+  emoji: 👤
+  description: "[IDENTITY] Identity or authentication related."
+  characters: 1
+  codepoint: 1f464
+  hex: F0 9F 91 A4
+  shortcode: ":bust_in_silhouette:"
+
+- name: right-arrow-curving-left
+  emoji: ↩️
+  description: "[VERSIONING] Revert changes."
+  characters: 2
+  codepoint: 21a9, fe0f
+  hex: E2 86 A9, EF B8 8F
+  shortcode: ":leftwards_arrow_with_hook:"
+  variant: true
+
+- name: arrow_up
+  emoji: ⬆️
+  description: "[VERSIONING] Add or upgrade dependencies."
+  characters: 2
+  codepoint: 2b06, fe0f
+  hex: E2 AC 86, EF B8 8F
+  shortcode: ":arrow_up:"
+  variant: true
+
+- name: arrow_down
+  emoji: ⬇️
+  description: "[VERSIONING] Remove or downgrade dependencies."
+  characters: 2
+  codepoint: 2b07, fe0f
+  hex: E2 AC 87, EF B8 8F
+  shortcode: ":arrow_down:"
+  variant: true
+
+- name: link
+  emoji: 🔗
+  description: "[VERSIONING] Dependencies related."
+  characters: 1
+  codepoint: 1f517
+  hex: F0 9F 94 97
+  shortcode: ":link:"

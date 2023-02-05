@@ -8,6 +8,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var firstCommittedEmoji = emoji.Emoji{
+	Name:        "bug",
+	Character:   "🐛",
+	Description: "[FIX] Fix bug.",
+	Characters:  1,
+	Codepoint:   "e525",
+	Hex:         "F0 9F 90 9B",
+	Shortcode:   ":bug:",
+}
+
 var firstGitmojiEmoji = emoji.Emoji{
 	Name:        "art",
 	Character:   "🎨",
@@ -58,6 +68,15 @@ func TestNew(t *testing.T) {
 				len:   72,
 				name:  "gitmoji",
 				emoji: firstGitmojiEmoji,
+			},
+		},
+		{
+			name:    "committed",
+			options: emoji.WithEmojiSet(emoji.CommittedProfile),
+			want: want{
+				len:   25,
+				name:  "committed",
+				emoji: firstCommittedEmoji,
 			},
 		},
 		{

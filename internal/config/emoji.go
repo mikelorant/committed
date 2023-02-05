@@ -14,6 +14,7 @@ type (
 
 const (
 	EmojiSetUnset EmojiSet = iota
+	EmojiSetCommitted
 	EmojiSetGitmoji
 	EmojiSetDevmoji
 	EmojiSetEmojiLog
@@ -40,6 +41,7 @@ func (e *EmojiSet) UnmarshalYAML(value *yaml.Node) error {
 func (e EmojiSet) MarshalYAML() (interface{}, error) {
 	return []string{
 		"",
+		"committed",
 		"gitmoji",
 		"devmoji",
 		"emojilog",
@@ -112,10 +114,11 @@ func (e EmojiSelector) Index() int {
 
 func ParseEmojiSet(str string) EmojiSet {
 	emojiSet := map[string]EmojiSet{
-		"":         EmojiSetUnset,
-		"gitmoji":  EmojiSetGitmoji,
-		"devmoji":  EmojiSetDevmoji,
-		"emojilog": EmojiSetEmojiLog,
+		"":          EmojiSetUnset,
+		"committed": EmojiSetCommitted,
+		"gitmoji":   EmojiSetGitmoji,
+		"devmoji":   EmojiSetDevmoji,
+		"emojilog":  EmojiSetEmojiLog,
 	}
 
 	return emojiSet[strings.ToLower(str)]
