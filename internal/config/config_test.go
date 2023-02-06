@@ -11,8 +11,6 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var typeError *yaml.TypeError
-
 func TestConfig(t *testing.T) {
 	t.Parallel()
 
@@ -29,7 +27,7 @@ func TestConfig(t *testing.T) {
 		{
 			name: "invalid",
 			data: "invalid",
-			err:  typeError,
+			err:  new(yaml.TypeError),
 		},
 		{
 			name:   "focus_empty",
@@ -195,7 +193,7 @@ func TestConfig(t *testing.T) {
 			name:   "signoff_invalid",
 			data:   "commit: {signoff: invalid}",
 			config: config.Config{Commit: config.Commit{Signoff: false}},
-			err:    typeError,
+			err:    new(yaml.TypeError),
 		},
 		{
 			name:   "theme_empty",
@@ -392,7 +390,7 @@ func TestConfig(t *testing.T) {
 					{Name: "John Doe", Email: "john.doe@example.com"},
 				},
 			},
-			err: typeError,
+			err: new(yaml.TypeError),
 		},
 	}
 
@@ -405,7 +403,10 @@ func TestConfig(t *testing.T) {
 			cfg, err := new(config.Config).Load(strings.NewReader(tt.data))
 			if tt.err != nil {
 				assert.NotNil(t, err)
+
+				var typeError *yaml.TypeError
 				assert.ErrorAs(t, err, &typeError)
+
 				return
 			}
 			assert.Nil(t, err)
