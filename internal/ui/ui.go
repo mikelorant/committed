@@ -96,6 +96,18 @@ const (
 	bodyName    = "Body"
 )
 
+const (
+	KeyAmend   = "å"
+	KeyLoad    = "¬"
+	KeySignoff = "ß"
+	KeyTheme   = "†"
+	KeyAuthor  = "¡"
+	KeyEmoji   = "™"
+	KeySummary = "£"
+	KeyBody    = "¢"
+	KeyHelp    = "˙"
+)
+
 func New() Model {
 	return Model{
 		Date: time.Now(),
@@ -228,22 +240,22 @@ func (m Model) View() string {
 
 func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 	switch msg.String() {
-	case "alt+1":
+	case "alt+1", KeyAuthor:
 		if m.focus == authorComponent {
 			return keyResponse{model: m, nilMsg: true}
 		}
 		m.focus = authorComponent
-	case "alt+2":
+	case "alt+2", KeyEmoji:
 		if m.focus == emojiComponent {
 			return keyResponse{model: m, nilMsg: true}
 		}
 		m.focus = emojiComponent
-	case "alt+3":
+	case "alt+3", KeySummary:
 		if m.focus == summaryComponent {
 			return keyResponse{model: m, nilMsg: true}
 		}
 		m.focus = summaryComponent
-	case "alt+4":
+	case "alt+4", KeyBody:
 		if m.focus == bodyComponent {
 			return keyResponse{model: m, nilMsg: true}
 		}
@@ -259,7 +271,7 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 		case summaryComponent:
 			m.focus = bodyComponent
 		}
-	case "alt+enter":
+	case "alt+enter", "alt+\\":
 		if !m.validate() {
 			break
 		}
@@ -267,7 +279,7 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 		m = m.commit(applyQuit)
 
 		return keyResponse{model: m, cmd: tea.Quit, end: true}
-	case "alt+a":
+	case "alt+a", KeyAmend:
 		m.amend = !m.amend
 
 		m.swapSave()
@@ -276,21 +288,21 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 		m.models.body.CursorStart()
 
 		return keyResponse{model: m, end: false, nilMsg: true}
-	case "alt+l":
+	case "alt+l", KeyLoad:
 		if m.setSave() {
 			m.models.header.CursorStartSummary()
 			m.models.body.CursorStart()
 		}
 
 		return keyResponse{model: m, end: false, nilMsg: true}
-	case "alt+s":
+	case "alt+s", KeySignoff:
 		m.signoff = !m.signoff
 
 		return keyResponse{model: m, end: false, nilMsg: true}
-	case "alt+t":
+	case "alt+t", KeyTheme:
 		m.state.Theme.NextTint()
 		return keyResponse{model: m, cmd: theme.UpdateTheme, end: true}
-	case "ctrl+h":
+	case "ctrl+h", KeyHelp:
 		if m.focus == helpComponent {
 			m.focus = m.previousFocus
 			break

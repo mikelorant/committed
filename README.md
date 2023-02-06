@@ -86,6 +86,24 @@ useful.
 
 ## ⚠️ Limitations [⭡](#committed)
 
+### Option Key
+
+The option key needs to be set to send the `meta` or `esc+` keycode. Terminals such
+as macOS Terminal or iTerm2 may not have this as default. If not set correctly it will
+not be possible to apply a commit.
+
+To make these changes following the instructions below.
+
+| Terminal       | Setting                                                      |
+| :------------- | :----------------------------------------------------------- |
+| macOS Terminal | `Profiles` `Keyboard`<br />![macOS Terminal Keyboard Setting](docs/keyboard-options-macos-terminal.png) |
+| iTerm2         | `Preferences` `Profile ` `Keys`<br />![iTerm2 Keyboard Setting](docs/keyboard-options-iterm2.png) |
+
+The alternative keyboard shortcut  <kbd>⌥ Option</kbd> + <kbd>\\</kbd> can also be used to apply
+a commit.
+
+### Rendering Borders
+
 Terminals render emojis differently and this makes alignment of borders
 complicated and difficult. It is an ongoing process to improve the compatibility
 with terminals. The following list are the terminals that have been tested.
@@ -239,6 +257,7 @@ The global shortcuts can be used within any view.
 | Key Binding                              | Command            |
 | :--------------------------------------- | :----------------- |
 | <kbd>⌥ Option</kbd> + <kbd>⏎ Enter</kbd> | Commit             |
+| <kbd>⌥ Option</kbd> + <kbd>\\</kbd>      | Commit             |
 | <kbd>⌥ Option</kbd> + <kbd>S</kbd>       | Toggle sign-off    |
 | <kbd>⌥ Option</kbd> + <kbd>T</kbd>       | Toggle theme       |
 | <kbd>⌥ Option</kbd> + <kbd>/</kbd>       | Help               |
