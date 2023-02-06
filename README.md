@@ -27,7 +27,7 @@ commits by showing you the layout in the same format as `git log`.
 1. Install using Homebrew.
 
 ```shell
-$ brew install mikelorant/taps/committed
+brew install mikelorant/committed/committed
 ```
 
 2. Before creating and applying a commit you will need to stage the files you wish
@@ -37,13 +37,13 @@ $ brew install mikelorant/taps/committed
    your change is to run:
 
 ```shell
-$ committed
+committed
 ```
 
 It is also possible to amend your previous commit with:
 
 ```shell
-$ committed --amend
+committed --amend
 ```
 
 Once the UI has appeared take note of the keyboard shortcuts shown at the bottom
@@ -107,7 +107,7 @@ update the list.
 Install Committed with Homebrew.
 
 ```shell
-$ brew install mikelorant/taps/committed
+brew install mikelorant/taps/committed
 ```
 
 ## 🎛 Usage [⭡](#committed)
@@ -267,13 +267,13 @@ Shell or Git aliases can be used to tailor Committed to your preferred workflow.
 An example Git alias is as follows:
 
 ```shell
-$ git config --global alias.co '! committed'
+git config --global alias.co '! committed'
 ```
 
 You can then commit changes with:
 
 ```shell
-$ git co
+git co
 ```
 
 ### Amend
