@@ -6,6 +6,7 @@ import (
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/go-git/go-git/v5"
 	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/config"
@@ -786,6 +787,13 @@ func testState() commit.State {
 			Head: repository.Head{
 				Hash: "1",
 				When: time.Date(2022, time.January, 1, 1, 0, 0, 0, time.UTC),
+			},
+			Worktree: repository.Worktree{
+				Status: map[string]*git.FileStatus{
+					"test": {
+						Staging: git.Added,
+					},
+				},
 			},
 		},
 		Emojis: &emoji.Set{

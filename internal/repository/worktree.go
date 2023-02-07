@@ -32,6 +32,16 @@ func (r *Repository) Worktree() (Worktree, error) {
 	return wt, nil
 }
 
+func (w *Worktree) IsStaged() bool {
+	for _, s := range w.Status {
+		if !(s.Staging == git.Unmodified || s.Staging == git.Untracked) {
+			return true
+		}
+	}
+
+	return false
+}
+
 // Alternative method to determine file status. Modified from original
 // version which was part of the following pull request.
 // https://github.com/zricethezav/gitleaks/pull/463

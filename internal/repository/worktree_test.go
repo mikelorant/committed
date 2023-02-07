@@ -100,3 +100,125 @@ func TestWorktree(t *testing.T) {
 		})
 	}
 }
+
+func TestIsStaged(t *testing.T) {
+	type file struct {
+		name       string
+		statusCode git.StatusCode
+	}
+
+	tests := []struct {
+		name   string
+		files  []file
+		staged bool
+	}{
+		{
+			name: "unmodified",
+			files: []file{
+				{name: "test", statusCode: git.Unmodified},
+			},
+			staged: false,
+		},
+		{
+			name: "untracked",
+			files: []file{
+				{name: "test", statusCode: git.Untracked},
+			},
+			staged: false,
+		},
+		{
+			name: "modified",
+			files: []file{
+				{name: "test", statusCode: git.Modified},
+			},
+			staged: true,
+		},
+		{
+			name: "added",
+			files: []file{
+				{name: "test", statusCode: git.Added},
+			},
+			staged: true,
+		},
+		{
+			name: "deleted",
+			files: []file{
+				{name: "test", statusCode: git.Deleted},
+			},
+			staged: true,
+		},
+		{
+			name: "renamed",
+			files: []file{
+				{name: "test", statusCode: git.Renamed},
+			},
+			staged: true,
+		},
+		{
+			name: "copied",
+			files: []file{
+				{name: "test", statusCode: git.Copied},
+			},
+			staged: true,
+		},
+		{
+			name: "updated_but_unmerged",
+			files: []file{
+				{name: "test", statusCode: git.UpdatedButUnmerged},
+			},
+			staged: true,
+		},
+		{
+			name: "multiple_staged",
+			files: []file{
+				{name: "modified", statusCode: git.Modified},
+				{name: "added", statusCode: git.Added},
+			},
+			staged: true,
+		},
+		{
+			name: "multiple_unstaged",
+			files: []file{
+				{name: "unmodified", statusCode: git.Unmodified},
+				{name: "untracked", statusCode: git.Untracked},
+			},
+			staged: false,
+		},
+		{
+			name: "multiple_mixed",
+			files: []file{
+				{name: "modified", statusCode: git.Modified},
+				{name: "unmodified", statusCode: git.Unmodified},
+			},
+			staged: true,
+		},
+		{
+			name:   "empty",
+			files:  []file{},
+			staged: false,
+		},
+		{
+			name:   "nil",
+			files:  nil,
+			staged: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			files := make(map[string]*git.FileStatus, len(tt.files))
+
+			for _, v := range tt.files {
+				files[v.name] = &git.FileStatus{
+					Staging: v.statusCode,
+				}
+			}
+
+			wt := repository.Worktree{
+				Status: files,
+			}
+
+			assert.Equal(t, tt.staged, wt.IsStaged(), tt.name)
+		})
+	}
+}

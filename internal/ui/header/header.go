@@ -7,7 +7,6 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/go-git/go-git/v5"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
@@ -247,7 +246,7 @@ func (m Model) readyCommitType() string {
 
 func (m Model) ready() string {
 	switch {
-	case !m.isStaged() && !m.Amend:
+	case !m.state.Repository.Worktree.IsStaged() && !m.Amend:
 		return m.styles.readyError.String()
 	case len(m.Summary()) < 1:
 		return m.styles.readyIncomplete.String()
@@ -262,16 +261,6 @@ func (m Model) commitType() string {
 	}
 
 	return m.styles.commitTypeNew.String()
-}
-
-func (m Model) isStaged() bool {
-	for _, s := range m.state.Repository.Worktree.Status {
-		if !(s.Staging == git.Unmodified || s.Staging == git.Untracked) {
-			return true
-		}
-	}
-
-	return false
 }
 
 func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
