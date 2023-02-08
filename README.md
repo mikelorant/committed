@@ -97,7 +97,7 @@ To make these changes following the instructions below.
 | Terminal       | Setting                                                      |
 | :------------- | :----------------------------------------------------------- |
 | macOS Terminal | `Profiles` `Keyboard`<br />![macOS Terminal Keyboard Setting](docs/keyboard-options-macos-terminal.png) |
-| iTerm2         | `Preferences` `Profile ` `Keys`<br />![iTerm2 Keyboard Setting](docs/keyboard-options-iterm2.png) |
+| iTerm2         | `Preferences` `Profile` `Keys`<br />![iTerm2 Keyboard Setting](docs/keyboard-options-iterm2.png) |
 
 The alternative keyboard shortcut  <kbd>⌥ Option</kbd> + <kbd>\\</kbd> can also be used to apply
 a commit.
