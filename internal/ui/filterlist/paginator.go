@@ -5,6 +5,7 @@ import (
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/ui/colour"
 )
 
 func verticalPaginator(pos, total int, state *commit.State) string {
@@ -16,7 +17,7 @@ func horizontalPaginator(pos, total int, state *commit.State) string {
 }
 
 func dots(pos, total int, state *commit.State) []string {
-	colour := state.Theme.FilterList()
+	clr := colour.New(state.Theme).FilterList()
 
 	dots := make([]string, total)
 	for i := range dots {
@@ -25,7 +26,7 @@ func dots(pos, total int, state *commit.State) []string {
 
 	dots = append(dots[:pos], dots[pos:]...)
 	dots[pos] = lipgloss.NewStyle().
-		Foreground(colour.PaginatorDots).
+		Foreground(clr.PaginatorDots).
 		Render(paginatorActiveDot)
 
 	return dots

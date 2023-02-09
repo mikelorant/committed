@@ -2,7 +2,8 @@ package info
 
 import (
 	"github.com/charmbracelet/lipgloss"
-	"github.com/mikelorant/committed/internal/ui/theme"
+	"github.com/mikelorant/committed/internal/theme"
+	"github.com/mikelorant/committed/internal/ui/colour"
 )
 
 const (
@@ -36,7 +37,7 @@ type Styles struct {
 func defaultStyles(th theme.Theme) Styles {
 	var s Styles
 
-	colour := th.Info()
+	clr := colour.New(th).Info()
 
 	s.infoBoundary = lipgloss.NewStyle().
 		MarginBottom(1)
@@ -45,51 +46,51 @@ func defaultStyles(th theme.Theme) Styles {
 		MarginTop(1)
 
 	s.hashText = lipgloss.NewStyle().
-		Foreground(colour.HashText).
+		Foreground(clr.HashText).
 		SetString("commit")
 
 	s.hashValue = lipgloss.NewStyle().
-		Foreground(colour.HashValue)
+		Foreground(clr.HashValue)
 
 	s.hashBoundary = lipgloss.NewStyle().
 		MarginRight(1)
 
 	s.branchHead = lipgloss.NewStyle().
-		Foreground(colour.BranchHead).
+		Foreground(clr.BranchHead).
 		Bold(true).
 		SetString("HEAD ->")
 
 	s.branchLocal = lipgloss.NewStyle().
-		Foreground(colour.BranchLocal).
+		Foreground(clr.BranchLocal).
 		Bold(true)
 
 	s.branchGrouping = lipgloss.NewStyle().
-		Foreground(colour.BranchGrouping)
+		Foreground(clr.BranchGrouping)
 
 	s.branchRemote = lipgloss.NewStyle().
-		Foreground(colour.BranchRemote).
+		Foreground(clr.BranchRemote).
 		Bold(true)
 
 	s.colon = lipgloss.NewStyle().
-		Foreground(colour.Colon).
+		Foreground(clr.Colon).
 		SetString(":")
 
 	s.authorAngledBracket = lipgloss.NewStyle().
-		Foreground(colour.AuthorAngledBracket)
+		Foreground(clr.AuthorAngledBracket)
 
 	s.authorText = lipgloss.NewStyle().
-		Foreground(colour.AuthorText).
+		Foreground(clr.AuthorText).
 		SetString("author")
 
 	s.authorValue = lipgloss.NewStyle().
-		Foreground(colour.AuthorValue)
+		Foreground(clr.AuthorValue)
 
 	s.dateText = lipgloss.NewStyle().
-		Foreground(colour.DateText).
+		Foreground(clr.DateText).
 		SetString("date")
 
 	s.dateValue = lipgloss.NewStyle().
-		Foreground(colour.DateValue)
+		Foreground(clr.DateValue)
 
 	return s
 }

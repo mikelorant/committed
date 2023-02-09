@@ -7,7 +7,7 @@ import (
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
 	"github.com/mikelorant/committed/internal/snapshot"
-	"github.com/mikelorant/committed/internal/ui/theme"
+	"github.com/mikelorant/committed/internal/theme"
 )
 
 type State struct {

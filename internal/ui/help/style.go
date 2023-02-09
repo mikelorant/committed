@@ -2,7 +2,8 @@ package help
 
 import (
 	"github.com/charmbracelet/lipgloss"
-	"github.com/mikelorant/committed/internal/ui/theme"
+	"github.com/mikelorant/committed/internal/theme"
+	"github.com/mikelorant/committed/internal/ui/colour"
 )
 
 type Styles struct {
@@ -13,7 +14,7 @@ type Styles struct {
 func defaultStyles(th theme.Theme) Styles {
 	var s Styles
 
-	colour := th.Help()
+	clr := colour.New(th).Help()
 
 	s.boundary = lipgloss.NewStyle().
 		Width(74).
@@ -21,11 +22,11 @@ func defaultStyles(th theme.Theme) Styles {
 		MarginLeft(4).
 		Align(lipgloss.Left, lipgloss.Top).
 		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(colour.Boundary).
+		BorderForeground(clr.Boundary).
 		Padding(0, 1, 0, 1)
 
 	s.viewport = lipgloss.NewStyle().
-		Foreground(colour.Viewport)
+		Foreground(clr.Viewport)
 
 	return s
 }

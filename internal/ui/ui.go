@@ -11,13 +11,13 @@ import (
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/ui/body"
+	"github.com/mikelorant/committed/internal/ui/colour"
 	"github.com/mikelorant/committed/internal/ui/footer"
 	"github.com/mikelorant/committed/internal/ui/header"
 	"github.com/mikelorant/committed/internal/ui/help"
 	"github.com/mikelorant/committed/internal/ui/info"
 	"github.com/mikelorant/committed/internal/ui/message"
 	"github.com/mikelorant/committed/internal/ui/status"
-	"github.com/mikelorant/committed/internal/ui/theme"
 )
 
 type Model struct {
@@ -300,8 +300,8 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 
 		return keyResponse{model: m, end: false, nilMsg: true}
 	case "alt+t", KeyTheme:
-		m.state.Theme.NextTint()
-		return keyResponse{model: m, cmd: theme.UpdateTheme, end: true}
+		m.state.Theme.Next()
+		return keyResponse{model: m, cmd: colour.Update, end: true}
 	case "ctrl+h", KeyHelp:
 		if m.focus == helpComponent {
 			m.focus = m.previousFocus

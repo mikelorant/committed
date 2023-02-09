@@ -2,7 +2,8 @@ package header
 
 import (
 	"github.com/charmbracelet/lipgloss"
-	"github.com/mikelorant/committed/internal/ui/theme"
+	"github.com/mikelorant/committed/internal/theme"
+	"github.com/mikelorant/committed/internal/ui/colour"
 )
 
 type Styles struct {
@@ -37,7 +38,7 @@ const readyDot = "●"
 func defaultStyles(th theme.Theme) Styles {
 	var s Styles
 
-	colour := th.Header()
+	clr := colour.New(th).Header()
 
 	s.emojiBoundary = lipgloss.NewStyle().
 		Width(4).
@@ -46,7 +47,7 @@ func defaultStyles(th theme.Theme) Styles {
 		MarginRight(1).
 		Align(lipgloss.Center, lipgloss.Center).
 		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(colour.EmojiBoundary)
+		BorderForeground(clr.EmojiBoundary)
 
 	s.summaryBoundary = lipgloss.NewStyle().
 		Width(53).
@@ -55,14 +56,14 @@ func defaultStyles(th theme.Theme) Styles {
 		Align(lipgloss.Left, lipgloss.Center).
 		Padding(0, 0, 0, 1).
 		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(colour.SummaryBoundary)
+		BorderForeground(clr.SummaryBoundary)
 
 	s.counterDivider = lipgloss.NewStyle().
-		Foreground(colour.CounterDivider).
+		Foreground(clr.CounterDivider).
 		SetString("/")
 
 	s.counterLimit = lipgloss.NewStyle().
-		Foreground(colour.CounterLimit)
+		Foreground(clr.CounterLimit)
 
 	s.counterBoundary = lipgloss.NewStyle().
 		Width(5).
@@ -71,16 +72,16 @@ func defaultStyles(th theme.Theme) Styles {
 		Align(lipgloss.Right, lipgloss.Center)
 
 	s.summaryInputPromptStyle = lipgloss.NewStyle().
-		Foreground(colour.SummaryInputPromptStyle)
+		Foreground(clr.SummaryInputPromptStyle)
 
 	s.summaryInputTextStyle = lipgloss.NewStyle().
-		Foreground(colour.SummaryInputTextStyle)
+		Foreground(clr.SummaryInputTextStyle)
 
 	s.summaryInputPlaceholderStyle = lipgloss.NewStyle().
-		Foreground(colour.SummaryInputPlaceholderStyle)
+		Foreground(clr.SummaryInputPlaceholderStyle)
 
 	s.summaryInputCursorStyle = lipgloss.NewStyle().
-		Foreground(colour.SummaryInputCursorStyle)
+		Foreground(clr.SummaryInputCursorStyle)
 
 	s.readyCommitTypeBoundary = lipgloss.NewStyle().
 		Width(7).
@@ -88,27 +89,27 @@ func defaultStyles(th theme.Theme) Styles {
 		Align(lipgloss.Right, lipgloss.Center)
 
 	s.readyError = lipgloss.NewStyle().
-		Foreground(colour.ReadyError).
+		Foreground(clr.ReadyError).
 		MarginRight(1).
 		SetString(readyDot)
 
 	s.readyIncomplete = lipgloss.NewStyle().
-		Foreground(colour.ReadyIncomplete).
+		Foreground(clr.ReadyIncomplete).
 		MarginRight(1).
 		SetString(readyDot)
 
 	s.readyOK = lipgloss.NewStyle().
-		Foreground(colour.ReadyOK).
+		Foreground(clr.ReadyOK).
 		MarginRight(1).
 		SetString(readyDot)
 
 	s.commitTypeNew = lipgloss.NewStyle().
-		Foreground(colour.CommitTypeNew).
+		Foreground(clr.CommitTypeNew).
 		Align(lipgloss.Right).
 		SetString("New")
 
 	s.commitTypeAmend = lipgloss.NewStyle().
-		Foreground(colour.CommitTypeAmend).
+		Foreground(clr.CommitTypeAmend).
 		SetString("Amend")
 
 	s.spacer = lipgloss.NewStyle().
@@ -120,7 +121,7 @@ func defaultStyles(th theme.Theme) Styles {
 func counterStyle(i int, th theme.Theme) lipgloss.Style {
 	var clr lipgloss.TerminalColor
 
-	colour := th.Header()
+	colour := colour.New(th).Header()
 
 	switch {
 	case i > emptyCounter && i < minimumCounter:

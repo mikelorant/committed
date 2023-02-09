@@ -6,8 +6,8 @@ import (
 	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/config"
+	"github.com/mikelorant/committed/internal/theme"
 	"github.com/mikelorant/committed/internal/ui/shortcut"
-	"github.com/mikelorant/committed/internal/ui/theme"
 	"github.com/mikelorant/committed/internal/ui/uitest"
 )
 

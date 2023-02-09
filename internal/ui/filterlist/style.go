@@ -2,7 +2,8 @@ package filterlist
 
 import (
 	"github.com/charmbracelet/lipgloss"
-	"github.com/mikelorant/committed/internal/ui/theme"
+	"github.com/mikelorant/committed/internal/theme"
+	"github.com/mikelorant/committed/internal/ui/colour"
 )
 
 type Styles struct {
@@ -31,12 +32,12 @@ const (
 func defaultStyles(th theme.Theme) Styles {
 	var s Styles
 
-	colour := th.FilterList()
+	clr := colour.New(th).FilterList()
 
 	s.boundary = lipgloss.NewStyle().
 		MarginLeft(4).
 		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(colour.Boundary)
+		BorderForeground(clr.Boundary)
 
 	s.paginatorBoundary = lipgloss.NewStyle().
 		MarginRight(1)
@@ -47,42 +48,42 @@ func defaultStyles(th theme.Theme) Styles {
 	}
 
 	s.listNormalTitle = lipgloss.NewStyle().
-		Foreground(colour.ListNormalTitle).
+		Foreground(clr.ListNormalTitle).
 		Padding(0, 0, 0, 2)
 
 	// Assign border style to the selected item.
 	s.listSelectedTitle = lipgloss.NewStyle().
 		Border(s.listItemPrompt, false, false, false, true).
-		BorderForeground(colour.ListSelectedTitle).
-		Foreground(colour.ListSelectedTitle).
+		BorderForeground(clr.ListSelectedTitle).
+		Foreground(clr.ListSelectedTitle).
 		Padding(0, 0, 0, 1)
 
 	s.listNoItems = lipgloss.NewStyle().
-		Foreground(colour.ListNoItems)
+		Foreground(clr.ListNoItems)
 
 	s.textInputPromptMark = lipgloss.NewStyle().
-		Foreground(colour.TextInputPromptMark).
+		Foreground(clr.TextInputPromptMark).
 		MarginRight(1)
 
 	s.textInputPromptText = lipgloss.NewStyle().
-		Foreground(colour.TextInputPromptText).
+		Foreground(clr.TextInputPromptText).
 		Bold(true).
 		MarginRight(1)
 
 	s.paginatorDots = lipgloss.NewStyle().
-		Foreground(colour.PaginatorDots)
+		Foreground(clr.PaginatorDots)
 
 	s.textInputPromptStyle = lipgloss.NewStyle().
-		Foreground(colour.TextInputPromptStyle)
+		Foreground(clr.TextInputPromptStyle)
 
 	s.textInputTextStyle = lipgloss.NewStyle().
-		Foreground(colour.TextInputTextStyle)
+		Foreground(clr.TextInputTextStyle)
 
 	s.textInputPlaceholderStyle = lipgloss.NewStyle().
-		Foreground(colour.TextInputPlaceholderStyle)
+		Foreground(clr.TextInputPlaceholderStyle)
 
 	s.textInputCursorStyle = lipgloss.NewStyle().
-		Foreground(colour.TextInputCursorStyle)
+		Foreground(clr.TextInputCursorStyle)
 
 	return s
 }

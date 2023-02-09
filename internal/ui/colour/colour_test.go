@@ -1,4 +1,4 @@
-package theme_test
+package colour_test
 
 import (
 	"fmt"
@@ -6,7 +6,8 @@ import (
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/config"
-	"github.com/mikelorant/committed/internal/ui/theme"
+	"github.com/mikelorant/committed/internal/theme"
+	"github.com/mikelorant/committed/internal/ui/colour"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -123,15 +124,14 @@ func TestBody(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			th := theme.New(config.ColourAdaptive)
-			body := th.Body()
+			clr := colour.New(theme.New(config.ColourAdaptive)).Body()
 
-			assert.Equal(t, tt.body.Boundary, toColour(body.Boundary), "Boundary")
-			assert.Equal(t, tt.body.TextAreaPlaceholder, toColour(body.TextAreaPlaceholder), "TextAreaPlaceholder")
-			assert.Equal(t, tt.body.TextAreaPrompt, toColour(body.TextAreaPrompt), "TextAreaPrompt")
-			assert.Equal(t, tt.body.TextAreaFocusedText, toColour(body.TextAreaFocusedText), "TextAreaFocusedText")
-			assert.Equal(t, tt.body.TextAreaBlurredText, toColour(body.TextAreaBlurredText), "TextAreaBlurredText")
-			assert.Equal(t, tt.body.TextAreaCursorStyle, toColour(body.TextAreaCursorStyle), "TextAreaCursorStyle")
+			assert.Equal(t, tt.body.Boundary, toColour(clr.Boundary), "Boundary")
+			assert.Equal(t, tt.body.TextAreaPlaceholder, toColour(clr.TextAreaPlaceholder), "TextAreaPlaceholder")
+			assert.Equal(t, tt.body.TextAreaPrompt, toColour(clr.TextAreaPrompt), "TextAreaPrompt")
+			assert.Equal(t, tt.body.TextAreaFocusedText, toColour(clr.TextAreaFocusedText), "TextAreaFocusedText")
+			assert.Equal(t, tt.body.TextAreaBlurredText, toColour(clr.TextAreaBlurredText), "TextAreaBlurredText")
+			assert.Equal(t, tt.body.TextAreaCursorStyle, toColour(clr.TextAreaCursorStyle), "TextAreaCursorStyle")
 		})
 	}
 }
@@ -167,20 +167,19 @@ func TestFilterList(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			th := theme.New(config.ColourAdaptive)
-			filterlist := th.FilterList()
+			clr := colour.New(theme.New(config.ColourAdaptive)).FilterList()
 
-			assert.Equal(t, tt.filterlist.Boundary, toColour(filterlist.Boundary), "Boundary")
-			assert.Equal(t, tt.filterlist.ListNormalTitle, toColour(filterlist.ListNormalTitle), "ListNormalTitle")
-			assert.Equal(t, tt.filterlist.ListSelectedTitle, toColour(filterlist.ListSelectedTitle), "ListSelectedTitle")
-			assert.Equal(t, tt.filterlist.ListNoItems, toColour(filterlist.ListNoItems), "ListNoItems")
-			assert.Equal(t, tt.filterlist.TextInputPromptMark, toColour(filterlist.TextInputPromptMark), "TextInputPromptMark")
-			assert.Equal(t, tt.filterlist.TextInputPromptText, toColour(filterlist.TextInputPromptText), "TextInputPromptText")
-			assert.Equal(t, tt.filterlist.PaginatorDots, toColour(filterlist.PaginatorDots), "PaginatorDots")
-			assert.Equal(t, tt.filterlist.TextInputPromptStyle, toColour(filterlist.TextInputPromptStyle), "TextInputPromptStyle")
-			assert.Equal(t, tt.filterlist.TextInputTextStyle, toColour(filterlist.TextInputTextStyle), "TextInputTextStyle")
-			assert.Equal(t, tt.filterlist.TextInputPlaceholderStyle, toColour(filterlist.TextInputPlaceholderStyle), "TextInputPlaceholderStyle")
-			assert.Equal(t, tt.filterlist.TextInputCursorStyle, toColour(filterlist.TextInputCursorStyle), "TextInputCursorStyle")
+			assert.Equal(t, tt.filterlist.Boundary, toColour(clr.Boundary), "Boundary")
+			assert.Equal(t, tt.filterlist.ListNormalTitle, toColour(clr.ListNormalTitle), "ListNormalTitle")
+			assert.Equal(t, tt.filterlist.ListSelectedTitle, toColour(clr.ListSelectedTitle), "ListSelectedTitle")
+			assert.Equal(t, tt.filterlist.ListNoItems, toColour(clr.ListNoItems), "ListNoItems")
+			assert.Equal(t, tt.filterlist.TextInputPromptMark, toColour(clr.TextInputPromptMark), "TextInputPromptMark")
+			assert.Equal(t, tt.filterlist.TextInputPromptText, toColour(clr.TextInputPromptText), "TextInputPromptText")
+			assert.Equal(t, tt.filterlist.PaginatorDots, toColour(clr.PaginatorDots), "PaginatorDots")
+			assert.Equal(t, tt.filterlist.TextInputPromptStyle, toColour(clr.TextInputPromptStyle), "TextInputPromptStyle")
+			assert.Equal(t, tt.filterlist.TextInputTextStyle, toColour(clr.TextInputTextStyle), "TextInputTextStyle")
+			assert.Equal(t, tt.filterlist.TextInputPlaceholderStyle, toColour(clr.TextInputPlaceholderStyle), "TextInputPlaceholderStyle")
+			assert.Equal(t, tt.filterlist.TextInputCursorStyle, toColour(clr.TextInputCursorStyle), "TextInputCursorStyle")
 		})
 	}
 }
@@ -206,10 +205,9 @@ func TestFooter(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			th := theme.New(config.ColourAdaptive)
-			footer := th.Footer()
+			clr := colour.New(theme.New(config.ColourAdaptive)).Footer()
 
-			assert.Equal(t, tt.footer.View, toColour(footer.View), "Boundary")
+			assert.Equal(t, tt.footer.View, toColour(clr.View), "Boundary")
 		})
 	}
 }
@@ -252,24 +250,23 @@ func TestHeader(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			th := theme.New(config.ColourAdaptive)
-			header := th.Header()
+			clr := colour.New(theme.New(config.ColourAdaptive)).Header()
 
-			assert.Equal(t, tt.header.EmojiBoundary, toColour(header.EmojiBoundary), "EmojiBoundary")
-			assert.Equal(t, tt.header.SummaryBoundary, toColour(header.SummaryBoundary), "SummaryBoundary")
-			assert.Equal(t, tt.header.CounterDivider, toColour(header.CounterDivider), "CounterDivider")
-			assert.Equal(t, tt.header.CounterLimit, toColour(header.CounterLimit), "CounterLimit")
-			assert.Equal(t, tt.header.SummaryInputPromptStyle, toColour(header.SummaryInputPromptStyle), "SummaryInputPromptStyle")
-			assert.Equal(t, tt.header.SummaryInputTextStyle, toColour(header.SummaryInputTextStyle), "SummaryInputTextStyle")
-			assert.Equal(t, tt.header.SummaryInputPlaceholderStyle, toColour(header.SummaryInputPlaceholderStyle), "SummaryInputPlaceholderStyle")
-			assert.Equal(t, tt.header.SummaryInputCursorStyle, toColour(header.SummaryInputCursorStyle), "SummaryInputCursorStyle")
-			assert.Equal(t, tt.header.CounterDefault, toColour(header.CounterDefault), "CounterDefault")
-			assert.Equal(t, tt.header.CounterLow, toColour(header.CounterLow), "CounterLow")
-			assert.Equal(t, tt.header.CounterNormal, toColour(header.CounterNormal), "CounterNormal")
-			assert.Equal(t, tt.header.CounterWarning, toColour(header.CounterWarning), "CounterWarning")
-			assert.Equal(t, tt.header.CounterHigh, toColour(header.CounterHigh), "CounterHigh")
-			assert.Equal(t, tt.header.CommitTypeNew, toColour(header.CommitTypeNew), "CommitTypeNew")
-			assert.Equal(t, tt.header.CommitTypeAmend, toColour(header.CommitTypeAmend), "CommitTypeAmend")
+			assert.Equal(t, tt.header.EmojiBoundary, toColour(clr.EmojiBoundary), "EmojiBoundary")
+			assert.Equal(t, tt.header.SummaryBoundary, toColour(clr.SummaryBoundary), "SummaryBoundary")
+			assert.Equal(t, tt.header.CounterDivider, toColour(clr.CounterDivider), "CounterDivider")
+			assert.Equal(t, tt.header.CounterLimit, toColour(clr.CounterLimit), "CounterLimit")
+			assert.Equal(t, tt.header.SummaryInputPromptStyle, toColour(clr.SummaryInputPromptStyle), "SummaryInputPromptStyle")
+			assert.Equal(t, tt.header.SummaryInputTextStyle, toColour(clr.SummaryInputTextStyle), "SummaryInputTextStyle")
+			assert.Equal(t, tt.header.SummaryInputPlaceholderStyle, toColour(clr.SummaryInputPlaceholderStyle), "SummaryInputPlaceholderStyle")
+			assert.Equal(t, tt.header.SummaryInputCursorStyle, toColour(clr.SummaryInputCursorStyle), "SummaryInputCursorStyle")
+			assert.Equal(t, tt.header.CounterDefault, toColour(clr.CounterDefault), "CounterDefault")
+			assert.Equal(t, tt.header.CounterLow, toColour(clr.CounterLow), "CounterLow")
+			assert.Equal(t, tt.header.CounterNormal, toColour(clr.CounterNormal), "CounterNormal")
+			assert.Equal(t, tt.header.CounterWarning, toColour(clr.CounterWarning), "CounterWarning")
+			assert.Equal(t, tt.header.CounterHigh, toColour(clr.CounterHigh), "CounterHigh")
+			assert.Equal(t, tt.header.CommitTypeNew, toColour(clr.CommitTypeNew), "CommitTypeNew")
+			assert.Equal(t, tt.header.CommitTypeAmend, toColour(clr.CommitTypeAmend), "CommitTypeAmend")
 		})
 	}
 }
@@ -295,10 +292,9 @@ func TestHelp(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			th := theme.New(config.ColourAdaptive)
-			help := th.Help()
+			clr := colour.New(theme.New(config.ColourAdaptive)).Help()
 
-			assert.Equal(t, tt.help.Boundary, toColour(help.Boundary), "Boundary")
+			assert.Equal(t, tt.help.Boundary, toColour(clr.Boundary), "Boundary")
 		})
 	}
 }
@@ -335,21 +331,20 @@ func TestInfo(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			th := theme.New(config.ColourAdaptive)
-			info := th.Info()
+			clr := colour.New(theme.New(config.ColourAdaptive)).Info()
 
-			assert.Equal(t, tt.info.HashText, toColour(info.HashText), "HashText")
-			assert.Equal(t, tt.info.HashValue, toColour(info.HashValue), "HashValue")
-			assert.Equal(t, tt.info.BranchHead, toColour(info.BranchHead), "BranchHead")
-			assert.Equal(t, tt.info.BranchLocal, toColour(info.BranchLocal), "BranchLocal")
-			assert.Equal(t, tt.info.BranchGrouping, toColour(info.BranchGrouping), "BranchGrouping")
-			assert.Equal(t, tt.info.BranchRemote, toColour(info.BranchRemote), "BranchRemote")
-			assert.Equal(t, tt.info.Colon, toColour(info.Colon), "Colon")
-			assert.Equal(t, tt.info.AuthorAngledBracket, toColour(info.AuthorAngledBracket), "AuthorAngledBracket")
-			assert.Equal(t, tt.info.AuthorText, toColour(info.AuthorText), "AuthorText")
-			assert.Equal(t, tt.info.AuthorValue, toColour(info.AuthorValue), "AuthorValue")
-			assert.Equal(t, tt.info.DateText, toColour(info.DateText), "DateText")
-			assert.Equal(t, tt.info.DateValue, toColour(info.DateValue), "DateValue")
+			assert.Equal(t, tt.info.HashText, toColour(clr.HashText), "HashText")
+			assert.Equal(t, tt.info.HashValue, toColour(clr.HashValue), "HashValue")
+			assert.Equal(t, tt.info.BranchHead, toColour(clr.BranchHead), "BranchHead")
+			assert.Equal(t, tt.info.BranchLocal, toColour(clr.BranchLocal), "BranchLocal")
+			assert.Equal(t, tt.info.BranchGrouping, toColour(clr.BranchGrouping), "BranchGrouping")
+			assert.Equal(t, tt.info.BranchRemote, toColour(clr.BranchRemote), "BranchRemote")
+			assert.Equal(t, tt.info.Colon, toColour(clr.Colon), "Colon")
+			assert.Equal(t, tt.info.AuthorAngledBracket, toColour(clr.AuthorAngledBracket), "AuthorAngledBracket")
+			assert.Equal(t, tt.info.AuthorText, toColour(clr.AuthorText), "AuthorText")
+			assert.Equal(t, tt.info.AuthorValue, toColour(clr.AuthorValue), "AuthorValue")
+			assert.Equal(t, tt.info.DateText, toColour(clr.DateText), "DateText")
+			assert.Equal(t, tt.info.DateValue, toColour(clr.DateValue), "DateValue")
 		})
 	}
 }
@@ -377,12 +372,11 @@ func TestMessage(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			th := theme.New(config.ColourAdaptive)
-			message := th.Message()
+			clr := colour.New(theme.New(config.ColourAdaptive)).Message()
 
-			assert.Equal(t, tt.message.Summary, toColour(message.Summary), "Summary")
-			assert.Equal(t, tt.message.Body, toColour(message.Body), "Body")
-			assert.Equal(t, tt.message.Footer, toColour(message.Footer), "Footer")
+			assert.Equal(t, tt.message.Summary, toColour(clr.Summary), "Summary")
+			assert.Equal(t, tt.message.Body, toColour(clr.Body), "Body")
+			assert.Equal(t, tt.message.Footer, toColour(clr.Footer), "Footer")
 		})
 	}
 }
@@ -411,19 +405,18 @@ func TestShortcut(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			th := theme.New(config.ColourAdaptive)
-			shortcut := th.Shortcut()
+			clr := colour.New(theme.New(config.ColourAdaptive)).Shortcut()
 
-			assert.Equal(t, tt.shortcut.Key, toColour(shortcut.Key), "Key")
-			assert.Equal(t, tt.shortcut.Label, toColour(shortcut.Label), "Label")
-			assert.Equal(t, tt.shortcut.Plus, toColour(shortcut.Plus), "Plus")
-			assert.Equal(t, tt.shortcut.AngleBracket, toColour(shortcut.AngleBracket), "AngleBracket")
+			assert.Equal(t, tt.shortcut.Key, toColour(clr.Key), "Key")
+			assert.Equal(t, tt.shortcut.Label, toColour(clr.Label), "Label")
+			assert.Equal(t, tt.shortcut.Plus, toColour(clr.Plus), "Plus")
+			assert.Equal(t, tt.shortcut.AngleBracket, toColour(clr.AngleBracket), "AngleBracket")
 		})
 	}
 }
 
-func toColour(tc lipgloss.TerminalColor) Colour {
-	switch clr := tc.(type) {
+func toColour(clr lipgloss.TerminalColor) Colour {
+	switch clr := clr.(type) {
 	case lipgloss.AdaptiveColor:
 		return Colour{Dark: clr.Dark, Light: clr.Light}
 	default:

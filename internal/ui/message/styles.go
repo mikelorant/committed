@@ -2,7 +2,8 @@ package message
 
 import (
 	"github.com/charmbracelet/lipgloss"
-	"github.com/mikelorant/committed/internal/ui/theme"
+	"github.com/mikelorant/committed/internal/theme"
+	"github.com/mikelorant/committed/internal/ui/colour"
 )
 
 type Styles struct {
@@ -15,22 +16,22 @@ type Styles struct {
 func defaultStyles(th theme.Theme) Styles {
 	var s Styles
 
-	colour := th.Message()
+	clr := colour.New(th).Message()
 
 	s.message = lipgloss.NewStyle().
 		MarginLeft(4).
 		MarginBottom(2)
 
 	s.summary = lipgloss.NewStyle().
-		Foreground(colour.Summary)
+		Foreground(clr.Summary)
 
 	s.body = lipgloss.NewStyle().
 		MarginTop(1).
-		Foreground(colour.Body)
+		Foreground(clr.Body)
 
 	s.footer = lipgloss.NewStyle().
 		MarginTop(1).
-		Foreground(colour.Footer)
+		Foreground(clr.Footer)
 
 	return s
 }

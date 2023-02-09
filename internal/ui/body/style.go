@@ -2,7 +2,8 @@ package body
 
 import (
 	"github.com/charmbracelet/lipgloss"
-	"github.com/mikelorant/committed/internal/ui/theme"
+	"github.com/mikelorant/committed/internal/theme"
+	"github.com/mikelorant/committed/internal/ui/colour"
 )
 
 type Styles struct {
@@ -17,7 +18,7 @@ type Styles struct {
 func defaultStyles(th theme.Theme) Styles {
 	var s Styles
 
-	colour := th.Body()
+	clr := colour.New(th).Body()
 
 	s.boundary = lipgloss.NewStyle().
 		Width(74).
@@ -26,23 +27,23 @@ func defaultStyles(th theme.Theme) Styles {
 		MarginLeft(4).
 		Align(lipgloss.Left, lipgloss.Top).
 		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(colour.Boundary).
+		BorderForeground(clr.Boundary).
 		Padding(0, 1, 0, 1)
 
 	s.textAreaPlaceholder = lipgloss.NewStyle().
-		Foreground(colour.TextAreaPlaceholder)
+		Foreground(clr.TextAreaPlaceholder)
 
 	s.textAreaPrompt = lipgloss.NewStyle().
-		Foreground(colour.TextAreaPrompt)
+		Foreground(clr.TextAreaPrompt)
 
 	s.textAreaFocusedText = lipgloss.NewStyle().
-		Foreground(colour.TextAreaFocusedText)
+		Foreground(clr.TextAreaFocusedText)
 
 	s.textAreaBlurredText = lipgloss.NewStyle().
-		Foreground(colour.TextAreaBlurredText)
+		Foreground(clr.TextAreaBlurredText)
 
 	s.textAreaCursorStyle = lipgloss.NewStyle().
-		Foreground(colour.TextAreaCursorStyle)
+		Foreground(clr.TextAreaCursorStyle)
 
 	return s
 }

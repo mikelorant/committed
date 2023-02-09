@@ -9,8 +9,8 @@ import (
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/repository"
+	"github.com/mikelorant/committed/internal/theme"
 	"github.com/mikelorant/committed/internal/ui/info"
-	"github.com/mikelorant/committed/internal/ui/theme"
 	"github.com/mikelorant/committed/internal/ui/uitest"
 	"github.com/stretchr/testify/assert"
 )

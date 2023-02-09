@@ -6,7 +6,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
-	"github.com/mikelorant/committed/internal/ui/theme"
+	"github.com/mikelorant/committed/internal/ui/colour"
 )
 
 type Model struct {
@@ -89,7 +89,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	//nolint:gocritic
 	switch msg.(type) {
-	case theme.Msg:
+	case colour.Msg:
 		m.styles = defaultStyles(m.state.Theme)
 		m.styleTextInput(&m.textInput)
 		m.styleList(&m.list)

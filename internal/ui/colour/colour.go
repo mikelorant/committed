@@ -1,10 +1,13 @@
-package theme
+package colour
 
 import (
 	"fmt"
 	"image/color"
 
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	tint "github.com/lrstanley/bubbletint"
+	"github.com/mikelorant/committed/internal/theme"
 	"github.com/muesli/gamut"
 )
 
@@ -89,108 +92,136 @@ type shortcut struct {
 	AngleBracket lipgloss.TerminalColor
 }
 
+type Colour struct {
+	registry *tint.Registry
+}
+
+type Msg int
+
+func New(th theme.Theme) *Colour {
+	return &Colour{
+		registry: th.Registry,
+	}
+}
+
 //nolint:revive
-func (t *Theme) Body() body {
+func (c *Colour) Body() body {
+	clr := c.registry
+
 	return body{
-		Boundary:            t.Registry.Fg(),
-		TextAreaPlaceholder: ToAdaptive(t.Registry.BrightBlack()),
-		TextAreaPrompt:      t.Registry.Fg(),
-		TextAreaFocusedText: t.Registry.Fg(),
-		TextAreaBlurredText: t.Registry.Fg(),
-		TextAreaCursorStyle: t.Registry.Fg(),
+		Boundary:            clr.Fg(),
+		TextAreaPlaceholder: ToAdaptive(clr.BrightBlack()),
+		TextAreaPrompt:      clr.Fg(),
+		TextAreaFocusedText: clr.Fg(),
+		TextAreaBlurredText: clr.Fg(),
+		TextAreaCursorStyle: clr.Fg(),
 	}
 }
 
 //nolint:revive
-func (t *Theme) FilterList() filterlist {
+func (c *Colour) FilterList() filterlist {
+	clr := c.registry
+
 	return filterlist{
-		Boundary:                  t.Registry.Fg(),
-		ListNormalTitle:           t.Registry.Fg(),
-		ListSelectedTitle:         ToAdaptive(t.Registry.Cyan()),
-		ListNoItems:               ToAdaptive(t.Registry.BrightBlack()),
-		TextInputPromptMark:       ToAdaptive(t.Registry.Green()),
-		TextInputPromptText:       t.Registry.Fg(),
-		PaginatorDots:             ToAdaptive(t.Registry.Cyan()),
-		TextInputPromptStyle:      t.Registry.Fg(),
-		TextInputTextStyle:        t.Registry.Fg(),
-		TextInputPlaceholderStyle: ToAdaptive(t.Registry.BrightBlack()),
-		TextInputCursorStyle:      t.Registry.Fg(),
+		Boundary:                  clr.Fg(),
+		ListNormalTitle:           clr.Fg(),
+		ListSelectedTitle:         ToAdaptive(clr.Cyan()),
+		ListNoItems:               ToAdaptive(clr.BrightBlack()),
+		TextInputPromptMark:       ToAdaptive(clr.Green()),
+		TextInputPromptText:       clr.Fg(),
+		PaginatorDots:             ToAdaptive(clr.Cyan()),
+		TextInputPromptStyle:      clr.Fg(),
+		TextInputTextStyle:        clr.Fg(),
+		TextInputPlaceholderStyle: ToAdaptive(clr.BrightBlack()),
+		TextInputCursorStyle:      clr.Fg(),
 	}
 }
 
 //nolint:revive
-func (t *Theme) Footer() footer {
+func (c *Colour) Footer() footer {
+	clr := c.registry
+
 	return footer{
-		View: t.Registry.Fg(),
+		View: clr.Fg(),
 	}
 }
 
 //nolint:revive
-func (t *Theme) Header() header {
+func (c *Colour) Header() header {
+	clr := c.registry
+
 	return header{
-		EmojiBoundary:                t.Registry.Fg(),
-		SummaryBoundary:              t.Registry.Fg(),
-		CounterDivider:               t.Registry.Fg(),
-		CounterLimit:                 t.Registry.Fg(),
-		SummaryInputPromptStyle:      t.Registry.Fg(),
-		SummaryInputTextStyle:        t.Registry.Fg(),
-		SummaryInputPlaceholderStyle: ToAdaptive(t.Registry.BrightBlack()),
-		SummaryInputCursorStyle:      t.Registry.Fg(),
-		CounterDefault:               t.Registry.Fg(),
-		CounterLow:                   ToAdaptive(t.Registry.Yellow()),
-		CounterNormal:                ToAdaptive(t.Registry.Green()),
-		CounterWarning:               ToAdaptive(t.Registry.Yellow()),
-		CounterHigh:                  ToAdaptive(t.Registry.BrightRed()),
-		ReadyError:                   ToAdaptive(t.Registry.BrightRed()),
-		ReadyIncomplete:              ToAdaptive(t.Registry.Yellow()),
-		ReadyOK:                      ToAdaptive(t.Registry.Green()),
-		CommitTypeNew:                ToAdaptive(t.Registry.Green()),
-		CommitTypeAmend:              ToAdaptive(t.Registry.Yellow()),
+		EmojiBoundary:                clr.Fg(),
+		SummaryBoundary:              clr.Fg(),
+		CounterDivider:               clr.Fg(),
+		CounterLimit:                 clr.Fg(),
+		SummaryInputPromptStyle:      clr.Fg(),
+		SummaryInputTextStyle:        clr.Fg(),
+		SummaryInputPlaceholderStyle: ToAdaptive(clr.BrightBlack()),
+		SummaryInputCursorStyle:      clr.Fg(),
+		CounterDefault:               clr.Fg(),
+		CounterLow:                   ToAdaptive(clr.Yellow()),
+		CounterNormal:                ToAdaptive(clr.Green()),
+		CounterWarning:               ToAdaptive(clr.Yellow()),
+		CounterHigh:                  ToAdaptive(clr.BrightRed()),
+		ReadyError:                   ToAdaptive(clr.BrightRed()),
+		ReadyIncomplete:              ToAdaptive(clr.Yellow()),
+		ReadyOK:                      ToAdaptive(clr.Green()),
+		CommitTypeNew:                ToAdaptive(clr.Green()),
+		CommitTypeAmend:              ToAdaptive(clr.Yellow()),
 	}
 }
 
 //nolint:revive
-func (t *Theme) Help() help {
+func (c *Colour) Help() help {
+	clr := c.registry
+
 	return help{
-		Boundary: t.Registry.Fg(),
-		Viewport: t.Registry.Fg(),
+		Boundary: clr.Fg(),
+		Viewport: clr.Fg(),
 	}
 }
 
 //nolint:revive
-func (t *Theme) Info() info {
+func (c *Colour) Info() info {
+	clr := c.registry
+
 	return info{
-		HashText:            ToAdaptive(t.Registry.Yellow()),
-		HashValue:           ToAdaptive(t.Registry.Yellow()),
-		BranchHead:          ToAdaptive(t.Registry.BrightCyan()),
-		BranchLocal:         ToAdaptive(t.Registry.BrightGreen()),
-		BranchGrouping:      ToAdaptive(t.Registry.Yellow()),
-		BranchRemote:        ToAdaptive(t.Registry.BrightRed()),
-		Colon:               t.Registry.Fg(),
-		AuthorAngledBracket: t.Registry.Fg(),
-		AuthorText:          t.Registry.Fg(),
-		AuthorValue:         t.Registry.Fg(),
-		DateText:            t.Registry.Fg(),
-		DateValue:           t.Registry.Fg(),
+		HashText:            ToAdaptive(clr.Yellow()),
+		HashValue:           ToAdaptive(clr.Yellow()),
+		BranchHead:          ToAdaptive(clr.BrightCyan()),
+		BranchLocal:         ToAdaptive(clr.BrightGreen()),
+		BranchGrouping:      ToAdaptive(clr.Yellow()),
+		BranchRemote:        ToAdaptive(clr.BrightRed()),
+		Colon:               clr.Fg(),
+		AuthorAngledBracket: clr.Fg(),
+		AuthorText:          clr.Fg(),
+		AuthorValue:         clr.Fg(),
+		DateText:            clr.Fg(),
+		DateValue:           clr.Fg(),
 	}
 }
 
 //nolint:revive
-func (t *Theme) Message() message {
+func (c *Colour) Message() message {
+	clr := c.registry
+
 	return message{
-		Summary: t.Registry.Fg(),
-		Body:    t.Registry.Fg(),
-		Footer:  t.Registry.Fg(),
+		Summary: clr.Fg(),
+		Body:    clr.Fg(),
+		Footer:  clr.Fg(),
 	}
 }
 
 //nolint:revive
-func (t *Theme) Shortcut() shortcut {
+func (c *Colour) Shortcut() shortcut {
+	clr := c.registry
+
 	return shortcut{
-		Key:          ToAdaptive(t.Registry.Cyan()),
-		Label:        ToAdaptive(t.Registry.Green()),
-		Plus:         t.Registry.Fg(),
-		AngleBracket: t.Registry.Fg(),
+		Key:          ToAdaptive(clr.Cyan()),
+		Label:        ToAdaptive(clr.Green()),
+		Plus:         clr.Fg(),
+		AngleBracket: clr.Fg(),
 	}
 }
 
@@ -210,4 +241,11 @@ func ToComplementary(hexClr string) string {
 	compClr := gamut.Complementary(clr)
 
 	return gamut.ToHex(compClr)
+}
+
+//nolint:ireturn
+func Update() tea.Msg {
+	var msg Msg
+
+	return msg
 }

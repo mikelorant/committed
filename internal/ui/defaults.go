@@ -3,7 +3,7 @@ package ui
 import (
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/config"
-	"github.com/mikelorant/committed/internal/ui/theme"
+	"github.com/mikelorant/committed/internal/theme"
 )
 
 func (m *Model) defaults(cfg config.Config) {
@@ -36,7 +36,7 @@ func (m *Model) defaultSignoff(signoff bool) {
 
 func (m *Model) defaultTheme(th string, clr config.Colour) {
 	t := theme.New(clr)
-	t.SetTint(th)
+	t.Set(th)
 
 	m.state.Theme = t
 }

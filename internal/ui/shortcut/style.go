@@ -2,7 +2,8 @@ package shortcut
 
 import (
 	"github.com/charmbracelet/lipgloss"
-	"github.com/mikelorant/committed/internal/ui/theme"
+	"github.com/mikelorant/committed/internal/theme"
+	"github.com/mikelorant/committed/internal/ui/colour"
 )
 
 type Styles struct {
@@ -18,7 +19,7 @@ type Styles struct {
 func defaultStyles(th theme.Theme) Styles {
 	var s Styles
 
-	colour := th.Shortcut()
+	clr := colour.New(th).Shortcut()
 
 	s.boundary = lipgloss.NewStyle().
 		MarginBottom(1)
@@ -30,17 +31,17 @@ func defaultStyles(th theme.Theme) Styles {
 		MarginRight(1)
 
 	s.key = lipgloss.NewStyle().
-		Foreground(colour.Key)
+		Foreground(clr.Key)
 
 	s.label = lipgloss.NewStyle().
-		Foreground(colour.Label)
+		Foreground(clr.Label)
 
 	s.modifierPlus = lipgloss.NewStyle().
-		Foreground(colour.Plus).
+		Foreground(clr.Plus).
 		SetString("+")
 
 	s.angleBracket = lipgloss.NewStyle().
-		Foreground(colour.AngleBracket)
+		Foreground(clr.AngleBracket)
 
 	return s
 }

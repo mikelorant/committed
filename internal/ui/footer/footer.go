@@ -7,6 +7,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/repository"
+	"github.com/mikelorant/committed/internal/ui/colour"
 )
 
 type Model struct {
@@ -39,7 +40,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	colour := m.state.Theme.Footer()
+	clr := colour.New(m.state.Theme).Footer()
 
 	return lipgloss.NewStyle().
 		Width(74).
@@ -49,7 +50,7 @@ func (m Model) View() string {
 		Align(lipgloss.Left, lipgloss.Center).
 		Border(lipgloss.HiddenBorder(), false, true).
 		Padding(0, 1, 0, 1).
-		Foreground(colour.View).
+		Foreground(clr.View).
 		Render(m.signoff())
 }
 

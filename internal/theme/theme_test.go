@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/mikelorant/committed/internal/config"
-	"github.com/mikelorant/committed/internal/ui/theme"
+	"github.com/mikelorant/committed/internal/theme"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -64,8 +64,8 @@ func TestNew(t *testing.T) {
 			th := theme.New(tt.colour)
 
 			var ids []string
-			for i := 0; i < len(th.ListTints()); i++ {
-				ids = append(ids, th.ListTints()[i])
+			for i := 0; i < len(th.List()); i++ {
+				ids = append(ids, th.List()[i])
 			}
 
 			assert.Equal(t, tt.ids, ids)
@@ -73,7 +73,7 @@ func TestNew(t *testing.T) {
 	}
 }
 
-func TestNextTint(t *testing.T) {
+func TestNext(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -121,15 +121,15 @@ func TestNextTint(t *testing.T) {
 			th := theme.New(config.ColourAdaptive)
 
 			for i := 0; i < tt.count; i++ {
-				th.NextTint()
+				th.Next()
 			}
 
-			assert.Equal(t, tt.id, th.GetTint())
+			assert.Equal(t, tt.id, th.ID)
 		})
 	}
 }
 
-func TestListTints(t *testing.T) {
+func TestList(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -158,49 +158,13 @@ func TestListTints(t *testing.T) {
 
 			th := theme.New(config.ColourAdaptive)
 
-			got := th.ListTints()
+			got := th.List()
 			assert.Equal(t, tt.want, got)
 		})
 	}
 }
 
-func TestGetTint(t *testing.T) {
-	t.Parallel()
-
-	tests := []struct {
-		name string
-		id   string
-		want string
-	}{
-		{
-			name: "valid",
-			id:   "builtin_dark",
-			want: "builtin_dark",
-		},
-		{
-			name: "invalid",
-			id:   "invalid",
-			want: "builtin_dark",
-		},
-	}
-
-	for _, tt := range tests {
-		tt := tt
-
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-
-			th := theme.New(config.ColourAdaptive)
-
-			_ = th.SetTint(tt.id)
-			got := th.GetTint()
-
-			assert.Equal(t, tt.want, got)
-		})
-	}
-}
-
-func TestSetTint(t *testing.T) {
+func TestSet(t *testing.T) {
 	t.Parallel()
 
 	type want struct {
@@ -238,17 +202,15 @@ func TestSetTint(t *testing.T) {
 
 			th := theme.New(config.ColourAdaptive)
 
-			ok := th.SetTint(tt.id)
+			ok := th.Set(tt.id)
 			if !tt.want.ok {
 				assert.False(t, ok)
-				got := th.GetTint()
-				assert.Equal(t, tt.want.id, got)
+				assert.Equal(t, tt.want.id, th.ID)
 				return
 			}
 			assert.True(t, ok)
 
-			got := th.GetTint()
-			assert.Equal(t, tt.want.id, got)
+			assert.Equal(t, tt.want.id, th.ID)
 		})
 	}
 }
