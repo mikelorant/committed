@@ -1,8 +1,10 @@
 package commit
 
 import (
+	"errors"
 	"fmt"
 	"io"
+	"os/exec"
 
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
@@ -141,7 +143,17 @@ func (c *Commit) Apply(req *Request) error {
 	}
 
 	if err := c.Repoer.Apply(com); err != nil {
-		return fmt.Errorf("unable to apply commit: %w", err)
+		var exitErr *exec.ExitError
+
+		if !errors.As(err, &exitErr) {
+			return fmt.Errorf("unable to apply commit: %w", err)
+		}
+
+		snap.Restore = true
+
+		if err := setSnapshot(c.Creator, c.Snapshotter, c.Options.SnapshotFile, snap); err != nil {
+			return fmt.Errorf("unable to set snapshot: %w", err)
+		}
 	}
 
 	return nil

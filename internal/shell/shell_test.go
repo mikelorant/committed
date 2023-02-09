@@ -102,6 +102,15 @@ func TestRun(t *testing.T) {
 				err: "unable to copy commit output: /dev/pmtx: error",
 			},
 		},
+		{
+			name: "error_non_zero_exit",
+			args: args{
+				command: "false",
+			},
+			want: want{
+				err: "non-zero exit code returned",
+			},
+		},
 	}
 
 	for _, tt := range tests {

@@ -142,6 +142,13 @@ func (m *Model) Configure(state *commit.State) {
 	}
 
 	m.restoreModel(m.currentSave)
+
+	if m.state.Snapshot.Restore {
+		if m.setSave() {
+			m.models.header.CursorStartSummary()
+			m.models.body.CursorStart()
+		}
+	}
 }
 
 func (m Model) Start() (*commit.Request, error) {

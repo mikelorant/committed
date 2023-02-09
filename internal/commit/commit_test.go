@@ -3,6 +3,7 @@ package commit_test
 import (
 	"errors"
 	"io"
+	"os/exec"
 	"strings"
 	"testing"
 
@@ -111,7 +112,10 @@ func MockCreate(err error) func(file string) (io.WriteCloser, error) {
 	}
 }
 
-var errMock = errors.New("error")
+var (
+	errMock     = errors.New("error")
+	errMockExit *exec.ExitError
+)
 
 func TestConfigure(t *testing.T) {
 	t.Parallel()
@@ -512,7 +516,7 @@ func TestApply(t *testing.T) {
 				req: &commit.Request{
 					Emoji:   ":art:",
 					Summary: "summary",
-					Body:    "body",
+					RawBody: "body",
 					Footer:  "Signed-off-by: John Doe <john.doe@example.com>",
 					Author: repository.User{
 						Name:  "John Doe",
@@ -537,6 +541,33 @@ func TestApply(t *testing.T) {
 			name: "snapshot_save_error",
 			args: args{
 				req:         &commit.Request{},
+				snapSaveErr: errMock,
+			},
+			want: want{
+				err: "unable to set snapshot: unable to save snapshot: error",
+			},
+		},
+		{
+			name: "snapshot_exit_error",
+			args: args{
+				req: &commit.Request{
+					Apply: true,
+				},
+				applyErr: errMockExit,
+			},
+			want: want{
+				snapshot: snapshot.Snapshot{
+					Restore: true,
+				},
+			},
+		},
+		{
+			name: "snapshot_exit_save_error",
+			args: args{
+				req: &commit.Request{
+					Apply: true,
+				},
+				applyErr:    errMockExit,
 				snapSaveErr: errMock,
 			},
 			want: want{
@@ -578,6 +609,7 @@ func TestApply(t *testing.T) {
 			}
 			assert.Nil(t, err)
 			assert.Equal(t, tt.want.cfg, repo.com)
+			assert.Equal(t, tt.want.snapshot, snap.snap)
 		})
 	}
 }

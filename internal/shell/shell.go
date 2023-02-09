@@ -36,5 +36,15 @@ func Run(w io.Writer, command string, args []string) error {
 		}
 	}
 
+	if err := cmd.Wait(); err != nil {
+		var exitErr *exec.ExitError
+
+		if errors.As(err, &exitErr) {
+			return fmt.Errorf("non-zero exit code returned: %w", err)
+		}
+
+		return fmt.Errorf("unable to exec command: %w", err)
+	}
+
 	return nil
 }

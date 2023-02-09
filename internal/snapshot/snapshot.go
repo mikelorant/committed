@@ -16,6 +16,7 @@ type Snapshot struct {
 	Footer  string          `yaml:"footer,omitempty"`
 	Author  repository.User `yaml:"author,omitempty"`
 	Amend   bool            `yaml:"amend,omitempty"`
+	Restore bool            `yaml:"restore,omitempty"`
 }
 
 var (

@@ -12,6 +12,7 @@ import (
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
+	"github.com/mikelorant/committed/internal/snapshot"
 	"github.com/mikelorant/committed/internal/theme"
 	"github.com/mikelorant/committed/internal/ui"
 	"github.com/mikelorant/committed/internal/ui/uitest"
@@ -727,6 +728,39 @@ func TestModel(t *testing.T) {
 					m, _ = ToModel(m.Update(nil))
 					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}, Alt: true}))
 					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}, Alt: true}))
+
+					return m
+				},
+			},
+		},
+		{
+			name: "snapshot_restore_previous_commit_success",
+			args: args{
+				state: func(s *commit.State) {
+					s.Snapshot = snapshot.Snapshot{
+						Summary: "summary",
+						Body:    "body",
+					}
+				},
+				model: func(m ui.Model) ui.Model {
+					m, _ = ToModel(m.Update(nil))
+
+					return m
+				},
+			},
+		},
+		{
+			name: "snapshot_restore_previous_commit_fail",
+			args: args{
+				state: func(s *commit.State) {
+					s.Snapshot = snapshot.Snapshot{
+						Summary: "summary",
+						Body:    "body",
+						Restore: true,
+					}
+				},
+				model: func(m ui.Model) ui.Model {
+					m, _ = ToModel(m.Update(nil))
 
 					return m
 				},
