@@ -1,6 +1,9 @@
 package config_test
 
 import (
+	"bytes"
+	"errors"
+	"io"
 	"strings"
 	"testing"
 
@@ -11,7 +14,30 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func TestConfig(t *testing.T) {
+type badBuffer struct {
+	buf bytes.Buffer
+	err error
+}
+
+func (b *badBuffer) Write(p []byte) (int, error) {
+	if b.err != nil {
+		return 0, b.err
+	}
+
+	return b.buf.Write(p)
+}
+
+func (b *badBuffer) Read(p []byte) (int, error) {
+	return b.buf.Read(p)
+}
+
+func (b *badBuffer) Close() error {
+	return nil
+}
+
+var errMock = errors.New("error")
+
+func TestLoad(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -412,6 +438,204 @@ func TestConfig(t *testing.T) {
 			assert.Nil(t, err)
 
 			assert.Equal(t, tt.config, cfg)
+		})
+	}
+}
+
+func TestSave(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name   string
+		config func(*config.Config)
+		data   string
+		err    error
+	}{
+		{
+			name: "empty",
+			data: "{}",
+		},
+		{
+			name:   "view_focus_unset",
+			config: func(c *config.Config) { c.View.Focus = config.FocusUnset },
+			data:   "{}",
+		},
+		{
+			name:   "view_focus_author",
+			config: func(c *config.Config) { c.View.Focus = config.FocusAuthor },
+			data:   "view: {focus: author}",
+		},
+		{
+			name:   "view_focus_emoji",
+			config: func(c *config.Config) { c.View.Focus = config.FocusEmoji },
+			data:   "view: {focus: emoji}",
+		},
+		{
+			name:   "view_focus_summary",
+			config: func(c *config.Config) { c.View.Focus = config.FocusSummary },
+			data:   "view: {focus: summary}",
+		},
+		{
+			name:   "view_compatibility_unset",
+			config: func(c *config.Config) { c.View.Compatibility = config.CompatibilityUnset },
+			data:   "{}",
+		},
+		{
+			name:   "view_compatibility_default",
+			config: func(c *config.Config) { c.View.Compatibility = config.CompatibilityDefault },
+			data:   "view: {compatibility: default}",
+		},
+		{
+			name:   "view_compatibility_ttyd",
+			config: func(c *config.Config) { c.View.Compatibility = config.CompatibilityTtyd },
+			data:   "view: {compatibility: ttyd}",
+		},
+		{
+			name:   "view_compatibility_kitty",
+			config: func(c *config.Config) { c.View.Compatibility = config.CompatibilityKitty },
+			data:   "view: {compatibility: kitty}",
+		},
+		{
+			name:   "view_colour_unset",
+			config: func(c *config.Config) { c.View.Colour = config.ColourUnset },
+			data:   "{}",
+		},
+		{
+			name:   "view_colour_adaptive",
+			config: func(c *config.Config) { c.View.Colour = config.ColourAdaptive },
+			data:   "view: {colour: adaptive}",
+		},
+		{
+			name:   "view_colour_dark",
+			config: func(c *config.Config) { c.View.Colour = config.ColourDark },
+			data:   "view: {colour: dark}",
+		},
+		{
+			name:   "view_colour_light",
+			config: func(c *config.Config) { c.View.Colour = config.ColourLight },
+			data:   "view: {colour: light}",
+		},
+		{
+			name:   "view_emojiset_unset",
+			config: func(c *config.Config) { c.View.EmojiSet = config.EmojiSetUnset },
+			data:   "{}",
+		},
+		{
+			name:   "view_emojiSet_gitmoji",
+			config: func(c *config.Config) { c.View.EmojiSet = config.EmojiSetGitmoji },
+			data:   "view: {emojiSet: gitmoji}",
+		},
+		{
+			name:   "view_emojiset_devmoji",
+			config: func(c *config.Config) { c.View.EmojiSet = config.EmojiSetDevmoji },
+			data:   "view: {emojiSet: devmoji}",
+		},
+		{
+			name:   "view_emojiset_emojilog",
+			config: func(c *config.Config) { c.View.EmojiSet = config.EmojiSetEmojiLog },
+			data:   "view: {emojiSet: emojilog}",
+		},
+		{
+			name:   "view_emojiselector_unset",
+			config: func(c *config.Config) { c.View.EmojiSelector = config.EmojiSelectorUnset },
+			data:   "{}",
+		},
+		{
+			name:   "view_emojiselector_below",
+			config: func(c *config.Config) { c.View.EmojiSelector = config.EmojiSelectorBelow },
+			data:   "view: {emojiSelector: below}",
+		},
+		{
+			name:   "view_emojiselector_above",
+			config: func(c *config.Config) { c.View.EmojiSelector = config.EmojiSelectorAbove },
+			data:   "view: {emojiSelector: above}",
+		},
+		{
+			name:   "view_emojitype_unset",
+			config: func(c *config.Config) { c.Commit.EmojiType = config.EmojiTypeUnset },
+			data:   "{}",
+		},
+		{
+			name:   "view_emojitype_below",
+			config: func(c *config.Config) { c.Commit.EmojiType = config.EmojiTypeShortcode },
+			data:   "commit: {emojiType: shortcode}",
+		},
+		{
+			name:   "view_emojitype_above",
+			config: func(c *config.Config) { c.Commit.EmojiType = config.EmojiTypeCharacter },
+			data:   "commit: {emojiType: character}",
+		},
+		{
+			name: "authors_one",
+			config: func(c *config.Config) {
+				c.Authors = []repository.User{
+					{Name: "John Doe", Email: "john.doe@example.com"},
+				}
+			},
+			data: "authors: [{name: John Doe, email: john.doe@example.com}]",
+		},
+		{
+			name: "authors_multiple",
+			config: func(c *config.Config) {
+				c.Authors = []repository.User{
+					{Name: "John Doe", Email: "john.doe@example.com"},
+					{Name: "John Doe", Email: "jdoe@example.org"},
+				}
+			},
+			data: "authors: [{name: John Doe, email: john.doe@example.com}, {name: John Doe, email: jdoe@example.org}]",
+		},
+		{
+			name:   "theme_empty",
+			config: func(c *config.Config) { c.View.Theme = "" },
+			data:   "{}",
+		},
+		{
+			name:   "theme_test",
+			config: func(c *config.Config) { c.View.Theme = "test" },
+			data:   "view: {theme: test}",
+		},
+		{
+			name:   "signoff_false",
+			config: func(c *config.Config) { c.Commit.Signoff = false },
+			data:   "{}",
+		},
+		{
+			name:   "signoff_true",
+			config: func(c *config.Config) { c.Commit.Signoff = true },
+			data:   "commit: {signoff: true}",
+		},
+		{
+			name: "error",
+			err:  errMock,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			var cfg config.Config
+
+			if tt.config != nil {
+				tt.config(&cfg)
+			}
+
+			buf := badBuffer{
+				err: tt.err,
+			}
+
+			err := new(config.Config).Save(&buf, cfg)
+			if tt.err != nil {
+				assert.Error(t, err)
+				assert.ErrorContains(t, err, "unable to encode config: yaml: write error: error")
+				return
+			}
+			assert.NoError(t, err)
+
+			data, _ := io.ReadAll(&buf)
+			assert.Equal(t, tt.data, strings.TrimSpace(string(data)))
 		})
 	}
 }
