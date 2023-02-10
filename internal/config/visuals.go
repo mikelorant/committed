@@ -41,13 +41,13 @@ func (f *Focus) UnmarshalYAML(value *yaml.Node) error {
 	return nil
 }
 
-func (f *Focus) MarshalYAML() (interface{}, error) {
+func (f Focus) MarshalYAML() (interface{}, error) {
 	return []string{
 		"",
 		"author",
 		"emoji",
 		"summary",
-	}[*f], nil
+	}[f], nil
 }
 
 func (c *Compatibility) UnmarshalYAML(value *yaml.Node) error {
@@ -56,13 +56,13 @@ func (c *Compatibility) UnmarshalYAML(value *yaml.Node) error {
 	return nil
 }
 
-func (c *Compatibility) MarshalYAML() (interface{}, error) {
+func (c Compatibility) MarshalYAML() (interface{}, error) {
 	return []string{
 		"",
 		"default",
 		"ttyd",
 		"kitty",
-	}[*c], nil
+	}[c], nil
 }
 
 func (c *Colour) UnmarshalYAML(value *yaml.Node) error {
@@ -71,13 +71,13 @@ func (c *Colour) UnmarshalYAML(value *yaml.Node) error {
 	return nil
 }
 
-func (c *Colour) MarshalYAML() (interface{}, error) {
+func (c Colour) MarshalYAML() (interface{}, error) {
 	return []string{
 		"",
 		"adaptive",
 		"dark",
 		"light",
-	}[*c], nil
+	}[c], nil
 }
 
 func ParseFocus(str string) Focus {
