@@ -81,6 +81,7 @@ type info struct {
 	BranchLocal         Colour
 	BranchGrouping      Colour
 	BranchRemote        Colour
+	BranchTag           Colour
 	Colon               Colour
 	AuthorAngledBracket Colour
 	AuthorText          Colour
@@ -327,6 +328,7 @@ func TestInfo(t *testing.T) {
 				BranchLocal:         Colour{Dark: "#55ff55", Light: "#ff55ff"},
 				BranchGrouping:      Colour{Dark: "#bbbb00", Light: "#0000bb"},
 				BranchRemote:        Colour{Dark: "#ff5555", Light: "#55ffff"},
+				BranchTag:           Colour{Dark: "#ffff55", Light: "#5555ff"},
 				Colon:               Colour{Dark: "#bbbbbb"},
 				AuthorAngledBracket: Colour{Dark: "#bbbbbb"},
 				AuthorText:          Colour{Dark: "#bbbbbb"},
@@ -351,6 +353,7 @@ func TestInfo(t *testing.T) {
 			assert.Equal(t, tt.info.BranchLocal, toColour(clr.BranchLocal), "BranchLocal")
 			assert.Equal(t, tt.info.BranchGrouping, toColour(clr.BranchGrouping), "BranchGrouping")
 			assert.Equal(t, tt.info.BranchRemote, toColour(clr.BranchRemote), "BranchRemote")
+			assert.Equal(t, tt.info.BranchTag, toColour(clr.BranchTag), "BranchTag")
 			assert.Equal(t, tt.info.Colon, toColour(clr.Colon), "Colon")
 			assert.Equal(t, tt.info.AuthorAngledBracket, toColour(clr.AuthorAngledBracket), "AuthorAngledBracket")
 			assert.Equal(t, tt.info.AuthorText, toColour(clr.AuthorText), "AuthorText")

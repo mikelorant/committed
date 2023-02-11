@@ -177,7 +177,7 @@ func TestDescribe(t *testing.T) {
 				GlobalConfig: MockGlobalConfig("", "", nil),
 				Remoter:      MockRepositoryRemote{err: tt.args.remoteErr},
 				Header:       MockRepositoryHead{headErr: tt.args.headErr},
-				Brancher:     MockRepositoryBranch{local: tt.args.localBranch, headErr: tt.args.branchErr},
+				Brancher:     &MockRepositoryBranch{local: tt.args.localBranch, headErr: tt.args.branchErr},
 				Worktreer:    MockRepositoryWorktree{fixture: fixtures.Basic().One(), err: tt.args.worktreeErr},
 			}
 

@@ -30,6 +30,7 @@ type Brancher interface {
 	Configer
 	Head() (*plumbing.Reference, error)
 	References() (storer.ReferenceIter, error)
+	TagObject(plumbing.Hash) (*object.Tag, error)
 }
 
 type Worktreer interface {

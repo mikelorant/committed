@@ -75,6 +75,7 @@ type info struct {
 	BranchLocal         lipgloss.TerminalColor
 	BranchGrouping      lipgloss.TerminalColor
 	BranchRemote        lipgloss.TerminalColor
+	BranchTag           lipgloss.TerminalColor
 	Colon               lipgloss.TerminalColor
 	AuthorAngledBracket lipgloss.TerminalColor
 	AuthorText          lipgloss.TerminalColor
@@ -201,6 +202,7 @@ func (c *Colour) Info() info {
 		BranchLocal:         ToAdaptive(clr.BrightGreen()),
 		BranchGrouping:      ToAdaptive(clr.Yellow()),
 		BranchRemote:        ToAdaptive(clr.BrightRed()),
+		BranchTag:           ToAdaptive(clr.BrightYellow()),
 		Colon:               clr.Fg(),
 		AuthorAngledBracket: clr.Fg(),
 		AuthorText:          clr.Fg(),

@@ -22,7 +22,7 @@ type Model struct {
 	Hash          string
 	LocalBranch   string
 	RemoteBranch  string
-	BranchRefs    []string
+	BranchRefs    repository.Refs
 	Remotes       []string
 	Date          string
 	Author        repository.User
@@ -176,33 +176,28 @@ func (m Model) branchRefs() string {
 		return ""
 	}
 
-	h := m.styles.branchHead
-	l := m.styles.branchLocal.Render(m.LocalBranch)
+	head := m.styles.branchHead
+	local := m.styles.branchLocal.Render(m.LocalBranch)
 
-	lp := m.styles.branchGrouping.Render("(")
-	rp := m.styles.branchGrouping.Render(")")
-	c := m.styles.branchGrouping.Render(",")
+	left := m.styles.branchGrouping.Render("(")
+	right := m.styles.branchGrouping.Render(")")
+	comma := m.styles.branchGrouping.Render(", ")
 
-	str := fmt.Sprintf("%s %s", h, l)
+	var refs []string
+	refs = append(refs, fmt.Sprintf("%s %s", head, local))
 
 	if m.RemoteBranch != "" {
-		b := m.styles.branchRemote.Render(m.RemoteBranch)
-
-		str += fmt.Sprintf("%s %s", c, b)
+		remote := m.styles.branchRemote.Render(m.RemoteBranch)
+		refs = append(refs, remote)
 	}
 
-	for _, ref := range m.BranchRefs {
-		if containsPrefixes(ref, m.Remotes) {
-			rc := m.styles.branchRemote.Render(m.RemoteBranch)
-			str += fmt.Sprintf("%s %s", c, rc)
-			continue
-		}
+	refs = append(refs, refsJoiner(m.BranchRefs.Tags, m.styles.branchTag, "tag: ")...)
+	refs = append(refs, refsJoiner(m.BranchRefs.Remotes, m.styles.branchRemote, "")...)
+	refs = append(refs, refsJoiner(m.BranchRefs.Locals, m.styles.branchLocal, "")...)
 
-		rc := m.styles.branchLocal.Render(ref)
-		str += fmt.Sprintf("%s %s", c, rc)
-	}
+	line := strings.Join(refs, comma)
 
-	return fmt.Sprintf("%s%s%s", lp, str, rp)
+	return fmt.Sprintf("%s%s%s", left, line, right)
 }
 
 func (m Model) author() string {
@@ -241,4 +236,14 @@ func containsPrefixes(str string, ps []string) bool {
 func concatSlice[T any](first []T, second []T) []T {
 	n := len(first)
 	return append(first[:n:n], second...)
+}
+
+func refsJoiner(refs []string, style lipgloss.Style, pfx string) []string {
+	fstr := make([]string, len(refs))
+
+	for idx, val := range refs {
+		fstr[idx] = style.Render(fmt.Sprintf("%v%v", pfx, val))
+	}
+
+	return fstr
 }

@@ -23,6 +23,7 @@ type Styles struct {
 	branchLocal    lipgloss.Style
 	branchGrouping lipgloss.Style
 	branchRemote   lipgloss.Style
+	branchTag      lipgloss.Style
 
 	colon lipgloss.Style
 
@@ -69,6 +70,10 @@ func defaultStyles(th theme.Theme) Styles {
 
 	s.branchRemote = lipgloss.NewStyle().
 		Foreground(clr.BranchRemote).
+		Bold(true)
+
+	s.branchTag = lipgloss.NewStyle().
+		Foreground(clr.BranchTag).
 		Bold(true)
 
 	s.colon = lipgloss.NewStyle().

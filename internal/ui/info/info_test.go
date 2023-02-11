@@ -93,7 +93,7 @@ func TestModel(t *testing.T) {
 			name: "remote",
 			args: args{
 				state: func(c *commit.State) {
-					c.Repository.Branch.Remote = "origin/master"
+					c.Repository.Branch.Refs.Remotes = []string{"origin/master"}
 				},
 			},
 		},
@@ -101,7 +101,7 @@ func TestModel(t *testing.T) {
 			name: "tags",
 			args: args{
 				state: func(c *commit.State) {
-					c.Repository.Branch.Refs = []string{"v1.0.0"}
+					c.Repository.Branch.Refs.Tags = []string{"v1.0.0"}
 				},
 			},
 		},

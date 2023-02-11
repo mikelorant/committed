@@ -2,19 +2,31 @@ package repository_test
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
+	"github.com/go-git/go-billy/v5/memfs"
+	fixtures "github.com/go-git/go-git-fixtures/v4"
+	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/plumbing/cache"
+	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/go-git/go-git/v5/plumbing/storer"
+	"github.com/go-git/go-git/v5/storage/filesystem"
 	"github.com/mikelorant/committed/internal/repository"
 	"github.com/stretchr/testify/assert"
 )
 
 type MockRepositoryBranch struct {
-	local     string
-	remote    string
-	refs      []string
+	repo       *git.Repository
+	local      string
+	remote     string
+	localRefs  []string
+	remoteRefs []string
+	tagRefs    []string
+	idx        int
+
 	configErr error
 	headErr   error
 	refsErr   error
@@ -22,9 +34,9 @@ type MockRepositoryBranch struct {
 
 var errMockBranch = errors.New("error")
 
-var mockHash = "1234567890abcdef1234567890abcdef12345678"
+var mockHash = plumbing.NewHash("6ecf0ef2c2dffb796033e5a02219af86ec6584e5")
 
-func (m MockRepositoryBranch) Config() (*config.Config, error) {
+func (m *MockRepositoryBranch) Config() (*config.Config, error) {
 	var cfg config.Config
 
 	if m.configErr != nil {
@@ -46,16 +58,37 @@ func (m MockRepositoryBranch) Config() (*config.Config, error) {
 	return &cfg, nil
 }
 
-func (m MockRepositoryBranch) Head() (*plumbing.Reference, error) {
+func (m *MockRepositoryBranch) Head() (*plumbing.Reference, error) {
 	if m.local == "" {
 		var ref plumbing.Reference
 
 		return &ref, nil
 	}
 
-	hr := plumbing.NewHashReference(plumbing.NewBranchReferenceName(m.local), plumbing.NewHash(mockHash))
+	hr := plumbing.NewHashReference(plumbing.NewBranchReferenceName(m.local), mockHash)
 
 	return hr, m.headErr
+}
+
+func (m *MockRepositoryBranch) TagObject(hash plumbing.Hash) (*object.Tag, error) {
+	var ref *plumbing.Reference
+	var err error
+
+	ref, err = m.repo.CreateTag(m.tagRefs[m.idx], hash, &git.CreateTagOptions{Message: m.tagRefs[m.idx]})
+	if err != nil {
+		ref, err = m.repo.Tag(m.tagRefs[m.idx])
+		if err != nil {
+			return nil, fmt.Errorf("unable to create tag or get existing tag: %w", err)
+		}
+	}
+	m.idx++
+
+	tag, err := m.repo.TagObject(ref.Hash())
+	if err != nil {
+		return nil, err
+	}
+
+	return tag, nil
 }
 
 //nolint:ireturn
@@ -64,10 +97,18 @@ func (m MockRepositoryBranch) References() (storer.ReferenceIter, error) {
 		return nil, m.refsErr
 	}
 
-	rs := make([]*plumbing.Reference, len(m.refs))
-	for i, r := range m.refs {
-		hr := plumbing.NewHashReference(plumbing.NewBranchReferenceName(r), plumbing.NewHash(mockHash))
-		rs[i] = hr
+	var rs []*plumbing.Reference
+
+	for _, r := range m.localRefs {
+		rs = append(rs, plumbing.NewHashReference(plumbing.NewBranchReferenceName(r), mockHash))
+	}
+
+	for _, r := range m.remoteRefs {
+		rs = append(rs, plumbing.NewHashReference(plumbing.NewRemoteReferenceName(r, m.local), mockHash))
+	}
+
+	for _, r := range m.tagRefs {
+		rs = append(rs, plumbing.NewHashReference(plumbing.NewTagReferenceName(r), mockHash))
 	}
 
 	return storer.NewReferenceSliceIter(rs), nil
@@ -77,19 +118,21 @@ func TestBranch(t *testing.T) {
 	t.Parallel()
 
 	type args struct {
-		local     string
-		remote    string
-		refs      []string
-		configErr error
-		headErr   error
-		refsErr   error
+		local      string
+		remote     string
+		localRefs  []string
+		remoteRefs []string
+		tagRefs    []string
+		configErr  error
+		headErr    error
+		refsErr    error
 	}
 
 	type want struct {
 		local  string
 		remote string
-		refs   []string
-		err    error
+		refs   repository.Refs
+		err    string
 	}
 
 	tests := []struct {
@@ -97,39 +140,183 @@ func TestBranch(t *testing.T) {
 		args args
 		want want
 	}{
+		// local
 		{
-			name: "master",
+			name: "local",
+			args: args{
+				local: "master",
+			},
+			want: want{
+				local: "master",
+			},
+		},
+		{
+			name: "no_local",
+			want: want{
+				err: "unable to get local branch: local branch not found",
+			},
+		},
+
+		// remote
+		{
+			name: "remote",
 			args: args{
 				local:  "master",
 				remote: "origin",
-				refs:   []string{"v1.0.0"},
 			},
 			want: want{
 				local:  "master",
 				remote: "origin/master",
-				refs:   []string{"v1.0.0"},
+			},
+		},
+
+		// refs local
+		{
+			name: "local_refs",
+			args: args{
+				local:     "master",
+				localRefs: []string{"test"},
+			},
+			want: want{
+				local: "master",
+				refs: repository.Refs{
+					Locals: []string{"test"},
+				},
 			},
 		},
 		{
-			name: "local_in_refs",
+			name: "local_refs_multiple",
 			args: args{
-				local:  "test",
-				remote: "origin",
-				refs:   []string{"v1.0.0", "test"},
+				local:     "master",
+				localRefs: []string{"test1", "test2"},
 			},
 			want: want{
-				local:  "test",
-				remote: "origin/test",
-				refs:   []string{"v1.0.0"},
+				local: "master",
+				refs: repository.Refs{
+					Locals: []string{"test1", "test2"},
+				},
 			},
 		},
+		{
+			name: "local_refs_duplicate",
+			args: args{
+				local:     "master",
+				localRefs: []string{"master"},
+			},
+			want: want{
+				local: "master",
+			},
+		},
+		{
+			name: "local_refs_multiple_duplicate",
+			args: args{
+				local:     "master",
+				localRefs: []string{"test", "master"},
+			},
+			want: want{
+				local: "master",
+				refs: repository.Refs{
+					Locals: []string{"test"},
+				},
+			},
+		},
+
+		// refs remote
+		{
+			name: "remote_refs",
+			args: args{
+				local:      "master",
+				remote:     "origin",
+				remoteRefs: []string{"test"},
+			},
+			want: want{
+				local:  "master",
+				remote: "origin/master",
+				refs: repository.Refs{
+					Remotes: []string{"test/master"},
+				},
+			},
+		},
+		{
+			name: "remote_refs_multiple",
+			args: args{
+				local:      "master",
+				remote:     "origin",
+				remoteRefs: []string{"test1", "test2"},
+			},
+			want: want{
+				local:  "master",
+				remote: "origin/master",
+				refs: repository.Refs{
+					Remotes: []string{"test1/master", "test2/master"},
+				},
+			},
+		},
+		{
+			name: "remote_refs_duplicate",
+			args: args{
+				local:      "master",
+				remote:     "origin",
+				remoteRefs: []string{"test", "origin"},
+			},
+			want: want{
+				local:  "master",
+				remote: "origin/master",
+				refs: repository.Refs{
+					Remotes: []string{"test/master"},
+				},
+			},
+		},
+
+		// refs tags
+		{
+			name: "tag_refs",
+			args: args{
+				local:   "master",
+				tagRefs: []string{"test"},
+			},
+			want: want{
+				local: "master",
+				refs: repository.Refs{
+					Tags: []string{"test"},
+				},
+			},
+		},
+		{
+			name: "tag_refs_multiple",
+			args: args{
+				local:   "master",
+				tagRefs: []string{"test1", "test2"},
+			},
+			want: want{
+				local: "master",
+				refs: repository.Refs{
+					Tags: []string{"test1", "test2"},
+				},
+			},
+		},
+		{
+			name: "tag_refs_duplicate",
+			args: args{
+				local:   "master",
+				tagRefs: []string{"test1", "test2", "test1"},
+			},
+			want: want{
+				local: "master",
+				refs: repository.Refs{
+					Tags: []string{"test1", "test2", "test1"},
+				},
+			},
+		},
+
+		// error
 		{
 			name: "config_error",
 			args: args{
 				configErr: errMockBranch,
 			},
 			want: want{
-				err: errMockBranch,
+				err: "unable to get repository config: error",
 			},
 		},
 		{
@@ -139,7 +326,7 @@ func TestBranch(t *testing.T) {
 				headErr: errMockBranch,
 			},
 			want: want{
-				err: errMockBranch,
+				err: "unable to get head reference: error",
 			},
 		},
 		{
@@ -147,24 +334,6 @@ func TestBranch(t *testing.T) {
 			args: args{
 				local:   "master",
 				headErr: plumbing.ErrReferenceNotFound,
-			},
-			want: want{
-				err: nil,
-			},
-		},
-		{
-			name: "no_local",
-			want: want{
-				err: repository.ErrLocalBranchNotFound,
-			},
-		},
-		{
-			name: "no_remote",
-			args: args{
-				local: "master",
-			},
-			want: want{
-				local: "master",
 			},
 		},
 		{
@@ -175,7 +344,7 @@ func TestBranch(t *testing.T) {
 			},
 			want: want{
 				local: "master",
-				err:   errMockBranch,
+				err:   "unable to get head references: unable to get references: error",
 			},
 		},
 	}
@@ -186,20 +355,29 @@ func TestBranch(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
+			dotgit := fixtures.Basic().One().DotGit()
+			st := filesystem.NewStorage(dotgit, cache.NewObjectLRUDefault())
+			wt := memfs.New()
+			repo, _ := git.Open(st, wt)
+
 			var r repository.Repository
 
-			r.Brancher = MockRepositoryBranch{
-				local:     tt.args.local,
-				remote:    tt.args.remote,
-				refs:      tt.args.refs,
-				configErr: tt.args.configErr,
-				headErr:   tt.args.headErr,
-				refsErr:   tt.args.refsErr,
+			r.Brancher = &MockRepositoryBranch{
+				repo:       repo,
+				local:      tt.args.local,
+				remote:     tt.args.remote,
+				localRefs:  tt.args.localRefs,
+				remoteRefs: tt.args.remoteRefs,
+				tagRefs:    tt.args.tagRefs,
+				configErr:  tt.args.configErr,
+				headErr:    tt.args.headErr,
+				refsErr:    tt.args.refsErr,
 			}
 
 			branch, err := r.Branch()
-			if tt.want.err != nil {
-				assert.ErrorContains(t, err, tt.want.err.Error())
+			if tt.want.err != "" {
+				assert.Error(t, err)
+				assert.ErrorContains(t, err, tt.want.err)
 				return
 			}
 			assert.NoError(t, err)

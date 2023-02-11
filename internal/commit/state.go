@@ -40,7 +40,7 @@ var PlaceholderMessage string
 var PlaceholderHelp string
 
 const (
-	PlaceholderHash    string = "1234567890abcdef1234567890abcdef1234567890"
+	PlaceholderHash    string = "1234567890abcdef1234567890abcdef12345678"
 	PlaceholderSummary string = "Capitalized, short (50 chars or less) summary"
 )
 
