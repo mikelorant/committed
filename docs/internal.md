@@ -1,10 +1,15 @@
+# Internal
+
 ## Architecture
 
-The application uses the Bubbletea UI framework and is composed of nested
-models. Simple boxes are combined with `textinput` and `textarea` models to
-build the interface.
+Committed uses the Bubbletea UI framework and is composed of nested models.
+Simple boxes are combined with `textinput` and `textarea` models to build the
+interface.
 
-```
+Help and the commit message replace the model that surrounds the emoji, summary,
+body and footer models.
+
+```text
 ┌───────────────────────Model───────────────────────┐
 │                                                   │
 │ ┌─────────────────────Model─────────────────────┐ │
@@ -62,13 +67,13 @@ build the interface.
 The main view when entering either the summary or body.
 
 ```text
-commit 1234567890abcdef1234567890abcdef1234567890
+commit 1234567890abcdef1234567890abcdef12345678 (HEAD -> main, origin/main)
 Author: John Doe <john.doe@example.com>
 Date:   Mon Jan 2 15:04:05 2006 -0700
 
-    ┌───┐ ┌──────────────────────────────────────────────────────────────┐
-    │ X │ │ Capitalized, short (50 chars or less) summary                │ 47/50
-    └───┘ └──────────────────────────────────────────────────────────────┘
+    ┌───┐ ┌──────────────────────────────────────────────────────┐
+    │ X │ │ Capitalized, short (50 chars or less) summary        │  0/50   ● New
+    └───┘ └──────────────────────────────────────────────────────┘
 
     ┌──────────────────────────────────────────────────────────────────────────┐
     │ More detailed explanatory text, if necessary.  Wrap it to about 72       │
@@ -94,8 +99,8 @@ Date:   Mon Jan 2 15:04:05 2006 -0700
 
       Signed-off-by: John Doe <john.doe@example.com>
 
- Alt + <enter> Commit <s> Sign-off </> Help                Summary <tab>
-Ctrl +     <c> Cancel                                       Author <tab> + Shift
+ Alt + <enter> Commit <a> Amend <l> Load <s> Sign-off         Body <tab>
+Ctrl +     <c> Cancel <h> Help                               Emoji <tab> + Shift
 ```
 
 ### Emoji
@@ -104,13 +109,13 @@ The emoji view reduces the position and lines of the body section to make space
 for a selector to appear. Filtering is available to narrow the choices down.
 
 ```text
-commit 1234567890abcdef1234567890abcdef1234567890
+commit 1234567890abcdef1234567890abcdef12345678 (HEAD -> main, origin/main)
 Author: John Doe <john.doe@example.com>
 Date:   Mon Jan 2 15:04:05 2006 -0700
 
-    ┌───┐ ┌──────────────────────────────────────────────────────────────┐
-    │ X │ │ Capitalized, short (50 chars or less) summary                │ 47/50
-    └───┘ └──────────────────────────────────────────────────────────────┘
+    ┌───┐ ┌──────────────────────────────────────────────────────┐
+    │ X │ │ Capitalized, short (50 chars or less) summary        │  0/50   ● New
+    └───┘ └──────────────────────────────────────────────────────┘
 
     ┌──────────────────────────────────────────────────────────────────────────┐
     │? Choose an emoji: █                                                      │
@@ -136,8 +141,8 @@ Date:   Mon Jan 2 15:04:05 2006 -0700
 
       Signed-off-by: John Doe <john.doe@example.com>
 
- Alt + <enter> Commit <s> Sign-off </> Help                Summary <tab>
-Ctrl +     <c> Cancel                                       Author <tab> + Shift
+ Alt + <enter> Commit <a> Amend <l> Load <s> Sign-off      Summary <tab>
+Ctrl +     <c> Cancel <h> Help                              Author <tab> + Shift
 ```
 
 ### Author
@@ -146,7 +151,7 @@ The author view moves the subject line down and reduces the height of the body
 section. This provides space for a selector to choose the commit author.
 
 ```text
-commit 1234567890abcdef1234567890abcdef1234567890
+commit 1234567890abcdef1234567890abcdef12345678 (HEAD -> main, origin/main)
 Author: John Doe <john.doe@example.com>
 Date:   Mon Jan 2 15:04:05 2006 -0700
 
@@ -157,9 +162,9 @@ Date:   Mon Jan 2 15:04:05 2006 -0700
     │                                                                          │
     └──────────────────────────────────────────────────────────────────────────┘
 
-    ┌───┐ ┌──────────────────────────────────────────────────────────────┐
-    │ X │ │ Capitalized, short (50 chars or less) summary                │ 47/50
-    └───┘ └──────────────────────────────────────────────────────────────┘
+    ┌───┐ ┌──────────────────────────────────────────────────────┐
+    │ X │ │ Capitalized, short (50 chars or less) summary        │  0/50   ● New
+    └───┘ └──────────────────────────────────────────────────────┘
 
     ┌──────────────────────────────────────────────────────────────────────────┐
     │ More detailed explanatory text, if necessary.  Wrap it to about 72       │
@@ -178,8 +183,8 @@ Date:   Mon Jan 2 15:04:05 2006 -0700
 
       Signed-off-by: John Doe <john.doe@example.com>
 
- Alt + <enter> Commit <s> Sign-off </> Help                  Emoji <tab>
-Ctrl +     <c> Cancel                                                    + Shift
+ Alt + <enter> Commit <a> Amend <l> Load <s> Sign-off        Emoji <tab>
+Ctrl +     <c> Cancel <h> Help
 ```
 
 ### Commit
@@ -188,7 +193,7 @@ Accepting the commit shows the output that will closely match the `git log`
 command.
 
 ```text
-commit 1234567890abcdef1234567890abcdef1234567890
+commit 1234567890abcdef1234567890abcdef12345678 (HEAD -> main, origin/main)
 Author: John Doe <john.doe@example.com>
 Date:   Mon Jan 2 15:04:05 2006 -0700
 
@@ -219,18 +224,3 @@ Date:   Mon Jan 2 15:04:05 2006 -0700
 [master 1234567] Capitalized, short (50 chars or less) summary
  3 files changed, 2 insertions(+), 1 deletions(-)
 ```
-
-## Git Commands
-
-The following commands are used as reference to extract from Git specific fields
-for the interface.
-
-| Field                    | Method                                                       |
-| :----------------------- | :----------------------------------------------------------- |
-| commit hash              | indeterminable                                               |
-| current branch           | `git rev-parse --abbrev-ref HEAD`                            |
-| tip of branch            | `git log -1` = `git log HEAD -1`                             |
-| upstream tracking branch | `git rev-parse --abbrev-ref ${branch}@{upstream}`            |
-| user name                | `git config user.name`<br />`git config --global user.name`  |
-| user email               | `git config user.email`<br />`git config --global user.email` |
-
