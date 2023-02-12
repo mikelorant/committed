@@ -451,7 +451,7 @@ func (m Model) commit(q quit) Model {
 }
 
 func (m Model) validate() bool {
-	return m.state.Repository.Worktree.IsStaged() && m.models.header.Summary() != ""
+	return (m.state.Repository.Worktree.IsStaged() || m.amend) && m.models.header.Summary() != ""
 }
 
 func (m *Model) restoreModel(save savedState) {
