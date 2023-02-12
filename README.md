@@ -110,15 +110,16 @@ with terminals. The following list are the terminals that have been tested.
 Other terminals may display correctly and feedback would be appreciated to help
 update the list.
 
-| Terminal       | Status                  |
-| :------------- | :---------------------- |
-| macOS Terminal | Compatible              |
-| iTerm2         | Compatible              |
-| VS Code        | Compatible              |
-| Hyper          | Compatible              |
-| Alacritty      | Compatible              |
-| WezTerm        | Compatible              |
-| Kitty          | Border alignment issues |
+| Terminal       | Status | Notes                              |
+| :------------- | :----- | :--------------------------------- |
+| macOS Terminal | ✅      |                                    |
+| iTerm2         | ✅      |                                    |
+| VS Code        | ✅      |                                    |
+| Hyper          | ✅      |                                    |
+| Alacritty      | ✅      |                                    |
+| WezTerm        | ✅      |                                    |
+| ttyd           | ✅      | Requires compatibility option set. |
+| kitty          | ✅      | Requires compatibility option set. |
 
 ## 💾 Installation [⭡](#committed)
 

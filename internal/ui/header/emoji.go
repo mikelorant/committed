@@ -25,6 +25,10 @@ func (i listItem) Title() string {
 	switch i.compatibility {
 	case config.CompatibilityTtyd:
 		space = " "
+	case config.CompatibilityKitty:
+		if runewidth.StringWidth(i.emoji.Character) == 1 && !i.emoji.Variant {
+			space = " "
+		}
 	default:
 		if runewidth.StringWidth(i.emoji.Character) == 1 {
 			space = " "

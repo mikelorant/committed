@@ -149,6 +149,15 @@ func (m *Model) Configure(state *commit.State) {
 			m.models.body.CursorStart()
 		}
 	}
+
+	switch m.state.Config.View.Compatibility {
+	case config.CompatibilityTtyd:
+		os.Setenv("LIPGLOSS_TERMINAL", "ttyd")
+	case config.CompatibilityKitty:
+		os.Setenv("LIPGLOSS_TERMINAL", "kitty")
+	default:
+
+	}
 }
 
 func (m Model) Start() (*commit.Request, error) {

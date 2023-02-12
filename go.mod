@@ -30,7 +30,7 @@ require (
 
 replace (
 	github.com/charmbracelet/bubbles => github.com/mikelorant/bubbles v0.0.0-20221206230145-c5687de7af43
-	github.com/charmbracelet/lipgloss => github.com/mikelorant/lipgloss v0.0.0-20221230031354-3413d8aef598
+	github.com/charmbracelet/lipgloss => github.com/mikelorant/lipgloss v0.0.0-20230212060525-24ffefde7d62
 	github.com/muesli/reflow => github.com/mikelorant/reflow v0.0.0-20230112022445-408368584af4
 )
 
