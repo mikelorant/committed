@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/go-git/go-billy/v5/memfs"
 	fixtures "github.com/go-git/go-git-fixtures/v4"
@@ -74,7 +75,14 @@ func (m *MockRepositoryBranch) TagObject(hash plumbing.Hash) (*object.Tag, error
 	var ref *plumbing.Reference
 	var err error
 
-	ref, err = m.repo.CreateTag(m.tagRefs[m.idx], hash, &git.CreateTagOptions{Message: m.tagRefs[m.idx]})
+	ref, err = m.repo.CreateTag(m.tagRefs[m.idx], hash, &git.CreateTagOptions{
+		Tagger: &object.Signature{
+			Name:  "John Doe",
+			Email: "john.doe@example.com",
+			When:  time.Now(),
+		},
+		Message: m.tagRefs[m.idx],
+	})
 	if err != nil {
 		ref, err = m.repo.Tag(m.tagRefs[m.idx])
 		if err != nil {
