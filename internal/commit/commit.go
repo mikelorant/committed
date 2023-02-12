@@ -35,6 +35,7 @@ type Repoer interface {
 	Open() error
 	Describe() (repository.Description, error)
 	Apply(repository.Commit) error
+	IgnoreGlobalConfig()
 }
 
 type Configer interface {
@@ -80,14 +81,18 @@ func New() Commit {
 func (c *Commit) Configure(opts Options) (*State, error) {
 	c.Options = opts
 
-	repo, err := getRepo(c.Repoer)
-	if err != nil {
-		return nil, fmt.Errorf("unable to get repository: %w", err)
-	}
-
 	cfg, err := getConfig(c.Opener, c.Configer, opts.ConfigFile)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get config: %w", err)
+	}
+
+	if cfg.View.IgnoreGlobalAuthor {
+		c.Repoer.IgnoreGlobalConfig()
+	}
+
+	repo, err := getRepo(c.Repoer)
+	if err != nil {
+		return nil, fmt.Errorf("unable to get repository: %w", err)
 	}
 
 	if !FileExists(opts.ConfigFile) {

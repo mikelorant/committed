@@ -34,6 +34,12 @@ func (r *Repository) Users() ([]User, error) {
 	return users, nil
 }
 
+func (r *Repository) IgnoreGlobalConfig() {
+	r.GlobalConfig = func(config.Scope) (*config.Config, error) {
+		return &config.Config{}, nil
+	}
+}
+
 func user(c *config.Config) User {
 	return User{
 		Name:  c.User.Name,

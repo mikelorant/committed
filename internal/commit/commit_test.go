@@ -17,7 +17,8 @@ import (
 )
 
 type MockRepository struct {
-	com repository.Commit
+	com    repository.Commit
+	ignore bool
 
 	openErr  error
 	descErr  error
@@ -40,6 +41,10 @@ func (r *MockRepository) Apply(c repository.Commit) error {
 	}
 
 	return nil
+}
+
+func (r *MockRepository) IgnoreGlobalConfig() {
+	r.ignore = true
 }
 
 type MockConfig struct {
@@ -135,9 +140,10 @@ func TestConfigure(t *testing.T) {
 	}
 
 	type want struct {
-		state commit.State
-		cfg   config.Config
-		err   string
+		state  commit.State
+		cfg    config.Config
+		ignore bool
+		err    string
 	}
 
 	tests := []struct {
@@ -270,6 +276,32 @@ func TestConfigure(t *testing.T) {
 					Options: commit.Options{
 						SnapshotFile: "test",
 					},
+				},
+			},
+		},
+		{
+			name: "ignore_global_config",
+			args: args{
+				cfg: config.Config{
+					View: config.View{
+						IgnoreGlobalAuthor: true,
+					},
+				},
+			},
+			want: want{
+				cfg: config.Config{
+					View: config.View{
+						IgnoreGlobalAuthor: true,
+					},
+				},
+				state: commit.State{
+					Config: config.Config{
+						View: config.View{
+							IgnoreGlobalAuthor: true,
+						},
+					},
+					Placeholders: testPlaceholders(),
+					Emojis:       &emoji.Set{},
 				},
 			},
 		},

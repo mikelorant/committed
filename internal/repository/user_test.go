@@ -48,6 +48,7 @@ func TestUser(t *testing.T) {
 	type args struct {
 		repositoryUser userSet
 		globalUser     userSet
+		ignoreGlobal   bool
 	}
 
 	type want struct {
@@ -141,6 +142,39 @@ func TestUser(t *testing.T) {
 			},
 		},
 		{
+			name: "both_repository_global_ignore",
+			args: args{
+				repositoryUser: userSet{
+					user: repository.User{Name: "John Doe", Email: "john.doe@example.com"},
+					err:  nil,
+				},
+				globalUser: userSet{
+					user: repository.User{Name: "Jim Bob", Email: "jim.bob@example.org"},
+					err:  nil,
+				},
+				ignoreGlobal: true,
+			},
+			want: want{
+				users: []repository.User{
+					{Name: "John Doe", Email: "john.doe@example.com"},
+				},
+				err: nil,
+			},
+		},
+		{
+			name: "global_ignore",
+			args: args{
+				globalUser: userSet{
+					user: repository.User{Name: "Jim Bob", Email: "jim.bob@example.org"},
+					err:  nil,
+				},
+				ignoreGlobal: true,
+			},
+			want: want{
+				err: nil,
+			},
+		},
+		{
 			name: "repository_error",
 			args: args{
 				repositoryUser: userSet{
@@ -180,6 +214,10 @@ func TestUser(t *testing.T) {
 
 			r.GlobalConfig = MockGlobalConfig(tt.args.globalUser.user.Name, tt.args.globalUser.user.Email, tt.args.globalUser.err)
 
+			if tt.args.ignoreGlobal {
+				r.IgnoreGlobalConfig()
+			}
+
 			users, err := r.Users()
 			if tt.want.err != nil {
 				assert.ErrorContains(t, err, tt.want.err.Error())
@@ -195,6 +233,35 @@ func TestUser(t *testing.T) {
 				assert.Equal(t, tt.want.users[i].Name, users[i].Name)
 				assert.Equal(t, tt.want.users[i].Email, users[i].Email)
 			}
+		})
+	}
+}
+
+func TestIgnoreGlobalConfig(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name  string
+		input func(config.Scope) (*config.Config, error)
+	}{
+		{
+			name: "default",
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			var r repository.Repository
+
+			r.IgnoreGlobalConfig()
+
+			got, err := r.GlobalConfig(config.GlobalScope)
+			assert.NoError(t, err)
+			assert.Equal(t, &config.Config{}, got)
 		})
 	}
 }

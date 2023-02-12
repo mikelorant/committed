@@ -101,6 +101,26 @@ func TestLoad(t *testing.T) {
 			err:  new(yaml.TypeError),
 		},
 		{
+			name:   "ignoreglobalauthor_empty",
+			data:   "view: {ignoreGlobalAuthor:}",
+			config: config.Config{View: config.View{IgnoreGlobalAuthor: false}},
+		},
+		{
+			name:   "ignoreglobalauthor_true",
+			data:   "view: {ignoreGlobalAuthor: true}",
+			config: config.Config{View: config.View{IgnoreGlobalAuthor: true}},
+		},
+		{
+			name:   "ignoreglobalauthor_false",
+			data:   "view: {ignoreGlobalAuthor: false}",
+			config: config.Config{View: config.View{IgnoreGlobalAuthor: false}},
+		},
+		{
+			name: "ignoreglobalauthor_invalid",
+			data: "view: {ignoreGlobalAuthor: invalid}",
+			err:  new(yaml.TypeError),
+		},
+		{
 			name:   "compatibility_empty",
 			data:   "view: {compatibility:}",
 			config: config.Config{View: config.View{Compatibility: config.CompatibilityUnset}},
@@ -633,6 +653,16 @@ func TestSave(t *testing.T) {
 			name:   "highlightactive_true",
 			config: func(c *config.Config) { c.View.HighlightActive = true },
 			data:   "view: {highlightActive: true}",
+		},
+		{
+			name:   "ignoreglobalauthor_false",
+			config: func(c *config.Config) { c.View.IgnoreGlobalAuthor = false },
+			data:   "{}",
+		},
+		{
+			name:   "ignoreglobalauthor_true",
+			config: func(c *config.Config) { c.View.IgnoreGlobalAuthor = true },
+			data:   "view: {ignoreGlobalAuthor: true}",
 		},
 		{
 			name: "error",

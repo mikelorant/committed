@@ -206,6 +206,11 @@ view:
   # Default: false
   highlightActive: false
 
+  # Ignore Git global author.
+  # Value: true, false
+  # Default: false
+  ignoreGlobalAuthor: false
+
 commit:
   # Emoji format in commit.
   # Values: shortcode, character
