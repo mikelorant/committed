@@ -94,10 +94,10 @@ correctly it will not be possible to apply a commit.
 
 To make these changes following the instructions below.
 
-| Terminal       | Setting                                                      |
-| :------------- | :----------------------------------------------------------- |
+| Terminal       | Setting                                                                                                 |
+|:---------------|:--------------------------------------------------------------------------------------------------------|
 | macOS Terminal | `Profiles` `Keyboard`<br />![macOS Terminal Keyboard Setting](docs/keyboard-options-macos-terminal.png) |
-| iTerm2         | `Preferences` `Profile` `Keys`<br />![iTerm2 Keyboard Setting](docs/keyboard-options-iterm2.png) |
+| iTerm2         | `Preferences` `Profile` `Keys`<br />![iTerm2 Keyboard Setting](docs/keyboard-options-iterm2.png)        |
 
 The alternative keyboard shortcut  <kbd>⌥ Option</kbd> + <kbd>\\</kbd> can also be used to apply
 a commit.
@@ -110,16 +110,16 @@ with terminals. The following list are the terminals that have been tested.
 Other terminals may display correctly and feedback would be appreciated to help
 update the list.
 
-| Terminal       | Status | Notes                              |
-| :------------- | :----- | :--------------------------------- |
-| macOS Terminal | ✅      |                                    |
-| iTerm2         | ✅      |                                    |
-| VS Code        | ✅      |                                    |
-| Hyper          | ✅      |                                    |
-| Alacritty      | ✅      |                                    |
-| WezTerm        | ✅      |                                    |
-| ttyd           | ✅      | Requires compatibility option set. |
-| kitty          | ✅      | Requires compatibility option set. |
+| Terminal       | Status                              | Notes                              |
+|:---------------|:------------------------------------|:-----------------------------------|
+| macOS Terminal | ![✅](docs/assets/confirm-24x24.svg) |                                    |
+| iTerm2         | ![✅](docs/assets/confirm-24x24.svg) |                                    |
+| VS Code        | ![✅](docs/assets/confirm-24x24.svg) |                                    |
+| Hyper          | ![✅](docs/assets/confirm-24x24.svg) |                                    |
+| Alacritty      | ![✅](docs/assets/confirm-24x24.svg) |                                    |
+| WezTerm        | ![✅](docs/assets/confirm-24x24.svg) |                                    |
+| ttyd           | ![✅](docs/assets/confirm-24x24.svg) | Requires compatibility option set. |
+| kitty          | ![✅](docs/assets/confirm-24x24.svg) | Requires compatibility option set. |
 
 ## 💾 Installation [⭡](#committed)
 
@@ -129,7 +129,7 @@ Install Committed with Homebrew.
 brew install mikelorant/taps/committed
 ```
 
-## 🎛 Usage [⭡](#committed)
+## ⚙ Usage [⭡](#committed)
 
 ```text
 Committed is a WYSIWYG Git commit editor
@@ -180,7 +180,7 @@ Flags:
       --uninstall   Uninstall Git hook
 ```
 
-## ⚙ Configuration [⭡](#committed)
+## 🎛 Configuration [⭡](#committed)
 
 No configuration is necessary however there are some values that can be changed
 based on preference.
@@ -261,20 +261,20 @@ The first theme of each set is the default theme applied.
 
 #### Dark Themes
 
-| Name                                                         | ID                             |
-| :----------------------------------------------------------- | :----------------------------- |
-| Builtin Dark                                                 | builtin_dark                   |
-| [Dracula](https://draculatheme.com/)                         | dracula                        |
-| [Gruvbox Dark](https://github.com/morhetz/gruvbox)           | gruvbox_dark                   |
-| [Nord](https://www.nordtheme.com/)                           | nord                           |
-| [Retrowave](https://github.com/juanmnl/vs-1984)              | retrowave                      |
+| Name                                                                     | ID                             |
+|:-------------------------------------------------------------------------|:-------------------------------|
+| Builtin Dark                                                             | builtin_dark                   |
+| [Dracula](https://draculatheme.com/)                                     | dracula                        |
+| [Gruvbox Dark](https://github.com/morhetz/gruvbox)                       | gruvbox_dark                   |
+| [Nord](https://www.nordtheme.com/)                                       | nord                           |
+| [Retrowave](https://github.com/juanmnl/vs-1984)                          | retrowave                      |
 | [Solarized Dark Higher Contrast](https://ethanschoonover.com/solarized/) | solarized_dark_higher_contrast |
-| [Tokyo Night](https://github.com/enkia/tokyo-night-vscode-theme) | tokyo_night                    |
+| [Tokyo Night](https://github.com/enkia/tokyo-night-vscode-theme)         | tokyo_night                    |
 
 #### Light Theme
 
 | Name                                                                      | ID                      |
-| :------------------------------------------------------------------------ | :---------------------- |
+|:--------------------------------------------------------------------------|:------------------------|
 | Builtin Light                                                             | builtin_light           |
 | [Builtin Solarized Light](https://ethanschoonover.com/solarized/)         | builtin_solarized_light |
 | [Builtin Tango Light](http://tango.freedesktop.org/Tango_Desktop_Project) | builtin_tango_light     |
@@ -330,7 +330,7 @@ Related links:
 The global shortcuts can be used within any view.
 
 | Key Binding                              | Command            |
-| :--------------------------------------- | :----------------- |
+|:-----------------------------------------|:-------------------|
 | <kbd>⌥ Option</kbd> + <kbd>⏎ Enter</kbd> | Commit             |
 | <kbd>⌥ Option</kbd> + <kbd>\\</kbd>      | Commit             |
 | <kbd>⌥ Option</kbd> + <kbd>S</kbd>       | Toggle sign-off    |
@@ -347,7 +347,7 @@ The global shortcuts can be used within any view.
 The emoji shortcuts are limited to the emoji view only.
 
 | Key Binding            | Command       |
-| :--------------------- | :------------ |
+|:-----------------------|:--------------|
 | <kbd>⌫ Delete</kbd>    | Clear emoji   |
 | <kbd>⎋ Escape</kbd>    | Reset filter  |
 | <kbd>⇟ Page Down</kbd> | Next page     |
@@ -425,6 +425,35 @@ with using Git as an editor.
 - Trailers will be imported into the body.
 - Summary will be truncated if more than 72 characters.
 - Lines will not reflow when editing the body.
+
+## ⚖️ Comparison
+
+### Git Functions
+
+| Feature                      | Committed                           | Gitmoji CLI                            |
+|:-----------------------------|:------------------------------------|:---------------------------------------|
+| Git hooks                    | ![✅](docs/assets/confirm-24x24.svg) | ![✅](docs/assets/confirm-24x24.svg)    |
+| Git editor replacement       | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)     |
+| Amend commit                 | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)     |
+| Add files                    | ![❌](docs/assets/cancel-24x24.svg)  | ![✅](docs/assets/confirm-24x24.svg)    |
+| Signed commits               | ![❌](docs/assets/cancel-24x24.svg)  | ![✅](docs/assets/confirm-24x24.svg)    |
+| Sign-off commits             | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)     |
+| Switch author                | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)     |
+| Save and load failed commits | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)[^1] |
+
+[^1]: [Print Git command on failure](https://github.com/carloscuesta/gitmoji-cli/pull/681).
+
+### Visual Style
+
+| Feature                 | Committed                           | Gitmoji CLI                         |
+|:------------------------|:------------------------------------|:------------------------------------|
+| Subject counter         | ![✅](docs/assets/confirm-24x24.svg) | ![✅](docs/assets/confirm-24x24.svg) |
+| Custom emojis           | ![❌](docs/assets/cancel-24x24.svg)  | ![✅](docs/assets/confirm-24x24.svg) |
+| Mulitple emoji profiles | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)  |
+| Multiline editor        | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)  |
+| Scope prompt            | ![❌](docs/assets/cancel-24x24.svg)  | ![✅](docs/assets/confirm-24x24.svg) |
+| Themes                  | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)  |
+| Hard wrap body width    | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)  |
 
 ## ✏️ Authors [⭡](#committed)
 
