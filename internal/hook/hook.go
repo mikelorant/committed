@@ -13,6 +13,7 @@ type Hook struct {
 	Action  Action
 	Creator Creator
 	Locater Locater
+	Deleter Deleter
 	Opener  Opener
 	Runner  Runner
 	Stater  Stater
@@ -31,6 +32,7 @@ type Options struct {
 
 type (
 	Creator func(name string, flag int, perm os.FileMode) (*os.File, error)
+	Deleter func(string) error
 	Opener  func(string) (*os.File, error)
 	Locater func(run Runner) (string, error)
 	Runner  func(io.Writer, string, []string) error
@@ -66,6 +68,7 @@ func New(opts Options) Hook {
 	return Hook{
 		Action:  action(opts),
 		Creator: os.OpenFile,
+		Deleter: os.Remove,
 		Opener:  os.Open,
 		Locater: Locate,
 		Runner:  shell.Run,
