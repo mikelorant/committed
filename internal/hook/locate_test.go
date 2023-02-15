@@ -1,7 +1,6 @@
 package hook_test
 
 import (
-	"errors"
 	"io"
 	"testing"
 
@@ -9,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type MockRun struct {
+type MockLocateRun struct {
 	idx int
 
 	glob    string
@@ -21,9 +20,7 @@ type MockRun struct {
 	args []string
 }
 
-var errMock = errors.New("error")
-
-func (r *MockRun) Run() func(io.Writer, string, []string) error {
+func (r *MockLocateRun) Run() func(io.Writer, string, []string) error {
 	return func(w io.Writer, cmd string, args []string) error {
 		r.cmd = cmd
 		r.args = args
@@ -82,7 +79,7 @@ func TestLocate(t *testing.T) {
 		{
 			name: "default",
 			want: want{
-				err: "no hook location",
+				err: "no hook location found",
 			},
 		},
 		{
@@ -168,7 +165,7 @@ func TestLocate(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			r := MockRun{
+			r := MockLocateRun{
 				glob:    tt.args.glob,
 				globErr: tt.args.globErr,
 				repo:    tt.args.repo,

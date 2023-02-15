@@ -14,7 +14,7 @@ var (
 	gitRepositoryArgs = []string{"rev-parse", "--absolute-git-dir"}
 )
 
-var ErrLocation = errors.New("no hook location")
+var ErrLocation = errors.New("no hook location found")
 
 func Locate(run Runner) (string, error) {
 	var err error
