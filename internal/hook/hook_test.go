@@ -13,26 +13,26 @@ func TestNew(t *testing.T) {
 	tests := []struct {
 		name   string
 		input  hook.Options
-		output hook.Hook
+		output hook.Action
 	}{
 		{
 			name:   "empty",
-			output: hook.Hook{},
+			output: hook.ActionUnset,
 		},
 		{
 			name:   "install",
 			input:  hook.Options{Install: true},
-			output: hook.Hook{Action: hook.ActionInstall},
+			output: hook.ActionInstall,
 		},
 		{
 			name:   "uninstall",
 			input:  hook.Options{Uninstall: true},
-			output: hook.Hook{Action: hook.ActionUninstall},
+			output: hook.ActionUninstall,
 		},
 		{
 			name:   "commit",
 			input:  hook.Options{Commit: true},
-			output: hook.Hook{Action: hook.ActionCommit},
+			output: hook.ActionCommit,
 		},
 	}
 
@@ -44,7 +44,7 @@ func TestNew(t *testing.T) {
 
 			got := hook.New(tt.input)
 
-			assert.Equal(t, tt.output, got)
+			assert.Equal(t, tt.output, got.Action)
 		})
 	}
 }
@@ -54,31 +54,30 @@ func TestDo(t *testing.T) {
 
 	tests := []struct {
 		name  string
-		input hook.Hook
+		input hook.Action
 		err   error
 	}{
 		{
 			name:  "empty",
-			input: hook.Hook{},
+			input: hook.ActionUnset,
 			err:   hook.ErrAction,
 		},
 		{
 			name:  "install",
-			input: hook.Hook{Action: hook.ActionInstall},
+			input: hook.ActionInstall,
 		},
 		{
 			name:  "uninstall",
-			input: hook.Hook{Action: hook.ActionUninstall},
+			input: hook.ActionUninstall,
 		},
 		{
 			name:  "commit",
-			input: hook.Hook{Action: hook.ActionCommit},
+			input: hook.ActionCommit,
 			err:   hook.ErrAction,
 		},
 		{
-			name:  "nil",
-			input: hook.Hook{},
-			err:   hook.ErrAction,
+			name: "nil",
+			err:  hook.ErrAction,
 		},
 	}
 
@@ -88,7 +87,11 @@ func TestDo(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			err := tt.input.Do()
+			hook := hook.Hook{
+				Action: tt.input,
+			}
+
+			err := hook.Do()
 
 			assert.ErrorIs(t, err, tt.err)
 		})

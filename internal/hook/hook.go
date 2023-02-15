@@ -2,10 +2,14 @@ package hook
 
 import (
 	"errors"
+	"io"
+
+	"github.com/mikelorant/committed/internal/shell"
 )
 
 type Hook struct {
 	Action Action
+	Runner Runner
 }
 
 type Options struct {
@@ -13,6 +17,10 @@ type Options struct {
 	Uninstall bool
 	Commit    bool
 }
+
+type (
+	Runner func(io.Writer, string, []string) error
+)
 
 type (
 	Action int
@@ -30,6 +38,7 @@ const (
 func New(opts Options) Hook {
 	return Hook{
 		Action: action(opts),
+		Runner: shell.Run,
 	}
 }
 
