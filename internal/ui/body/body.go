@@ -2,14 +2,12 @@ package body
 
 import (
 	"strings"
-	"unicode"
 
-	"github.com/acarl005/stripansi"
-	"github.com/charmbracelet/bubbles/cursor"
 	"github.com/charmbracelet/bubbles/textarea"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/ui/colour"
+	"github.com/muesli/reflow/wordwrap"
 )
 
 type Model struct {
@@ -112,15 +110,9 @@ func (m Model) Focused() bool {
 }
 
 func (m Model) Value() string {
-	if m.textArea.Value() == "" {
-		return ""
-	}
+	txt := wordwrap.String(m.textArea.Value(), 72)
 
-	m.textArea.Cursor.SetMode(cursor.CursorHide)
-	res := strings.TrimRightFunc(stripansi.Strip(m.textArea.View()), unicode.IsSpace)
-	m.textArea.Cursor.SetMode(cursor.CursorBlink)
-
-	return res
+	return strings.TrimSpace(txt)
 }
 
 func (m Model) RawValue() string {
