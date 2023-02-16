@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"os"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/config"
@@ -40,6 +41,7 @@ type Worktreer interface {
 type Repository struct {
 	Opener       func(string, *git.PlainOpenOptions) (*git.Repository, error)
 	Runner       func(io.Writer, string, []string) error
+	OpenFiler    func(string, int, os.FileMode) (*os.File, error)
 	GlobalConfig func(config.Scope) (*config.Config, error)
 	Configer     Configer
 	Remoter      Remoter
@@ -62,6 +64,7 @@ func New() *Repository {
 	return &Repository{
 		GlobalConfig: config.LoadConfig,
 		Opener:       git.PlainOpenWithOptions,
+		OpenFiler:    os.OpenFile,
 		Runner:       shell.Run,
 	}
 }
