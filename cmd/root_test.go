@@ -234,7 +234,108 @@ func TestNewRootCmdFlags(t *testing.T) {
 			},
 		},
 		{
-			name: "invalid",
+			name: "hook_flag",
+			args: "--hook",
+			want: want{
+				flags: map[string]flag{
+					"hook": {
+						shorthand:   "",
+						value:       "true",
+						defValue:    "false",
+						changed:     true,
+						noOptDefVal: "true",
+					},
+				},
+				err: false,
+			},
+		},
+		{
+			name: "hook_message_file_flag",
+			args: "--message-file test",
+			want: want{
+				flags: map[string]flag{
+					"message-file": {
+						shorthand:   "",
+						value:       "test",
+						defValue:    "",
+						changed:     true,
+						noOptDefVal: "",
+					},
+				},
+				err: false,
+			},
+		},
+		{
+			name: "hook_source_flag",
+			args: "--source commit",
+			want: want{
+				flags: map[string]flag{
+					"source": {
+						shorthand:   "",
+						value:       "commit",
+						defValue:    "",
+						changed:     true,
+						noOptDefVal: "",
+					},
+				},
+				err: false,
+			},
+		},
+		{
+			name: "hook_sha_flag",
+			args: "--sha HEAD",
+			want: want{
+				flags: map[string]flag{
+					"sha": {
+						shorthand:   "",
+						value:       "HEAD",
+						defValue:    "",
+						changed:     true,
+						noOptDefVal: "",
+					},
+				},
+				err: false,
+			},
+		},
+		{
+			name: "hook_complete",
+			args: "--hook --message-file test --source commit --sha HEAD",
+			want: want{
+				flags: map[string]flag{
+					"hook": {
+						shorthand:   "",
+						value:       "true",
+						defValue:    "false",
+						changed:     true,
+						noOptDefVal: "true",
+					},
+					"message-file": {
+						shorthand:   "",
+						value:       "test",
+						defValue:    "",
+						changed:     true,
+						noOptDefVal: "",
+					},
+					"source": {
+						shorthand:   "",
+						value:       "commit",
+						defValue:    "",
+						changed:     true,
+						noOptDefVal: "",
+					},
+					"sha": {
+						shorthand:   "",
+						value:       "HEAD",
+						defValue:    "",
+						changed:     true,
+						noOptDefVal: "",
+					},
+				},
+				err: false,
+			},
+		},
+		{
+			name: "root_invalid",
 			args: "--invalid",
 			want: want{
 				err: true,

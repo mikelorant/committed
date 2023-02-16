@@ -1,0 +1,9 @@
+Install and uninstall Git hook
+
+Usage:
+  hook [flags]
+
+Flags:
+      --install     Install Git hook
+      --uninstall   Uninstall Git hook
+  -h, --help        help for hook

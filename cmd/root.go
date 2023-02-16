@@ -10,6 +10,7 @@ import (
 	"github.com/go-git/go-git/v5"
 	cc "github.com/ivanpirog/coloredcobra"
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/hook"
 	"github.com/mikelorant/committed/internal/ui"
 	"github.com/spf13/cobra"
 )
@@ -28,11 +29,16 @@ type Logger interface {
 	Fatalf(format string, v ...any)
 }
 
+type Hooker interface {
+	Do(opts hook.Options) error
+}
+
 type App struct {
 	Commiter Commiter
 	UIer     UIer
 	Logger   Logger
 	Writer   io.Writer
+	Hooker   Hooker
 
 	req  *commit.Request
 	opts commit.Options
@@ -63,12 +69,21 @@ func NewRootCmd(a App) *cobra.Command {
 
 	cmd.AddCommand(NewVersionCmd())
 	cmd.AddCommand(NewListCmd(a.Writer))
+	cmd.AddCommand(NewHookCmd(a))
 	cmd.SetVersionTemplate(verTmpl)
 	cmd.Flags().SortFlags = false
 	cmd.Flags().StringVarP(&a.opts.ConfigFile, "config", "", defaultConfigFile, "Config file location")
 	cmd.Flags().StringVarP(&a.opts.SnapshotFile, "snapshot", "", defaultSnapshotFile, "Snapshot file location")
 	cmd.Flags().BoolVarP(&a.opts.DryRun, "dry-run", "", defaultDryRun, "Simulate applying a commit")
 	cmd.Flags().BoolVarP(&a.opts.Amend, "amend", "a", false, "Replace the tip of the current branch by creating a new commit")
+	cmd.Flags().BoolVarP(&a.opts.Hook.Enable, "hook", "", false, "Install and uninstall Git hook")
+	cmd.Flags().StringVarP(&a.opts.Hook.MessageFile, "message-file", "", "", "")
+	cmd.Flags().StringVarP(&a.opts.Hook.Source, "source", "", "", "")
+	cmd.Flags().StringVarP(&a.opts.Hook.SHA, "sha", "", "", "")
+	cmd.Flags().MarkHidden("hook")
+	cmd.Flags().MarkHidden("message-file")
+	cmd.Flags().MarkHidden("source")
+	cmd.Flags().MarkHidden("sha")
 
 	cc.Init(&cc.Config{
 		RootCmd:         cmd,
@@ -93,14 +108,16 @@ func Execute() {
 
 func NewApp() App {
 	c := commit.New()
-	u := ui.New()
+	h := hook.New()
 	l := log.Default()
+	u := ui.New()
 	w := os.Stdout
 
 	return App{
 		Commiter: &c,
-		UIer:     &u,
+		Hooker:   &h,
 		Logger:   l,
+		UIer:     &u,
 		Writer:   w,
 	}
 }
