@@ -39,7 +39,7 @@ func MessageToSummary(msg string) string {
 
 func MessageToBody(msg string) string {
 	if !hasSummary(msg) {
-		return msg
+		return strings.TrimSpace(msg)
 	}
 
 	ls := strings.Split(msg, "\n")

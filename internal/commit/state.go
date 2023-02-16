@@ -18,6 +18,7 @@ type State struct {
 	Config       config.Config
 	Snapshot     snapshot.Snapshot
 	Options      Options
+	Hook         Hook
 }
 
 type Placeholders struct {
@@ -31,6 +32,11 @@ type Config struct {
 	View    config.View
 	Commit  config.Commit
 	Authors []repository.User
+}
+
+type Hook struct {
+	Amend   bool
+	Message string
 }
 
 //go:embed message.txt

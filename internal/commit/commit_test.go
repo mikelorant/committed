@@ -117,6 +117,16 @@ func MockCreate(err error) func(file string) (io.WriteCloser, error) {
 	}
 }
 
+func MockReadFile(data string, err error) func(string) ([]byte, error) {
+	return func(string) ([]byte, error) {
+		if err != nil {
+			return nil, err
+		}
+
+		return []byte(data), nil
+	}
+}
+
 var (
 	errMock     = errors.New("error")
 	errMockExit *exec.ExitError
@@ -129,6 +139,7 @@ func TestConfigure(t *testing.T) {
 		opts        commit.Options
 		cfg         config.Config
 		snap        snapshot.Snapshot
+		data        string
 		repoOpenErr error
 		repoDescErr error
 		configErr   error
@@ -137,6 +148,7 @@ func TestConfigure(t *testing.T) {
 		loadErr     error
 		saveErr     error
 		snapLoadErr error
+		readFileErr error
 	}
 
 	type want struct {
@@ -280,6 +292,56 @@ func TestConfigure(t *testing.T) {
 			},
 		},
 		{
+			name: "hook",
+			args: args{
+				opts: commit.Options{
+					Hook: commit.HookOptions{
+						Enable: true,
+					},
+				},
+			},
+			want: want{
+				state: commit.State{
+					Placeholders: testPlaceholders(),
+					Config:       config.Config{},
+					Emojis:       &emoji.Set{},
+					Options: commit.Options{
+						Hook: commit.HookOptions{
+							Enable: true,
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "hook_sha",
+			args: args{
+				opts: commit.Options{
+					Hook: commit.HookOptions{
+						Enable: true,
+						SHA:    "HEAD",
+					},
+				},
+			},
+			want: want{
+				state: commit.State{
+					Placeholders: testPlaceholders(),
+					Config:       config.Config{},
+					Emojis:       &emoji.Set{},
+					Options: commit.Options{
+						Hook: commit.HookOptions{
+							Enable: true,
+							SHA:    "HEAD",
+						},
+						Amend: true,
+					},
+					Hook: commit.Hook{
+						Amend: true,
+					},
+				},
+			},
+		},
+		{
 			name: "ignore_global_config",
 			args: args{
 				cfg: config.Config{
@@ -371,6 +433,20 @@ func TestConfigure(t *testing.T) {
 				err: "unable to get snapshot: unable to load snapshot: error",
 			},
 		},
+		{
+			name: "hook_error",
+			args: args{
+				opts: commit.Options{
+					Hook: commit.HookOptions{
+						Enable: true,
+					},
+				},
+				readFileErr: errMock,
+			},
+			want: want{
+				err: "unable to get hook mesage: unable to read file: error",
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -402,6 +478,7 @@ func TestConfigure(t *testing.T) {
 				Emojier:     MockNewEmoji,
 				Creator:     MockCreate(tt.args.createErr),
 				Opener:      MockOpen(tt.args.openErr),
+				ReadFiler:   MockReadFile(tt.args.data, tt.args.readFileErr),
 			}
 
 			state, err := c.Configure(tt.args.opts)
@@ -505,6 +582,36 @@ func TestApply(t *testing.T) {
 				cfg: repository.Commit{
 					Amend:  true,
 					DryRun: true,
+				},
+			},
+		},
+		{
+			name: "hook",
+			args: args{
+				req: &commit.Request{
+					Apply: true,
+					Hook:  true,
+				},
+			},
+			want: want{
+				cfg: repository.Commit{
+					Hook: true,
+				},
+			},
+		},
+		{
+			name: "hook_message",
+			args: args{
+				req: &commit.Request{
+					Apply:       true,
+					Hook:        true,
+					MessageFile: "test",
+				},
+			},
+			want: want{
+				cfg: repository.Commit{
+					Hook:        true,
+					MessageFile: "test",
 				},
 			},
 		},
