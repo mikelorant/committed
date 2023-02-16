@@ -155,8 +155,6 @@ func (m *Model) Configure(state *commit.State) {
 		os.Setenv("LIPGLOSS_TERMINAL", "ttyd")
 	case config.CompatibilityKitty:
 		os.Setenv("LIPGLOSS_TERMINAL", "kitty")
-	default:
-
 	}
 }
 
