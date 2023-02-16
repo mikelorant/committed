@@ -110,7 +110,7 @@ func (m Model) Focused() bool {
 }
 
 func (m Model) Value() string {
-	txt := wordwrap.String(m.textArea.Value(), 72)
+	txt := wordwrap.String(m.textArea.Value(), 73)
 
 	return strings.TrimSpace(txt)
 }
