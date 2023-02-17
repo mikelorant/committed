@@ -131,25 +131,9 @@ func (m *Model) Configure(state *commit.State) {
 
 	m.models.info.Date = m.Date.Format(dateTimeFormat)
 
-	m.amend = state.Options.Amend
-
-	switch m.amend {
-	case true:
-		m.currentSave = defaultAmendSave(state)
-		m.previousSave = savedState{}
-	case false:
-		m.currentSave = savedState{}
-		m.previousSave = defaultAmendSave(state)
-	}
-
+	m.setSaves()
 	m.restoreModel(m.currentSave)
-
-	switch m.state.Config.View.Compatibility {
-	case config.CompatibilityTtyd:
-		os.Setenv("LIPGLOSS_TERMINAL", "ttyd")
-	case config.CompatibilityKitty:
-		os.Setenv("LIPGLOSS_TERMINAL", "kitty")
-	}
+	m.setCompatibility()
 
 	if m.state.Snapshot.Restore && m.setSave() {
 		m.resetCursor()
@@ -456,10 +440,22 @@ func (m Model) commit(q quit) Model {
 }
 
 func (m Model) validate() bool {
-	return (m.state.Repository.Worktree.IsStaged() || m.amend) && m.models.header.Summary() != ""
+	staged := m.state.Repository.Worktree.IsStaged()
+	summary := m.models.header.Summary()
+
+	return (staged || m.amend) && summary != ""
 }
 
 func (m *Model) resetCursor() {
 	m.models.header.CursorStartSummary()
 	m.models.body.CursorStart()
+}
+
+func (m *Model) setCompatibility() {
+	switch m.state.Config.View.Compatibility {
+	case config.CompatibilityTtyd:
+		os.Setenv("LIPGLOSS_TERMINAL", "ttyd")
+	case config.CompatibilityKitty:
+		os.Setenv("LIPGLOSS_TERMINAL", "kitty")
+	}
 }

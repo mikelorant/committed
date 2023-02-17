@@ -18,6 +18,17 @@ func (m *Model) backupModel() savedState {
 	return save
 }
 
+func (m *Model) setSaves() {
+	m.amend = m.state.Options.Amend
+
+	switch m.amend {
+	case true:
+		m.currentSave = defaultAmendSave(m.state)
+	case false:
+		m.previousSave = defaultAmendSave(m.state)
+	}
+}
+
 func (m *Model) setSave() bool {
 	save := m.snapshotToSave()
 
