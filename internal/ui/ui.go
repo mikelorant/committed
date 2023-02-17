@@ -29,6 +29,7 @@ type Model struct {
 	models        Models
 	quit          quit
 	amend         bool
+	hook          bool
 	signoff       bool
 	err           error
 	ready         bool
@@ -135,7 +136,7 @@ func (m *Model) Configure(state *commit.State) {
 	m.restoreModel(m.currentSave)
 	m.setCompatibility()
 
-	if m.state.Snapshot.Restore && m.setSave() {
+	if (m.state.Snapshot.Restore && m.setSave()) || m.hook {
 		m.resetCursor()
 	}
 }
@@ -421,13 +422,15 @@ func (m Model) commit(q quit) Model {
 	}
 
 	m.Request = &commit.Request{
-		Author:  m.models.info.Author,
-		Emoji:   emoji,
-		Summary: m.models.header.Summary(),
-		Body:    m.models.body.Value(),
-		RawBody: m.models.body.RawValue(),
-		Footer:  m.models.footer.Value(),
-		Amend:   m.amend,
+		Author:      m.models.info.Author,
+		Emoji:       emoji,
+		Summary:     m.models.header.Summary(),
+		Body:        m.models.body.Value(),
+		RawBody:     m.models.body.RawValue(),
+		Footer:      m.models.footer.Value(),
+		Amend:       m.amend,
+		Hook:        m.hook,
+		MessageFile: m.state.Options.Hook.MessageFile,
 	}
 
 	if m.quit == applyQuit {
@@ -443,7 +446,7 @@ func (m Model) validate() bool {
 	staged := m.state.Repository.Worktree.IsStaged()
 	summary := m.models.header.Summary()
 
-	return (staged || m.amend) && summary != ""
+	return (staged || m.amend) && (summary != "" || m.hook)
 }
 
 func (m *Model) resetCursor() {

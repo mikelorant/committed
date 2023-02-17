@@ -45,7 +45,16 @@ func TestHookCmd(t *testing.T) {
 		want want
 	}{
 		{
+			name: "empty",
+			args: args{
+				args: []string{"--"},
+			},
+		},
+		{
 			name: "help",
+			args: args{
+				args: []string{"--help"},
+			},
 		},
 		{
 			name: "install",
@@ -100,6 +109,7 @@ func TestHookCmd(t *testing.T) {
 			a := cmd.App{
 				Hooker: &h,
 				Logger: mlog,
+				Writer: &buf,
 			}
 
 			hook := cmd.NewHookCmd(a)

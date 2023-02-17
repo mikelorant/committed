@@ -70,6 +70,31 @@ func TestModel(t *testing.T) {
 				footer:  "footer",
 			},
 		},
+		{
+			name: "comments_body",
+			args: args{
+				emoji:   ":art:",
+				summary: "summary",
+				body:    "# body",
+			},
+		},
+		{
+			name: "comments_body_mixed",
+			args: args{
+				emoji:   ":art:",
+				summary: "summary",
+				body:    "line 1\n# line 2\nline 3\n",
+			},
+		},
+		{
+			name: "comments_body_footer",
+			args: args{
+				emoji:   ":art:",
+				summary: "summary",
+				body:    "# body",
+				footer:  "footer",
+			},
+		},
 	}
 
 	for _, tt := range tests {

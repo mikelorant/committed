@@ -1,8 +1,15 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/mikelorant/committed/internal/hook"
 	"github.com/spf13/cobra"
+)
+
+const (
+	hookInstallSuccess   = "✅ Hook installed."
+	hookUninstallSuccess = "❎ Hook uninstalled."
 )
 
 func NewHookCmd(a App) *cobra.Command {
@@ -19,6 +26,15 @@ func NewHookCmd(a App) *cobra.Command {
 
 			if err := a.Hooker.Do(hookOptions); err != nil {
 				a.Logger.Fatalf("Unable to install or uninstall hook.")
+
+				return
+			}
+
+			switch {
+			case hookOptions.Install:
+				fmt.Fprintln(a.Writer, hookInstallSuccess)
+			case hookOptions.Uninstall:
+				fmt.Fprintln(a.Writer, hookUninstallSuccess)
 			}
 		},
 	}

@@ -1,7 +1,9 @@
 package message
 
 import (
+	"bufio"
 	"fmt"
+	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -50,8 +52,9 @@ func (m Model) View() string {
 		message = m.styles.summary.Render(s)
 	}
 
-	if m.body != "" {
-		b := m.styles.body.Render(m.body)
+	body := removeComments(m.body)
+	if body != "" {
+		b := m.styles.body.Render(body)
 		message = lipgloss.JoinVertical(lipgloss.Top, message, b)
 	}
 
@@ -61,4 +64,24 @@ func (m Model) View() string {
 	}
 
 	return m.styles.message.Render(message)
+}
+
+func removeComments(str string) string {
+	var sb strings.Builder
+
+	r := strings.NewReader(str)
+
+	scanner := bufio.NewScanner(r)
+
+	for scanner.Scan() {
+		txt := scanner.Text()
+
+		if strings.HasPrefix(txt, "#") {
+			continue
+		}
+
+		fmt.Fprintln(&sb, txt)
+	}
+
+	return strings.TrimSpace(sb.String())
 }

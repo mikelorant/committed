@@ -54,3 +54,16 @@ func defaultAmendSave(st *commit.State) savedState {
 
 	return s
 }
+
+func defaultHookSave(st *commit.State) savedState {
+	s := savedState{
+		summary: commit.MessageToSummary(st.Hook.Message),
+		body:    commit.MessageToBody(st.Hook.Message),
+	}
+
+	if e := commit.MessageToEmoji(st.Emojis, st.Hook.Message); e.Valid {
+		s.emoji = e.Emoji
+	}
+
+	return s
+}
