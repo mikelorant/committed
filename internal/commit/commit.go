@@ -131,6 +131,8 @@ func (c *Commit) Configure(opts Options) (*State, error) {
 		opts.Amend = true
 	}
 
+	c.Options = opts
+
 	return &State{
 		Placeholders: placeholders(),
 		Emojis:       getEmojis(c.Emojier, cfg),
