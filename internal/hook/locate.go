@@ -17,21 +17,13 @@ var (
 var ErrLocation = errors.New("no hook location found")
 
 func Locate(run Runner) (string, error) {
-	var err error
-
-	glob, err := runCmd(run, gitCommand, gitGlobalArgs)
-	if err != nil {
-		return "", fmt.Errorf("unable to check global hook: %w", err)
-	}
+	glob, _ := runCmd(run, gitCommand, gitGlobalArgs)
 
 	if glob != "" {
 		return glob, nil
 	}
 
-	repo, err := runCmd(run, gitCommand, gitRepositoryArgs)
-	if err != nil {
-		return "", fmt.Errorf("unable to check repository hook: %w", err)
-	}
+	repo, _ := runCmd(run, gitCommand, gitRepositoryArgs)
 
 	if repo != "" {
 		return repo, nil

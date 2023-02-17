@@ -111,7 +111,7 @@ func TestLocate(t *testing.T) {
 				globErr: errMock,
 			},
 			want: want{
-				err: "unable to check global hook: unable to run command: error",
+				err: "no hook location found",
 			},
 		},
 		{
@@ -121,7 +121,7 @@ func TestLocate(t *testing.T) {
 				repoErr: errMock,
 			},
 			want: want{
-				err: "unable to check repository hook: unable to run command: error",
+				err: "no hook location found",
 			},
 		},
 		{
