@@ -108,6 +108,8 @@ const (
 	KeyHelp    = "˙"
 )
 
+const dateTimeFormat = "Mon Jan 2 15:04:05 2006 -0700"
+
 func New() Model {
 	return Model{
 		Date: time.Now(),
@@ -127,7 +129,6 @@ func (m *Model) Configure(state *commit.State) {
 		help:   help.New(state),
 	}
 
-	dateTimeFormat := "Mon Jan 2 15:04:05 2006 -0700"
 	m.models.info.Date = m.Date.Format(dateTimeFormat)
 
 	m.amend = state.Options.Amend
