@@ -143,18 +143,15 @@ func (m *Model) Configure(state *commit.State) {
 
 	m.restoreModel(m.currentSave)
 
-	if m.state.Snapshot.Restore {
-		if m.setSave() {
-			m.models.header.CursorStartSummary()
-			m.models.body.CursorStart()
-		}
-	}
-
 	switch m.state.Config.View.Compatibility {
 	case config.CompatibilityTtyd:
 		os.Setenv("LIPGLOSS_TERMINAL", "ttyd")
 	case config.CompatibilityKitty:
 		os.Setenv("LIPGLOSS_TERMINAL", "kitty")
+	}
+
+	if m.state.Snapshot.Restore && m.setSave() {
+		m.resetCursor()
 	}
 }
 
@@ -518,4 +515,9 @@ func (m *Model) loadSave(st savedState) {
 	m.models.body.Reset()
 
 	m.restoreModel(st)
+}
+
+func (m *Model) resetCursor() {
+	m.models.header.CursorStartSummary()
+	m.models.body.CursorStart()
 }
