@@ -21,6 +21,8 @@ func (m *Model) backupModel() savedState {
 func (m *Model) setSave() bool {
 	save := m.snapshotToSave()
 
+	hasSave := (save.body != "" || save.emoji.Name != "" || save.summary != "")
+
 	switch {
 	case m.currentSave.amend && save.amend:
 		m.loadSave(save)
@@ -29,10 +31,10 @@ func (m *Model) setSave() bool {
 		m.swapSave()
 		m.loadSave(save)
 		return true
-	case (save.body != "" || save.emoji.Name != "" || save.summary != "") && !m.currentSave.amend:
+	case hasSave && !m.currentSave.amend:
 		m.loadSave(save)
 		return true
-	case (save.body != "" || save.emoji.Name != "" || save.summary != "") && !m.previousSave.amend:
+	case hasSave && !m.previousSave.amend:
 		m.swapSave()
 		m.loadSave(save)
 		return true
@@ -57,4 +59,18 @@ func (m *Model) loadSave(st savedState) {
 	m.models.body.Reset()
 
 	m.restoreModel(st)
+}
+
+func (m Model) snapshotToSave() savedState {
+	s := savedState{
+		amend:   m.state.Snapshot.Amend,
+		summary: m.state.Snapshot.Summary,
+		body:    m.state.Snapshot.Body,
+	}
+
+	if e := m.state.Emojis.Find(m.state.Snapshot.Emoji); e.Valid {
+		s.emoji = e.Emoji
+	}
+
+	return s
 }
