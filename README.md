@@ -141,6 +141,7 @@ Usage:
 Available Commands:
   completion   Generate the autocompletion script for the specified shell
   help         Help about any command
+  hook         Install and uninstall Git hook
   list         List settings with profiles or IDs
   version      Print the version information
 
@@ -149,12 +150,34 @@ Flags:
                           "$HOME/.config/committed/config.yaml")
       --snapshot string   Snapshot file location (default
                           "$HOME/.local/state/committed/snapshot.yaml")
-      --dry-run           Simulate applying a commit (default true)
+      --dry-run           Simulate applying a commit (default false)
   -a, --amend             Replace the tip of the current branch by creating a new commit
   -h, --help              help for committed
   -v, --version           version for committed
 
 Use "committed [command] --help" for more information about a command.
+```
+
+### List
+
+```text
+Usage:
+  committed list [command]
+
+Available Commands:
+  emojis       List emoji profiles
+  themes       List theme IDs
+```
+
+### Hook
+
+```text
+Usage:
+  committed hook [flags]
+
+Flags:
+      --install     Install Git hook
+      --uninstall   Uninstall Git hook
 ```
 
 ## ⚙ Configuration [⭡](#committed)
