@@ -1,12 +1,10 @@
 package message
 
 import (
-	"bufio"
 	"fmt"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/theme"
 )
 
@@ -46,42 +44,26 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	message := m.styles.summary.Render(m.summary)
-	if m.emoji != "" {
-		s := fmt.Sprintf("%s %s", m.emoji, m.summary)
-		message = m.styles.summary.Render(s)
+	var str []string
+
+	if m.summary != "" {
+		switch {
+		case m.emoji != "":
+			str = append(str, fmt.Sprintf("%v %v", m.emoji, m.summary))
+		default:
+			str = append(str, m.summary)
+		}
 	}
 
-	body := removeComments(m.body)
-	if body != "" {
-		b := m.styles.body.Render(body)
-		message = lipgloss.JoinVertical(lipgloss.Top, message, b)
+	if m.body != "" {
+		str = append(str, m.body)
 	}
 
 	if m.footer != "" {
-		f := m.styles.footer.Render(m.footer)
-		message = lipgloss.JoinVertical(lipgloss.Top, message, f)
+		str = append(str, m.footer)
 	}
 
-	return m.styles.message.Render(message)
-}
+	msg := strings.Join(str, "\n\n")
 
-func removeComments(str string) string {
-	var sb strings.Builder
-
-	r := strings.NewReader(str)
-
-	scanner := bufio.NewScanner(r)
-
-	for scanner.Scan() {
-		txt := scanner.Text()
-
-		if strings.HasPrefix(txt, "#") {
-			continue
-		}
-
-		fmt.Fprintln(&sb, txt)
-	}
-
-	return strings.TrimSpace(sb.String())
+	return m.styles.message.Render(msg)
 }

@@ -20,18 +20,8 @@ func defaultStyles(th theme.Theme) Styles {
 
 	s.message = lipgloss.NewStyle().
 		MarginLeft(4).
-		MarginBottom(2)
-
-	s.summary = lipgloss.NewStyle().
-		Foreground(clr.Summary)
-
-	s.body = lipgloss.NewStyle().
-		MarginTop(1).
-		Foreground(clr.Body)
-
-	s.footer = lipgloss.NewStyle().
-		MarginTop(1).
-		Foreground(clr.Footer)
+		MarginBottom(2).
+		Foreground(clr.Message)
 
 	return s
 }

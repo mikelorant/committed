@@ -85,9 +85,7 @@ type info struct {
 }
 
 type message struct {
-	Summary lipgloss.TerminalColor
-	Body    lipgloss.TerminalColor
-	Footer  lipgloss.TerminalColor
+	Message lipgloss.TerminalColor
 }
 
 type shortcut struct {
@@ -217,9 +215,7 @@ func (c *Colour) Message() message {
 	clr := c.registry
 
 	return message{
-		Summary: clr.Fg(),
-		Body:    clr.Fg(),
-		Footer:  clr.Fg(),
+		Message: clr.Fg(),
 	}
 }
 

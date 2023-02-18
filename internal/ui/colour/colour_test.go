@@ -91,9 +91,7 @@ type info struct {
 }
 
 type message struct {
-	Summary Colour
-	Body    Colour
-	Footer  Colour
+	Message Colour
 }
 
 type shortcut struct {
@@ -374,9 +372,7 @@ func TestMessage(t *testing.T) {
 		{
 			name: "Message",
 			message: message{
-				Summary: Colour{Dark: "#bbbbbb"},
-				Body:    Colour{Dark: "#bbbbbb"},
-				Footer:  Colour{Dark: "#bbbbbb"},
+				Message: Colour{Dark: "#bbbbbb"},
 			},
 		},
 	}
@@ -389,9 +385,7 @@ func TestMessage(t *testing.T) {
 
 			clr := colour.New(theme.New(config.ColourAdaptive)).Message()
 
-			assert.Equal(t, tt.message.Summary, toColour(clr.Summary), "Summary")
-			assert.Equal(t, tt.message.Body, toColour(clr.Body), "Body")
-			assert.Equal(t, tt.message.Footer, toColour(clr.Footer), "Footer")
+			assert.Equal(t, tt.message.Message, toColour(clr.Message), "Summary")
 		})
 	}
 }
