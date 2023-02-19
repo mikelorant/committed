@@ -267,7 +267,7 @@ The first theme of each set is the default theme applied.
 | [Dracula](https://draculatheme.com/)                         | dracula                        |
 | [Gruvbox Dark](https://github.com/morhetz/gruvbox)           | gruvbox_dark                   |
 | [Nord](https://www.nordtheme.com/)                           | nord                           |
-| Retrowave                                                    | retrowave                      |
+| [Retrowave](https://github.com/juanmnl/vs-1984)              | retrowave                      |
 | [Solarized Dark Higher Contrast](https://ethanschoonover.com/solarized/) | solarized_dark_higher_contrast |
 | [Tokyo Night](https://github.com/enkia/tokyo-night-vscode-theme) | tokyo_night                    |
 
