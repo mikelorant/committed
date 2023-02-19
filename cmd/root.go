@@ -130,7 +130,7 @@ func NewApp() App {
 }
 
 func (a *App) configure(opts commit.Options) error {
-	a.mode()
+	opts.Mode = a.mode()
 
 	state, err := a.Commiter.Configure(opts)
 	switch {
@@ -168,13 +168,13 @@ func (a *App) apply() error {
 	return nil
 }
 
-func (a *App) mode() {
+func (a *App) mode() commit.Mode {
 	switch {
 	case !a.hook && a.opts.File.MessageFile != "":
-		a.opts.Mode = commit.ModeEditor
+		return commit.ModeEditor
 	case a.hook:
-		a.opts.Mode = commit.ModeHook
+		return commit.ModeHook
 	default:
-		a.opts.Mode = commit.ModeCommit
+		return commit.ModeCommit
 	}
 }
