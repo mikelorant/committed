@@ -5,10 +5,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
+
+	"github.com/hexops/autogold/v2"
 	"github.com/stretchr/testify/assert"
 )
 

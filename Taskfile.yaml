@@ -29,6 +29,7 @@ tasks:
     desc: Format Go files.
     cmds:
       - gofumpt -l -w .
+      - goimports-reviser -rm-unused -format -imports-order=std,project,general,company ./...
 
   release:
     desc: Build release version.

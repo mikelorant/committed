@@ -4,12 +4,13 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/mikelorant/committed/internal/repository"
+
 	"github.com/go-git/go-billy/v5/memfs"
 	fixtures "github.com/go-git/go-git-fixtures/v4"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing/cache"
 	"github.com/go-git/go-git/v5/storage/filesystem"
-	"github.com/mikelorant/committed/internal/repository"
 	"github.com/stretchr/testify/assert"
 )
 

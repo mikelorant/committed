@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/mikelorant/committed/internal/ui/uitest"
+
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/mikelorant/committed/internal/ui/uitest"
 	"github.com/stretchr/testify/assert"
 )
 

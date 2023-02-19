@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/mikelorant/committed/internal/repository"
+
 	"github.com/stretchr/testify/assert"
 )
 

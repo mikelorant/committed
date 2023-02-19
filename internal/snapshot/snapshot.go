@@ -6,6 +6,7 @@ import (
 	"io"
 
 	"github.com/mikelorant/committed/internal/repository"
+
 	"gopkg.in/yaml.v3"
 )
 

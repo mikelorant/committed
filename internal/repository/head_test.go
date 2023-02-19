@@ -5,9 +5,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/mikelorant/committed/internal/repository"
+
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
-	"github.com/mikelorant/committed/internal/repository"
 	"github.com/stretchr/testify/assert"
 )
 

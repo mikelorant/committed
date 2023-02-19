@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/mikelorant/committed/internal/hook"
+
 	"github.com/stretchr/testify/assert"
 )
 

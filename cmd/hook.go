@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/mikelorant/committed/internal/hook"
+
 	"github.com/spf13/cobra"
 )
 

@@ -6,12 +6,13 @@ import (
 	"io"
 	"os"
 
+	"github.com/mikelorant/committed/internal/shell"
+
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/go-git/go-git/v5/plumbing/storer"
-	"github.com/mikelorant/committed/internal/shell"
 )
 
 type Configer interface {

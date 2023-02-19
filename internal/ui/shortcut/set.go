@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
+
+	"github.com/charmbracelet/lipgloss"
 )
 
 type KeyBinding struct {

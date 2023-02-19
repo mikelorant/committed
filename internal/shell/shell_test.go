@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/mikelorant/committed/internal/shell"
+
 	"github.com/stretchr/testify/assert"
 )
 

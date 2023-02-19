@@ -4,8 +4,9 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/go-git/go-git/v5/config"
 	"github.com/mikelorant/committed/internal/repository"
+
+	"github.com/go-git/go-git/v5/config"
 	"github.com/stretchr/testify/assert"
 )
 

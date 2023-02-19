@@ -4,14 +4,15 @@ import (
 	"strings"
 	"testing"
 
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/theme"
 	"github.com/mikelorant/committed/internal/ui/header"
 	"github.com/mikelorant/committed/internal/ui/uitest"
+
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/hexops/autogold/v2"
 	"github.com/stretchr/testify/assert"
 )
 

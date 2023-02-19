@@ -3,9 +3,10 @@ package status
 import (
 	"strings"
 
-	tea "github.com/charmbracelet/bubbletea"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/ui/shortcut"
+
+	tea "github.com/charmbracelet/bubbletea"
 )
 
 type Model struct {

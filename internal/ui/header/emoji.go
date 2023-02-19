@@ -3,11 +3,12 @@ package header
 import (
 	"fmt"
 
-	"github.com/charmbracelet/bubbles/list"
-	"github.com/mattn/go-runewidth"
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/fuzzy"
+
+	"github.com/charmbracelet/bubbles/list"
+	"github.com/mattn/go-runewidth"
 )
 
 type listItem struct {

@@ -1,9 +1,10 @@
 package header
 
 import (
-	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/theme"
 	"github.com/mikelorant/committed/internal/ui/colour"
+
+	"github.com/charmbracelet/lipgloss"
 )
 
 type Styles struct {

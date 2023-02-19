@@ -5,11 +5,12 @@ import (
 	"io"
 	"strings"
 
-	"github.com/charmbracelet/lipgloss"
-	tint "github.com/lrstanley/bubbletint"
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/theme"
+
+	"github.com/charmbracelet/lipgloss"
+	tint "github.com/lrstanley/bubbletint"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 )

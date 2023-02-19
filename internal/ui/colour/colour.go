@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"image/color"
 
+	"github.com/mikelorant/committed/internal/theme"
+
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	tint "github.com/lrstanley/bubbletint"
-	"github.com/mikelorant/committed/internal/theme"
 	"github.com/muesli/gamut"
 )
 

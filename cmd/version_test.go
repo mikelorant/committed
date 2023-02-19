@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/cmd"
+
+	"github.com/hexops/autogold/v2"
 )
 
 func TestNewVersionCmd(t *testing.T) {

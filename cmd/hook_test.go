@@ -5,9 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/cmd"
 	"github.com/mikelorant/committed/internal/hook"
+
+	"github.com/hexops/autogold/v2"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/stretchr/testify/assert"

@@ -1,12 +1,13 @@
 package filterlist
 
 import (
+	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/ui/colour"
+
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/mikelorant/committed/internal/commit"
-	"github.com/mikelorant/committed/internal/ui/colour"
 )
 
 type Model struct {

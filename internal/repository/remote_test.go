@@ -3,10 +3,11 @@ package repository_test
 import (
 	"testing"
 
+	"github.com/mikelorant/committed/internal/repository"
+
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/storage/memory"
-	"github.com/mikelorant/committed/internal/repository"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/theme"
 	"github.com/mikelorant/committed/internal/ui/colour"
 
+	"github.com/charmbracelet/lipgloss"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -7,9 +7,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MakeNowJust/heredoc/v2"
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/repository"
+
+	"github.com/MakeNowJust/heredoc/v2"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v3"
 )

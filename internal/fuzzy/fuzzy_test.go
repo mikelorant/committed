@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/mikelorant/committed/internal/fuzzy"
+
 	"github.com/stretchr/testify/assert"
 )
 

@@ -7,11 +7,12 @@ import (
 	"log"
 	"os"
 
-	"github.com/go-git/go-git/v5"
-	cc "github.com/ivanpirog/coloredcobra"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/hook"
 	"github.com/mikelorant/committed/internal/ui"
+
+	"github.com/go-git/go-git/v5"
+	cc "github.com/ivanpirog/coloredcobra"
 	"github.com/spf13/cobra"
 )
 

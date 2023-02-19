@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/mikelorant/committed/internal/config"
+
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v3"
 )

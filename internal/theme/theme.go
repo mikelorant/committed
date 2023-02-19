@@ -3,8 +3,9 @@ package theme
 import (
 	"os"
 
-	tint "github.com/lrstanley/bubbletint"
 	"github.com/mikelorant/committed/internal/config"
+
+	tint "github.com/lrstanley/bubbletint"
 	"github.com/muesli/termenv"
 )
 

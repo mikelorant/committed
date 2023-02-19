@@ -5,6 +5,7 @@ import (
 
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/theme"
+
 	"github.com/stretchr/testify/assert"
 )
 

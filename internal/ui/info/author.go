@@ -3,9 +3,10 @@ package info
 import (
 	"fmt"
 
-	"github.com/charmbracelet/bubbles/list"
 	"github.com/mikelorant/committed/internal/fuzzy"
 	"github.com/mikelorant/committed/internal/repository"
+
+	"github.com/charmbracelet/bubbles/list"
 )
 
 type listItem struct {

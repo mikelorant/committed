@@ -3,9 +3,10 @@ package filterlist
 import (
 	"strings"
 
-	"github.com/charmbracelet/lipgloss"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/ui/colour"
+
+	"github.com/charmbracelet/lipgloss"
 )
 
 func verticalPaginator(pos, total int, state *commit.State) string {

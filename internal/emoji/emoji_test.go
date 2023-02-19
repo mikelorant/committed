@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/mikelorant/committed/internal/emoji"
+
 	"github.com/stretchr/testify/assert"
 )
 

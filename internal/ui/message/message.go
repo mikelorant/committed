@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	tea "github.com/charmbracelet/bubbletea"
 	"github.com/mikelorant/committed/internal/theme"
+
+	tea "github.com/charmbracelet/bubbletea"
 )
 
 type Model struct {

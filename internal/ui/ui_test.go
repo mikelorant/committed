@@ -5,9 +5,6 @@ import (
 	"testing"
 	"time"
 
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/go-git/go-git/v5"
-	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
@@ -16,6 +13,10 @@ import (
 	"github.com/mikelorant/committed/internal/theme"
 	"github.com/mikelorant/committed/internal/ui"
 	"github.com/mikelorant/committed/internal/ui/uitest"
+
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/go-git/go-git/v5"
+	"github.com/hexops/autogold/v2"
 	"github.com/stretchr/testify/assert"
 )
 
