@@ -1,6 +1,7 @@
 package commit
 
 import (
+	"bufio"
 	"fmt"
 	"strings"
 
@@ -119,4 +120,25 @@ func hasSummary(msg string) bool {
 func concatSlice[T any](first []T, second []T) []T {
 	n := len(first)
 	return append(first[:n:n], second...)
+}
+
+func TrimComments(str string) string {
+	var sb strings.Builder
+
+	r := strings.NewReader(str)
+
+	scanner := bufio.NewScanner(r)
+
+	for scanner.Scan() {
+		txt := scanner.Text()
+
+		if strings.HasPrefix(txt, "#") && len(txt) > 70 {
+			fmt.Fprintln(&sb, txt[:70])
+			continue
+		}
+
+		fmt.Fprintln(&sb, txt)
+	}
+
+	return strings.TrimSpace(sb.String())
 }

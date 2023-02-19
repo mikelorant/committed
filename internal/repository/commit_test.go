@@ -182,10 +182,9 @@ func TestApply(t *testing.T) {
 			},
 		},
 		{
-			name: "hook",
+			name: "file",
 			args: args{
 				commit: repository.Commit{
-					Hook:        true,
 					MessageFile: "test",
 				},
 			},
@@ -194,55 +193,59 @@ func TestApply(t *testing.T) {
 			},
 		},
 		{
-			name: "hook_summary",
+			name: "file_summary",
 			args: args{
 				commit: repository.Commit{
-					Subject: "summary",
-					Hook:    true,
+					Subject:     "summary",
+					MessageFile: "test",
 				},
 			},
 			want: want{
-				data: "summary",
+				mockFilename: "test",
+				data:         "summary",
 			},
 		},
 		{
-			name: "hook_summary_body",
+			name: "file_summary_body",
 			args: args{
 				commit: repository.Commit{
-					Subject: "summary",
-					Body:    "body",
-					Hook:    true,
+					Subject:     "summary",
+					Body:        "body",
+					MessageFile: "test",
 				},
 			},
 			want: want{
-				data: "summary\n\nbody",
+				mockFilename: "test",
+				data:         "summary\n\nbody",
 			},
 		},
 		{
-			name: "hook_summary_footer",
+			name: "file_summary_footer",
 			args: args{
 				commit: repository.Commit{
-					Subject: "summary",
-					Footer:  "Signed-off-by: John Doe <john.doe@example.com>",
-					Hook:    true,
+					Subject:     "summary",
+					Footer:      "Signed-off-by: John Doe <john.doe@example.com>",
+					MessageFile: "test",
 				},
 			},
 			want: want{
-				data: "summary\n\nSigned-off-by: John Doe <john.doe@example.com>",
+				mockFilename: "test",
+				data:         "summary\n\nSigned-off-by: John Doe <john.doe@example.com>",
 			},
 		},
 		{
-			name: "hook_summary_body_footer",
+			name: "file_summary_body_footer",
 			args: args{
 				commit: repository.Commit{
-					Subject: "summary",
-					Body:    "body",
-					Footer:  "Signed-off-by: John Doe <john.doe@example.com>",
-					Hook:    true,
+					Subject:     "summary",
+					Body:        "body",
+					Footer:      "Signed-off-by: John Doe <john.doe@example.com>",
+					MessageFile: "test",
 				},
 			},
 			want: want{
-				data: "summary\n\nbody\n\nSigned-off-by: John Doe <john.doe@example.com>",
+				mockFilename: "test",
+				data:         "summary\n\nbody\n\nSigned-off-by: John Doe <john.doe@example.com>",
 			},
 		},
 		{
@@ -255,10 +258,10 @@ func TestApply(t *testing.T) {
 			},
 		},
 		{
-			name: "hook_error",
+			name: "file_error",
 			args: args{
 				commit: repository.Commit{
-					Hook: true,
+					MessageFile: "test",
 				},
 				openFileErr: errMock,
 			},
@@ -267,10 +270,10 @@ func TestApply(t *testing.T) {
 			},
 		},
 		{
-			name: "hook_error_close",
+			name: "file_error_close",
 			args: args{
 				commit: repository.Commit{
-					Hook: true,
+					MessageFile: "test",
 				},
 				close: true,
 			},
@@ -309,13 +312,13 @@ func TestApply(t *testing.T) {
 			}
 			assert.Nil(t, err)
 
-			assert.Equal(t, tt.want.cmd, shell.command)
-			assert.Equal(t, tt.want.args, shell.args)
+			assert.Equal(t, tt.want.cmd, shell.command, "command")
+			assert.Equal(t, tt.want.args, shell.args, "args")
 
-			if tt.args.commit.Hook {
+			if tt.args.commit.MessageFile != "" {
 				out, _ := os.ReadFile(openFile.mockFilename)
-				assert.Equal(t, tt.want.mockFilename, openFile.filename)
-				assert.Equal(t, tt.want.data, strings.TrimSpace(string(out)))
+				assert.Equal(t, tt.want.mockFilename, openFile.filename, "filename")
+				assert.Equal(t, tt.want.data, strings.TrimSpace(string(out)), "data")
 			}
 		})
 	}

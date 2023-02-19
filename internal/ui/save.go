@@ -19,26 +19,26 @@ func (m *Model) backupModel() savedState {
 }
 
 func (m *Model) setSaves() {
-	m.hook = m.state.Options.Hook.Enable
-	m.amend = m.state.Options.Amend || m.state.Hook.Amend
+	m.file = m.state.Options.File.MessageFile != ""
+	m.amend = m.state.Options.Amend || m.state.File.Amend
 
 	switch m.amend {
 	case true:
-		switch m.state.Hook.Amend {
-		case true:
-			m.currentSave = defaultHookSave(m.state)
+		switch {
+		case m.state.File.Amend:
+			m.currentSave = defaultHookEditorSave(m.state)
 		default:
 			m.currentSave = defaultAmendSave(m.state)
 		}
 
 	case false:
-		if m.hook {
-			m.currentSave = defaultHookSave(m.state)
+		if m.file {
+			m.currentSave = defaultHookEditorSave(m.state)
 		}
 
-		switch m.state.Hook.Amend {
-		case true:
-			m.previousSave = defaultHookSave(m.state)
+		switch {
+		case m.state.File.Amend:
+			m.previousSave = defaultHookEditorSave(m.state)
 		default:
 			m.previousSave = defaultAmendSave(m.state)
 		}

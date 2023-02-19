@@ -370,10 +370,56 @@ You can then commit changes with:
 git co
 ```
 
+### Prepare Message Hook
+
+Committed can be installed as a Git prepare message hook. Be aware that any
+existing `prepare-commit-msg` hook will not be replaced and it is necessary to
+remove this hook before installing.
+
+Installation:
+
+```shell
+committed hook --install
+```
+
+Removal:
+
+```shell
+committed hook --uninstall
+```
+
+### Editor
+
+Committed can replace the default Git editor which allows commits to be applied
+using `git commit`. Most of the standard Git command arguments can be used.
+
+```shell
+git config --global core.editor "committed --editor"
+```
+
+This can be removed with:
+
+```shell
+git config --global --unset-all core.editor
+```
+
+There are some limitations related to acting as an editor.
+
+- Comment lines will be truncated to the width of the editor.
+- Interactive rebasing and other operations which require edit commands may have
+  visual issues. The first command may be part of the summary.
+- Author cannot be set. The configured Git author will be used and will be
+  selected using the default Git method (repository followed by global).
+- When amending, subject line may be part of the body.
+- When amending, emoji character or shortcode must be in the existing data set.
+- When amending, summary will be truncated if more than 72 characters.
+- When amending, trailers will be imported into the body.
+
 ### Amend
 
 There are certain limitations when amending commits and it is recommended only
-for use with commits created with Committed. The limitations are:
+for use with commits created with Committed. The limitations share similarities
+with using Git as an editor.
 
 - Emoji character or shortcode must be in the existing data set.
 - Trailers will be imported into the body.

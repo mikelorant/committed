@@ -42,6 +42,11 @@ type App struct {
 
 	req  *commit.Request
 	opts commit.Options
+	hook bool
+}
+
+type Options struct {
+	Hook bool
 }
 
 func NewRootCmd(a App) *cobra.Command {
@@ -76,10 +81,12 @@ func NewRootCmd(a App) *cobra.Command {
 	cmd.Flags().StringVarP(&a.opts.SnapshotFile, "snapshot", "", defaultSnapshotFile, "Snapshot file location")
 	cmd.Flags().BoolVarP(&a.opts.DryRun, "dry-run", "", defaultDryRun, "Simulate applying a commit")
 	cmd.Flags().BoolVarP(&a.opts.Amend, "amend", "a", false, "Replace the tip of the current branch by creating a new commit")
-	cmd.Flags().BoolVarP(&a.opts.Hook.Enable, "hook", "", false, "Install and uninstall Git hook")
-	cmd.Flags().StringVarP(&a.opts.Hook.MessageFile, "message-file", "", "", "")
-	cmd.Flags().StringVarP(&a.opts.Hook.Source, "source", "", "", "")
-	cmd.Flags().StringVarP(&a.opts.Hook.SHA, "sha", "", "", "")
+	cmd.Flags().StringVarP(&a.opts.File.MessageFile, "editor", "", "", "")
+	cmd.Flags().BoolVarP(&a.hook, "hook", "", false, "")
+	cmd.Flags().StringVarP(&a.opts.File.MessageFile, "message-file", "", "", "")
+	cmd.Flags().StringVarP(&a.opts.File.Source, "source", "", "", "")
+	cmd.Flags().StringVarP(&a.opts.File.SHA, "sha", "", "", "")
+	cmd.Flags().MarkHidden("editor")
 	cmd.Flags().MarkHidden("hook")
 	cmd.Flags().MarkHidden("message-file")
 	cmd.Flags().MarkHidden("source")
@@ -123,6 +130,8 @@ func NewApp() App {
 }
 
 func (a *App) configure(opts commit.Options) error {
+	a.mode()
+
 	state, err := a.Commiter.Configure(opts)
 	switch {
 	case err == nil:
@@ -157,4 +166,15 @@ func (a *App) apply() error {
 	}
 
 	return nil
+}
+
+func (a *App) mode() {
+	switch {
+	case !a.hook && a.opts.File.MessageFile != "":
+		a.opts.Mode = commit.ModeEditor
+	case a.hook:
+		a.opts.Mode = commit.ModeHook
+	default:
+		a.opts.Mode = commit.ModeCommit
+	}
 }

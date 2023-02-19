@@ -1,8 +1,11 @@
 package commit_test
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 
+	"github.com/hexops/autogold/v2"
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/emoji"
 	"github.com/mikelorant/committed/internal/repository"
@@ -525,6 +528,37 @@ func TestSortUsersByDefault(t *testing.T) {
 			users := commit.SortUsersByDefault(us...)
 
 			assert.Equal(t, tt.users, users)
+		})
+	}
+}
+
+func TestTrimComments(t *testing.T) {
+	t.Parallel()
+
+	files, err := filepath.Glob(filepath.Join("testdata", "*.input"))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for _, file := range files {
+		file := file
+
+		_, filename := filepath.Split(file)
+		ext := filepath.Ext(file)
+		testLen := len(filename) - len(ext)
+		testName := filename[:testLen]
+
+		t.Run(testName, func(t *testing.T) {
+			t.Parallel()
+
+			source, err := os.ReadFile(file)
+			if err != nil {
+				t.Fatal("unable to read source file:", err)
+			}
+
+			got := commit.TrimComments(string(source))
+
+			autogold.ExpectFile(t, autogold.Raw(got), autogold.Name(testName))
 		})
 	}
 }

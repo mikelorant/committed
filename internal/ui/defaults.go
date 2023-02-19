@@ -55,13 +55,15 @@ func defaultAmendSave(st *commit.State) savedState {
 	return s
 }
 
-func defaultHookSave(st *commit.State) savedState {
+func defaultHookEditorSave(st *commit.State) savedState {
+	msg := st.File.Message
+
 	s := savedState{
-		summary: commit.MessageToSummary(st.Hook.Message),
-		body:    commit.MessageToBody(st.Hook.Message),
+		summary: commit.TrimComments(commit.MessageToSummary(msg)),
+		body:    commit.TrimComments(commit.MessageToBody(msg)),
 	}
 
-	if e := commit.MessageToEmoji(st.Emojis, st.Hook.Message); e.Valid {
+	if e := commit.MessageToEmoji(st.Emojis, msg); e.Valid {
 		s.emoji = e.Emoji
 	}
 

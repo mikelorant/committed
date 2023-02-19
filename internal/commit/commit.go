@@ -1,11 +1,13 @@
 package commit
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"io"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
@@ -56,11 +58,11 @@ type Options struct {
 	SnapshotFile string
 	DryRun       bool
 	Amend        bool
-	Hook         HookOptions
+	Mode         Mode
+	File         FileOptions
 }
 
-type HookOptions struct {
-	Enable      bool
+type FileOptions struct {
 	MessageFile string
 	Source      string
 	SHA         string
@@ -76,9 +78,18 @@ type Request struct {
 	Author      repository.User
 	Amend       bool
 	DryRun      bool
-	Hook        bool
+	File        bool
 	MessageFile string
 }
+
+type Mode int
+
+const (
+	ModeUnset Mode = iota
+	ModeCommit
+	ModeEditor
+	ModeHook
+)
 
 func New() Commit {
 	return Commit{
@@ -118,16 +129,15 @@ func (c *Commit) Configure(opts Options) (*State, error) {
 		return nil, fmt.Errorf("unable to get snapshot: %w", err)
 	}
 
-	var hook Hook
-
-	if opts.Hook.Enable {
-		hook, err = getHook(c.ReadFiler, opts.Hook)
+	var file File
+	if opts.Mode > ModeCommit {
+		file, err = readFile(c.ReadFiler, opts)
 		if err != nil {
-			return nil, fmt.Errorf("unable to get hook mesage: %w", err)
+			return nil, fmt.Errorf("unable to read message file: %w", err)
 		}
 	}
 
-	if opts.Hook.Enable && opts.Hook.SHA == "HEAD" {
+	if file.Amend {
 		opts.Amend = true
 	}
 
@@ -140,7 +150,7 @@ func (c *Commit) Configure(opts Options) (*State, error) {
 		Config:       cfg,
 		Snapshot:     snap,
 		Options:      opts,
-		Hook:         hook,
+		File:         file,
 	}, nil
 }
 
@@ -156,7 +166,7 @@ func (c *Commit) Apply(req *Request) error {
 		Footer:      req.Footer,
 		Amend:       req.Amend,
 		DryRun:      req.DryRun,
-		Hook:        req.Hook,
+		File:        req.File,
 		MessageFile: req.MessageFile,
 	}
 
@@ -268,19 +278,39 @@ func getEmojis(emojier Emojier, cfg config.Config) *emoji.Set {
 	return emojier(fn)
 }
 
-func getHook(readFile ReadFiler, ho HookOptions) (Hook, error) {
-	msg, err := readFile(ho.MessageFile)
+func readFile(readFile ReadFiler, opts Options) (File, error) {
+	data, err := readFile(opts.File.MessageFile)
 	if err != nil {
-		return Hook{}, fmt.Errorf("unable to read file: %w", err)
+		return File{}, fmt.Errorf("unable to read file: %w", err)
 	}
 
-	h := Hook{
-		Message: string(msg),
+	msg := string(data)
+
+	f := File{
+		Message: msg,
 	}
 
-	if ho.SHA == "HEAD" {
-		h.Amend = true
+	if isAmend(msg, opts) {
+		f.Amend = true
 	}
 
-	return h, nil
+	return f, nil
+}
+
+func isAmend(msg string, opts Options) bool {
+	if opts.Mode == ModeHook && opts.File.SHA == "HEAD" {
+		return true
+	}
+
+	r := strings.NewReader(msg)
+
+	scanner := bufio.NewScanner(r)
+
+	for scanner.Scan() {
+		if !strings.HasPrefix(scanner.Text(), "#") && strings.TrimSpace(scanner.Text()) != "" {
+			return true
+		}
+	}
+
+	return false
 }

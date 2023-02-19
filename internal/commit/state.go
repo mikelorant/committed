@@ -18,7 +18,7 @@ type State struct {
 	Config       config.Config
 	Snapshot     snapshot.Snapshot
 	Options      Options
-	Hook         Hook
+	File         File
 }
 
 type Placeholders struct {
@@ -34,7 +34,7 @@ type Config struct {
 	Authors []repository.User
 }
 
-type Hook struct {
+type File struct {
 	Amend   bool
 	Message string
 }

@@ -13,15 +13,15 @@ type Commit struct {
 	Footer      string
 	Amend       bool
 	DryRun      bool
-	Hook        bool
+	File        bool
 	MessageFile string
 }
 
 const command = "git"
 
 func (r *Repository) Apply(c Commit) error {
-	if c.Hook {
-		return r.hook(c)
+	if c.MessageFile != "" {
+		return r.file(c)
 	}
 
 	if err := r.Runner(os.Stdout, command, build(c)); err != nil {
@@ -31,7 +31,7 @@ func (r *Repository) Apply(c Commit) error {
 	return nil
 }
 
-func (r *Repository) hook(c Commit) error {
+func (r *Repository) file(c Commit) error {
 	fh, err := r.OpenFiler(c.MessageFile, os.O_RDWR|os.O_TRUNC, 0o0755)
 	if err != nil {
 		return fmt.Errorf("unble to open file: %w", err)
@@ -50,7 +50,10 @@ func build(c Commit) []string {
 
 	args = append(args, "commit")
 	args = append(args, "--author", c.Author)
-	args = append(args, "--message", c.Subject)
+
+	if c.Subject != "" {
+		args = append(args, "--message", c.Subject)
+	}
 
 	if c.Body != "" {
 		args = append(args, "--message", c.Body)
@@ -74,8 +77,10 @@ func build(c Commit) []string {
 func write(c Commit, w io.WriteCloser) error {
 	var err error
 
-	fmt.Fprintln(w, c.Subject)
-	fmt.Fprintln(w, "")
+	if c.Subject != "" {
+		fmt.Fprintln(w, c.Subject)
+		fmt.Fprintln(w, "")
+	}
 
 	if c.Body != "" {
 		fmt.Fprintln(w, c.Body)

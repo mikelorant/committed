@@ -292,11 +292,12 @@ func TestConfigure(t *testing.T) {
 			},
 		},
 		{
-			name: "hook",
+			name: "file_hook",
 			args: args{
 				opts: commit.Options{
-					Hook: commit.HookOptions{
-						Enable: true,
+					Mode: commit.ModeHook,
+					File: commit.FileOptions{
+						MessageFile: "test",
 					},
 				},
 			},
@@ -306,20 +307,22 @@ func TestConfigure(t *testing.T) {
 					Config:       config.Config{},
 					Emojis:       &emoji.Set{},
 					Options: commit.Options{
-						Hook: commit.HookOptions{
-							Enable: true,
+						Mode: commit.ModeHook,
+						File: commit.FileOptions{
+							MessageFile: "test",
 						},
 					},
 				},
 			},
 		},
 		{
-			name: "hook_sha",
+			name: "file_hook_sha",
 			args: args{
 				opts: commit.Options{
-					Hook: commit.HookOptions{
-						Enable: true,
-						SHA:    "HEAD",
+					Mode: commit.ModeHook,
+					File: commit.FileOptions{
+						MessageFile: "test",
+						SHA:         "HEAD",
 					},
 				},
 			},
@@ -329,13 +332,14 @@ func TestConfigure(t *testing.T) {
 					Config:       config.Config{},
 					Emojis:       &emoji.Set{},
 					Options: commit.Options{
-						Hook: commit.HookOptions{
-							Enable: true,
-							SHA:    "HEAD",
+						Mode: commit.ModeHook,
+						File: commit.FileOptions{
+							MessageFile: "test",
+							SHA:         "HEAD",
 						},
 						Amend: true,
 					},
-					Hook: commit.Hook{
+					File: commit.File{
 						Amend: true,
 					},
 				},
@@ -434,17 +438,15 @@ func TestConfigure(t *testing.T) {
 			},
 		},
 		{
-			name: "hook_error",
+			name: "file_hook_error",
 			args: args{
 				opts: commit.Options{
-					Hook: commit.HookOptions{
-						Enable: true,
-					},
+					Mode: commit.ModeHook,
 				},
 				readFileErr: errMock,
 			},
 			want: want{
-				err: "unable to get hook mesage: unable to read file: error",
+				err: "unable to read message file: unable to read file: error",
 			},
 		},
 	}
@@ -586,31 +588,31 @@ func TestApply(t *testing.T) {
 			},
 		},
 		{
-			name: "hook",
+			name: "file",
 			args: args{
 				req: &commit.Request{
 					Apply: true,
-					Hook:  true,
+					File:  true,
 				},
 			},
 			want: want{
 				cfg: repository.Commit{
-					Hook: true,
+					File: true,
 				},
 			},
 		},
 		{
-			name: "hook_message",
+			name: "file_message",
 			args: args{
 				req: &commit.Request{
 					Apply:       true,
-					Hook:        true,
+					File:        true,
 					MessageFile: "test",
 				},
 			},
 			want: want{
 				cfg: repository.Commit{
-					Hook:        true,
+					File:        true,
 					MessageFile: "test",
 				},
 			},
