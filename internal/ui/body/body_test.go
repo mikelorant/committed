@@ -150,6 +150,45 @@ func TestModel(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "reflow_single_world",
+			args: args{
+				model: func(m body.Model) body.Model {
+					m.Height = 3
+					m.Width = 10
+
+					m.SetValue("1234567890")
+					m, _ = body.ToModel(m.Update(m))
+					return m
+				},
+			},
+		},
+		{
+			name: "reflow_multiple_words",
+			args: args{
+				model: func(m body.Model) body.Model {
+					m.Height = 3
+					m.Width = 10
+
+					m.SetValue("1 2 3 4 56")
+					m, _ = body.ToModel(m.Update(m))
+					return m
+				},
+			},
+		},
+		{
+			name: "reflow_combination",
+			args: args{
+				model: func(m body.Model) body.Model {
+					m.Height = 3
+					m.Width = 10
+
+					m.SetValue("12345678901 2 3 4 56")
+					m, _ = body.ToModel(m.Update(m))
+					return m
+				},
+			},
+		},
 	}
 
 	for _, tt := range tests {

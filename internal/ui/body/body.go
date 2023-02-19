@@ -29,6 +29,7 @@ const (
 func New(state *commit.State, h int) Model {
 	m := Model{
 		Height:   h,
+		Width:    defaultWidth,
 		state:    state,
 		styles:   defaultStyles(state.Theme),
 		textArea: newTextArea(state.Placeholders.Body, defaultWidth, state),
@@ -74,6 +75,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	m.textArea.SetHeight(m.Height)
+	m.textArea.SetWidth(m.Width)
 
 	switch {
 	case m.focus && !m.textArea.Focused():
@@ -110,9 +112,19 @@ func (m Model) Focused() bool {
 }
 
 func (m Model) Value() string {
-	txt := wordwrap.String(m.textArea.Value(), 73)
+	w := wordwrap.WordWrap{
+		// Further details for the text reflow issue:
+		// https://github.com/charmbracelet/bubbles/issues/333
+		Limit:        m.Width - 1,
+		Breakpoints:  []rune{'-'},
+		Newline:      []rune{'\n'},
+		KeepNewlines: true,
+	}
 
-	return strings.TrimSpace(txt)
+	w.Write([]byte(m.textArea.Value()))
+	w.Close()
+
+	return strings.TrimSpace(w.String())
 }
 
 func (m Model) RawValue() string {
