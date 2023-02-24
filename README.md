@@ -207,7 +207,7 @@ view:
   # Theme to display. Dark and light backgrounds have different themes.
   # Dark values:
   #   builtin_dark, dracula, gruvbox_dark, nord, retrowave,
-  #   solarized_dark_higher_contrast, tokyo_night
+  #   solarized_dark_higher_contrast, tokyo_night, snazzy
   # Dark default: builtin_dark
   # Light values:
   #   builtin_light, gruvbox_light, builtin_solarized_light,
@@ -261,15 +261,16 @@ The first theme of each set is the default theme applied.
 
 #### Dark Themes
 
-| Name                                                                     | ID                             |
-|:-------------------------------------------------------------------------|:-------------------------------|
-| Builtin Dark                                                             | builtin_dark                   |
-| [Dracula](https://draculatheme.com/)                                     | dracula                        |
-| [Gruvbox Dark](https://github.com/morhetz/gruvbox)                       | gruvbox_dark                   |
-| [Nord](https://www.nordtheme.com/)                                       | nord                           |
-| [Retrowave](https://github.com/juanmnl/vs-1984)                          | retrowave                      |
-| [Solarized Dark Higher Contrast](https://ethanschoonover.com/solarized/) | solarized_dark_higher_contrast |
-| [Tokyo Night](https://github.com/enkia/tokyo-night-vscode-theme)         | tokyo_night                    |
+| Name                                                                                  | ID                             |
+|:--------------------------------------------------------------------------------------|:-------------------------------|
+| Builtin Dark                                                                          | builtin_dark                   |
+| [Dracula](https://draculatheme.com/)                                                  | dracula                        |
+| [Gruvbox Dark](https://github.com/morhetz/gruvbox)                                    | gruvbox_dark                   |
+| [Nord](https://www.nordtheme.com/)                                                    | nord                           |
+| [Retrowave](https://github.com/juanmnl/vs-1984)                                       | retrowave                      |
+| [Solarized Dark Higher Contrast](https://ethanschoonover.com/solarized/)              | solarized_dark_higher_contrast |
+| [Tokyo Night](https://github.com/enkia/tokyo-night-vscode-theme)                      | tokyo_night                    |
+| [Snazzy](https://github.com/lrstanley/bubbletint/blob/master/DEFAULT_TINTS.md#Snazzy) | snazzy                         |
 
 #### Light Theme
 

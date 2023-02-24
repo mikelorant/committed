@@ -87,6 +87,7 @@ func dark() []tint.Tint {
 		tint.TintDracula,
 		tint.TintNord,
 		tint.TintTokyoNight,
+		tint.TintSnazzy,
 	}
 }
 
