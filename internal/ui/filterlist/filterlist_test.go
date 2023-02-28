@@ -330,6 +330,58 @@ func TestModel(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "width",
+			args: args{
+				items: []MockItem{
+					{title: "item 1"},
+					{title: "item 2"},
+					{title: "item 3"},
+				},
+				title: "test",
+				model: func(m filterlist.Model) filterlist.Model {
+					m.SetWidth(20)
+					m, _ = filterlist.ToModel(m.Update(nil))
+
+					return m
+				},
+			},
+		},
+		{
+			name: "height",
+			args: args{
+				items: []MockItem{
+					{title: "item 1"},
+					{title: "item 2"},
+					{title: "item 3"},
+				},
+				title: "test",
+				model: func(m filterlist.Model) filterlist.Model {
+					m.SetHeight(5)
+					m, _ = filterlist.ToModel(m.Update(nil))
+
+					return m
+				},
+			},
+		},
+		{
+			name: "width_height",
+			args: args{
+				items: []MockItem{
+					{title: "item 1"},
+					{title: "item 2"},
+					{title: "item 3"},
+				},
+				title: "test",
+				model: func(m filterlist.Model) filterlist.Model {
+					m.SetWidth(10)
+					m.SetHeight(5)
+					m, _ = filterlist.ToModel(m.Update(nil))
+
+					return m
+				},
+			},
+		},
 	}
 
 	for _, tt := range tests {

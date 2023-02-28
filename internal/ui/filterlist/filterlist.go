@@ -151,6 +151,12 @@ func (m *Model) SetItems(i []list.Item) tea.Cmd {
 	return m.list.SetItems(i)
 }
 
+func (m *Model) SetWidth(w int) {
+	m.Width = w
+	m.textInput.Width = m.Width - lipgloss.Width(m.PromptText)
+	m.list.SetWidth(w)
+}
+
 func (m *Model) SetHeight(h int) {
 	m.Height = h
 	m.list.SetHeight(h)
