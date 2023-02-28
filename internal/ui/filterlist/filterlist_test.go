@@ -382,6 +382,23 @@ func TestModel(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "no_border",
+			args: args{
+				items: []MockItem{
+					{title: "item 1"},
+					{title: "item 2"},
+					{title: "item 3"},
+				},
+				title: "test",
+				model: func(m filterlist.Model) filterlist.Model {
+					m.Border = false
+					m, _ = filterlist.ToModel(m.Update(nil))
+
+					return m
+				},
+			},
+		},
 	}
 
 	for _, tt := range tests {

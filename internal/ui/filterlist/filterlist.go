@@ -15,6 +15,7 @@ type Model struct {
 	Height     int
 	Width      int
 	CharLimit  int
+	Border     bool
 
 	focus        bool
 	state        *commit.State
@@ -36,6 +37,7 @@ func New(state *commit.State) Model {
 		Height:    defaultHeight,
 		Width:     defaultWidth,
 		CharLimit: defaultCharLimit,
+		Border:    true,
 		state:     state,
 		styles:    defaultStyles(state.Theme),
 	}
@@ -118,6 +120,10 @@ func (m Model) View() string {
 	e := lipgloss.JoinVertical(lipgloss.Top, m.textInput.View(), m.list.View())
 	p := m.styles.paginatorBoundary.Render(m.stylePaginatorColumn())
 	ep := lipgloss.JoinHorizontal(lipgloss.Top, e, p)
+
+	if !m.Border {
+		return ep
+	}
 
 	if m.focus || !m.state.Config.View.HighlightActive {
 		return m.styles.focusBoundary.Height(m.Height - 1).Render(ep)
