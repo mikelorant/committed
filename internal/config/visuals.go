@@ -50,6 +50,19 @@ func (f Focus) MarshalYAML() (interface{}, error) {
 	}[f], nil
 }
 
+func (f Focus) Default() int {
+	return 2
+}
+
+
+func (f Focus) Index() int {
+	if f == FocusUnset {
+		return f.Default()
+	}
+
+	return int(f)
+}
+
 func (c *Compatibility) UnmarshalYAML(value *yaml.Node) error {
 	*c = ParseCompatibility(value.Value)
 
@@ -65,6 +78,19 @@ func (c Compatibility) MarshalYAML() (interface{}, error) {
 	}[c], nil
 }
 
+func (c Compatibility) Default() int {
+	return 1
+}
+
+func (c Compatibility) Index() int {
+	if c == CompatibilityUnset {
+		return c.Default()
+	}
+
+	return int(c)
+}
+
+
 func (c *Colour) UnmarshalYAML(value *yaml.Node) error {
 	*c = ParseColour(value.Value)
 
@@ -78,6 +104,18 @@ func (c Colour) MarshalYAML() (interface{}, error) {
 		"dark",
 		"light",
 	}[c], nil
+}
+
+func (c Colour) Default() int {
+	return 1
+}
+
+func (c Colour) Index() int {
+	if c == ColourUnset {
+		return c.Default()
+	}
+
+	return int(c)
 }
 
 func ParseFocus(str string) Focus {

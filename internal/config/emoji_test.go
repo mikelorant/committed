@@ -172,3 +172,76 @@ func TestMarshallYAMLEmojiType(t *testing.T) {
 		})
 	}
 }
+
+func TestIndexEmojiSet(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name  string
+		input config.EmojiSet
+		want  int
+	}{
+		{name: "unset", input: config.EmojiSet(config.EmojiSetUnset), want: 1},
+		{name: "gitmoji", input: config.EmojiSet(config.EmojiSetGitmoji), want: 1},
+		{name: "devmoji", input: config.EmojiSet(config.EmojiSetDevmoji), want: 2},
+		{name: "emojilog", input: config.EmojiSet(config.EmojiSetEmojiLog), want: 3},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			assert.Equal(t, tt.want, tt.input.Index())
+		})
+	}
+}
+
+func TestIndexEmojiType(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name  string
+		input config.EmojiType
+		want  int
+	}{
+		{name: "unset", input: config.EmojiType(config.EmojiTypeUnset), want: 1},
+		{name: "shortcode", input: config.EmojiType(config.EmojiTypeShortcode), want: 1},
+		{name: "character", input: config.EmojiType(config.EmojiTypeCharacter), want: 2},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			assert.Equal(t, tt.want, tt.input.Index())
+		})
+	}
+}
+
+func TestIndexEmojiSelector(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name  string
+		input config.EmojiSelector
+		want  int
+	}{
+		{name: "unset", input: config.EmojiSelector(config.EmojiSelectorUnset), want: 1},
+		{name: "below", input: config.EmojiSelector(config.EmojiSelectorBelow), want: 1},
+		{name: "above", input: config.EmojiSelector(config.EmojiSelectorAbove), want: 2},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			assert.Equal(t, tt.want, tt.input.Index())
+		})
+	}
+}

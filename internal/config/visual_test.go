@@ -176,3 +176,78 @@ func TestMarshallYAMLColour(t *testing.T) {
 		})
 	}
 }
+
+func TestIndexColour(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name  string
+		input config.Colour
+		want  int
+	}{
+		{name: "unset", input: config.Colour(config.ColourUnset), want: 1},
+		{name: "adaptive", input: config.Colour(config.ColourAdaptive), want: 1},
+		{name: "dark", input: config.Colour(config.ColourDark), want: 2},
+		{name: "light", input: config.Colour(config.ColourLight), want: 3},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			assert.Equal(t, tt.want, tt.input.Index())
+		})
+	}
+}
+
+func TestIndexCompatibility(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name  string
+		input config.Compatibility
+		want  int
+	}{
+		{name: "unset", input: config.Compatibility(config.CompatibilityUnset), want: 1},
+		{name: "default", input: config.Compatibility(config.CompatibilityDefault), want: 1},
+		{name: "ttyd", input: config.Compatibility(config.CompatibilityTtyd), want: 2},
+		{name: "kitty", input: config.Compatibility(config.CompatibilityKitty), want: 3},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			assert.Equal(t, tt.want, tt.input.Index())
+		})
+	}
+}
+
+func TestIndexFocus(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name  string
+		input config.Focus
+		want  int
+	}{
+		{name: "unset", input: config.Focus(config.FocusUnset), want: 2},
+		{name: "author", input: config.Focus(config.FocusAuthor), want: 1},
+		{name: "emoji", input: config.Focus(config.FocusEmoji), want: 2},
+		{name: "summary", input: config.Focus(config.FocusSummary), want: 3},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			assert.Equal(t, tt.want, tt.input.Index())
+		})
+	}
+}

@@ -46,6 +46,18 @@ func (e EmojiSet) MarshalYAML() (interface{}, error) {
 	}[e], nil
 }
 
+func (e EmojiSet) Default() int {
+	return 1
+}
+
+func (e EmojiSet) Index() int {
+	if e == EmojiSetUnset {
+		return e.Default()
+	}
+
+	return int(e)
+}
+
 func (e *EmojiType) UnmarshalYAML(value *yaml.Node) error {
 	*e = ParseEmojiType(value.Value)
 
@@ -60,6 +72,19 @@ func (e EmojiType) MarshalYAML() (interface{}, error) {
 	}[e], nil
 }
 
+func (e EmojiType) Default() int {
+	return 1
+}
+
+
+func (e EmojiType) Index() int {
+	if e == EmojiTypeUnset {
+		return e.Default()
+	}
+
+	return int(e)
+}
+
 func (e *EmojiSelector) UnmarshalYAML(value *yaml.Node) error {
 	*e = ParseEmojiSelector(value.Value)
 
@@ -72,6 +97,18 @@ func (e EmojiSelector) MarshalYAML() (interface{}, error) {
 		"below",
 		"above",
 	}[e], nil
+}
+
+func (e EmojiSelector) Default() int {
+	return 1
+}
+
+func (e EmojiSelector) Index() int {
+	if e == EmojiSelectorUnset {
+		return e.Default()
+	}
+
+	return int(e)
 }
 
 func ParseEmojiSet(str string) EmojiSet {
