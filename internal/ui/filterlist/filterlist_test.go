@@ -342,8 +342,23 @@ func TestModel(t *testing.T) {
 				Theme: theme.New(config.ColourAdaptive),
 			}
 
-			m := filterlist.New(castToListItems(tt.args.items), tt.args.title, tt.args.height, state)
+			m := filterlist.New(state)
 			m, _ = filterlist.ToModel(m.Update(nil))
+
+			if len(tt.args.items) > 0 {
+				m.SetItems(castToListItems(tt.args.items))
+				m, _ = filterlist.ToModel(m.Update(nil))
+			}
+
+			if tt.args.height != 0 {
+				m.SetHeight(tt.args.height)
+				m, _ = filterlist.ToModel(m.Update(nil))
+			}
+
+			if tt.args.title != "" {
+				m.SetPromptText(tt.args.title)
+				m, _ = filterlist.ToModel(m.Update(nil))
+			}
 
 			if tt.args.model != nil {
 				m = tt.args.model(m)

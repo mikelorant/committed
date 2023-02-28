@@ -59,13 +59,12 @@ func New(state *commit.State) Model {
 		state:         state,
 		styles:        defaultStyles(state.Theme),
 		summaryInput:  summaryInput(state),
-		filterList: filterlist.New(
-			castToListItems(state.Emojis.Emojis, WithCompatibility(state.Config.View.Compatibility)),
-			filterPromptText,
-			filterHeight,
-			state,
-		),
+		filterList:    filterlist.New(state),
 	}
+
+	m.filterList.SetItems(castToListItems(state.Emojis.Emojis, WithCompatibility(state.Config.View.Compatibility)))
+	m.filterList.SetHeight(filterHeight)
+	m.filterList.SetPromptText(filterPromptText)
 
 	return m
 }

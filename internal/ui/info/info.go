@@ -58,13 +58,12 @@ func New(state *commit.State) Model {
 		Authors:      authors,
 		state:        state,
 		styles:       defaultStyles(state.Theme),
-		filterList: filterlist.New(
-			castToListItems(state.Repository.Users),
-			filterPromptText,
-			filterHeight,
-			state,
-		),
+		filterList:   filterlist.New(state),
 	}
+
+	m.filterList.SetItems(castToListItems(state.Repository.Users))
+	m.filterList.SetHeight(filterHeight)
+	m.filterList.SetPromptText(filterPromptText)
 
 	if state.Options.Amend {
 		m.Hash = state.Repository.Head.Hash

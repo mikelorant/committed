@@ -26,19 +26,18 @@ type Model struct {
 }
 
 const (
+	defaultHeight    = 2
 	defaultWidth     = 68
 	defaultCharLimit = 20
 )
 
-func New(items []list.Item, prompt string, h int, state *commit.State) Model {
+func New(state *commit.State) Model {
 	m := Model{
-		PromptText: prompt,
-		Height:     h,
-		Width:      defaultWidth,
-		CharLimit:  defaultCharLimit,
-		state:      state,
-		styles:     defaultStyles(state.Theme),
-		items:      items,
+		Height:    defaultHeight,
+		Width:     defaultWidth,
+		CharLimit: defaultCharLimit,
+		state:     state,
+		styles:    defaultStyles(state.Theme),
 	}
 
 	m.list = m.newList()
@@ -152,8 +151,19 @@ func (m *Model) SetItems(i []list.Item) tea.Cmd {
 	return m.list.SetItems(i)
 }
 
+func (m *Model) SetHeight(h int) {
+	m.Height = h
+	m.list.SetHeight(h)
+}
+
+func (m *Model) SetPromptText(txt string) {
+	m.PromptText = txt
+	m.textInput.Width = m.Width - lipgloss.Width(m.PromptText)
+	m.styleTextInput(&m.textInput)
+}
+
 func (m Model) newList() list.Model {
-	l := list.New(m.items, list.NewDefaultDelegate(), m.Width, m.Height)
+	l := list.New([]list.Item{}, list.NewDefaultDelegate(), m.Width, m.Height)
 	l.SetShowHelp(false)
 	l.SetShowPagination(false)
 	l.SetShowStatusBar(false)
