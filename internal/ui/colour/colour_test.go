@@ -118,6 +118,8 @@ type optionSetting struct {
 	SettingTitleSelected Colour
 	SettingDotEmpty      Colour
 	SettingDotFilled     Colour
+	SettingSquareEmpty   Colour
+	SettingSquareFilled  Colour
 }
 
 type shortcut struct {
@@ -506,6 +508,8 @@ func TestOptionSetting(t *testing.T) {
 				SettingTitleSelected: Colour{Dark: "#ffffff", Light: "#ffffff"},
 				SettingDotEmpty:      Colour{Dark: "#bbbbbb"},
 				SettingDotFilled:     Colour{Dark: "#00bbbb", Light: "#bb0000"},
+				SettingSquareEmpty:   Colour{Dark: "#bbbbbb"},
+				SettingSquareFilled:  Colour{Dark: "#00bbbb", Light: "#bb0000"},
 			},
 		},
 	}
@@ -524,6 +528,8 @@ func TestOptionSetting(t *testing.T) {
 			assert.Equal(t, tt.optionSetting.SettingTitleSelected, toColour(clr.SettingTitleSelected), "SettingTitleSelected")
 			assert.Equal(t, tt.optionSetting.SettingDotEmpty, toColour(clr.SettingDotEmpty), "SettingDotEmpty")
 			assert.Equal(t, tt.optionSetting.SettingDotFilled, toColour(clr.SettingDotFilled), "SettingDotFilled")
+			assert.Equal(t, tt.optionSetting.SettingSquareEmpty, toColour(clr.SettingSquareEmpty), "SettingSquareEmpty")
+			assert.Equal(t, tt.optionSetting.SettingSquareFilled, toColour(clr.SettingSquareFilled), "SettingSquareFilled")
 		})
 	}
 }

@@ -33,6 +33,7 @@ const (
 	TypeUnset = iota
 	TypeNoop
 	TypeRadio
+	TypeToggle
 )
 
 const (
@@ -89,6 +90,10 @@ func (m *Model) SelectPane(title string) {
 	for _, p := range m.panes {
 		switch pane := p.(type) {
 		case *Radio:
+			if pane.Title != title {
+				continue
+			}
+		case *Toggle:
 			if pane.Title != title {
 				continue
 			}

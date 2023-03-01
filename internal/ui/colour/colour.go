@@ -113,6 +113,8 @@ type optionSetting struct {
 	SettingTitleSelected lipgloss.TerminalColor
 	SettingDotEmpty      lipgloss.TerminalColor
 	SettingDotFilled     lipgloss.TerminalColor
+	SettingSquareEmpty   lipgloss.TerminalColor
+	SettingSquareFilled  lipgloss.TerminalColor
 }
 
 type shortcut struct {
@@ -284,6 +286,8 @@ func (c *Colour) OptionSetting() optionSetting {
 		SettingTitleSelected: ToAdaptive(clr.BrightWhite()),
 		SettingDotEmpty:      clr.Fg(),
 		SettingDotFilled:     ToAdaptive(clr.Cyan()),
+		SettingSquareEmpty:   clr.Fg(),
+		SettingSquareFilled:  ToAdaptive(clr.Cyan()),
 	}
 }
 

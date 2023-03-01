@@ -239,6 +239,29 @@ func TestModel(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "toggle",
+			args: args{
+				panes: []setting.Paner{
+					&setting.Toggle{Title: "Title"},
+				},
+				model: func(m setting.Model) setting.Model {
+					m.SelectPane("Title")
+
+					ap := setting.ToToggle(m.ActivePane())
+					ap.Enable = true
+
+					return m
+				},
+			},
+			want: want{
+				model: func(m setting.Model) {
+					ap := setting.ToToggle(m.ActivePane())
+
+					assert.Equal(t, true, ap.Value())
+				},
+			},
+		},
 	}
 
 	for _, tt := range tests {

@@ -14,6 +14,8 @@ type Styles struct {
 	settingTitleSelected lipgloss.Style
 	settingDotEmpty      lipgloss.Style
 	settingDotFilled     lipgloss.Style
+	settingSquareEmpty   lipgloss.Style
+	settingSquareFilled  lipgloss.Style
 }
 
 func defaultStyles(th theme.Theme) Styles {
@@ -40,6 +42,14 @@ func defaultStyles(th theme.Theme) Styles {
 	s.settingDotFilled = lipgloss.NewStyle().
 		Foreground(clr.SettingDotFilled).
 		SetString("●")
+
+	s.settingSquareEmpty = lipgloss.NewStyle().
+		Foreground(clr.SettingSquareEmpty).
+		SetString("▢")
+
+	s.settingSquareFilled = lipgloss.NewStyle().
+		Foreground(clr.SettingSquareFilled).
+		SetString("▣")
 
 	return s
 }
