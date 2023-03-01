@@ -15,6 +15,7 @@ import (
 	"github.com/mikelorant/committed/internal/ui/help"
 	"github.com/mikelorant/committed/internal/ui/info"
 	"github.com/mikelorant/committed/internal/ui/message"
+	"github.com/mikelorant/committed/internal/ui/option"
 	"github.com/mikelorant/committed/internal/ui/status"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -47,6 +48,7 @@ type Models struct {
 	status  status.Model
 	help    help.Model
 	message message.Model
+	option  option.Model
 }
 
 type savedState struct {
@@ -72,6 +74,7 @@ const (
 	summaryComponent
 	bodyComponent
 	helpComponent
+	optionComponent
 )
 
 type quit int
@@ -108,6 +111,7 @@ const (
 	KeySummary = "£"
 	KeyBody    = "¢"
 	KeyHelp    = "˙"
+	KeyOption  = "ø"
 )
 
 const dateTimeFormat = "Mon Jan 2 15:04:05 2006 -0700"
@@ -129,6 +133,7 @@ func (m *Model) Configure(state *commit.State) {
 		footer: footer.New(state),
 		status: status.New(state),
 		help:   help.New(state),
+		option: option.New(state),
 	}
 
 	m.models.info.Date = m.Date.Format(dateTimeFormat)
@@ -136,6 +141,7 @@ func (m *Model) Configure(state *commit.State) {
 	m.setSaves()
 	m.restoreModel(m.currentSave)
 	m.setCompatibility()
+	m.configureOptions()
 
 	if (m.state.Snapshot.Restore && m.setSave()) || m.file {
 		m.resetCursor()
@@ -214,6 +220,14 @@ func (m Model) View() string {
 		return lipgloss.JoinVertical(lipgloss.Top,
 			m.models.info.View(),
 			m.models.help.View(),
+			m.models.status.View(),
+		)
+	}
+
+	if m.focus == optionComponent {
+		return lipgloss.JoinVertical(lipgloss.Top,
+			m.models.info.View(),
+			m.models.option.View(),
 			m.models.status.View(),
 		)
 	}
@@ -307,8 +321,15 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 		}
 		m.previousFocus = m.focus
 		m.focus = helpComponent
+	case "ctrl+o", KeyOption:
+		if m.focus == optionComponent {
+			m.focus = m.previousFocus
+			break
+		}
+		m.previousFocus = m.focus
+		m.focus = optionComponent
 	case "esc":
-		if m.focus == helpComponent {
+		if m.focus == helpComponent || m.focus == optionComponent {
 			m.focus = m.previousFocus
 		}
 	case "tab":
@@ -385,13 +406,14 @@ func (m Model) setModels() Model {
 }
 
 func (m Model) updateModels(msg tea.Msg) (Model, tea.Cmd) {
-	cmds := make([]tea.Cmd, 6)
+	cmds := make([]tea.Cmd, 7)
 	m.models.info, cmds[0] = info.ToModel(m.models.info.Update(msg))
 	m.models.header, cmds[1] = header.ToModel(m.models.header.Update(msg))
 	m.models.body, cmds[2] = body.ToModel(m.models.body.Update(msg))
 	m.models.footer, cmds[3] = footer.ToModel(m.models.footer.Update(msg))
 	m.models.status, cmds[4] = status.ToModel(m.models.status.Update(msg))
 	m.models.help, cmds[5] = help.ToModel(m.models.help.Update(msg))
+	m.models.option, cmds[6] = option.ToModel(m.models.option.Update(msg))
 
 	if !m.ready {
 		m.ready = true

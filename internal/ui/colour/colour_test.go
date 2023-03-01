@@ -94,7 +94,10 @@ type message struct {
 	Message Colour
 }
 
-type option struct{}
+type option struct {
+	SectionBoundary      Colour
+	SectionBoundaryFocus Colour
+}
 
 type optionSection struct {
 	Category         Colour
@@ -412,8 +415,11 @@ func TestOption(t *testing.T) {
 		option option
 	}{
 		{
-			name:   "Option",
-			option: option{},
+			name: "Option",
+			option: option{
+				SectionBoundary:      Colour{Dark: "#555555", Light: "#555555"},
+				SectionBoundaryFocus: Colour{Dark: "#bbbbbb"},
+			},
 		},
 	}
 
@@ -423,7 +429,10 @@ func TestOption(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			_ = colour.New(theme.New(config.ColourAdaptive)).Option()
+			clr := colour.New(theme.New(config.ColourAdaptive)).Option()
+
+			assert.Equal(t, tt.option.SectionBoundary, toColour(clr.SectionBoundary), "SectionBoundary")
+			assert.Equal(t, tt.option.SectionBoundaryFocus, toColour(clr.SectionBoundaryFocus), "SectionBoundaryFocus")
 		})
 	}
 }

@@ -89,7 +89,10 @@ type message struct {
 	Message lipgloss.TerminalColor
 }
 
-type option struct{}
+type option struct {
+	SectionBoundary      lipgloss.TerminalColor
+	SectionBoundaryFocus lipgloss.TerminalColor
+}
 
 type optionSection struct {
 	Category         lipgloss.TerminalColor
@@ -236,9 +239,12 @@ func (c *Colour) Message() message {
 
 //nolint:revive
 func (c *Colour) Option() option {
-	_ = c.registry
+	clr := c.registry
 
-	return option{}
+	return option{
+		SectionBoundary:      ToAdaptive(clr.BrightBlack()),
+		SectionBoundaryFocus: clr.Fg(),
+	}
 }
 
 //nolint:revive

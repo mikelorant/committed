@@ -7,6 +7,7 @@ import (
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/theme"
 	"github.com/mikelorant/committed/internal/ui/option"
+	"github.com/mikelorant/committed/internal/ui/option/section"
 	"github.com/mikelorant/committed/internal/ui/uitest"
 
 	"github.com/hexops/autogold/v2"
@@ -30,6 +31,27 @@ func TestModel(t *testing.T) {
 	}{
 		{
 			name: "default",
+		},
+		{
+			name: "section",
+			args: args{
+				model: func(m option.Model) option.Model {
+					m.SetSettings([]section.Setting{
+						{Category: "First", Name: "1"},
+						{Category: "First", Name: "2"},
+						{Category: "First", Name: "3"},
+						{Category: "First", Name: "4"},
+						{Category: "Second", Name: "1"},
+						{Category: "Third", Name: "1"},
+						{Category: "Third", Name: "2"},
+						{Category: "Third", Name: "3"},
+						{Category: "Forth", Name: "1"},
+						{Category: "Forth", Name: "2"},
+					})
+
+					return m
+				},
+			},
 		},
 	}
 
