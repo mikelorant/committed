@@ -369,6 +369,7 @@ func (m Model) resetModels() Model {
 	m.models.footer.Author = m.models.info.Author
 	m.models.footer.Signoff = m.signoff
 	m.models.help.Blur()
+	m.models.option.Blur()
 
 	return m
 }
@@ -398,6 +399,7 @@ func (m Model) setModels() Model {
 		m.models.help.Focus()
 	case optionComponent:
 		m.models.status.Shortcuts = status.OptionShortcuts()
+		m.models.option.Focus()
 	}
 
 	if m.signoff {

@@ -25,6 +25,7 @@ type Model struct {
 	Panel Panel
 
 	state   *commit.State
+	focus   bool
 	section section.Model
 	setting setting.Model
 	help    help.Model
@@ -225,6 +226,15 @@ func (m Model) View() string {
 
 	return lipgloss.JoinHorizontal(lipgloss.Top, section, settingHelp)
 }
+
+func (m *Model) Focus() {
+	m.focus = true
+}
+
+func (m *Model) Blur() {
+	m.focus = false
+}
+
 
 func (m *Model) SetSettings(set []section.Setting) {
 	m.section.Settings = set
