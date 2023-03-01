@@ -14,6 +14,7 @@ type Config struct {
 	View    View              `yaml:"view,omitempty,flow"`
 	Commit  Commit            `yaml:"commit,omitempty,flow"`
 	Authors []repository.User `yaml:"authors,omitempty,flow"`
+	Update  bool              `yaml:"-"`
 }
 
 type View struct {

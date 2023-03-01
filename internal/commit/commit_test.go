@@ -411,24 +411,6 @@ func TestConfigure(t *testing.T) {
 			},
 		},
 		{
-			name: "create_error",
-			args: args{
-				createErr: errMock,
-			},
-			want: want{
-				err: "unable to set config: unable to create config: error",
-			},
-		},
-		{
-			name: "save_error",
-			args: args{
-				saveErr: errMock,
-			},
-			want: want{
-				err: "unable to set config: unable to save config: error",
-			},
-		},
-		{
 			name: "snapshot_load_error",
 			args: args{
 				snapLoadErr: errMock,
@@ -491,7 +473,6 @@ func TestConfigure(t *testing.T) {
 			}
 			assert.Nil(t, err)
 			assert.Equal(t, &tt.want.state, state)
-			assert.Equal(t, tt.want.cfg, cfg.file)
 		})
 	}
 }
@@ -509,7 +490,8 @@ func TestApply(t *testing.T) {
 	}
 
 	type want struct {
-		cfg      repository.Commit
+		cfg      config.Config
+		com      repository.Commit
 		snapshot snapshot.Snapshot
 		err      string
 	}
@@ -535,7 +517,7 @@ func TestApply(t *testing.T) {
 				},
 			},
 			want: want{
-				cfg: repository.Commit{
+				com: repository.Commit{
 					Author:  "John Doe <john.doe@example.com>",
 					Subject: ":art: summary",
 					Body:    "body",
@@ -552,7 +534,7 @@ func TestApply(t *testing.T) {
 				},
 			},
 			want: want{
-				cfg: repository.Commit{
+				com: repository.Commit{
 					DryRun: true,
 				},
 			},
@@ -566,7 +548,7 @@ func TestApply(t *testing.T) {
 				},
 			},
 			want: want{
-				cfg: repository.Commit{
+				com: repository.Commit{
 					Amend: true,
 				},
 			},
@@ -581,7 +563,7 @@ func TestApply(t *testing.T) {
 				},
 			},
 			want: want{
-				cfg: repository.Commit{
+				com: repository.Commit{
 					Amend:  true,
 					DryRun: true,
 				},
@@ -596,7 +578,7 @@ func TestApply(t *testing.T) {
 				},
 			},
 			want: want{
-				cfg: repository.Commit{
+				com: repository.Commit{
 					File: true,
 				},
 			},
@@ -611,7 +593,7 @@ func TestApply(t *testing.T) {
 				},
 			},
 			want: want{
-				cfg: repository.Commit{
+				com: repository.Commit{
 					File:        true,
 					MessageFile: "test",
 				},
@@ -715,6 +697,34 @@ func TestApply(t *testing.T) {
 				err: "unable to set snapshot: unable to save snapshot: error",
 			},
 		},
+		{
+			name: "create_error",
+			args: args{
+				req: &commit.Request{
+					Config: config.Config{
+						Update: true,
+					},
+				},
+				createErr: errMock,
+			},
+			want: want{
+				err: "unable to set config: unable to create config: error",
+			},
+		},
+		{
+			name: "save_error",
+			args: args{
+				req: &commit.Request{
+					Config: config.Config{
+						Update: true,
+					},
+				},
+				saveErr: errMock,
+			},
+			want: want{
+				err: "unable to set config: unable to save config: error",
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -725,6 +735,10 @@ func TestApply(t *testing.T) {
 
 			repo := MockRepository{
 				applyErr: tt.args.applyErr,
+			}
+
+			cfg := MockConfig{
+				saveErr: tt.args.saveErr,
 			}
 
 			snap := MockSnapshot{
@@ -739,6 +753,7 @@ func TestApply(t *testing.T) {
 			c := commit.Commit{
 				Repoer:      &repo,
 				Snapshotter: &snap,
+				Configer:    &cfg,
 				Creator:     MockCreate(tt.args.createErr),
 			}
 
@@ -749,8 +764,9 @@ func TestApply(t *testing.T) {
 				return
 			}
 			assert.Nil(t, err)
-			assert.Equal(t, tt.want.cfg, repo.com)
+			assert.Equal(t, tt.want.com, repo.com)
 			assert.Equal(t, tt.want.snapshot, snap.snap)
+			assert.Equal(t, tt.want.cfg, cfg.file)
 		})
 	}
 }

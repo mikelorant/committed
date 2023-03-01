@@ -629,7 +629,6 @@ func TestModel(t *testing.T) {
 						},
 						Amend: true,
 					}
-
 					assert.Equal(t, &req, m.Request)
 				},
 			},

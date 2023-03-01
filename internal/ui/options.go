@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/ui/option/section"
 	"github.com/mikelorant/committed/internal/ui/option/setting"
 )
@@ -118,4 +119,28 @@ func (m *Model) CommitPaneSet() {
 			},
 		},
 	)
+}
+
+func (m *Model) ToConfig() config.Config {
+	ps := m.models.option.GetPaneSets()
+
+	view := config.View{
+		Focus:              config.Focus(ps["General"][0].(*setting.Radio).Index) + 1,
+		EmojiSelector:      config.EmojiSelector(ps["General"][1].(*setting.Radio).Index) + 1,
+		EmojiSet:           config.EmojiSet(ps["General"][2].(*setting.Radio).Index) + 1,
+		IgnoreGlobalAuthor: ps["General"][3].(*setting.Toggle).Enable,
+		Colour:             config.Colour(ps["Visual"][0].(*setting.Radio).Index) + 1,
+		Compatibility:      config.Compatibility(ps["Visual"][1].(*setting.Radio).Index) + 1,
+		HighlightActive:    ps["Visual"][2].(*setting.Toggle).Enable,
+	}
+
+	commit := config.Commit{
+		EmojiType: config.EmojiType(ps["Commit"][0].(*setting.Radio).Index) + 1,
+		Signoff:   ps["Commit"][1].(*setting.Toggle).Enable,
+	}
+
+	return config.Config{
+		View:   view,
+		Commit: commit,
+	}
 }

@@ -80,6 +80,7 @@ type Request struct {
 	DryRun      bool
 	File        bool
 	MessageFile string
+	Config      config.Config
 }
 
 type Mode int
@@ -116,12 +117,6 @@ func (c *Commit) Configure(opts Options) (*State, error) {
 	repo, err := getRepo(c.Repoer)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get repository: %w", err)
-	}
-
-	if !FileExists(opts.ConfigFile) {
-		if err := setConfig(c.Creator, c.Configer, opts.ConfigFile, cfg); err != nil {
-			return nil, fmt.Errorf("unable to set config: %w", err)
-		}
 	}
 
 	snap, err := getSnapshot(c.Opener, c.Snapshotter, opts.SnapshotFile)
@@ -177,6 +172,12 @@ func (c *Commit) Apply(req *Request) error {
 		Footer:  req.Footer,
 		Author:  req.Author,
 		Amend:   req.Amend,
+	}
+
+	if req.Config.Update {
+		if err := setConfig(c.Creator, c.Configer, c.Options.ConfigFile, req.Config); err != nil {
+			return fmt.Errorf("unable to set config: %w", err)
+		}
 	}
 
 	if !req.Apply {

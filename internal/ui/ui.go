@@ -35,6 +35,7 @@ type Model struct {
 	signoff       bool
 	err           error
 	ready         bool
+	writeConfig   bool
 	currentSave   savedState
 	previousSave  savedState
 	emojiType     config.EmojiType
@@ -328,6 +329,9 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 		}
 		m.previousFocus = m.focus
 		m.focus = optionComponent
+	case "ctrl+w":
+		m.state.Config = m.ToConfig()
+		m.writeConfig = true
 	case "esc":
 		if m.focus == helpComponent || m.focus == optionComponent {
 			m.focus = m.previousFocus
@@ -458,6 +462,11 @@ func (m Model) commit(q quit) Model {
 		Amend:       m.amend,
 		File:        m.file,
 		MessageFile: m.state.Options.File.MessageFile,
+	}
+
+	if m.writeConfig {
+		m.Request.Config = m.state.Config
+		m.Request.Config.Update = true
 	}
 
 	if m.quit == applyQuit {
