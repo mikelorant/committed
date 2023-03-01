@@ -90,11 +90,15 @@ type message struct {
 }
 
 type option struct {
-	SectionBoundary      lipgloss.TerminalColor
-	SectionBoundaryFocus lipgloss.TerminalColor
-	SettingBoundary      lipgloss.TerminalColor
-	SettingBoundaryFocus lipgloss.TerminalColor
-	HelpBoundary         lipgloss.TerminalColor
+	SectionBoundary         lipgloss.TerminalColor
+	SectionBoundaryFocus    lipgloss.TerminalColor
+	SettingBoundary         lipgloss.TerminalColor
+	SettingBoundaryFocus    lipgloss.TerminalColor
+	HelpBoundary            lipgloss.TerminalColor
+	ThemeTitleBoundary      lipgloss.TerminalColor
+	ThemeTitleBoundaryFocus lipgloss.TerminalColor
+	ThemeListBoundary       lipgloss.TerminalColor
+	ThemeListBoundaryFocus  lipgloss.TerminalColor
 }
 
 type optionSection struct {
@@ -118,6 +122,15 @@ type optionSetting struct {
 	SettingDotFilled     lipgloss.TerminalColor
 	SettingSquareEmpty   lipgloss.TerminalColor
 	SettingSquareFilled  lipgloss.TerminalColor
+}
+
+type optionTheme struct {
+	Title         lipgloss.TerminalColor
+	TitleFocus    lipgloss.TerminalColor
+	TitleLabel    lipgloss.TerminalColor
+	TitleText     lipgloss.TerminalColor
+	Boundary      lipgloss.TerminalColor
+	BoundaryFocus lipgloss.TerminalColor
 }
 
 type shortcut struct {
@@ -256,11 +269,15 @@ func (c *Colour) Option() option {
 	clr := c.registry
 
 	return option{
-		SectionBoundary:      ToAdaptive(clr.BrightBlack()),
-		SectionBoundaryFocus: clr.Fg(),
-		SettingBoundary:      ToAdaptive(clr.BrightBlack()),
-		SettingBoundaryFocus: clr.Fg(),
-		HelpBoundary:         clr.Fg(),
+		SectionBoundary:         ToAdaptive(clr.BrightBlack()),
+		SectionBoundaryFocus:    clr.Fg(),
+		SettingBoundary:         ToAdaptive(clr.BrightBlack()),
+		SettingBoundaryFocus:    clr.Fg(),
+		HelpBoundary:            clr.Fg(),
+		ThemeTitleBoundary:      ToAdaptive(clr.BrightBlack()),
+		ThemeTitleBoundaryFocus: clr.Fg(),
+		ThemeListBoundary:       ToAdaptive(clr.BrightBlack()),
+		ThemeListBoundaryFocus:  clr.Fg(),
 	}
 }
 
@@ -294,6 +311,20 @@ func (c *Colour) OptionSetting() optionSetting {
 		SettingDotFilled:     ToAdaptive(clr.Cyan()),
 		SettingSquareEmpty:   clr.Fg(),
 		SettingSquareFilled:  ToAdaptive(clr.Cyan()),
+	}
+}
+
+//nolint:revive
+func (c *Colour) OptionTheme() optionTheme {
+	clr := c.registry
+
+	return optionTheme{
+		Title:         ToAdaptive(clr.BrightBlack()),
+		TitleFocus:    clr.Fg(),
+		TitleLabel:    clr.Fg(),
+		TitleText:     ToAdaptive(clr.BrightWhite()),
+		Boundary:      ToAdaptive(clr.BrightBlack()),
+		BoundaryFocus: clr.Fg(),
 	}
 }
 

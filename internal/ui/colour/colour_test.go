@@ -125,6 +125,15 @@ type optionSetting struct {
 	SettingSquareFilled  Colour
 }
 
+type optionTheme struct {
+	Title         Colour
+	TitleFocus    Colour
+	TitleLabel    Colour
+	TitleText     Colour
+	Boundary      Colour
+	BoundaryFocus Colour
+}
+
 type shortcut struct {
 	Key          Colour
 	Label        Colour
@@ -539,6 +548,44 @@ func TestOptionSetting(t *testing.T) {
 			assert.Equal(t, tt.optionSetting.SettingDotFilled, toColour(clr.SettingDotFilled), "SettingDotFilled")
 			assert.Equal(t, tt.optionSetting.SettingSquareEmpty, toColour(clr.SettingSquareEmpty), "SettingSquareEmpty")
 			assert.Equal(t, tt.optionSetting.SettingSquareFilled, toColour(clr.SettingSquareFilled), "SettingSquareFilled")
+		})
+	}
+}
+
+func TestOptionTheme(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name        string
+		optionTheme optionTheme
+	}{
+		{
+			name: "OptionTheme",
+			optionTheme: optionTheme{
+				Title:         Colour{Dark: "#555555", Light: "#555555"},
+				TitleFocus:    Colour{Dark: "#bbbbbb"},
+				TitleLabel:    Colour{Dark: "#bbbbbb"},
+				TitleText:     Colour{Dark: "#ffffff", Light: "#ffffff"},
+				Boundary:      Colour{Dark: "#555555", Light: "#555555"},
+				BoundaryFocus: Colour{Dark: "#bbbbbb"},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			clr := colour.New(theme.New(config.ColourAdaptive)).OptionTheme()
+
+			assert.Equal(t, tt.optionTheme.Title, toColour(clr.Title), "Title")
+			assert.Equal(t, tt.optionTheme.TitleFocus, toColour(clr.TitleFocus), "TitleFocus")
+			assert.Equal(t, tt.optionTheme.TitleLabel, toColour(clr.TitleLabel), "TitleLabel")
+			assert.Equal(t, tt.optionTheme.TitleText, toColour(clr.TitleText), "TitleText")
+			assert.Equal(t, tt.optionTheme.Boundary, toColour(clr.Boundary), "Boundary")
+			assert.Equal(t, tt.optionTheme.BoundaryFocus, toColour(clr.BoundaryFocus), "BoundaryFocus")
 		})
 	}
 }

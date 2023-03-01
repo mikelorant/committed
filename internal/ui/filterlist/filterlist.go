@@ -148,6 +148,10 @@ func (m Model) Filter() string {
 	return m.textInput.Value()
 }
 
+func (m *Model) Select(i int) {
+	m.list.Select(i)
+}
+
 //nolint:ireturn
 func (m Model) SelectedItem() list.Item {
 	return m.list.SelectedItem()

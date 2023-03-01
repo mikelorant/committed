@@ -13,6 +13,7 @@ type Styles struct {
 	settingBoundary      lipgloss.Style
 	settingBoundaryFocus lipgloss.Style
 	helpBoundary         lipgloss.Style
+	themeBoundary        lipgloss.Style
 }
 
 func defaultStyles(th theme.Theme) Styles {
@@ -54,5 +55,11 @@ func defaultStyles(th theme.Theme) Styles {
 		BorderStyle(lipgloss.NormalBorder()).
 		Padding(0, 1, 0, 1).
 		MarginBottom(1)
+
+	s.themeBoundary = lipgloss.NewStyle().
+		Align(lipgloss.Left, lipgloss.Top).
+		Padding(0, 1, 0, 1).
+		MarginBottom(1)
+
 	return s
 }

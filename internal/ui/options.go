@@ -9,8 +9,10 @@ func (m *Model) configureOptions() {
 	m.models.option.SectionWidth = 30
 	m.models.option.SettingWidth = 41
 	m.models.option.HelpWidth = 41
+	m.models.option.ThemeWidth = 44
 	m.models.option.SectionHeight = 23
 	m.models.option.SettingHeight = 17
+	m.models.option.ThemeHeight = 18
 	m.models.option.HelpHeight = 3
 
 	m.setOptionSettings()
