@@ -2,6 +2,7 @@ package option
 
 import (
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/ui/option/help"
 	"github.com/mikelorant/committed/internal/ui/option/section"
 	"github.com/mikelorant/committed/internal/ui/option/setting"
 
@@ -12,14 +13,17 @@ import (
 type Model struct {
 	SectionWidth  int
 	SettingWidth  int
+	HelpWidth     int
 	SectionHeight int
 	SettingHeight int
+	HelpHeight    int
 
 	Panel Panel
 
 	state   *commit.State
 	section section.Model
 	setting setting.Model
+	help    help.Model
 	styles  Styles
 }
 
@@ -28,21 +32,26 @@ type Panel int
 const (
 	PanelSection Panel = iota
 	PanelSetting
+	PanelHelp
 )
 
 const (
 	defaultSectionWidth  = 40
 	defaultSettingWidth  = 40
+	defaultHelpWidth     = 40
 	defaultSectionHeight = 20
 	defaultSettingHeight = 14
+	defaultHelpHeight    = 3
 )
 
 func New(state *commit.State) Model {
 	m := Model{
 		SectionWidth:  defaultSectionWidth,
 		SettingWidth:  defaultSettingWidth,
+		HelpWidth:     defaultHelpWidth,
 		SectionHeight: defaultSectionHeight,
 		SettingHeight: defaultSettingHeight,
+		HelpHeight:    defaultHelpHeight,
 		section:       section.New(state),
 		setting:       setting.New(state),
 		styles:        defaultStyles(state.Theme),
@@ -113,6 +122,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m Model) View() string {
 	m.section.Width = m.SectionWidth
 	m.setting.Width = m.SettingWidth
+	m.help.Width = m.HelpWidth
 
 	var (
 		boundarySection lipgloss.Style
@@ -138,7 +148,18 @@ func (m Model) View() string {
 		Height(m.SettingHeight).
 		Render(m.setting.View())
 
-	return lipgloss.JoinHorizontal(lipgloss.Top, section, setting)
+	help := m.styles.helpBoundary.
+		Width(m.HelpWidth).
+		Height(m.HelpHeight).
+		Render(m.help.View())
+
+	settingHelp := lipgloss.JoinVertical(
+		lipgloss.Top,
+		setting,
+		help,
+	)
+
+	return lipgloss.JoinHorizontal(lipgloss.Top, section, settingHelp)
 }
 
 func (m *Model) SetSettings(set []section.Setting) {
@@ -173,6 +194,10 @@ func (m *Model) ActivePane() setting.Paner {
 func (m *Model) SectionIndex(c int, s int) {
 	m.section.CatIndex = c
 	m.section.SetIndex = s
+}
+
+func (m *Model) SetHelp(content string) {
+	m.help.Content = content
 }
 
 func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {

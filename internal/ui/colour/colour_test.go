@@ -99,6 +99,7 @@ type option struct {
 	SectionBoundaryFocus Colour
 	SettingBoundary      Colour
 	SettingBoundaryFocus Colour
+	HelpBoundary         Colour
 }
 
 type optionSection struct {
@@ -434,6 +435,7 @@ func TestOption(t *testing.T) {
 				SectionBoundaryFocus: Colour{Dark: "#bbbbbb"},
 				SettingBoundary:      Colour{Dark: "#555555", Light: "#555555"},
 				SettingBoundaryFocus: Colour{Dark: "#bbbbbb"},
+				HelpBoundary:         Colour{Dark: "#bbbbbb"},
 			},
 		},
 	}
@@ -450,6 +452,7 @@ func TestOption(t *testing.T) {
 			assert.Equal(t, tt.option.SectionBoundaryFocus, toColour(clr.SectionBoundaryFocus), "SectionBoundaryFocus")
 			assert.Equal(t, tt.option.SettingBoundary, toColour(clr.SettingBoundary), "SettingBoundary")
 			assert.Equal(t, tt.option.SettingBoundaryFocus, toColour(clr.SettingBoundaryFocus), "SettingBoundaryFocus")
+			assert.Equal(t, tt.option.HelpBoundary, toColour(clr.HelpBoundary), "HelpBoundary")
 		})
 	}
 }

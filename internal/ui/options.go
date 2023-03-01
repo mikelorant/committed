@@ -8,11 +8,15 @@ import (
 func (m *Model) configureOptions() {
 	m.models.option.SectionWidth = 30
 	m.models.option.SettingWidth = 41
+	m.models.option.HelpWidth = 41
 	m.models.option.SectionHeight = 23
 	m.models.option.SettingHeight = 17
+	m.models.option.HelpHeight = 3
 
 	m.setOptionSettings()
 	m.setOptionPaneSets()
+
+	m.models.option.SetHelp("Help text for settings.")
 }
 
 func (m *Model) setOptionSettings() {
