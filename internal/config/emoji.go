@@ -76,7 +76,6 @@ func (e EmojiType) Default() int {
 	return 1
 }
 
-
 func (e EmojiType) Index() int {
 	if e == EmojiTypeUnset {
 		return e.Default()

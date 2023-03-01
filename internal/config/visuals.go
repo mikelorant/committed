@@ -54,7 +54,6 @@ func (f Focus) Default() int {
 	return 2
 }
 
-
 func (f Focus) Index() int {
 	if f == FocusUnset {
 		return f.Default()
@@ -89,7 +88,6 @@ func (c Compatibility) Index() int {
 
 	return int(c)
 }
-
 
 func (c *Colour) UnmarshalYAML(value *yaml.Node) error {
 	*c = ParseColour(value.Value)

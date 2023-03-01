@@ -89,6 +89,8 @@ type message struct {
 	Message lipgloss.TerminalColor
 }
 
+type option struct{}
+
 type shortcut struct {
 	Key          lipgloss.TerminalColor
 	Label        lipgloss.TerminalColor
@@ -218,6 +220,13 @@ func (c *Colour) Message() message {
 	return message{
 		Message: clr.Fg(),
 	}
+}
+
+//nolint:revive
+func (c *Colour) Option() option {
+	_ = c.registry
+
+	return option{}
 }
 
 //nolint:revive
