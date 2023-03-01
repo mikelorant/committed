@@ -111,6 +111,8 @@ type optionSection struct {
 	SettingJoiner    Colour
 }
 
+type optionSetting struct{}
+
 type shortcut struct {
 	Key          Colour
 	Label        Colour
@@ -477,6 +479,30 @@ func TestOptionSection(t *testing.T) {
 			assert.Equal(t, tt.optionSection.SettingSpacer, toColour(clr.SettingSpacer), "SettingSpacer")
 			assert.Equal(t, tt.optionSection.SettingPrompt, toColour(clr.SettingPrompt), "SettingPrompt")
 			assert.Equal(t, tt.optionSection.SettingJoiner, toColour(clr.SettingJoiner), "SettingJoiner")
+		})
+	}
+}
+
+func TestOptionSetting(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name          string
+		optionSetting optionSetting
+	}{
+		{
+			name:          "OptionSetting",
+			optionSetting: optionSetting{},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			_ = colour.New(theme.New(config.ColourAdaptive)).OptionSetting()
 		})
 	}
 }
