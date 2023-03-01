@@ -10,6 +10,8 @@ import (
 type Styles struct {
 	sectionBoundary      lipgloss.Style
 	sectionBoundaryFocus lipgloss.Style
+	settingBoundary      lipgloss.Style
+	settingBoundaryFocus lipgloss.Style
 }
 
 func defaultStyles(th theme.Theme) Styles {
@@ -30,5 +32,19 @@ func defaultStyles(th theme.Theme) Styles {
 		BorderStyle(lipgloss.NormalBorder()).
 		Padding(0, 1, 0, 0).
 		Margin(0, 1, 1, 4)
+
+	s.settingBoundary = lipgloss.NewStyle().
+		Align(lipgloss.Left, lipgloss.Top).
+		BorderForeground(clr.SettingBoundary).
+		BorderStyle(lipgloss.NormalBorder()).
+		Padding(0, 1, 0, 1).
+		MarginBottom(1)
+
+	s.settingBoundaryFocus = lipgloss.NewStyle().
+		Align(lipgloss.Left, lipgloss.Top).
+		BorderForeground(clr.SettingBoundaryFocus).
+		BorderStyle(lipgloss.NormalBorder()).
+		Padding(0, 1, 0, 1).
+		MarginBottom(1)
 	return s
 }

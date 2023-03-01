@@ -92,6 +92,8 @@ type message struct {
 type option struct {
 	SectionBoundary      lipgloss.TerminalColor
 	SectionBoundaryFocus lipgloss.TerminalColor
+	SettingBoundary      lipgloss.TerminalColor
+	SettingBoundaryFocus lipgloss.TerminalColor
 }
 
 type optionSection struct {
@@ -255,6 +257,8 @@ func (c *Colour) Option() option {
 	return option{
 		SectionBoundary:      ToAdaptive(clr.BrightBlack()),
 		SectionBoundaryFocus: clr.Fg(),
+		SettingBoundary:      ToAdaptive(clr.BrightBlack()),
+		SettingBoundaryFocus: clr.Fg(),
 	}
 }
 

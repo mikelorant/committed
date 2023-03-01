@@ -8,6 +8,7 @@ import (
 	"github.com/mikelorant/committed/internal/theme"
 	"github.com/mikelorant/committed/internal/ui/option"
 	"github.com/mikelorant/committed/internal/ui/option/section"
+	"github.com/mikelorant/committed/internal/ui/option/setting"
 	"github.com/mikelorant/committed/internal/ui/uitest"
 
 	"github.com/hexops/autogold/v2"
@@ -47,6 +48,47 @@ func TestModel(t *testing.T) {
 						{Category: "Third", Name: "3"},
 						{Category: "Forth", Name: "1"},
 						{Category: "Forth", Name: "2"},
+					})
+
+					return m
+				},
+			},
+		},
+		{
+			name: "setting",
+			args: args{
+				model: func(m option.Model) option.Model {
+					m.SetSettings([]section.Setting{
+						{Category: "First", Name: "1"},
+						{Category: "First", Name: "2"},
+						{Category: "First", Name: "3"},
+						{Category: "First", Name: "4"},
+						{Category: "Second", Name: "1"},
+						{Category: "Third", Name: "1"},
+						{Category: "Third", Name: "2"},
+						{Category: "Third", Name: "3"},
+						{Category: "Forth", Name: "1"},
+						{Category: "Forth", Name: "2"},
+					})
+
+					m.AddPaneSet("Test", []setting.Paner{
+						&setting.Radio{Title: "First", Values: []string{"1", "2", "3"}},
+						&setting.Radio{Title: "Second", Values: []string{"4", "5", "6"}},
+						&setting.Toggle{Title: "Second", Enable: true},
+					})
+
+					return m
+				},
+			},
+		},
+		{
+			name: "section_setting",
+			args: args{
+				model: func(m option.Model) option.Model {
+					m.AddPaneSet("Test", []setting.Paner{
+						&setting.Radio{Title: "First", Values: []string{"1", "2", "3"}},
+						&setting.Radio{Title: "Second", Values: []string{"4", "5", "6"}},
+						&setting.Toggle{Title: "Second", Enable: true},
 					})
 
 					return m
