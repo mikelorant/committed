@@ -32,6 +32,7 @@ type Type int
 const (
 	TypeUnset = iota
 	TypeNoop
+	TypeRadio
 )
 
 const (
@@ -86,6 +87,13 @@ func (m *Model) AddPaneSet(name string, ps []Paner) {
 
 func (m *Model) SelectPane(title string) {
 	for _, p := range m.panes {
+		switch pane := p.(type) {
+		case *Radio:
+			if pane.Title != title {
+				continue
+			}
+		}
+
 		m.Selected.Blur()
 		m.Selected = p
 		m.Selected.Focus()

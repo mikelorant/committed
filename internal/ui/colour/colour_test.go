@@ -111,7 +111,14 @@ type optionSection struct {
 	SettingJoiner    Colour
 }
 
-type optionSetting struct{}
+type optionSetting struct {
+	Setting              Colour
+	SettingSelected      Colour
+	SettingTitle         Colour
+	SettingTitleSelected Colour
+	SettingDotEmpty      Colour
+	SettingDotFilled     Colour
+}
 
 type shortcut struct {
 	Key          Colour
@@ -491,8 +498,15 @@ func TestOptionSetting(t *testing.T) {
 		optionSetting optionSetting
 	}{
 		{
-			name:          "OptionSetting",
-			optionSetting: optionSetting{},
+			name: "OptionSetting",
+			optionSetting: optionSetting{
+				Setting:              Colour{Dark: "#bbbbbb"},
+				SettingSelected:      Colour{Dark: "#ffffff", Light: "#ffffff"},
+				SettingTitle:         Colour{Dark: "#bbbbbb"},
+				SettingTitleSelected: Colour{Dark: "#ffffff", Light: "#ffffff"},
+				SettingDotEmpty:      Colour{Dark: "#bbbbbb"},
+				SettingDotFilled:     Colour{Dark: "#00bbbb", Light: "#bb0000"},
+			},
 		},
 	}
 
@@ -502,7 +516,14 @@ func TestOptionSetting(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			_ = colour.New(theme.New(config.ColourAdaptive)).OptionSetting()
+			clr := colour.New(theme.New(config.ColourAdaptive)).OptionSetting()
+
+			assert.Equal(t, tt.optionSetting.Setting, toColour(clr.Setting), "Setting")
+			assert.Equal(t, tt.optionSetting.SettingSelected, toColour(clr.SettingSelected), "SettingSelected")
+			assert.Equal(t, tt.optionSetting.SettingTitle, toColour(clr.SettingTitle), "SettingTitle")
+			assert.Equal(t, tt.optionSetting.SettingTitleSelected, toColour(clr.SettingTitleSelected), "SettingTitleSelected")
+			assert.Equal(t, tt.optionSetting.SettingDotEmpty, toColour(clr.SettingDotEmpty), "SettingDotEmpty")
+			assert.Equal(t, tt.optionSetting.SettingDotFilled, toColour(clr.SettingDotFilled), "SettingDotFilled")
 		})
 	}
 }

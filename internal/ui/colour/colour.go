@@ -106,7 +106,14 @@ type optionSection struct {
 	SettingJoiner    lipgloss.TerminalColor
 }
 
-type optionSetting struct{}
+type optionSetting struct {
+	Setting              lipgloss.TerminalColor
+	SettingTitle         lipgloss.TerminalColor
+	SettingSelected      lipgloss.TerminalColor
+	SettingTitleSelected lipgloss.TerminalColor
+	SettingDotEmpty      lipgloss.TerminalColor
+	SettingDotFilled     lipgloss.TerminalColor
+}
 
 type shortcut struct {
 	Key          lipgloss.TerminalColor
@@ -268,9 +275,16 @@ func (c *Colour) OptionSection() optionSection {
 
 //nolint:revive
 func (c *Colour) OptionSetting() optionSetting {
-	_ = c.registry
+	clr := c.registry
 
-	return optionSetting{}
+	return optionSetting{
+		Setting:              clr.Fg(),
+		SettingSelected:      ToAdaptive(clr.BrightWhite()),
+		SettingTitle:         clr.Fg(),
+		SettingTitleSelected: ToAdaptive(clr.BrightWhite()),
+		SettingDotEmpty:      clr.Fg(),
+		SettingDotFilled:     ToAdaptive(clr.Cyan()),
+	}
 }
 
 //nolint:revive
