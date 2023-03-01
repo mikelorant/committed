@@ -124,6 +124,51 @@ func HelpShortcuts() shortcut.Shortcuts {
 	}
 }
 
+func OptionShortcuts() shortcut.Shortcuts {
+	kb := defaultKeyBindings()[:1]
+	mods := defaultModifiers()
+
+	mods = append(mods, shortcut.Modifier{
+		Modifier: shortcut.NoModifier,
+		Align:    shortcut.AlignRight,
+	})
+
+	kb = append(kb, shortcut.KeyBinding{
+		Modifier: shortcut.AltModifier,
+		Key:      "w",
+		Label:    "Write",
+	})
+
+	kb = append(kb, shortcut.KeyBinding{
+		Modifier: shortcut.NoModifier,
+		Key:      "↑→↓←",
+		Label:    "Move",
+	})
+
+	kb = append(kb, shortcut.KeyBinding{
+		Modifier: shortcut.NoModifier,
+		Key:      "Space",
+		Label:    "Toggle",
+	})
+
+	kb = append(kb, shortcut.KeyBinding{
+		Modifier: shortcut.NoModifier,
+		Key:      "Enter",
+		Label:    "Select",
+	})
+
+	kb = append(kb, shortcut.KeyBinding{
+		Modifier: shortcut.NoModifier,
+		Key:      "esc",
+		Label:    "Exit",
+	})
+
+	return shortcut.Shortcuts{
+		Modifiers:   mods,
+		KeyBindings: kb,
+	}
+}
+
 func ToModel(m tea.Model, c tea.Cmd) (Model, tea.Cmd) {
 	return m.(Model), c
 }
@@ -138,6 +183,7 @@ func defaultModifiers() []shortcut.Modifier {
 func defaultKeyBindings() []shortcut.KeyBinding {
 	return []shortcut.KeyBinding{
 		{Modifier: shortcut.ControlModifier, Key: "c", Label: "Cancel"},
+		{Modifier: shortcut.ControlModifier, Key: "o", Label: "Options"},
 		{Modifier: shortcut.ControlModifier, Key: "h", Label: "Help"},
 		{Modifier: shortcut.AltModifier, Key: "enter", Label: "Commit"},
 		{Modifier: shortcut.AltModifier, Key: "a", Label: "Amend"},

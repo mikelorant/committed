@@ -15,6 +15,7 @@ import (
 const (
 	globalShortcuts = iota
 	helpShortcuts
+	optionShortcuts
 )
 
 func TestModel(t *testing.T) {
@@ -68,6 +69,12 @@ func TestModel(t *testing.T) {
 				shortcuts: helpShortcuts,
 			},
 		},
+		{
+			name: "option",
+			args: args{
+				shortcuts: optionShortcuts,
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -85,6 +92,8 @@ func TestModel(t *testing.T) {
 			switch tt.args.shortcuts {
 			case helpShortcuts:
 				m.Shortcuts = status.HelpShortcuts()
+			case optionShortcuts:
+				m.Shortcuts = status.OptionShortcuts()
 			default:
 				m.Shortcuts = status.GlobalShortcuts(tt.args.next, tt.args.previous)
 			}

@@ -396,6 +396,8 @@ func (m Model) setModels() Model {
 	case helpComponent:
 		m.models.status.Shortcuts = status.HelpShortcuts()
 		m.models.help.Focus()
+	case optionComponent:
+		m.models.status.Shortcuts = status.OptionShortcuts()
 	}
 
 	if m.signoff {
