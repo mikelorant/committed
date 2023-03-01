@@ -96,6 +96,18 @@ type message struct {
 
 type option struct{}
 
+type optionSection struct {
+	Category         Colour
+	CategorySelected Colour
+	CategorySpacer   Colour
+	CategoryPrompt   Colour
+	Setting          Colour
+	SettingSelected  Colour
+	SettingSpacer    Colour
+	SettingPrompt    Colour
+	SettingJoiner    Colour
+}
+
 type shortcut struct {
 	Key          Colour
 	Label        Colour
@@ -412,6 +424,50 @@ func TestOption(t *testing.T) {
 			t.Parallel()
 
 			_ = colour.New(theme.New(config.ColourAdaptive)).Option()
+		})
+	}
+}
+
+func TestOptionSection(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name          string
+		optionSection optionSection
+	}{
+		{
+			name: "OptionSection",
+			optionSection: optionSection{
+				Category:         Colour{Dark: "#bbbbbb"},
+				CategorySelected: Colour{Dark: "#ffffff", Light: "#ffffff"},
+				CategorySpacer:   Colour{Dark: "#bbbbbb"},
+				CategoryPrompt:   Colour{Dark: "#00bbbb"},
+				Setting:          Colour{Dark: "#bbbbbb"},
+				SettingSelected:  Colour{Dark: "#ffffff", Light: "#ffffff"},
+				SettingSpacer:    Colour{Dark: "#bbbbbb"},
+				SettingPrompt:    Colour{Dark: "#bbbbbb"},
+				SettingJoiner:    Colour{Dark: "#bbbbbb"},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			clr := colour.New(theme.New(config.ColourAdaptive)).OptionSection()
+
+			assert.Equal(t, tt.optionSection.Category, toColour(clr.Category), "Category")
+			assert.Equal(t, tt.optionSection.CategorySelected, toColour(clr.CategorySelected), "CategorySelected")
+			assert.Equal(t, tt.optionSection.CategorySpacer, toColour(clr.CategorySpacer), "CategorySpacer")
+			assert.Equal(t, tt.optionSection.CategoryPrompt, toColour(clr.CategoryPrompt), "CategoryPrompt")
+			assert.Equal(t, tt.optionSection.Setting, toColour(clr.Setting), "Setting")
+			assert.Equal(t, tt.optionSection.SettingSelected, toColour(clr.SettingSelected), "SettingSelected")
+			assert.Equal(t, tt.optionSection.SettingSpacer, toColour(clr.SettingSpacer), "SettingSpacer")
+			assert.Equal(t, tt.optionSection.SettingPrompt, toColour(clr.SettingPrompt), "SettingPrompt")
+			assert.Equal(t, tt.optionSection.SettingJoiner, toColour(clr.SettingJoiner), "SettingJoiner")
 		})
 	}
 }

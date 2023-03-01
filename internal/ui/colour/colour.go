@@ -91,6 +91,18 @@ type message struct {
 
 type option struct{}
 
+type optionSection struct {
+	Category         lipgloss.TerminalColor
+	CategorySelected lipgloss.TerminalColor
+	CategorySpacer   lipgloss.TerminalColor
+	CategoryPrompt   lipgloss.TerminalColor
+	Setting          lipgloss.TerminalColor
+	SettingSelected  lipgloss.TerminalColor
+	SettingSpacer    lipgloss.TerminalColor
+	SettingPrompt    lipgloss.TerminalColor
+	SettingJoiner    lipgloss.TerminalColor
+}
+
 type shortcut struct {
 	Key          lipgloss.TerminalColor
 	Label        lipgloss.TerminalColor
@@ -227,6 +239,23 @@ func (c *Colour) Option() option {
 	_ = c.registry
 
 	return option{}
+}
+
+//nolint:revive
+func (c *Colour) OptionSection() optionSection {
+	clr := c.registry
+
+	return optionSection{
+		Category:         clr.Fg(),
+		CategorySelected: ToAdaptive(clr.BrightWhite()),
+		CategorySpacer:   clr.Fg(),
+		CategoryPrompt:   clr.Cyan(),
+		Setting:          clr.Fg(),
+		SettingSelected:  ToAdaptive(clr.BrightWhite()),
+		SettingSpacer:    clr.Fg(),
+		SettingPrompt:    clr.Fg(),
+		SettingJoiner:    clr.Fg(),
+	}
 }
 
 //nolint:revive
