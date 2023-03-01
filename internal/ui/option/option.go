@@ -2,6 +2,7 @@ package option
 
 import (
 	"github.com/mikelorant/committed/internal/commit"
+	"github.com/mikelorant/committed/internal/ui/colour"
 	"github.com/mikelorant/committed/internal/ui/option/help"
 	"github.com/mikelorant/committed/internal/ui/option/section"
 	"github.com/mikelorant/committed/internal/ui/option/setting"
@@ -137,6 +138,12 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.Panel = PanelSection
 			}
 		}
+	}
+
+	//nolint:gocritic
+	switch msg.(type) {
+	case colour.Msg:
+		m.styles = defaultStyles(m.state.Theme)
 	}
 
 	if m.Panel == PanelTheme && !m.theme.Focused() {
