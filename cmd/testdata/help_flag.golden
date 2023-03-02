@@ -8,7 +8,6 @@ Available Commands:
   completion   Generate the autocompletion script for the specified shell
   help         Help about any command
   hook         Install and uninstall Git hook
-  list         List settings with profiles or IDs
   version      Print the version information
 
 Flags:

@@ -74,7 +74,6 @@ func NewRootCmd(a App) *cobra.Command {
 	)
 
 	cmd.AddCommand(NewVersionCmd())
-	cmd.AddCommand(NewListCmd(a.Writer))
 	cmd.AddCommand(NewHookCmd(a))
 	cmd.SetVersionTemplate(verTmpl)
 	cmd.Flags().SortFlags = false
