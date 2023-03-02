@@ -35,7 +35,7 @@ func (m *Model) defaultSignoff(signoff bool) {
 }
 
 func (m *Model) defaultTheme(th string, clr config.Colour) {
-	t := theme.New(clr)
+	t := theme.New(theme.Default(clr))
 	t.Set(th)
 
 	m.state.Theme = t

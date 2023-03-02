@@ -9,6 +9,7 @@ import (
 
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/hook"
+	"github.com/mikelorant/committed/internal/theme"
 	"github.com/mikelorant/committed/internal/ui"
 
 	"github.com/go-git/go-git/v5"
@@ -40,6 +41,7 @@ type App struct {
 	Logger   Logger
 	Writer   io.Writer
 	Hooker   Hooker
+	Tint     theme.Tint
 
 	req  *commit.Request
 	opts commit.Options

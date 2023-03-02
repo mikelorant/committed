@@ -202,7 +202,7 @@ func TestModel(t *testing.T) {
 				Placeholders: commit.Placeholders{
 					Body: tt.args.body,
 				},
-				Theme: theme.New(config.ColourAdaptive),
+				Theme: theme.New(theme.Default(config.ColourAdaptive)),
 			}
 
 			m := body.New(&c, tt.args.height)

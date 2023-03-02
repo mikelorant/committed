@@ -408,7 +408,7 @@ func TestModel(t *testing.T) {
 			t.Parallel()
 
 			state := &commit.State{
-				Theme: theme.New(config.ColourAdaptive),
+				Theme: theme.New(theme.Default(config.ColourAdaptive)),
 			}
 
 			m := filterlist.New(state)

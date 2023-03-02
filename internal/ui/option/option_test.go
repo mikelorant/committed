@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/mikelorant/committed/internal/commit"
-	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/theme"
+	"github.com/mikelorant/committed/internal/theme/themetest"
 	"github.com/mikelorant/committed/internal/ui/option"
 	"github.com/mikelorant/committed/internal/ui/option/section"
 	"github.com/mikelorant/committed/internal/ui/option/setting"
@@ -322,8 +322,13 @@ func TestModel(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
+			tint := theme.Tint{
+				Default:  themetest.NewStubTints(5)[0],
+				Defaults: themetest.NewStubTints(5),
+			}
+
 			state := &commit.State{
-				Theme: theme.New(config.ColourAdaptive),
+				Theme: theme.New(tint),
 			}
 
 			m := option.New(state)

@@ -5,7 +5,9 @@ import (
 
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/theme"
+	"github.com/mikelorant/committed/internal/theme/themetest"
 
+	tint "github.com/lrstanley/bubbletint"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,39 +22,17 @@ func TestNew(t *testing.T) {
 		{
 			name:   "adaptive",
 			colour: config.ColourAdaptive,
-			ids: []string{
-				"builtin_dark",
-				"dracula",
-				"gruvbox_dark",
-				"nord",
-				"retrowave",
-				"solarized_dark_higher_contrast",
-				"tokyo_night",
-			},
+			ids:    testIDs(15)[0:5],
 		},
 		{
 			name:   "dark",
 			colour: config.ColourDark,
-			ids: []string{
-				"builtin_dark",
-				"dracula",
-				"gruvbox_dark",
-				"nord",
-				"retrowave",
-				"solarized_dark_higher_contrast",
-				"tokyo_night",
-			},
+			ids:    testIDs(15)[5:10],
 		},
 		{
 			name:   "light",
 			colour: config.ColourLight,
-			ids: []string{
-				"builtin_light",
-				"builtin_solarized_light",
-				"builtin_tango_light",
-				"gruvbox_light",
-				"tokyo_night_light",
-			},
+			ids:    testIDs(15)[10:15],
 		},
 	}
 
@@ -62,7 +42,27 @@ func TestNew(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			th := theme.New(tt.colour)
+			var d tint.Tint
+			var ds []tint.Tint
+
+			switch tt.colour {
+			case config.ColourAdaptive:
+				d = themetest.NewStubTints(15)[0]
+				ds = themetest.NewStubTints(15)[0:5]
+			case config.ColourDark:
+				d = themetest.NewStubTints(15)[5]
+				ds = themetest.NewStubTints(15)[5:10]
+			case config.ColourLight:
+				d = themetest.NewStubTints(15)[10]
+				ds = themetest.NewStubTints(15)[10:15]
+			}
+
+			tints := theme.Tint{
+				Default:  d,
+				Defaults: ds,
+			}
+
+			th := theme.New(tints)
 
 			var ids []string
 			for i := 0; i < len(th.ListID()); i++ {
@@ -84,32 +84,32 @@ func TestNext(t *testing.T) {
 	}{
 		{
 			name: "first",
-			id:   "builtin_dark",
+			id:   "id0",
 		},
 		{
 			name:  "one",
 			count: 1,
-			id:    "dracula",
+			id:    "id1",
 		},
 		{
 			name:  "three",
-			count: 4,
-			id:    "retrowave",
+			count: 2,
+			id:    "id2",
 		},
 		{
 			name:  "last",
-			count: 6,
-			id:    "tokyo_night",
+			count: 4,
+			id:    "id4",
 		},
 		{
 			name:  "last_plus_one",
-			count: 7,
-			id:    "builtin_dark",
+			count: 5,
+			id:    "id0",
 		},
 		{
 			name:  "last_plus_two",
-			count: 8,
-			id:    "dracula",
+			count: 6,
+			id:    "id1",
 		},
 	}
 
@@ -119,7 +119,12 @@ func TestNext(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			th := theme.New(config.ColourAdaptive)
+			tints := theme.Tint{
+				Default:  themetest.NewStubTints(5)[0],
+				Defaults: themetest.NewStubTints(5),
+			}
+
+			th := theme.New(tints)
 
 			for i := 0; i < tt.count; i++ {
 				th.Next()
@@ -139,15 +144,7 @@ func TestList(t *testing.T) {
 	}{
 		{
 			name: "default",
-			want: []string{
-				"builtin_dark",
-				"dracula",
-				"gruvbox_dark",
-				"nord",
-				"retrowave",
-				"solarized_dark_higher_contrast",
-				"tokyo_night",
-			},
+			want: []string{"id0", "id1", "id2", "id3", "id4"},
 		},
 	}
 
@@ -157,7 +154,12 @@ func TestList(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			th := theme.New(config.ColourAdaptive)
+			tints := theme.Tint{
+				Default:  themetest.NewStubTints(5)[0],
+				Defaults: themetest.NewStubTints(5),
+			}
+
+			th := theme.New(tints)
 
 			got := th.ListID()
 			assert.Equal(t, tt.want, got)
@@ -180,9 +182,9 @@ func TestSet(t *testing.T) {
 	}{
 		{
 			name: "valid",
-			id:   "dracula",
+			id:   "id1",
 			want: want{
-				id: "dracula",
+				id: "id1",
 				ok: true,
 			},
 		},
@@ -190,7 +192,7 @@ func TestSet(t *testing.T) {
 			name: "invalid",
 			id:   "test",
 			want: want{
-				id: "builtin_dark",
+				id: "id0",
 			},
 		},
 	}
@@ -201,7 +203,12 @@ func TestSet(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			th := theme.New(config.ColourAdaptive)
+			tints := theme.Tint{
+				Default:  themetest.NewStubTints(5)[0],
+				Defaults: themetest.NewStubTints(5),
+			}
+
+			th := theme.New(tints)
 
 			ok := th.Set(tt.id)
 			if !tt.want.ok {
@@ -214,4 +221,15 @@ func TestSet(t *testing.T) {
 			assert.Equal(t, tt.want.id, th.ID)
 		})
 	}
+}
+
+func testIDs(n int) []string {
+	tints := themetest.NewStubTints(n)
+
+	ids := make([]string, n)
+	for idx, tint := range tints {
+		ids[idx] = tint.ID()
+	}
+
+	return ids
 }

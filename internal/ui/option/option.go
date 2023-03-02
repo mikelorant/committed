@@ -235,7 +235,6 @@ func (m *Model) Blur() {
 	m.focus = false
 }
 
-
 func (m *Model) SetSettings(set []section.Setting) {
 	m.section.Settings = set
 }

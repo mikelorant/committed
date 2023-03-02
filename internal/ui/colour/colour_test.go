@@ -168,7 +168,7 @@ func TestBody(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			clr := colour.New(theme.New(config.ColourAdaptive)).Body()
+			clr := colour.New(theme.New(theme.Default(config.ColourAdaptive))).Body()
 
 			assert.Equal(t, tt.body.Boundary, toColour(clr.Boundary), "Boundary")
 			assert.Equal(t, tt.body.FocusBoundary, toColour(clr.FocusBoundary), "FocusBoundary")
@@ -213,7 +213,7 @@ func TestFilterList(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			clr := colour.New(theme.New(config.ColourAdaptive)).FilterList()
+			clr := colour.New(theme.New(theme.Default(config.ColourAdaptive))).FilterList()
 
 			assert.Equal(t, tt.filterlist.Boundary, toColour(clr.Boundary), "Boundary")
 			assert.Equal(t, tt.filterlist.FocusBoundary, toColour(clr.FocusBoundary), "FocusBoundary")
@@ -252,7 +252,7 @@ func TestFooter(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			clr := colour.New(theme.New(config.ColourAdaptive)).Footer()
+			clr := colour.New(theme.New(theme.Default(config.ColourAdaptive))).Footer()
 
 			assert.Equal(t, tt.footer.View, toColour(clr.View), "Boundary")
 		})
@@ -299,7 +299,7 @@ func TestHeader(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			clr := colour.New(theme.New(config.ColourAdaptive)).Header()
+			clr := colour.New(theme.New(theme.Default(config.ColourAdaptive))).Header()
 
 			assert.Equal(t, tt.header.EmojiBoundary, toColour(clr.EmojiBoundary), "EmojiBoundary")
 			assert.Equal(t, tt.header.EmojiFocusBoundary, toColour(clr.EmojiFocusBoundary), "EmojiFocusBoundary")
@@ -343,7 +343,7 @@ func TestHelp(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			clr := colour.New(theme.New(config.ColourAdaptive)).Help()
+			clr := colour.New(theme.New(theme.Default(config.ColourAdaptive))).Help()
 
 			assert.Equal(t, tt.help.Boundary, toColour(clr.Boundary), "Boundary")
 		})
@@ -383,7 +383,7 @@ func TestInfo(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			clr := colour.New(theme.New(config.ColourAdaptive)).Info()
+			clr := colour.New(theme.New(theme.Default(config.ColourAdaptive))).Info()
 
 			assert.Equal(t, tt.info.HashText, toColour(clr.HashText), "HashText")
 			assert.Equal(t, tt.info.HashValue, toColour(clr.HashValue), "HashValue")
@@ -423,7 +423,7 @@ func TestMessage(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			clr := colour.New(theme.New(config.ColourAdaptive)).Message()
+			clr := colour.New(theme.New(theme.Default(config.ColourAdaptive))).Message()
 
 			assert.Equal(t, tt.message.Message, toColour(clr.Message), "Summary")
 		})
@@ -455,7 +455,7 @@ func TestOption(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			clr := colour.New(theme.New(config.ColourAdaptive)).Option()
+			clr := colour.New(theme.New(theme.Default(config.ColourAdaptive))).Option()
 
 			assert.Equal(t, tt.option.SectionBoundary, toColour(clr.SectionBoundary), "SectionBoundary")
 			assert.Equal(t, tt.option.SectionBoundaryFocus, toColour(clr.SectionBoundaryFocus), "SectionBoundaryFocus")
@@ -495,7 +495,7 @@ func TestOptionSection(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			clr := colour.New(theme.New(config.ColourAdaptive)).OptionSection()
+			clr := colour.New(theme.New(theme.Default(config.ColourAdaptive))).OptionSection()
 
 			assert.Equal(t, tt.optionSection.Category, toColour(clr.Category), "Category")
 			assert.Equal(t, tt.optionSection.CategorySelected, toColour(clr.CategorySelected), "CategorySelected")
@@ -538,7 +538,7 @@ func TestOptionSetting(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			clr := colour.New(theme.New(config.ColourAdaptive)).OptionSetting()
+			clr := colour.New(theme.New(theme.Default(config.ColourAdaptive))).OptionSetting()
 
 			assert.Equal(t, tt.optionSetting.Setting, toColour(clr.Setting), "Setting")
 			assert.Equal(t, tt.optionSetting.SettingSelected, toColour(clr.SettingSelected), "SettingSelected")
@@ -578,7 +578,7 @@ func TestOptionTheme(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			clr := colour.New(theme.New(config.ColourAdaptive)).OptionTheme()
+			clr := colour.New(theme.New(theme.Default(config.ColourAdaptive))).OptionTheme()
 
 			assert.Equal(t, tt.optionTheme.Title, toColour(clr.Title), "Title")
 			assert.Equal(t, tt.optionTheme.TitleFocus, toColour(clr.TitleFocus), "TitleFocus")
@@ -614,7 +614,7 @@ func TestShortcut(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			clr := colour.New(theme.New(config.ColourAdaptive)).Shortcut()
+			clr := colour.New(theme.New(theme.Default(config.ColourAdaptive))).Shortcut()
 
 			assert.Equal(t, tt.shortcut.Key, toColour(clr.Key), "Key")
 			assert.Equal(t, tt.shortcut.Label, toColour(clr.Label), "Label")

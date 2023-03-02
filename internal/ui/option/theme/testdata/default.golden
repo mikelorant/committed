@@ -1,16 +1,16 @@
 ┌────────────────────────────────────────┐
-│ Theme: Builtin Dark                    │
+│ Theme: 0                               │
 └────────────────────────────────────────┘
 
 ┌────────────────────────────────────────┐
 │? Select a theme:                     ● │
-│❯ Builtin Dark                          │
-│  Dracula                               │
-│  Gruvbox Dark                          │
-│  nord                                  │
-│  Retrowave                             │
-│  Solarized Dark Higher Contrast        │
-│  TokyoNight                            │
+│❯ 0                                     │
+│  1                                     │
+│  2                                     │
+│  3                                     │
+│  4                                     │
+│                                        │
+│                                        │
 │                                        │
 │                                        │
 │                                        │

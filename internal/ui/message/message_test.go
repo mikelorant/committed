@@ -80,7 +80,7 @@ func TestModel(t *testing.T) {
 			t.Parallel()
 
 			c := message.State{
-				Theme:   theme.New(config.ColourAdaptive),
+				Theme:   theme.New(theme.Default(config.ColourAdaptive)),
 				Emoji:   tt.args.emoji,
 				Summary: tt.args.summary,
 				Body:    tt.args.body,

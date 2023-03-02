@@ -840,7 +840,7 @@ func testState() commit.State {
 				},
 			},
 		},
-		Theme: theme.New(config.ColourAdaptive),
+		Theme: theme.New(theme.Default(config.ColourAdaptive)),
 		Options: commit.Options{
 			Amend: true,
 		},

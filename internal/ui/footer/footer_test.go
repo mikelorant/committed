@@ -99,7 +99,7 @@ func TestModel(t *testing.T) {
 			t.Parallel()
 
 			state := &commit.State{
-				Theme: theme.New(config.ColourAdaptive),
+				Theme: theme.New(theme.Default(config.ColourAdaptive)),
 			}
 			if tt.args.author.Name != "" && tt.args.author.Email != "" {
 				state.Repository.Users = []repository.User{tt.args.author}

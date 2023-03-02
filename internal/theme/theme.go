@@ -14,9 +14,13 @@ type Theme struct {
 	Registry *tint.Registry
 }
 
-func New(clr config.Colour) Theme {
-	ts := tints(clr)
-	reg := tint.NewRegistry(ts[0], ts[1:]...)
+type Tint struct {
+	Default  tint.Tint
+	Defaults []tint.Tint
+}
+
+func New(t Tint) Theme {
+	reg := tint.NewRegistry(t.Default, t.Defaults...)
 
 	return Theme{
 		ID:       reg.ID(),
@@ -62,40 +66,25 @@ func (t *Theme) List() []tint.Tint {
 	return t.Registry.Tints()
 }
 
-func tints(clr config.Colour) []tint.Tint {
-	if clr == config.ColourDark {
-		return dark()
+func Default(clr config.Colour) Tint {
+	dark := Tint{
+		Default:  tint.DefaultTints()[29],
+		Defaults: tint.DefaultTints(),
 	}
 
-	if clr == config.ColourLight {
-		return light()
+	light := Tint{
+		Default:  tint.DefaultTints()[30],
+		Defaults: tint.DefaultTints(),
 	}
 
-	if termenv.NewOutput(os.Stdout).HasDarkBackground() {
-		return dark()
+	switch {
+	case clr == config.ColourDark:
+		return dark
+	case clr == config.ColourLight:
+		return light
+	case termenv.NewOutput(os.Stdout).HasDarkBackground():
+		return dark
 	}
 
-	return light()
-}
-
-func dark() []tint.Tint {
-	return []tint.Tint{
-		tint.TintBuiltinDark,
-		tint.TintGruvboxDark,
-		tint.TintSolarizedDarkHigherContrast,
-		tint.TintRetrowave,
-		tint.TintDracula,
-		tint.TintNord,
-		tint.TintTokyoNight,
-	}
-}
-
-func light() []tint.Tint {
-	return []tint.Tint{
-		tint.TintBuiltinLight,
-		tint.TintGruvboxLight,
-		tint.TintBuiltinSolarizedLight,
-		tint.TintBuiltinTangoLight,
-		tint.TintTokyoNightLight,
-	}
+	return light
 }
