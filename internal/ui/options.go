@@ -132,6 +132,7 @@ func (m *Model) ToConfig() config.Config {
 		Colour:             config.Colour(ps["Visual"][0].(*setting.Radio).Index) + 1,
 		Compatibility:      config.Compatibility(ps["Visual"][1].(*setting.Radio).Index) + 1,
 		HighlightActive:    ps["Visual"][2].(*setting.Toggle).Enable,
+		Theme:              m.state.Theme.ID,
 	}
 
 	commit := config.Commit{
