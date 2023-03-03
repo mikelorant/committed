@@ -11,21 +11,21 @@ import (
 )
 
 type Config struct {
-	View    View              `yaml:"view,omitempty,flow"`
-	Commit  Commit            `yaml:"commit,omitempty,flow"`
-	Authors []repository.User `yaml:"authors,omitempty,flow"`
+	View    View              `yaml:"view,omitempty"`
+	Commit  Commit            `yaml:"commit,omitempty"`
+	Authors []repository.User `yaml:"authors,omitempty"`
 	Update  bool              `yaml:"-"`
 }
 
 type View struct {
-	Focus              Focus         `yaml:"focus,omitempty,flow"`
-	EmojiSet           EmojiSet      `yaml:"emojiSet,omitempty,flow"`
-	EmojiSelector      EmojiSelector `yaml:"emojiSelector,omitempty,flow"`
-	Compatibility      Compatibility `yaml:"compatibility,omitempty,flow"`
-	Theme              string        `yaml:"theme,omitempty,flow"`
-	Colour             Colour        `yaml:"colour,omitempty,flow"`
-	HighlightActive    bool          `yaml:"highlightActive,omitempty,flow"`
-	IgnoreGlobalAuthor bool          `yaml:"ignoreGlobalAuthor,omitempty,flow"`
+	Focus              Focus         `yaml:"focus,omitempty"`
+	EmojiSet           EmojiSet      `yaml:"emojiSet,omitempty"`
+	EmojiSelector      EmojiSelector `yaml:"emojiSelector,omitempty"`
+	Compatibility      Compatibility `yaml:"compatibility,omitempty"`
+	Theme              string        `yaml:"theme,omitempty"`
+	Colour             Colour        `yaml:"colour,omitempty"`
+	HighlightActive    bool          `yaml:"highlightActive,omitempty"`
+	IgnoreGlobalAuthor bool          `yaml:"ignoreGlobalAuthor,omitempty"`
 }
 
 type Commit struct {

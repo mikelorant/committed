@@ -494,117 +494,179 @@ func TestSave(t *testing.T) {
 	}{
 		{
 			name: "empty",
-			data: "{}",
+			data: heredoc.Doc(`
+				{}
+			`),
 		},
 		{
 			name:   "view_focus_unset",
 			config: func(c *config.Config) { c.View.Focus = config.FocusUnset },
-			data:   "{}",
+			data: heredoc.Doc(`
+				{}
+			`),
 		},
 		{
 			name:   "view_focus_author",
 			config: func(c *config.Config) { c.View.Focus = config.FocusAuthor },
-			data:   "view: {focus: author}",
+			data: heredoc.Doc(`
+				view:
+					focus: author
+			`),
 		},
 		{
 			name:   "view_focus_emoji",
 			config: func(c *config.Config) { c.View.Focus = config.FocusEmoji },
-			data:   "view: {focus: emoji}",
+			data: heredoc.Doc(`
+				view:
+					focus: emoji
+			`),
 		},
 		{
 			name:   "view_focus_summary",
 			config: func(c *config.Config) { c.View.Focus = config.FocusSummary },
-			data:   "view: {focus: summary}",
+			data: heredoc.Doc(`
+				view:
+					focus: summary
+			`),
 		},
 		{
 			name:   "view_compatibility_unset",
 			config: func(c *config.Config) { c.View.Compatibility = config.CompatibilityUnset },
-			data:   "{}",
+			data: heredoc.Doc(`
+				{}
+			`),
 		},
 		{
 			name:   "view_compatibility_default",
 			config: func(c *config.Config) { c.View.Compatibility = config.CompatibilityDefault },
-			data:   "view: {compatibility: default}",
+			data: heredoc.Doc(`
+				view:
+					compatibility: default
+			`),
 		},
 		{
 			name:   "view_compatibility_ttyd",
 			config: func(c *config.Config) { c.View.Compatibility = config.CompatibilityTtyd },
-			data:   "view: {compatibility: ttyd}",
+			data: heredoc.Doc(`
+				view:
+					compatibility: ttyd
+			`),
 		},
 		{
 			name:   "view_compatibility_kitty",
 			config: func(c *config.Config) { c.View.Compatibility = config.CompatibilityKitty },
-			data:   "view: {compatibility: kitty}",
+			data: heredoc.Doc(`
+				view:
+					compatibility: kitty
+			`),
 		},
 		{
 			name:   "view_colour_unset",
 			config: func(c *config.Config) { c.View.Colour = config.ColourUnset },
-			data:   "{}",
+			data: heredoc.Doc(`
+				{}
+			`),
 		},
 		{
 			name:   "view_colour_adaptive",
 			config: func(c *config.Config) { c.View.Colour = config.ColourAdaptive },
-			data:   "view: {colour: adaptive}",
+			data: heredoc.Doc(`
+				view:
+					colour: adaptive
+			`),
 		},
 		{
 			name:   "view_colour_dark",
 			config: func(c *config.Config) { c.View.Colour = config.ColourDark },
-			data:   "view: {colour: dark}",
+			data: heredoc.Doc(`
+				view:
+					colour: dark
+			`),
 		},
 		{
 			name:   "view_colour_light",
 			config: func(c *config.Config) { c.View.Colour = config.ColourLight },
-			data:   "view: {colour: light}",
+			data: heredoc.Doc(`
+				view:
+					colour: light
+			`),
 		},
 		{
 			name:   "view_emojiset_unset",
 			config: func(c *config.Config) { c.View.EmojiSet = config.EmojiSetUnset },
-			data:   "{}",
+			data: heredoc.Doc(`
+				{}
+			`),
 		},
 		{
 			name:   "view_emojiSet_gitmoji",
 			config: func(c *config.Config) { c.View.EmojiSet = config.EmojiSetGitmoji },
-			data:   "view: {emojiSet: gitmoji}",
+			data: heredoc.Doc(`
+				view:
+					emojiSet: gitmoji
+			`),
 		},
 		{
 			name:   "view_emojiset_devmoji",
 			config: func(c *config.Config) { c.View.EmojiSet = config.EmojiSetDevmoji },
-			data:   "view: {emojiSet: devmoji}",
+			data: heredoc.Doc(`
+				view:
+					emojiSet: devmoji
+			`),
 		},
 		{
 			name:   "view_emojiset_emojilog",
 			config: func(c *config.Config) { c.View.EmojiSet = config.EmojiSetEmojiLog },
-			data:   "view: {emojiSet: emojilog}",
+			data: heredoc.Doc(`
+				view:
+					emojiSet: emojilog
+			`),
 		},
 		{
 			name:   "view_emojiselector_unset",
 			config: func(c *config.Config) { c.View.EmojiSelector = config.EmojiSelectorUnset },
-			data:   "{}",
+			data: heredoc.Doc(`
+				{}
+			`),
 		},
 		{
 			name:   "view_emojiselector_below",
 			config: func(c *config.Config) { c.View.EmojiSelector = config.EmojiSelectorBelow },
-			data:   "view: {emojiSelector: below}",
+			data: heredoc.Doc(`
+				view:
+					emojiSelector: below
+			`),
 		},
 		{
 			name:   "view_emojiselector_above",
 			config: func(c *config.Config) { c.View.EmojiSelector = config.EmojiSelectorAbove },
-			data:   "view: {emojiSelector: above}",
+			data: heredoc.Doc(`
+				view:
+					emojiSelector: above
+			`),
 		},
 		{
 			name:   "view_emojitype_unset",
 			config: func(c *config.Config) { c.Commit.EmojiType = config.EmojiTypeUnset },
-			data:   "{}",
+			data: heredoc.Doc(`
+				{}
+			`),
 		},
 		{
 			name:   "view_emojitype_below",
 			config: func(c *config.Config) { c.Commit.EmojiType = config.EmojiTypeShortcode },
-			data:   "commit: {emojiType: shortcode}",
+			data: heredoc.Doc(`
+				commit:
+					emojiType: shortcode
+			`),
 		},
 		{
 			name:   "view_emojitype_above",
 			config: func(c *config.Config) { c.Commit.EmojiType = config.EmojiTypeCharacter },
-			data:   "commit: {emojiType: character}",
+			data: heredoc.Doc(`
+				commit:
+					emojiType: character
+			`),
 		},
 		{
 			name: "authors_one",
@@ -613,7 +675,11 @@ func TestSave(t *testing.T) {
 					{Name: "John Doe", Email: "john.doe@example.com"},
 				}
 			},
-			data: "authors: [{name: John Doe, email: john.doe@example.com}]",
+			data: heredoc.Doc(`
+				authors:
+					- name: John Doe
+					  email: john.doe@example.com
+			`),
 		},
 		{
 			name: "authors_multiple",
@@ -623,47 +689,73 @@ func TestSave(t *testing.T) {
 					{Name: "John Doe", Email: "jdoe@example.org"},
 				}
 			},
-			data: "authors: [{name: John Doe, email: john.doe@example.com}, {name: John Doe, email: jdoe@example.org}]",
+			data: heredoc.Doc(`
+				authors:
+					- name: John Doe
+					  email: john.doe@example.com
+					- name: John Doe
+					  email: jdoe@example.org
+			`),
 		},
 		{
 			name:   "theme_empty",
 			config: func(c *config.Config) { c.View.Theme = "" },
-			data:   "{}",
+			data: heredoc.Doc(`
+				{}
+			`),
 		},
 		{
 			name:   "theme_test",
 			config: func(c *config.Config) { c.View.Theme = "test" },
-			data:   "view: {theme: test}",
+			data: heredoc.Doc(`
+				view:
+					theme: test
+			`),
 		},
 		{
 			name:   "signoff_false",
 			config: func(c *config.Config) { c.Commit.Signoff = false },
-			data:   "{}",
+			data: heredoc.Doc(`
+				{}
+			`),
 		},
 		{
 			name:   "signoff_true",
 			config: func(c *config.Config) { c.Commit.Signoff = true },
-			data:   "commit: {signoff: true}",
+			data: heredoc.Doc(`
+				commit:
+					signoff: true
+			`),
 		},
 		{
 			name:   "highlightactive_false",
 			config: func(c *config.Config) { c.View.HighlightActive = false },
-			data:   "{}",
+			data: heredoc.Doc(`
+				{}
+			`),
 		},
 		{
 			name:   "highlightactive_true",
 			config: func(c *config.Config) { c.View.HighlightActive = true },
-			data:   "view: {highlightActive: true}",
+			data: heredoc.Doc(`
+				view:
+					highlightActive: true
+			`),
 		},
 		{
 			name:   "ignoreglobalauthor_false",
 			config: func(c *config.Config) { c.View.IgnoreGlobalAuthor = false },
-			data:   "{}",
+			data: heredoc.Doc(`
+				{}
+			`),
 		},
 		{
 			name:   "ignoreglobalauthor_true",
 			config: func(c *config.Config) { c.View.IgnoreGlobalAuthor = true },
-			data:   "view: {ignoreGlobalAuthor: true}",
+			data: heredoc.Doc(`
+				view:
+					ignoreGlobalAuthor: true
+			`),
 		},
 		{
 			name: "error",
@@ -696,7 +788,8 @@ func TestSave(t *testing.T) {
 			assert.NoError(t, err)
 
 			data, _ := io.ReadAll(&buf)
-			assert.Equal(t, tt.data, strings.TrimSpace(string(data)))
+			want := strings.ReplaceAll(tt.data, "\t", strings.Repeat(" ", 4))
+			assert.Equal(t, want, string(data))
 		})
 	}
 }
