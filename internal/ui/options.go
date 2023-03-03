@@ -4,6 +4,8 @@ import (
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/ui/option/section"
 	"github.com/mikelorant/committed/internal/ui/option/setting"
+
+	"github.com/imdario/mergo"
 )
 
 func (m *Model) configureOptions() {
@@ -121,7 +123,7 @@ func (m *Model) CommitPaneSet() {
 	)
 }
 
-func (m *Model) ToConfig() config.Config {
+func (m *Model) ToConfig() {
 	ps := m.models.option.GetPaneSets()
 
 	view := config.View{
@@ -140,8 +142,10 @@ func (m *Model) ToConfig() config.Config {
 		Signoff:   ps["Commit"][1].(*setting.Toggle).Enable,
 	}
 
-	return config.Config{
+	cfg := config.Config{
 		View:   view,
 		Commit: commit,
 	}
+
+	mergo.Merge(&m.state.Config, cfg)
 }
