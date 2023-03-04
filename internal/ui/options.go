@@ -147,5 +147,8 @@ func (m *Model) ToConfig() {
 		Commit: commit,
 	}
 
-	mergo.Merge(&m.state.Config, cfg)
+	mergo.Merge(&m.state.Config, cfg, mergo.WithOverride)
+
+	m.state.Config.View.IgnoreGlobalAuthor = view.IgnoreGlobalAuthor
+	m.state.Config.View.HighlightActive = view.HighlightActive
 }
