@@ -31,7 +31,7 @@ func TestModel(t *testing.T) {
 			name: "help",
 			args: args{
 				model: func(m help.Model) help.Model {
-					m.Content = "help"
+					m.SetContent("help")
 
 					return m
 				},
@@ -41,7 +41,7 @@ func TestModel(t *testing.T) {
 			name: "help_long",
 			args: args{
 				model: func(m help.Model) help.Model {
-					m.Content = strings.Repeat("1234567890", 10)
+					m.SetContent(strings.Repeat("1234567890", 10))
 
 					return m
 				},
@@ -51,7 +51,7 @@ func TestModel(t *testing.T) {
 			name: "help_multiline",
 			args: args{
 				model: func(m help.Model) help.Model {
-					m.Content = strings.Repeat("1234567890\n", 10)
+					m.SetContent(strings.Repeat("1234567890\n", 10))
 
 					return m
 				},
