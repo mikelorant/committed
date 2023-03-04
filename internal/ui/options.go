@@ -58,7 +58,7 @@ func (m *Model) GeneralPaneSet() {
 			},
 			&setting.Radio{
 				Title:  "Emoji Selector",
-				Values: []string{"Above", "Below"},
+				Values: []string{"Below", "Above"},
 				Index:  cfg.View.EmojiSelector.Index() - 1,
 			},
 			&setting.Radio{
