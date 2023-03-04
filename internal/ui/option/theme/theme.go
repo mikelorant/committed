@@ -141,7 +141,7 @@ func (m Model) themeTitle() string {
 
 	theme := fmt.Sprintf("%v %v", label, text)
 
-	if m.focus {
+	if m.focus || !m.state.Config.View.HighlightActive {
 		return m.styles.themeTitleFocus.Render(theme)
 	}
 
@@ -151,7 +151,7 @@ func (m Model) themeTitle() string {
 func (m Model) themeList() string {
 	theme := m.filterList.View()
 
-	if m.focus {
+	if m.focus || !m.state.Config.View.HighlightActive {
 		return m.styles.themeListBoundaryFocus.Render(theme)
 	}
 

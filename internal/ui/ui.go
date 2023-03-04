@@ -421,7 +421,10 @@ func (m Model) updateModels(msg tea.Msg) (Model, tea.Cmd) {
 	m.models.footer, cmds[3] = footer.ToModel(m.models.footer.Update(msg))
 	m.models.status, cmds[4] = status.ToModel(m.models.status.Update(msg))
 	m.models.help, cmds[5] = help.ToModel(m.models.help.Update(msg))
-	m.models.option, cmds[6] = option.ToModel(m.models.option.Update(msg))
+
+	if m.focus == optionComponent {
+		m.models.option, cmds[6] = option.ToModel(m.models.option.Update(msg))
+	}
 
 	if !m.ready {
 		m.ready = true

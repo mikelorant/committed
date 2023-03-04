@@ -90,7 +90,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.section.Next()
 			case "up":
 				m.section.Previous()
-			case "right", "enter":
+			case "right", "enter", "tab":
 				if m.Category() == "Theme" {
 					m.Panel = PanelTheme
 					break
@@ -116,7 +116,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				case *setting.Radio:
 					p.Previous()
 				}
-			case "left", "enter":
+			case "left", "enter", "tab":
 				m.Panel = PanelSection
 			case " ":
 				switch p := m.setting.Selected.(type) {
@@ -134,7 +134,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case "enter":
 				m.theme, _ = theme.ToModel(m.theme.Update(msg))
 				fallthrough
-			case "left":
+			case "left", "tab":
 				m.theme.Blur()
 				m.Panel = PanelSection
 			}
@@ -174,6 +174,12 @@ func (m Model) View() string {
 		boundarySetting lipgloss.Style
 		boundaryTheme   lipgloss.Style
 	)
+
+	if !m.state.Config.View.HighlightActive {
+		m.styles.sectionBoundary = m.styles.sectionBoundaryFocus
+		m.styles.settingBoundary = m.styles.settingBoundaryFocus
+		m.styles.helpBoundary = m.styles.helpBoundaryFocus
+	}
 
 	switch m.Panel {
 	case PanelSection:

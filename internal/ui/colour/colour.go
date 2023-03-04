@@ -95,6 +95,7 @@ type option struct {
 	SettingBoundary         lipgloss.TerminalColor
 	SettingBoundaryFocus    lipgloss.TerminalColor
 	HelpBoundary            lipgloss.TerminalColor
+	HelpBoundaryFocus       lipgloss.TerminalColor
 	ThemeTitleBoundary      lipgloss.TerminalColor
 	ThemeTitleBoundaryFocus lipgloss.TerminalColor
 	ThemeListBoundary       lipgloss.TerminalColor
@@ -273,7 +274,8 @@ func (c *Colour) Option() option {
 		SectionBoundaryFocus:    clr.Fg(),
 		SettingBoundary:         ToAdaptive(clr.BrightBlack()),
 		SettingBoundaryFocus:    clr.Fg(),
-		HelpBoundary:            clr.Fg(),
+		HelpBoundary:            ToAdaptive(clr.BrightBlack()),
+		HelpBoundaryFocus:       clr.Fg(),
 		ThemeTitleBoundary:      ToAdaptive(clr.BrightBlack()),
 		ThemeTitleBoundaryFocus: clr.Fg(),
 		ThemeListBoundary:       ToAdaptive(clr.BrightBlack()),
