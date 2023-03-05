@@ -35,8 +35,8 @@ brews:
 
 dockers:
   - image_templates:
-      - mikelorant/committed:{{.Version}}
-      - mikelorant/committed:latest
+      - ghcr.io/mikelorant/committed:{{.Version}}
+      - ghcr.io/mikelorant/committed:latest
     dockerfile: Dockerfile.release
     build_flag_templates:
       - "--pull"
