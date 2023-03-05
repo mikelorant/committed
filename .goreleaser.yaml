@@ -3,6 +3,7 @@ builds:
       - CGO_ENABLED=0
     goos:
       - darwin
+      - linux
     goarch:
       - amd64
       - arm64
@@ -31,3 +32,15 @@ brews:
       - name: git
     test: |
       system "#{bin}/committed --help"
+
+dockers:
+  - image_templates:
+      - mikelorant/committed:{{.Version}}
+      - mikelorant/committed:latest
+    dockerfile: Dockerfile.release
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
