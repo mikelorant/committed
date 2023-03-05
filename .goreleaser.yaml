@@ -36,6 +36,7 @@ dockers:
   - image_templates:
       - mikelorant/committed:{{.Version}}
       - mikelorant/committed:latest
+    dockerfile: Dockerfile.release
     build_flag_templates:
       - "--pull"
       - "--label=org.opencontainers.image.created={{.Date}}"
