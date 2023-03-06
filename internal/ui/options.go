@@ -2,10 +2,9 @@ package ui
 
 import (
 	"github.com/mikelorant/committed/internal/config"
+	"github.com/mikelorant/committed/internal/theme"
 	"github.com/mikelorant/committed/internal/ui/option/section"
 	"github.com/mikelorant/committed/internal/ui/option/setting"
-
-	"github.com/imdario/mergo"
 )
 
 func (m *Model) configureOptions() {
@@ -123,9 +122,7 @@ func (m *Model) CommitPaneSet() {
 	)
 }
 
-func (m *Model) ToConfig() {
-	ps := m.models.option.GetPaneSets()
-
+func ToConfig(cfg config.Config, ps map[string][]setting.Paner, th theme.Theme) config.Config {
 	view := config.View{
 		Focus:              config.Focus(ps["General"][0].(*setting.Radio).Index) + 1,
 		EmojiSelector:      config.EmojiSelector(ps["General"][1].(*setting.Radio).Index) + 1,
@@ -134,7 +131,7 @@ func (m *Model) ToConfig() {
 		Colour:             config.Colour(ps["Visual"][0].(*setting.Radio).Index) + 1,
 		Compatibility:      config.Compatibility(ps["Visual"][1].(*setting.Radio).Index) + 1,
 		HighlightActive:    ps["Visual"][2].(*setting.Toggle).Enable,
-		Theme:              m.state.Theme.ID,
+		Theme:              th.ID,
 	}
 
 	commit := config.Commit{
@@ -142,13 +139,9 @@ func (m *Model) ToConfig() {
 		Signoff:   ps["Commit"][1].(*setting.Toggle).Enable,
 	}
 
-	cfg := config.Config{
-		View:   view,
-		Commit: commit,
+	return config.Config{
+		View:    view,
+		Commit:  commit,
+		Authors: cfg.Authors,
 	}
-
-	mergo.Merge(&m.state.Config, cfg, mergo.WithOverride)
-
-	m.state.Config.View.IgnoreGlobalAuthor = view.IgnoreGlobalAuthor
-	m.state.Config.View.HighlightActive = view.HighlightActive
 }

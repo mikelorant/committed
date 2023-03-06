@@ -330,7 +330,7 @@ func (m Model) onKeyPress(msg tea.KeyMsg) keyResponse {
 		m.previousFocus = m.focus
 		m.focus = optionComponent
 	case "ctrl+w":
-		m.ToConfig()
+		m.state.Config = ToConfig(m.state.Config, m.models.option.GetPaneSets(), m.state.Theme)
 		m.writeConfig = true
 	case "esc":
 		if m.focus == helpComponent || m.focus == optionComponent {

@@ -22,7 +22,6 @@ require (
 	github.com/muesli/gamut v0.3.1
 	github.com/muesli/reflow v0.3.0
 	github.com/muesli/termenv v0.14.0
-	github.com/rodaine/table v1.1.0
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.8.1
