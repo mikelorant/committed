@@ -49,7 +49,7 @@ func (e EmojiSet) MarshalYAML() (interface{}, error) {
 }
 
 func (e EmojiSet) Default() int {
-	return 1
+	return 2
 }
 
 func (e EmojiSet) Index() int {

@@ -181,7 +181,7 @@ func TestIndexEmojiSet(t *testing.T) {
 		input config.EmojiSet
 		want  int
 	}{
-		{name: "unset", input: config.EmojiSet(config.EmojiSetUnset), want: 1},
+		{name: "unset", input: config.EmojiSet(config.EmojiSetUnset), want: 2},
 		{name: "committed", input: config.EmojiSet(config.EmojiSetCommitted), want: 1},
 		{name: "gitmoji", input: config.EmojiSet(config.EmojiSetGitmoji), want: 2},
 		{name: "devmoji", input: config.EmojiSet(config.EmojiSetDevmoji), want: 3},
