@@ -105,8 +105,9 @@ func (es *Set) FindByCharacter(str string) NullEmoji {
 func ToString(p Profile) string {
 	return []string{
 		"default",
+		"committed",
 		"gitmoji",
-		"devmoj",
+		"devmoji",
 		"emoji-log",
 	}[int(p)]
 }
@@ -114,6 +115,7 @@ func ToString(p Profile) string {
 func ToURL(p Profile) string {
 	return []string{
 		"https://gitmoji.dev/",
+		"https://github.com/mikelorant/committed",
 		"https://gitmoji.dev/",
 		"https://github.com/folke/devmoji",
 		"https://github.com/ahmadawais/emoji-log",

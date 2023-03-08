@@ -392,3 +392,129 @@ func TestHasShortcode(t *testing.T) {
 		})
 	}
 }
+
+func TestToString(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name    string
+		profile emoji.Profile
+		want    string
+	}{
+		{
+			name:    "default",
+			profile: emoji.DefaultProfile,
+			want:    "default",
+		},
+		{
+			name:    "committed",
+			profile: emoji.CommittedProfile,
+			want:    "committed",
+		},
+		{
+			name:    "gitmoji",
+			profile: emoji.GitmojiProfile,
+			want:    "gitmoji",
+		},
+		{
+			name:    "devmoji",
+			profile: emoji.DevmojiProfile,
+			want:    "devmoji",
+		},
+		{
+			name:    "emojilog",
+			profile: emoji.EmojiLogProfile,
+			want:    "emoji-log",
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			assert.Equal(t, tt.want, emoji.ToString(tt.profile))
+		})
+	}
+}
+
+func TestToURL(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name    string
+		profile emoji.Profile
+		want    string
+	}{
+		{
+			name:    "default",
+			profile: emoji.DefaultProfile,
+			want:    "https://gitmoji.dev/",
+		},
+		{
+			name:    "committed",
+			profile: emoji.CommittedProfile,
+			want:    "https://github.com/mikelorant/committed",
+		},
+		{
+			name:    "gitmoji",
+			profile: emoji.GitmojiProfile,
+			want:    "https://gitmoji.dev/",
+		},
+		{
+			name:    "devmoji",
+			profile: emoji.DevmojiProfile,
+			want:    "https://github.com/folke/devmoji",
+		},
+		{
+			name:    "emojilog",
+			profile: emoji.EmojiLogProfile,
+			want:    "https://github.com/ahmadawais/emoji-log",
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			assert.Equal(t, tt.want, emoji.ToURL(tt.profile))
+		})
+	}
+}
+
+func TestListProfiles(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name string
+		want []emoji.Profile
+	}{
+		{
+			name: "profile",
+			want: []emoji.Profile{
+				emoji.DefaultProfile,
+				emoji.CommittedProfile,
+				emoji.GitmojiProfile,
+				emoji.DevmojiProfile,
+				emoji.EmojiLogProfile,
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			var es emoji.Set
+
+			got := es.ListProfiles()
+
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
