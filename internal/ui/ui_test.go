@@ -347,7 +347,7 @@ func TestModel(t *testing.T) {
 			want: want{
 				model: func(m ui.Model) {
 					_, cmd := ToModel(m.Update(tea.KeyMsg{Type: tea.KeyCtrlC}))
-					assert.Equal(t, "tea.quitMsg", fmt.Sprintf("%T", cmd()))
+					assert.Equal(t, "tea.QuitMsg", fmt.Sprintf("%T", cmd()))
 				},
 			},
 		},

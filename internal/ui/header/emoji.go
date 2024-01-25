@@ -8,7 +8,7 @@ import (
 	"github.com/mikelorant/committed/internal/fuzzy"
 
 	"github.com/charmbracelet/bubbles/list"
-	"github.com/mattn/go-runewidth"
+	"github.com/rivo/uniseg"
 )
 
 type listItem struct {
@@ -27,11 +27,11 @@ func (i listItem) Title() string {
 	case config.CompatibilityTtyd:
 		space = " "
 	case config.CompatibilityKitty:
-		if runewidth.StringWidth(i.emoji.Character) == 1 && !i.emoji.Variant {
+		if uniseg.StringWidth(i.emoji.Character) == 1 && !i.emoji.Variant {
 			space = " "
 		}
 	default:
-		if runewidth.StringWidth(i.emoji.Character) == 1 {
+		if uniseg.StringWidth(i.emoji.Character) == 1 {
 			space = " "
 		}
 	}

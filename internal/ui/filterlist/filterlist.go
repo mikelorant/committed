@@ -69,15 +69,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.list.CursorUp()
 				return m, nil
 			case "pgdown":
-				if m.list.Paginator.OnLastPage() {
-					break
-				}
 				m.list.NextPage()
-				m.list, cmd = m.list.Update(msg)
 				return m, cmd
 			case "pgup":
 				m.list.PrevPage()
-				m.list, cmd = m.list.Update(msg)
 				return m, cmd
 			case "enter":
 				m.selectedItem = m.list.SelectedItem()
