@@ -40,7 +40,7 @@ Sleep 1s
 Enter
 
 Sleep 3s
-ShiftTab
+Shift+Tab
 Sleep 3s
 Enter
 
@@ -72,7 +72,7 @@ Sleep 1s
 Alt+S
 
 Sleep 3s
-Alt+ENTER
+Alt+Enter
 Sleep 5s
 
 Hide
