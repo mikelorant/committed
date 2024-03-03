@@ -157,6 +157,7 @@ func newTextArea(ph string, w int, state *commit.State) textarea.Model {
 	ta.Prompt = ""
 	ta.ShowLineNumbers = false
 	ta.CharLimit = 0
+	ta.EndOfBufferCharacter = ' '
 	ta.SetWidth(w)
 
 	styleTextArea(&ta, state)
