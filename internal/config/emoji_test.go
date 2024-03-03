@@ -75,8 +75,8 @@ func TestUnmarshallYAMLEmojiType(t *testing.T) {
 		want  config.EmojiType
 	}{
 		{name: "empty", input: "", want: config.EmojiTypeUnset},
-		{name: "below", input: "shortcode", want: config.EmojiTypeShortcode},
-		{name: "above", input: "character", want: config.EmojiTypeCharacter},
+		{name: "shortcode", input: "shortcode", want: config.EmojiTypeShortcode},
+		{name: "character", input: "character", want: config.EmojiTypeCharacter},
 		{name: "invalid", input: "invalid", want: config.EmojiTypeUnset},
 	}
 

@@ -653,7 +653,7 @@ func TestSave(t *testing.T) {
 			`),
 		},
 		{
-			name:   "view_emojitype_below",
+			name:   "view_emojitype_shortcode",
 			config: func(c *config.Config) { c.Commit.EmojiType = config.EmojiTypeShortcode },
 			data: heredoc.Doc(`
 				commit:
@@ -661,7 +661,7 @@ func TestSave(t *testing.T) {
 			`),
 		},
 		{
-			name:   "view_emojitype_above",
+			name:   "view_emojitype_character",
 			config: func(c *config.Config) { c.Commit.EmojiType = config.EmojiTypeCharacter },
 			data: heredoc.Doc(`
 				commit:
