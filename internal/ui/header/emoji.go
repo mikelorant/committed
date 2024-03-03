@@ -50,6 +50,7 @@ func (i listItem) FilterValue() string {
 func (i fuzzyItem) Terms() []string {
 	return []string{
 		i.emoji.Description,
+		i.emoji.Shortcode,
 	}
 }
 
