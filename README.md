@@ -238,8 +238,8 @@ view:
 commit:
   # Emoji format in commit.
   # Values: shortcode, character
-  # Default: shortcode
-  emojiType: shortcode
+  # Default: character
+  emojiType: character
 
   # Enable author sign-off for commits.
   # Values: true, false

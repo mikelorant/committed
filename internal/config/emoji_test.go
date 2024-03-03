@@ -207,7 +207,7 @@ func TestIndexEmojiType(t *testing.T) {
 		input config.EmojiType
 		want  int
 	}{
-		{name: "unset", input: config.EmojiType(config.EmojiTypeUnset), want: 1},
+		{name: "unset", input: config.EmojiType(config.EmojiTypeUnset), want: 2},
 		{name: "shortcode", input: config.EmojiType(config.EmojiTypeShortcode), want: 1},
 		{name: "character", input: config.EmojiType(config.EmojiTypeCharacter), want: 2},
 	}
