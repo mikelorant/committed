@@ -8,6 +8,7 @@ import (
 	"github.com/mikelorant/committed/internal/commit"
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
+	"github.com/mikelorant/committed/internal/terminal"
 	"github.com/mikelorant/committed/internal/ui/body"
 	"github.com/mikelorant/committed/internal/ui/colour"
 	"github.com/mikelorant/committed/internal/ui/footer"
@@ -494,6 +495,8 @@ func (m *Model) resetCursor() {
 }
 
 func (m *Model) setCompatibility() {
+	terminal.Set(m.state.Config.View.Compatibility)
+
 	switch m.state.Config.View.Compatibility {
 	case config.CompatibilityTtyd:
 		os.Setenv("LIPGLOSS_TERMINAL", "ttyd")

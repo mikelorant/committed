@@ -22,6 +22,7 @@ require (
 	github.com/muesli/gamut v0.3.1
 	github.com/muesli/reflow v0.3.0
 	github.com/muesli/termenv v0.14.0
+	github.com/rivo/uniseg v0.4.7
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.8.1
@@ -33,6 +34,7 @@ replace (
 	github.com/charmbracelet/bubbles => github.com/mikelorant/bubbles v0.0.0-20221206230145-c5687de7af43
 	github.com/charmbracelet/lipgloss => github.com/mikelorant/lipgloss v0.0.0-20230212060525-24ffefde7d62
 	github.com/muesli/reflow => github.com/mikelorant/reflow v0.0.0-20230112022445-408368584af4
+	github.com/rivo/uniseg => github.com/mikelorant/uniseg v0.0.0-20240303073632-27c86650ffa5
 )
 
 require (
@@ -67,7 +69,6 @@ require (
 	github.com/nightlyone/lockfile v1.0.0 // indirect
 	github.com/pjbgf/sha1cd v0.2.3 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/rivo/uniseg v0.4.3 // indirect
 	github.com/rogpeppe/go-internal v1.9.0 // indirect
 	github.com/sahilm/fuzzy v0.1.0 // indirect
 	github.com/sergi/go-diff v1.3.1 // indirect
