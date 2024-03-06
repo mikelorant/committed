@@ -19,3 +19,9 @@ linters:
     - errcheck
     - structcheck
     - unused
+
+linters-settings:
+  revive:
+    rules:
+      - name: unused-parameter
+        disabled: true
