@@ -1,0 +1,7 @@
+no-inline-html:
+  allowed_elements:
+    - br
+    - kbd
+line-length:
+  code_block_line_length: 120
+  heading_line_length: 400

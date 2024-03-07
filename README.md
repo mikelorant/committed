@@ -1,11 +1,34 @@
 # Committed
 
-[![Release](https://img.shields.io/github/v/release/mikelorant/committed)](https://github.com/mikelorant/committed/releases) [![Build](https://github.com/mikelorant/committed/actions/workflows/release.yaml/badge.svg)](https://github.com/mikelorant/committed/actions/workflows/release.yaml) [![License](https://img.shields.io/github/license/mikelorant/committed)](https://spdx.org/licenses/MIT.html) [![Codecov](https://codecov.io/gh/mikelorant/committed/branch/main/graph/badge.svg?token=TW2XDZAJKT)](https://codecov.io/gh/mikelorant/committed) [![CodeFactor](https://www.codefactor.io/repository/github/mikelorant/committed/badge)](https://www.codefactor.io/repository/github/mikelorant/committed)
+[![Release][release-badge]][release]
+[![Build][build-badge]][build]
+[![License][license-badge]][license]
+[![Codecov][codecov-badge]][codecov]
+[![CodeFactor][codefactor-badge]][codefactor]
 
 Committed is a WYSIWYG Git commit editor that helps improve the quality of your
 commits by showing you the layout in the same format as `git log`.
 
-## [![Highlights](https://img.shields.io/badge/-💡_Highlights-ff0000)](#-highlights-) [![First Steps](https://img.shields.io/badge/-🐾_First_Steps-ffa500)](#-first-steps-) [![Installation](https://img.shields.io/badge/-💾_Installation-ffff00)](#-installation-) [![Usage](https://img.shields.io/badge/-🎛_Usage-008000)](#-usage-) [![Configuration](https://img.shields.io/badge/-⚙️_Configuration-0000ff)](#-configuration-) [![Best Practises](https://img.shields.io/badge/-🏆_Best_Practises-4b0082)](#-best-practises-) [![Shortcuts](https://img.shields.io/badge/-⌨️_Shortcuts-ee82ee)](#-shortcuts-)
+[release]: https://github.com/mikelorant/committed/releases
+[release-badge]: https://img.shields.io/github/v/release/mikelorant/committed
+[build]: https://github.com/mikelorant/committed/actions/workflows/release.yaml
+[build-badge]: https://github.com/mikelorant/committed/actions/workflows/release.yaml/badge.svg
+[license]: https://spdx.org/licenses/MIT.html
+[license-badge]: https://img.shields.io/github/license/mikelorant/committed
+[codecov]: https://codecov.io/gh/mikelorant/committed
+[codecov-badge]: https://codecov.io/gh/mikelorant/committed/branch/main/graph/badge.svg?token=TW2XDZAJKT
+[codefactor]: https://www.codefactor.io/repository/github/mikelorant/committed
+[codefactor-badge]: https://www.codefactor.io/repository/github/mikelorant/committed/badge
+
+## [![Highlights][highlights-badge]](#-highlights-) [![First Steps][first-steps-badge]](#-first-steps-) [![Installation][installation-badge]](#-installation-) [![Usage][usage-badge]](#-usage-) [![Configuration][configuration-badge]](#-configuration-) [![Best Practises][best-practises-badge]](#-best-practises-) [![Shortcuts][shortcuts-badge]](#-shortcuts-)
+
+[highlights-badge]: https://img.shields.io/badge/-💡_Highlights-ff0000
+[first-steps-badge]: https://img.shields.io/badge/-🐾_First_Steps-ffa500
+[installation-badge]: https://img.shields.io/badge/-💾_Installation-ffff00
+[usage-badge]: https://img.shields.io/badge/-🎛_Usage-008000
+[configuration-badge]: https://img.shields.io/badge/-⚙️_Configuration-0000ff
+[best-practises-badge]: https://img.shields.io/badge/-🏆_Best_Practises-4b0082
+[shortcuts-badge]: https://img.shields.io/badge/-⌨️_Shortcuts-ee82ee
 
 ![demo](docs/demo.gif)
 
@@ -26,9 +49,9 @@ commits by showing you the layout in the same format as `git log`.
 
 1. Install using Homebrew.
 
-```shell
-brew install mikelorant/committed/committed
-```
+   ```shell
+   brew install mikelorant/committed/committed
+   ```
 
 2. Before creating and applying a commit you will need to stage the files you
    wish to add with the `git add` command.
@@ -36,15 +59,15 @@ brew install mikelorant/committed/committed
 3. Committed replaces the `git commit` command and all you need to do to commit
    your change is to run:
 
-```shell
-committed
-```
+   ```shell
+   committed
+   ```
 
-It is also possible to amend your previous commit with:
+   It is also possible to amend your previous commit with:
 
-```shell
-committed --amend
-```
+   ```shell
+   committed --amend
+   ```
 
 Once the UI has appeared take note of the keyboard shortcuts shown at the bottom
 of the interface.
@@ -94,13 +117,16 @@ correctly it will not be possible to apply a commit.
 
 To make these changes following the instructions below.
 
-| Terminal       | Setting                                                                                                 |
-|:---------------|:--------------------------------------------------------------------------------------------------------|
-| macOS Terminal | `Profiles` `Keyboard`<br />![macOS Terminal Keyboard Setting](docs/keyboard-options-macos-terminal.png) |
-| iTerm2         | `Preferences` `Profile` `Keys`<br />![iTerm2 Keyboard Setting](docs/keyboard-options-iterm2.png)        |
+| Terminal       | Setting                                               |
+| :------------- | :---------------------------------------------------- |
+| macOS Terminal | `Profiles` `Keyboard`<br />![macOS Terminal options]  |
+| iTerm2         | `Preferences` `Profile` `Keys`<br />![iTerm2 options] |
 
-The alternative keyboard shortcut  <kbd>⌥ Option</kbd> + <kbd>\\</kbd> can also be used to apply
-a commit.
+The alternative keyboard shortcut <kbd>⌥ Option</kbd> + <kbd>\\</kbd> can also
+be used to apply a commit.
+
+[macos terminal options]: docs/keyboard-options-macos-terminal.png
+[iterm2 options]: docs/keyboard-options-iterm2.png
 
 ### Rendering Borders
 
@@ -110,16 +136,16 @@ with terminals. The following list are the terminals that have been tested.
 Other terminals may display correctly and feedback would be appreciated to help
 update the list.
 
-| Terminal       | Status                              | Notes                              |
-|:---------------|:------------------------------------|:-----------------------------------|
-| macOS Terminal | ![✅](docs/assets/confirm-24x24.svg) |                                    |
-| iTerm2         | ![✅](docs/assets/confirm-24x24.svg) |                                    |
-| VS Code        | ![✅](docs/assets/confirm-24x24.svg) |                                    |
-| Hyper          | ![✅](docs/assets/confirm-24x24.svg) |                                    |
-| Alacritty      | ![✅](docs/assets/confirm-24x24.svg) |                                    |
-| WezTerm        | ![✅](docs/assets/confirm-24x24.svg) |                                    |
-| ttyd           | ![✅](docs/assets/confirm-24x24.svg) | Requires compatibility option set. |
-| kitty          | ![✅](docs/assets/confirm-24x24.svg) | Requires compatibility option set. |
+| Terminal       | Status         | Notes                              |
+| :------------- | :------------- | :--------------------------------- |
+| macOS Terminal | ![✅][confirm] |                                    |
+| iTerm2         | ![✅][confirm] |                                    |
+| VS Code        | ![✅][confirm] |                                    |
+| Hyper          | ![✅][confirm] |                                    |
+| Alacritty      | ![✅][confirm] |                                    |
+| WezTerm        | ![✅][confirm] |                                    |
+| ttyd           | ![✅][confirm] | Requires compatibility option set. |
+| kitty          | ![✅][confirm] | Requires compatibility option set. |
 
 ## 💾 Installation [⭡](#committed)
 
@@ -185,7 +211,8 @@ Flags:
 No configuration is necessary however there are some values that can be changed
 based on preference.
 
-Committed defaults to using a config file located at `$HOME/.config/committed/config.yaml`.
+Committed defaults to using a config file located at
+`$HOME/.config/committed/config.yaml`.
 
 ```yaml
 view:
@@ -261,25 +288,33 @@ The first theme of each set is the default theme applied.
 
 #### Dark Themes
 
-| Name                                                                     | ID                             |
-|:-------------------------------------------------------------------------|:-------------------------------|
-| Builtin Dark                                                             | builtin_dark                   |
-| [Dracula](https://draculatheme.com/)                                     | dracula                        |
-| [Gruvbox Dark](https://github.com/morhetz/gruvbox)                       | gruvbox_dark                   |
-| [Nord](https://www.nordtheme.com/)                                       | nord                           |
-| [Retrowave](https://github.com/juanmnl/vs-1984)                          | retrowave                      |
-| [Solarized Dark Higher Contrast](https://ethanschoonover.com/solarized/) | solarized_dark_higher_contrast |
-| [Tokyo Night](https://github.com/enkia/tokyo-night-vscode-theme)         | tokyo_night                    |
+| Name                                        | ID                             |
+| :------------------------------------------ | :----------------------------- |
+| Builtin Dark                                | builtin_dark                   |
+| [Dracula][dracula]                          | dracula                        |
+| [Gruvbox Dark][gruvbox]                     | gruvbox_dark                   |
+| [Nord][nord]                                | nord                           |
+| [Retrowave][retrowave]                      | retrowave                      |
+| [Solarized Dark Higher Contrast][solarized] | solarized_dark_higher_contrast |
+| [Tokyo Night][tokyo-night]                  | tokyo_night                    |
 
 #### Light Theme
 
-| Name                                                                      | ID                      |
-|:--------------------------------------------------------------------------|:------------------------|
-| Builtin Light                                                             | builtin_light           |
-| [Builtin Solarized Light](https://ethanschoonover.com/solarized/)         | builtin_solarized_light |
-| [Builtin Tango Light](http://tango.freedesktop.org/Tango_Desktop_Project) | builtin_tango_light     |
-| [Gruvbox Light](https://github.com/morhetz/gruvbox)                       | gruvbox_light           |
-| [Tokyo Night Light](https://github.com/enkia/tokyo-night-vscode-theme)    | tokyo_night_light       |
+| Name                                 | ID                      |
+| :----------------------------------- | :---------------------- |
+| Builtin Light                        | builtin_light           |
+| [Builtin Solarized Light][solarized] | builtin_solarized_light |
+| [Builtin Tango Light][tango]         | builtin_tango_light     |
+| [Gruvbox Light][gruvbox]             | gruvbox_light           |
+| [Tokyo Night Light][tokyo-night]     | tokyo_night_light       |
+
+[dracula]: https://draculatheme.com/
+[gruvbox]: https://github.com/morhetz/gruvbox
+[nord]: https://www.nordtheme.com/
+[retrowave]: https://github.com/juanmnl/vs-1984
+[solarized]: https://ethanschoonover.com/solarized/
+[tokyo-night]: https://github.com/enkia/tokyo-night-vscode-theme
+[tango]: http://tango.freedesktop.org/Tango_Desktop_Project
 
 ### Emoji Profiles
 
@@ -330,7 +365,7 @@ Related links:
 The global shortcuts can be used within any view.
 
 | Key Binding                              | Command            |
-|:-----------------------------------------|:-------------------|
+| :--------------------------------------- | :----------------- |
 | <kbd>⌥ Option</kbd> + <kbd>⏎ Enter</kbd> | Commit             |
 | <kbd>⌥ Option</kbd> + <kbd>\\</kbd>      | Commit             |
 | <kbd>⌥ Option</kbd> + <kbd>S</kbd>       | Toggle sign-off    |
@@ -347,7 +382,7 @@ The global shortcuts can be used within any view.
 The emoji shortcuts are limited to the emoji view only.
 
 | Key Binding            | Command       |
-|:-----------------------|:--------------|
+| :--------------------- | :------------ |
 | <kbd>⌫ Delete</kbd>    | Clear emoji   |
 | <kbd>⎋ Escape</kbd>    | Reset filter  |
 | <kbd>⇟ Page Down</kbd> | Next page     |
@@ -430,30 +465,30 @@ with using Git as an editor.
 
 ### Git Functions
 
-| Feature                      | Committed                           | Gitmoji CLI                            |
-|:-----------------------------|:------------------------------------|:---------------------------------------|
-| Git hooks                    | ![✅](docs/assets/confirm-24x24.svg) | ![✅](docs/assets/confirm-24x24.svg)    |
-| Git editor replacement       | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)     |
-| Amend commit                 | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)     |
-| Add files                    | ![❌](docs/assets/cancel-24x24.svg)  | ![✅](docs/assets/confirm-24x24.svg)    |
-| Signed commits               | ![❌](docs/assets/cancel-24x24.svg)  | ![✅](docs/assets/confirm-24x24.svg)    |
-| Sign-off commits             | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)     |
-| Switch author                | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)     |
-| Save and load failed commits | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)[^1] |
+| Feature                      | Committed      | Gitmoji CLI       |
+| :--------------------------- | :------------- | :---------------- |
+| Git hooks                    | ![✅][confirm] | ![✅][confirm]    |
+| Git editor replacement       | ![✅][confirm] | ![❌][cancel]     |
+| Amend commit                 | ![✅][confirm] | ![❌][cancel]     |
+| Add files                    | ![❌][cancel]  | ![✅][confirm]    |
+| Signed commits               | ![❌][cancel]  | ![✅][confirm]    |
+| Sign-off commits             | ![✅][confirm] | ![❌][cancel]     |
+| Switch author                | ![✅][confirm] | ![❌][cancel]     |
+| Save and load failed commits | ![✅][confirm] | ![❌][cancel][^1] |
 
 [^1]: [Print Git command on failure](https://github.com/carloscuesta/gitmoji-cli/pull/681).
 
 ### Visual Style
 
-| Feature                 | Committed                           | Gitmoji CLI                         |
-|:------------------------|:------------------------------------|:------------------------------------|
-| Subject counter         | ![✅](docs/assets/confirm-24x24.svg) | ![✅](docs/assets/confirm-24x24.svg) |
-| Custom emojis           | ![❌](docs/assets/cancel-24x24.svg)  | ![✅](docs/assets/confirm-24x24.svg) |
-| Mulitple emoji profiles | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)  |
-| Multiline editor        | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)  |
-| Scope prompt            | ![❌](docs/assets/cancel-24x24.svg)  | ![✅](docs/assets/confirm-24x24.svg) |
-| Themes                  | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)  |
-| Hard wrap body width    | ![✅](docs/assets/confirm-24x24.svg) | ![❌](docs/assets/cancel-24x24.svg)  |
+| Feature                 | Committed      | Gitmoji CLI    |
+| :---------------------- | :------------- | :------------- |
+| Subject counter         | ![✅][confirm] | ![✅][confirm] |
+| Custom emojis           | ![❌][cancel]  | ![✅][confirm] |
+| Mulitple emoji profiles | ![✅][confirm] | ![❌][cancel]  |
+| Multiline editor        | ![✅][confirm] | ![❌][cancel]  |
+| Scope prompt            | ![❌][cancel]  | ![✅][confirm] |
+| Themes                  | ![✅][confirm] | ![❌][cancel]  |
+| Hard wrap body width    | ![✅][confirm] | ![❌][cancel]  |
 
 ## ✏️ Authors [⭡](#committed)
 
@@ -465,17 +500,38 @@ with using Git as an editor.
 
 ## 👍 Thanks [⭡](#committed)
 
-Thanks to [Carlos Cuesta](https://github.com/carloscuesta) for creating [gitmoji](https://gitmoji.dev/) and [gitmoji-cli](https://github.com/carloscuesta/gitmoji-cli) which was the
+Thanks to [Carlos Cuesta] for creating [gitmoji] and [gitmoji-cli] which was the
 inspiration for this project.
 
-Thanks to [Ahmad Awais](https://github.com/ahmadawais) for [Emoji-Log](https://github.com/ahmadawais/Emoji-Log) and [Folke Lemaitre](https://github.com/folke) for [Devmoji](https://github.com/folke/devmoji).
+Thanks to [Ahmad Awais] for [Emoji-Log] and [Folke Lemaitre] for [Devmoji].
 
-Many thanks to [David Ackroyd](https://github.com/dackroyd) and [Matt Hope](https://github.com/matthope) for all their guidance with Go.
+Many thanks to [David Ackroyd] and [Matt Hope] for all their guidance with Go.
 Without their expertise I would never had the capability to build Committed.
 
-Thanks to all the developers from [Charm](https://github.com/charmbracelet) for their amazing set of libraries.
-Committed would never have looked the way it does without [Bubble Tea](https://github.com/charmbracelet/bubbletea), [Lipgloss](https://github.com/charmbracelet/lipgloss)
-and [Bubbles](https://github.com/charmbracelet/bubbles).
+Thanks to all the developers from [Charm] for their amazing set of libraries.
+Committed would never have looked the way it does without [Bubble Tea],
+[Lipgloss] and [Bubbles].
 
-Thanks to [Tim Pope](https://github.com/tpope) for his Git commit recommendations which was a core
+Thanks to [Tim Pope] for his Git commit recommendations which was a core
 component in the interface design.
+
+[carlos cuesta]: https://github.com/carloscuesta
+[ahmad awais]: https://github.com/ahmadawais
+[folke lemaitre]: https://github.com/folke
+[david ackroyd]: https://github.com/dackroyd
+[matt hope]: https://github.com/matthope
+[charm]: https://github.com/charmbracelet
+[tim pope]: https://github.com/tpope
+
+[gitmoji]: https://gitmoji.dev/
+[gitmoji-cli]: https://github.com/carloscuesta/gitmoji-cli
+[emoji-log]: https://github.com/ahmadawais/Emoji-Log
+[devmoji]: https://github.com/folke/devmoji
+[bubble tea]: https://github.com/charmbracelet/bubbletea
+[lipgloss]: https://github.com/charmbracelet/lipgloss
+[bubbles]: https://github.com/charmbracelet/bubbles
+
+[//]: # (shared link reference definitions)
+
+[confirm]: docs/assets/confirm-24x24.svg
+[cancel]: docs/assets/cancel-24x24.svg
