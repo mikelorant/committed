@@ -8,6 +8,7 @@ require (
 	github.com/charmbracelet/bubbles v0.18.1-0.20240531002820-296fcf77faad
 	github.com/charmbracelet/bubbletea v0.26.4
 	github.com/charmbracelet/lipgloss v0.11.0
+	github.com/charmbracelet/x/ansi v0.1.2
 	github.com/creack/pty v1.1.21
 	github.com/forPelevin/gomoji v1.2.0
 	github.com/go-git/go-billy/v5 v5.5.0
@@ -19,7 +20,6 @@ require (
 	github.com/lithammer/fuzzysearch v1.1.8
 	github.com/lrstanley/bubbletint v0.0.0-20240125042035-5615d402d4e1
 	github.com/muesli/gamut v0.3.1
-	github.com/muesli/reflow v0.3.0
 	github.com/muesli/termenv v0.15.2
 	github.com/rivo/uniseg v0.4.7
 	github.com/spf13/cobra v1.8.0
@@ -31,7 +31,6 @@ require (
 
 replace (
 	github.com/ivanpirog/coloredcobra => github.com/mikelorant/coloredcobra v0.0.0-20240413232412-92879003fd8d
-	github.com/muesli/reflow => github.com/mikelorant/reflow v0.0.0-20240303072837-675d5d5cbae9
 	github.com/rivo/uniseg => github.com/mikelorant/uniseg v0.0.0-20240303073632-27c86650ffa5
 )
 
@@ -41,7 +40,6 @@ require (
 	github.com/ProtonMail/go-crypto v1.0.0 // indirect
 	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
-	github.com/charmbracelet/x/ansi v0.1.2 // indirect
 	github.com/charmbracelet/x/input v0.1.1 // indirect
 	github.com/charmbracelet/x/term v0.1.1 // indirect
 	github.com/charmbracelet/x/windows v0.1.2 // indirect

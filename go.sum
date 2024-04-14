@@ -136,8 +136,6 @@ github.com/mattn/go-runewidth v0.0.15 h1:UNAjwbU9l54TA3KzvqLGxwWjHmMgBUVhBiTjelZ
 github.com/mattn/go-runewidth v0.0.15/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh153qUoGf23w=
 github.com/mikelorant/coloredcobra v0.0.0-20240413232412-92879003fd8d h1:+3zyO4WrrTl8PG+a8KVjgKZ9hn+Pzqpu407Ggecy4ME=
 github.com/mikelorant/coloredcobra v0.0.0-20240413232412-92879003fd8d/go.mod h1:csDZxFD5oWCy1x8hxXVD4txpYQgo12WOcLS7JON5SVE=
-github.com/mikelorant/reflow v0.0.0-20240303072837-675d5d5cbae9 h1:u5GthgoPfZECckPnp+N3c3TBiu21IIuwxOA4y4Wz5cI=
-github.com/mikelorant/reflow v0.0.0-20240303072837-675d5d5cbae9/go.mod h1:OpGecHxg1YTnFIDjvHm/t+KGjBEnWkD5JHefBS/lrcU=
 github.com/mikelorant/uniseg v0.0.0-20240303073632-27c86650ffa5 h1:CRvVC4vrkEti+XI0DdksOAspVl0/9xG4BLF/bemiKfM=
 github.com/mikelorant/uniseg v0.0.0-20240303073632-27c86650ffa5/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
 github.com/muesli/ansi v0.0.0-20230316100256-276c6243b2f6 h1:ZK8zHtRHOkbHy6Mmr5D264iyp3TiX5OmNcI5cIARiQI=

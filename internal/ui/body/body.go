@@ -8,7 +8,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/textarea"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/muesli/reflow/wordwrap"
+	"github.com/charmbracelet/x/ansi"
 )
 
 type Model struct {
@@ -113,19 +113,13 @@ func (m Model) Focused() bool {
 }
 
 func (m Model) Value() string {
-	w := wordwrap.WordWrap{
-		// Further details for the text reflow issue:
-		// https://github.com/charmbracelet/bubbles/issues/333
-		Limit:        m.Width - 1,
-		Breakpoints:  []rune{'-'},
-		Newline:      []rune{'\n'},
-		KeepNewlines: true,
-	}
+	// Further details for the text reflow issue:
+	// https://github.com/charmbracelet/bubbles/issues/333
+	l := m.Width - 1
 
-	w.Write([]byte(m.textArea.Value()))
-	w.Close()
+	str := ansi.Wordwrap(m.textArea.Value(), l, "")
 
-	return strings.TrimSpace(w.String())
+	return strings.TrimSpace(str)
 }
 
 func (m Model) RawValue() string {
