@@ -41,7 +41,7 @@ func defaultStyles(th theme.Theme) Styles {
 		BorderStyle(lipgloss.NormalBorder()).
 		BorderForeground(clr.Boundary)
 
-	s.focusBoundary = s.boundary.Copy().
+	s.focusBoundary = s.boundary.
 		BorderForeground(clr.FocusBoundary)
 
 	s.paginatorBoundary = lipgloss.NewStyle().

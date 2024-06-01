@@ -28,7 +28,7 @@ func defaultStyles(th theme.Theme) Styles {
 		Padding(0, 1, 0, 1).
 		MarginBottom(1)
 
-	s.themeTitleFocus = s.themeTitle.Copy().
+	s.themeTitleFocus = s.themeTitle.
 		BorderForeground(clr.TitleFocus)
 
 	s.themeTitleLabel = lipgloss.NewStyle().
@@ -43,7 +43,7 @@ func defaultStyles(th theme.Theme) Styles {
 		Width(40).
 		BorderForeground(clr.Boundary)
 
-	s.themeListBoundaryFocus = s.themeListBoundary.Copy().
+	s.themeListBoundaryFocus = s.themeListBoundary.
 		BorderForeground(clr.BoundaryFocus)
 
 	return s

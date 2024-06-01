@@ -52,7 +52,7 @@ func defaultStyles(th theme.Theme) Styles {
 		BorderStyle(lipgloss.NormalBorder()).
 		BorderForeground(clr.EmojiBoundary)
 
-	s.emojiFocusBoundary = s.emojiBoundary.Copy().
+	s.emojiFocusBoundary = s.emojiBoundary.
 		BorderForeground(clr.EmojiFocusBoundary)
 
 	s.summaryBoundary = lipgloss.NewStyle().
@@ -64,7 +64,7 @@ func defaultStyles(th theme.Theme) Styles {
 		BorderStyle(lipgloss.NormalBorder()).
 		BorderForeground(clr.SummaryBoundary)
 
-	s.summaryFocusBoundary = s.summaryBoundary.Copy().
+	s.summaryFocusBoundary = s.summaryBoundary.
 		BorderForeground(clr.SummaryFocusBoundary)
 
 	s.counterDivider = lipgloss.NewStyle().

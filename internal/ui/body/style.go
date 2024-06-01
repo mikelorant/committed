@@ -32,7 +32,7 @@ func defaultStyles(th theme.Theme) Styles {
 		BorderForeground(clr.Boundary).
 		Padding(0, 1, 0, 1)
 
-	s.focusBoundary = s.boundary.Copy().
+	s.focusBoundary = s.boundary.
 		BorderForeground(clr.FocusBoundary)
 
 	s.textAreaPlaceholder = lipgloss.NewStyle().
