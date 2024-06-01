@@ -85,7 +85,7 @@ func (m *Model) VisualPaneSet() {
 			},
 			&setting.Radio{
 				Title:  "Compatibility",
-				Values: []string{"Default", "ttyd", "kitty"},
+				Values: []string{"Unicode 14", "Unicode 9"},
 				Index:  cfg.View.Compatibility.Index() - 1,
 			},
 			&setting.Toggle{

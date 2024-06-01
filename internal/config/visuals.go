@@ -21,9 +21,8 @@ const (
 
 const (
 	CompatibilityUnset Compatibility = iota
-	CompatibilityDefault
-	CompatibilityTtyd
-	CompatibilityKitty
+	CompatibilityUnicode14
+	CompatibilityUnicode9
 )
 
 const (
@@ -71,9 +70,8 @@ func (c *Compatibility) UnmarshalYAML(value *yaml.Node) error {
 func (c Compatibility) MarshalYAML() (interface{}, error) {
 	return []string{
 		"",
-		"default",
-		"ttyd",
-		"kitty",
+		"unicode14",
+		"unicode9",
 	}[c], nil
 }
 
@@ -129,10 +127,9 @@ func ParseFocus(str string) Focus {
 
 func ParseCompatibility(str string) Compatibility {
 	compatibility := map[string]Compatibility{
-		"":        CompatibilityUnset,
-		"default": CompatibilityDefault,
-		"ttyd":    CompatibilityTtyd,
-		"kitty":   CompatibilityKitty,
+		"":          CompatibilityUnset,
+		"unicode14": CompatibilityUnicode14,
+		"unicode9":  CompatibilityUnicode9,
 	}
 
 	return compatibility[strings.ToLower(str)]

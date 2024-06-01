@@ -233,36 +233,25 @@ func TestToConfig(t *testing.T) {
 			},
 		},
 		{
-			name: "compatibility_default",
+			name: "compatibility_unicode14",
 			args: args{
 				paneSets: func(ps map[string][]setting.Paner) {
-					ps["Visual"][1] = &setting.Radio{Title: "Compatibility", Index: toInt(config.CompatibilityDefault)}
+					ps["Visual"][1] = &setting.Radio{Title: "Compatibility", Index: toInt(config.CompatibilityUnicode14)}
 				},
 			},
 			want: want{
-				cfg: func(cfg *config.Config) { cfg.View.Compatibility = config.CompatibilityDefault },
+				cfg: func(cfg *config.Config) { cfg.View.Compatibility = config.CompatibilityUnicode14 },
 			},
 		},
 		{
-			name: "compatibility_ttyd",
+			name: "compatibility_unicode9",
 			args: args{
 				paneSets: func(ps map[string][]setting.Paner) {
-					ps["Visual"][1] = &setting.Radio{Title: "Compatibility", Index: toInt(config.CompatibilityTtyd)}
+					ps["Visual"][1] = &setting.Radio{Title: "Compatibility", Index: toInt(config.CompatibilityUnicode9)}
 				},
 			},
 			want: want{
-				cfg: func(cfg *config.Config) { cfg.View.Compatibility = config.CompatibilityTtyd },
-			},
-		},
-		{
-			name: "compatibility_kitty",
-			args: args{
-				paneSets: func(ps map[string][]setting.Paner) {
-					ps["Visual"][1] = &setting.Radio{Title: "Compatibility", Index: toInt(config.CompatibilityKitty)}
-				},
-			},
-			want: want{
-				cfg: func(cfg *config.Config) { cfg.View.Compatibility = config.CompatibilityKitty },
+				cfg: func(cfg *config.Config) { cfg.View.Compatibility = config.CompatibilityUnicode9 },
 			},
 		},
 		{
@@ -406,7 +395,7 @@ func wantConfig() config.Config {
 	return config.Config{
 		View: config.View{
 			Colour:        config.ColourAdaptive,
-			Compatibility: config.CompatibilityDefault,
+			Compatibility: config.CompatibilityUnicode14,
 			EmojiSelector: config.EmojiSelectorBelow,
 			EmojiSet:      config.EmojiSetCommitted,
 			Focus:         config.FocusAuthor,

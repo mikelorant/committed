@@ -496,11 +496,4 @@ func (m *Model) resetCursor() {
 
 func (m *Model) setCompatibility() {
 	terminal.Set(m.state.Config.View.Compatibility)
-
-	switch m.state.Config.View.Compatibility {
-	case config.CompatibilityTtyd:
-		os.Setenv("LIPGLOSS_TERMINAL", "ttyd")
-	case config.CompatibilityKitty:
-		os.Setenv("LIPGLOSS_TERMINAL", "kitty")
-	}
 }

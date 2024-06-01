@@ -127,19 +127,14 @@ func TestLoad(t *testing.T) {
 			config: config.Config{View: config.View{Compatibility: config.CompatibilityUnset}},
 		},
 		{
-			name:   "compatibility_default",
-			data:   "view: {compatibility: default}",
-			config: config.Config{View: config.View{Compatibility: config.CompatibilityDefault}},
+			name:   "compatibility_unicode14",
+			data:   "view: {compatibility: unicode14}",
+			config: config.Config{View: config.View{Compatibility: config.CompatibilityUnicode14}},
 		},
 		{
-			name:   "compatibility_ttyd",
-			data:   "view: {compatibility: ttyd}",
-			config: config.Config{View: config.View{Compatibility: config.CompatibilityTtyd}},
-		},
-		{
-			name:   "compatibility_kitty",
-			data:   "view: {compatibility: kitty}",
-			config: config.Config{View: config.View{Compatibility: config.CompatibilityKitty}},
+			name:   "compatibility_unicode9",
+			data:   "view: {compatibility: unicode9}",
+			config: config.Config{View: config.View{Compatibility: config.CompatibilityUnicode9}},
 		},
 		{
 			name:   "compatibility_invalid",
@@ -360,7 +355,7 @@ func TestLoad(t *testing.T) {
 				    focus: author
 				    emojiSet: gitmoji
 				    emojiSelector: below
-				    compatibility: default
+				    compatibility: unicode14
 				    theme: builtin
 				    colour: adaptive
 				commit:
@@ -375,7 +370,7 @@ func TestLoad(t *testing.T) {
 					Focus:         config.FocusAuthor,
 					EmojiSet:      config.EmojiSetGitmoji,
 					EmojiSelector: config.EmojiSelectorBelow,
-					Compatibility: config.CompatibilityDefault,
+					Compatibility: config.CompatibilityUnicode14,
 					Theme:         "builtin",
 					Colour:        config.ColourAdaptive,
 				},
@@ -430,7 +425,7 @@ func TestLoad(t *testing.T) {
 				    focus: author
 				    emojiSet: gitmoji
 				    emojiSelector: below
-				    compatibility: default
+				    compatibility: unicode14
 				    theme: builtin
 				    colour: adaptive
 				commit:
@@ -445,7 +440,7 @@ func TestLoad(t *testing.T) {
 					Focus:         config.FocusAuthor,
 					EmojiSet:      config.EmojiSetGitmoji,
 					EmojiSelector: config.EmojiSelectorBelow,
-					Compatibility: config.CompatibilityDefault,
+					Compatibility: config.CompatibilityUnicode14,
 					Theme:         "builtin",
 					Colour:        config.ColourAdaptive,
 				},
@@ -537,27 +532,19 @@ func TestSave(t *testing.T) {
 			`),
 		},
 		{
-			name:   "view_compatibility_default",
-			config: func(c *config.Config) { c.View.Compatibility = config.CompatibilityDefault },
+			name:   "view_compatibility_unicode14",
+			config: func(c *config.Config) { c.View.Compatibility = config.CompatibilityUnicode14 },
 			data: heredoc.Doc(`
 				view:
-					compatibility: default
+					compatibility: unicode14
 			`),
 		},
 		{
-			name:   "view_compatibility_ttyd",
-			config: func(c *config.Config) { c.View.Compatibility = config.CompatibilityTtyd },
+			name:   "view_compatibility_unicode9",
+			config: func(c *config.Config) { c.View.Compatibility = config.CompatibilityUnicode9 },
 			data: heredoc.Doc(`
 				view:
-					compatibility: ttyd
-			`),
-		},
-		{
-			name:   "view_compatibility_kitty",
-			config: func(c *config.Config) { c.View.Compatibility = config.CompatibilityKitty },
-			data: heredoc.Doc(`
-				view:
-					compatibility: kitty
+					compatibility: unicode9
 			`),
 		},
 		{

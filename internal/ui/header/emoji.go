@@ -2,6 +2,7 @@ package header
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/mikelorant/committed/internal/config"
 	"github.com/mikelorant/committed/internal/emoji"
@@ -21,22 +22,12 @@ type fuzzyItem struct {
 }
 
 func (i listItem) Title() string {
-	var space string
+	const maxEmojiWidth = 2
 
-	switch i.compatibility {
-	case config.CompatibilityTtyd:
-		space = " "
-	case config.CompatibilityKitty:
-		if uniseg.StringWidth(i.emoji.Character) == 1 && !i.emoji.Variant {
-			space = " "
-		}
-	default:
-		if uniseg.StringWidth(i.emoji.Character) == 1 {
-			space = " "
-		}
-	}
+	padLen := maxEmojiWidth - uniseg.StringWidth(i.emoji.Character)
+	padding := strings.Repeat(" ", padLen)
 
-	return fmt.Sprintf("%s%s - %s", i.emoji.Character, space, i.emoji.Description)
+	return fmt.Sprintf("%s%s - %s", i.emoji.Character, padding, i.emoji.Description)
 }
 
 func (i listItem) Description() string {

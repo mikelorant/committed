@@ -136,16 +136,38 @@ with terminals. The following list are the terminals that have been tested.
 Other terminals may display correctly and feedback would be appreciated to help
 update the list.
 
-| Terminal       | Status         | Notes                              |
-| :------------- | :------------- | :--------------------------------- |
-| macOS Terminal | ![✅][confirm] |                                    |
-| iTerm2         | ![✅][confirm] |                                    |
-| VS Code        | ![✅][confirm] |                                    |
-| Hyper          | ![✅][confirm] |                                    |
-| Alacritty      | ![✅][confirm] |                                    |
-| WezTerm        | ![✅][confirm] |                                    |
-| ttyd           | ![✅][confirm] | Requires compatibility option set. |
-| kitty          | ![✅][confirm] | Requires compatibility option set. |
+| Terminal                   | Status         | Compatibility Mode |
+| :------------------------- | :------------- | :----------------- |
+| macOS Terminal[¹](#iTerm2) | ![✅][confirm] | Unicode 9          |
+| iTerm2                     | ![✅][confirm] | Unicode 14         |
+| Visual Studio Code         | ![✅][confirm] | Unicode 9          |
+| Hyper                      | ![✅][confirm] | Unicode 9          |
+| Alacritty                  | ![✅][confirm] | Unicode 9          |
+| WezTerm[²](#WezTerm)       | ![✅][confirm] | Unicode 9          |
+| ttyd                       | ![✅][confirm] | Unicode 9          |
+| kitty                      | ![✅][confirm] | Unicode 14         |
+
+#### iTerm2
+
+iTerm2 versions lower than `3.5.0` will need to use Unicode 9 compatibility.
+
+It is also important to make sure that options related to [variation selector 16][iterm2 vs16]
+use full width when using Unicode 14 compatibility. This requires setting
+`Support variation selector 16 making emoji fullwidth outside of alternate
+screen mode?` to `Yes`.
+
+To correctly align emojis using variation select 16 within `git log`, the
+setting `Support variation selector 16 making emoji fullwidth in all modes?`
+must be set to `Yes`.
+
+[iterm2 vs16]: https://gitlab.com/gnachman/iterm2/-/issues/10480
+
+#### WezTerm
+
+WezTerm has [configurable][wezterm unicode] Unicode version support. This
+currently defaults to Unicode 9.
+
+[wezterm unicode]: https://wezfurlong.org/wezterm/config/lua/config/unicode_version.html
 
 ## 💾 Installation [⭡](#committed)
 
@@ -248,9 +270,9 @@ view:
   colour: adaptive
 
   # Terminal compatibility.
-  # Values: default, ttyd
-  # Default: default
-  compatibility: default
+  # Values: unicode14, unicode9
+  # Default: unicode14
+  compatibility: unicode14
 
   # Highlight active component.
   # Value: true, false

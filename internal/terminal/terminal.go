@@ -23,10 +23,9 @@ func overrideGraphemeClusterWidth(c config.Compatibility) map[string]int {
 	gs := make([]graphemes, 0)
 
 	switch c {
-	case config.CompatibilityTtyd:
-	case config.CompatibilityKitty:
-	default:
+	case config.CompatibilityUnicode9:
 		gs = append(gs, overrideVS16()...)
+	default:
 	}
 
 	return overrides(gs)

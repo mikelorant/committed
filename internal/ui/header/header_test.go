@@ -170,28 +170,11 @@ func TestModel(t *testing.T) {
 			},
 		},
 		{
-			name: "expand_emojis_ttyd",
+			name: "expand_emojis_page_down",
 			args: args{
 				state: func(c *commit.State) {
 					c.Emojis = emoji.New()
 					c.Repository.Head.Message = "summary\n\nbody"
-					c.Config.View.Compatibility = config.CompatibilityTtyd
-				},
-				model: func(m header.Model) header.Model {
-					m.Focus()
-					m.Expand = true
-					m, _ = header.ToModel(m.Update(nil))
-					return m
-				},
-			},
-		},
-		{
-			name: "expand_emojis_kitty",
-			args: args{
-				state: func(c *commit.State) {
-					c.Emojis = emoji.New()
-					c.Repository.Head.Message = "summary\n\nbody"
-					c.Config.View.Compatibility = config.CompatibilityKitty
 				},
 				model: func(m header.Model) header.Model {
 					m.Focus()

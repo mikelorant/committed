@@ -47,9 +47,8 @@ func TestUnmarshallYAMLCompatibility(t *testing.T) {
 		want  config.Compatibility
 	}{
 		{name: "empty", input: "", want: config.CompatibilityUnset},
-		{name: "default", input: "default", want: config.CompatibilityDefault},
-		{name: "ttyd", input: "ttyd", want: config.CompatibilityTtyd},
-		{name: "kitty", input: "kitty", want: config.CompatibilityKitty},
+		{name: "unicode14", input: "unicode14", want: config.CompatibilityUnicode14},
+		{name: "unicode9", input: "unicode9", want: config.CompatibilityUnicode9},
 		{name: "invalid", input: "invalid", want: config.CompatibilityUnset},
 	}
 
@@ -132,9 +131,8 @@ func TestMarshallYAMLCompatibility(t *testing.T) {
 		want  string
 	}{
 		{name: "empty", input: config.CompatibilityUnset, want: "\"\"\n"},
-		{name: "default", input: config.CompatibilityDefault, want: "default\n"},
-		{name: "ttyd", input: config.CompatibilityTtyd, want: "ttyd\n"},
-		{name: "kitty", input: config.CompatibilityKitty, want: "kitty\n"},
+		{name: "unicode14", input: config.CompatibilityUnicode14, want: "unicode14\n"},
+		{name: "unicode9", input: config.CompatibilityUnicode9, want: "unicode9\n"},
 		{name: "invalid", input: config.CompatibilityUnset, want: "\"\"\n"},
 	}
 
@@ -211,9 +209,8 @@ func TestIndexCompatibility(t *testing.T) {
 		want  int
 	}{
 		{name: "unset", input: config.Compatibility(config.CompatibilityUnset), want: 1},
-		{name: "default", input: config.Compatibility(config.CompatibilityDefault), want: 1},
-		{name: "ttyd", input: config.Compatibility(config.CompatibilityTtyd), want: 2},
-		{name: "kitty", input: config.Compatibility(config.CompatibilityKitty), want: 3},
+		{name: "unicode14", input: config.Compatibility(config.CompatibilityUnicode14), want: 1},
+		{name: "unicode9", input: config.Compatibility(config.CompatibilityUnicode9), want: 2},
 	}
 
 	for _, tt := range tests {

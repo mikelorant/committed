@@ -18,79 +18,79 @@ func TestSet(t *testing.T) {
 		width  int
 	}{
 		{
-			name:  "default empty",
+			name:  "unicode14 empty",
 			width: 0,
 		},
 		{
-			name:  "default simple",
+			name:  "unicode14 simple",
 			value: "test",
 			width: 4,
 		},
 		{
-			name:  "default single emoji without override",
+			name:  "unicode14 single emoji",
 			value: "❤️",
 			width: 2,
 		},
 		{
-			name:  "default single emoji with override",
+			name:  "unicode14 single vs16 emoji",
 			value: "⬆️",
-			width: 1,
+			width: 2,
 		},
 		{
-			name:  "default multiple emojis without override",
+			name:  "unicode14 multiple emoji",
 			value: "❤️❤️",
 			width: 4,
 		},
 		{
-			name:  "default multiple emojis with override",
+			name:  "unicode14 multiple vs16 emoji",
 			value: "⬆️⬆️",
-			width: 2,
+			width: 4,
 		},
 		{
-			name:  "default mixed emojis",
-			value: "⬆️❤️",
-			width: 3,
+			name:  "unicode14 multiple mixed emoji",
+			value: "❤️⬆️",
+			width: 4,
 		},
 		{
-			name:  "default multiple mixed emojis",
-			value: "⬆️❤️❤️⬆️",
-			width: 6,
-		},
-		{
-			name:   "ttyd empty",
-			compat: config.CompatibilityTtyd,
-			value:  "",
+			name:   "unicode9 empty",
+			compat: config.CompatibilityUnicode9,
 			width:  0,
 		},
 		{
-			name:   "ttyd simple",
-			compat: config.CompatibilityTtyd,
+			name:   "unicode9 simple",
+			compat: config.CompatibilityUnicode9,
 			value:  "test",
 			width:  4,
 		},
 		{
-			name:   "ttyd multiple emojis",
-			compat: config.CompatibilityTtyd,
-			value:  "⬆️❤️",
+			name:   "unicode9 single emoji",
+			compat: config.CompatibilityUnicode9,
+			value:  "❤️",
+			width:  2,
+		},
+		{
+			name:   "unicode9 single vs16 emoji",
+			compat: config.CompatibilityUnicode9,
+			value:  "⬆️",
+			width:  1,
+		},
+		{
+			name:   "unicode9 multiple emoji",
+			compat: config.CompatibilityUnicode9,
+			value:  "❤️❤️",
 			width:  4,
 		},
 		{
-			name:   "kitty empty",
-			compat: config.CompatibilityKitty,
-			value:  "",
-			width:  0,
+			name:   "unicode9 multiple vs16 emoji",
+			compat: config.CompatibilityUnicode9,
+			value:  "⬆️⬆️",
+			width:  2,
 		},
 		{
-			name:   "ttyd simple",
-			compat: config.CompatibilityKitty,
-			value:  "test",
-			width:  4,
-		},
-		{
-			name:   "ttyd multiple emojis",
-			compat: config.CompatibilityKitty,
-			value:  "⬆️❤️",
-			width:  4,
+			name:   "unicode9 multiple mixed emoji",
+			compat: config.CompatibilityUnicode9,
+			value:  "❤️⬆️",
+			width:  3,
 		},
 	}
 
@@ -114,13 +114,13 @@ func TestClear(t *testing.T) {
 		orWidth int
 	}{
 		{
-			name:    "default without override",
+			name:    "unicode9 without override",
 			value:   "❤️",
 			width:   2,
 			orWidth: 2,
 		},
 		{
-			name:    "default with override",
+			name:    "unicode9 with override",
 			value:   "⬆️",
 			width:   2,
 			orWidth: 1,
@@ -132,7 +132,7 @@ func TestClear(t *testing.T) {
 			width := uniseg.StringWidth(tt.value)
 			assert.Equal(t, tt.width, width)
 
-			terminal.Set(config.CompatibilityDefault)
+			terminal.Set(config.CompatibilityUnicode9)
 
 			width = uniseg.StringWidth(tt.value)
 			assert.Equal(t, tt.orWidth, width)
