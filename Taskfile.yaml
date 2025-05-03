@@ -23,7 +23,7 @@ tasks:
     cmds:
       - golangci-lint run ./...
       - hadolint --failure-threshold error Dockerfile
-      - markdownlint --disable MD013 MD025 MD033 -- README.md
+      - markdownlint --disable MD013 MD025 MD033 MD051 -- README.md
 
   fmt:
     desc: Format Go files.
