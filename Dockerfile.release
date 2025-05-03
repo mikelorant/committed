@@ -1,7 +1,7 @@
 FROM alpine:3.21.3 AS release
 ENV TERM=xterm-256color
 RUN apk add --no-cache \
-      git~=2
+      git=~2
 COPY committed /usr/local/bin/
 
 FROM release AS test

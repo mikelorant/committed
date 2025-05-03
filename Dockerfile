@@ -3,7 +3,7 @@ WORKDIR /usr/src/app
 RUN --mount=type=cache,target=/var/cache/apk \
     ln -vs /var/cache/apk /etc/apk/cache && \
     apk add \
-      git~=2
+      git=~2
 
 FROM base AS dependencies
 ENV CGO_ENABLED=0
@@ -34,7 +34,7 @@ ENV TERM=xterm-256color
 RUN --mount=type=cache,target=/var/cache/apk \
     ln -vs /var/cache/apk /etc/apk/cache && \
     apk add \
-      git~=2
+      git=~2
 COPY --from=build /usr/local/bin/committed /usr/local/bin
 
 FROM release AS test
