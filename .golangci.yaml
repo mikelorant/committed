@@ -1,27 +1,43 @@
+version: "2"
 linters:
   enable:
-    - exportloopref
+    - err113
+    - errname
+    - errorlint
     - gocritic
+    - ireturn
+    - makezero
+    - nestif
+    - nilnil
+    - revive
+    - whitespace
+  disable:
+    - errcheck
+    - unused
+  settings:
+    revive:
+      rules:
+        - name: unused-parameter
+          disabled: true
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
     - gofmt
     - gofumpt
     - goimports
-    - makezero
-    - nestif
-    - revive
-    - whitespace
-    - nilnil
-    - errname
-    - errorlint
-    - goerr113
-    - ireturn
-  disable:
-    - deadcode
-    - errcheck
-    - structcheck
-    - unused
-
-linters-settings:
-  revive:
-    rules:
-      - name: unused-parameter
-        disabled: true
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
