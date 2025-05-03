@@ -18,7 +18,7 @@ require (
 	github.com/go-git/go-git/v5 v5.16.0
 	github.com/goccy/go-yaml v1.17.1
 	github.com/hexops/autogold/v2 v2.3.0
-	github.com/ivanpirog/coloredcobra v1.0.1
+	github.com/ivanpirog/coloredcobra v1.0.2-0.20250501221745-46194c320708
 	github.com/lithammer/fuzzysearch v1.1.8
 	github.com/lrstanley/bubbletint v0.0.0-20250429224940-bd52c30e5c8b
 	github.com/muesli/gamut v0.3.1
@@ -31,10 +31,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 )
 
-replace (
-	github.com/ivanpirog/coloredcobra => github.com/mikelorant/coloredcobra v0.0.0-20240413232412-92879003fd8d
-	github.com/rivo/uniseg => github.com/mikelorant/uniseg v0.0.0-20240303073632-27c86650ffa5
-)
+replace github.com/rivo/uniseg => github.com/mikelorant/uniseg v0.0.0-20240303073632-27c86650ffa5
 
 require (
 	dario.cat/mergo v1.0.1 // indirect

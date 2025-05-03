@@ -90,6 +90,8 @@ github.com/hexops/valast v1.4.4/go.mod h1:Jcy1pNH7LNraVaAZDLyv21hHg2WBv9Nf9FL6fG
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
+github.com/ivanpirog/coloredcobra v1.0.2-0.20250501221745-46194c320708 h1:VQ9x0ecFBNH7r9mfvWelzhqLgG/8/YPGbcCu3JImaCE=
+github.com/ivanpirog/coloredcobra v1.0.2-0.20250501221745-46194c320708/go.mod h1:csDZxFD5oWCy1x8hxXVD4txpYQgo12WOcLS7JON5SVE=
 github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 h1:BQSFePA1RWJOlocH6Fxy8MmwDt+yVQYULKfN0RoTN8A=
 github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99/go.mod h1:1lJo3i6rXxKeerYnT8Nvf0QmHCRC1n8sfWVwXF2Frvo=
 github.com/kevinburke/ssh_config v1.2.0 h1:x584FjTGwHzMwvHx18PXxbBVzfnxogHaAReU4gf13a4=
@@ -120,8 +122,6 @@ github.com/mattn/go-localereader v0.0.1 h1:ygSAOl7ZXTx4RdPYinUpg6W99U8jWvWi9Ye2J
 github.com/mattn/go-localereader v0.0.1/go.mod h1:8fBrzywKY7BI3czFoHkuzRoWE9C+EiG4R1k4Cjx5p88=
 github.com/mattn/go-runewidth v0.0.16 h1:E5ScNMtiwvlvB5paMFdw9p4kSQzbXFikJ5SQO6TULQc=
 github.com/mattn/go-runewidth v0.0.16/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh153qUoGf23w=
-github.com/mikelorant/coloredcobra v0.0.0-20240413232412-92879003fd8d h1:+3zyO4WrrTl8PG+a8KVjgKZ9hn+Pzqpu407Ggecy4ME=
-github.com/mikelorant/coloredcobra v0.0.0-20240413232412-92879003fd8d/go.mod h1:csDZxFD5oWCy1x8hxXVD4txpYQgo12WOcLS7JON5SVE=
 github.com/mikelorant/uniseg v0.0.0-20240303073632-27c86650ffa5 h1:CRvVC4vrkEti+XI0DdksOAspVl0/9xG4BLF/bemiKfM=
 github.com/mikelorant/uniseg v0.0.0-20240303073632-27c86650ffa5/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
 github.com/muesli/ansi v0.0.0-20230316100256-276c6243b2f6 h1:ZK8zHtRHOkbHy6Mmr5D264iyp3TiX5OmNcI5cIARiQI=
