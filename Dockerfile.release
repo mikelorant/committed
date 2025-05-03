@@ -1,10 +1,10 @@
-FROM alpine:3.17.2 as release
+FROM alpine:3.21.3 AS release
 ENV TERM=xterm-256color
 RUN apk add --no-cache \
-      git=2.38.4-r1
+      git~=2
 COPY committed /usr/local/bin/
 
-FROM release as test
+FROM release AS test
 WORKDIR /root/repository
 RUN git config --global user.email "you@example.com" && \
     git config --global user.name "Your Name" && \
