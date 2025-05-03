@@ -105,7 +105,7 @@ func (m *Model) Next() {
 
 	switch {
 	// Index at end of setting but not on the last category
-	case m.SetIndex >= lastSetting && !(m.CatIndex >= lastCategory):
+	case m.SetIndex >= lastSetting && (m.CatIndex < lastCategory):
 		m.CatIndex++
 		m.SetIndex = 0
 

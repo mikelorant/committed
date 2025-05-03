@@ -50,7 +50,7 @@ func NewHookCmd(a App) *cobra.Command {
 }
 
 func help(cmd *cobra.Command, opts hook.Options) bool {
-	if !(opts.Install || opts.Uninstall) {
+	if !opts.Install && !opts.Uninstall {
 		cmd.Help()
 
 		return true

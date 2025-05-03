@@ -34,7 +34,7 @@ func (r *Repository) Worktree() (Worktree, error) {
 
 func (w *Worktree) IsStaged() bool {
 	for _, s := range w.Status {
-		if !(s.Staging == git.Unmodified || s.Staging == git.Untracked) {
+		if s.Staging != git.Unmodified && s.Staging != git.Untracked {
 			return true
 		}
 	}

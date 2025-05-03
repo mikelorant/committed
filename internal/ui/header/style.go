@@ -145,10 +145,7 @@ func counterStyle(i int, th theme.Theme) lipgloss.Style {
 		clr = colour.CounterDefault
 	}
 
-	bold := false
-	if i > maximumCounter {
-		bold = true
-	}
+	bold := i > maximumCounter
 
 	return lipgloss.NewStyle().
 		Foreground(clr).

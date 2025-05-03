@@ -32,8 +32,8 @@ func (t *Theme) Next() {
 	ids := t.ListID()
 	l := len(t.ListID())
 
-	switch {
-	case t.ID == ids[l-1]:
+	switch t.ID {
+	case ids[l-1]:
 		t.Set(ids[0])
 	default:
 		t.Registry.NextTint()

@@ -113,8 +113,7 @@ func (m *Model) ActivePane() Paner {
 }
 
 func (m *Model) SwapPaneSet(name string) {
-	//nolint:gosimple
-	m.panes, _ = m.paneSet[name]
+	m.panes = m.paneSet[name]
 }
 
 func (m Model) GetPaneSets() map[string][]Paner {

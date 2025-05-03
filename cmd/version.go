@@ -40,10 +40,10 @@ func annotations() map[string]string {
 	}
 
 	for _, s := range info.Settings {
-		switch {
-		case s.Key == "vcs.time":
+		switch s.Key {
+		case "vcs.time":
 			date = s.Value
-		case s.Key == "vcs.revision":
+		case "vcs.revision":
 			commit = s.Value
 		}
 	}
