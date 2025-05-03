@@ -1,3 +1,5 @@
+version: 2
+
 builds:
   - env:
       - CGO_ENABLED=0
@@ -20,7 +22,7 @@ release:
     name: committed
 
 brews:
-  - tap:
+  - repository:
       owner: mikelorant
       name: homebrew-committed
     homepage: https://github.com/mikelorant/committed
