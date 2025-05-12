@@ -440,10 +440,10 @@ func (m Model) commit(q quit) Model {
 	var emoji string
 
 	switch m.emojiType {
-	case config.EmojiTypeCharacter:
-		emoji = m.models.header.Emoji.Character
-	default:
+	case config.EmojiTypeShortcode:
 		emoji = m.models.header.Emoji.Shortcode
+	default:
+		emoji = m.models.header.Emoji.Character
 	}
 
 	if m.quit == applyQuit {

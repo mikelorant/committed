@@ -394,7 +394,7 @@ func TestModel(t *testing.T) {
 				model: func(m ui.Model) {
 					req := commit.Request{
 						Apply:   true,
-						Emoji:   ":art:",
+						Emoji:   "🎨",
 						Summary: "test",
 						Author: repository.User{
 							Name:  "John Doe",
