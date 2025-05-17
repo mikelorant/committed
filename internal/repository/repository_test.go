@@ -6,7 +6,7 @@ import (
 
 	"github.com/mikelorant/committed/internal/repository"
 
-	fixtures "github.com/go-git/go-git-fixtures/v4"
+	fixtures "github.com/go-git/go-git-fixtures/v5"
 	"github.com/go-git/go-git/v5"
 	"github.com/stretchr/testify/assert"
 )
