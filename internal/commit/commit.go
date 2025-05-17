@@ -25,6 +25,7 @@ type Commit struct {
 	Repoer      Repoer
 	Creator     Creator
 	Saver       Saver
+	Remover     Remover
 }
 
 type (
@@ -34,6 +35,7 @@ type (
 	Opener    func(string) (io.Reader, error)
 	ReadFiler func(string) ([]byte, error)
 	Saver     func(io.WriteCloser, snapshot.Snapshot) error
+	Remover   func(string) error
 )
 
 type Repoer interface {
@@ -101,6 +103,7 @@ func New() Commit {
 		Opener:      FileOpen(),
 		ReadFiler:   os.ReadFile,
 		Creator:     FileCreate(),
+		Remover:     FileRemove(),
 	}
 }
 
@@ -189,7 +192,8 @@ func (c *Commit) Apply(req *Request) error {
 		return nil
 	}
 
-	if err := c.Repoer.Apply(com); err != nil {
+	switch err := c.Repoer.Apply(com); {
+	case err != nil:
 		var exitErr *exec.ExitError
 
 		if !errors.As(err, &exitErr) {
@@ -198,6 +202,10 @@ func (c *Commit) Apply(req *Request) error {
 
 		if err := setSnapshot(c.Creator, c.Snapshotter, c.Options.SnapshotFile, snap); err != nil {
 			return fmt.Errorf("unable to set snapshot: %w", err)
+		}
+	default:
+		if err := c.Remover(c.Options.SnapshotFile); err != nil {
+			return fmt.Errorf("unable to remove snapshot: %w", err)
 		}
 	}
 

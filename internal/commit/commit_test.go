@@ -117,6 +117,17 @@ func MockCreate(err error) func(file string) (io.WriteCloser, error) {
 	}
 }
 
+type MockRemove struct {
+	called bool
+	err    error
+}
+
+func (r *MockRemove) Remove(file string) error {
+	r.called = true
+
+	return r.err
+}
+
 func MockReadFile(data string, err error) func(string) ([]byte, error) {
 	return func(string) ([]byte, error) {
 		if err != nil {
@@ -483,6 +494,7 @@ func TestApply(t *testing.T) {
 	type args struct {
 		req         *commit.Request
 		createErr   error
+		removeErr   error
 		saveErr     error
 		applyErr    error
 		snapSaveErr error
@@ -490,10 +502,11 @@ func TestApply(t *testing.T) {
 	}
 
 	type want struct {
-		cfg  config.Config
-		com  repository.Commit
-		snap snapshot.Snapshot
-		err  string
+		cfg    config.Config
+		com    repository.Commit
+		snap   snapshot.Snapshot
+		snapRm bool
+		err    string
 	}
 
 	tests := []struct {
@@ -523,6 +536,7 @@ func TestApply(t *testing.T) {
 					Body:    "body",
 					Footer:  "Signed-off-by: John Doe <john.doe@example.com>",
 				},
+				snapRm: true,
 			},
 		},
 		{
@@ -537,6 +551,7 @@ func TestApply(t *testing.T) {
 				com: repository.Commit{
 					DryRun: true,
 				},
+				snapRm: true,
 			},
 		},
 		{
@@ -551,6 +566,7 @@ func TestApply(t *testing.T) {
 				com: repository.Commit{
 					Amend: true,
 				},
+				snapRm: true,
 			},
 		},
 		{
@@ -567,6 +583,7 @@ func TestApply(t *testing.T) {
 					Amend:  true,
 					DryRun: true,
 				},
+				snapRm: true,
 			},
 		},
 		{
@@ -581,6 +598,7 @@ func TestApply(t *testing.T) {
 				com: repository.Commit{
 					File: true,
 				},
+				snapRm: true,
 			},
 		},
 		{
@@ -597,6 +615,7 @@ func TestApply(t *testing.T) {
 					File:        true,
 					MessageFile: "test",
 				},
+				snapRm: true,
 			},
 		},
 		{
@@ -709,6 +728,18 @@ func TestApply(t *testing.T) {
 			},
 		},
 		{
+			name: "snapshot_remove_error",
+			args: args{
+				req: &commit.Request{
+					Apply: true,
+				},
+				removeErr: errMock,
+			},
+			want: want{
+				err: "unable to remove snapshot: error",
+			},
+		},
+		{
 			name: "create_error",
 			args: args{
 				req: &commit.Request{
@@ -756,6 +787,10 @@ func TestApply(t *testing.T) {
 				saveErr: tt.args.snapSaveErr,
 			}
 
+			rm := MockRemove{
+				err: tt.args.removeErr,
+			}
+
 			req := tt.args.req
 			if tt.args.nilReq {
 				req = nil
@@ -766,6 +801,7 @@ func TestApply(t *testing.T) {
 				Snapshotter: &snap,
 				Configer:    &cfg,
 				Creator:     MockCreate(tt.args.createErr),
+				Remover:     rm.Remove,
 			}
 
 			err := c.Apply(req)
@@ -778,6 +814,7 @@ func TestApply(t *testing.T) {
 			assert.Equal(t, tt.want.com, repo.com)
 			assert.Equal(t, tt.want.snap, snap.snap)
 			assert.Equal(t, tt.want.cfg, cfg.file)
+			assert.Equal(t, tt.want.snapRm, rm.called)
 		})
 	}
 }
