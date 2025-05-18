@@ -172,6 +172,7 @@ func (c *Commit) Apply(req *Request) error {
 		Footer:  req.Footer,
 		Author:  req.Author,
 		Amend:   req.Amend,
+		Restore: true,
 	}
 
 	if req.Config.Update {
@@ -194,8 +195,6 @@ func (c *Commit) Apply(req *Request) error {
 		if !errors.As(err, &exitErr) {
 			return fmt.Errorf("unable to apply commit: %w", err)
 		}
-
-		snap.Restore = true
 
 		if err := setSnapshot(c.Creator, c.Snapshotter, c.Options.SnapshotFile, snap); err != nil {
 			return fmt.Errorf("unable to set snapshot: %w", err)

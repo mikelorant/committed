@@ -606,12 +606,22 @@ func TestApply(t *testing.T) {
 					Apply: false,
 				},
 			},
+			want: want{
+				snapshot: snapshot.Snapshot{
+					Restore: true,
+				},
+			},
 		},
 		{
 			name: "skip_apply",
 			args: args{
 				req: &commit.Request{
 					Apply: false,
+				},
+			},
+			want: want{
+				snapshot: snapshot.Snapshot{
+					Restore: true,
 				},
 			},
 		},
@@ -657,6 +667,7 @@ func TestApply(t *testing.T) {
 						Name:  "John Doe",
 						Email: "john.doe@example.com",
 					},
+					Restore: true,
 				},
 			},
 		},
