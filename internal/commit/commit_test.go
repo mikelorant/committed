@@ -490,10 +490,10 @@ func TestApply(t *testing.T) {
 	}
 
 	type want struct {
-		cfg      config.Config
-		com      repository.Commit
-		snapshot snapshot.Snapshot
-		err      string
+		cfg  config.Config
+		com  repository.Commit
+		snap snapshot.Snapshot
+		err  string
 	}
 
 	tests := []struct {
@@ -607,7 +607,7 @@ func TestApply(t *testing.T) {
 				},
 			},
 			want: want{
-				snapshot: snapshot.Snapshot{
+				snap: snapshot.Snapshot{
 					Restore: true,
 				},
 			},
@@ -620,7 +620,7 @@ func TestApply(t *testing.T) {
 				},
 			},
 			want: want{
-				snapshot: snapshot.Snapshot{
+				snap: snapshot.Snapshot{
 					Restore: true,
 				},
 			},
@@ -658,7 +658,7 @@ func TestApply(t *testing.T) {
 				},
 			},
 			want: want{
-				snapshot: snapshot.Snapshot{
+				snap: snapshot.Snapshot{
 					Emoji:   ":art:",
 					Summary: "summary",
 					Body:    "body",
@@ -690,7 +690,7 @@ func TestApply(t *testing.T) {
 				applyErr: errMockExit,
 			},
 			want: want{
-				snapshot: snapshot.Snapshot{
+				snap: snapshot.Snapshot{
 					Restore: true,
 				},
 			},
@@ -776,7 +776,7 @@ func TestApply(t *testing.T) {
 			}
 			assert.Nil(t, err)
 			assert.Equal(t, tt.want.com, repo.com)
-			assert.Equal(t, tt.want.snapshot, snap.snap)
+			assert.Equal(t, tt.want.snap, snap.snap)
 			assert.Equal(t, tt.want.cfg, cfg.file)
 		})
 	}
