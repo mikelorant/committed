@@ -46,6 +46,20 @@ func FileCreate() func(string) (io.WriteCloser, error) {
 	}
 }
 
+func FileRemove() func(string) error {
+	return func(file string) error {
+		if !FileExists(os.ExpandEnv(file)) {
+			return nil
+		}
+
+		if err := os.Remove(os.ExpandEnv(file)); err != nil {
+			return fmt.Errorf("unable to remove file: %w", err)
+		}
+
+		return nil
+	}
+}
+
 func FileExists(file string) bool {
 	_, err := os.Stat(os.ExpandEnv(file))
 

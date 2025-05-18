@@ -189,6 +189,108 @@ func TestFileCreate(t *testing.T) {
 	}
 }
 
+func TestFileRemove(t *testing.T) {
+	type args struct {
+		env    bool
+		create bool
+		deny   bool
+	}
+
+	type want struct {
+		err   string
+		exist bool
+	}
+
+	tests := []struct {
+		name string
+		args args
+		want want
+	}{
+		{
+			name: "missing",
+		},
+		{
+			name: "exists",
+			args: args{
+				create: true,
+			},
+		},
+		{
+			name: "exists_env",
+			args: args{
+				create: true,
+				env:    true,
+			},
+		},
+		{
+			name: "permission_denied",
+			args: args{
+				create: true,
+				deny:   true,
+			},
+			want: want{
+				err:   "permission denied",
+				exist: true,
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var dir string
+
+			const env = "TEST_ENV"
+
+			tmpDir := t.TempDir()
+
+			if tt.args.env {
+				t.Setenv(env, tmpDir)
+			}
+
+			if tt.args.create {
+				dir = tmpDir
+
+				if tt.args.env {
+					dir = fmt.Sprintf("$%v", env)
+				}
+			}
+
+			file := path.Join(dir, tt.name)
+
+			if tt.args.create {
+				if _, err := os.Create(os.ExpandEnv(file)); err != nil {
+					t.Fail()
+				}
+			}
+
+			if tt.args.deny {
+				if err := os.Chmod(dir, 0o555); err != nil {
+					t.Fail()
+				}
+			}
+
+			assert.Equal(t, tt.args.create, commit.FileExists(file))
+
+			err := commit.FileRemove()(file)
+			switch {
+			case tt.want.err != "":
+				assert.Error(t, err)
+				assert.ErrorContains(t, err, tt.want.err)
+			default:
+				assert.NoError(t, err)
+			}
+
+			if tt.args.deny {
+				if err := os.Chmod(dir, 0o755); err != nil {
+					t.Fail()
+				}
+			}
+
+			assert.Equal(t, tt.want.exist, commit.FileExists(file))
+		})
+	}
+}
+
 func TestFileExists(t *testing.T) {
 	type args struct {
 		env    bool
