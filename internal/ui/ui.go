@@ -464,6 +464,7 @@ func (m Model) commit(q quit) Model {
 		RawBody:     m.models.body.RawValue(),
 		Footer:      m.models.footer.Value(),
 		Amend:       m.amend,
+		DryRun:      m.state.Options.DryRun,
 		File:        m.file,
 		MessageFile: m.state.Options.File.MessageFile,
 	}
