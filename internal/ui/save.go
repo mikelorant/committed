@@ -57,6 +57,7 @@ func (m *Model) setSave() bool {
 	case m.previousSave.amend && save.amend:
 		m.swapSave()
 		m.loadSave(save)
+		m.swapSave()
 		return true
 	case hasSave && !m.currentSave.amend:
 		m.loadSave(save)
@@ -64,6 +65,7 @@ func (m *Model) setSave() bool {
 	case hasSave && !m.previousSave.amend:
 		m.swapSave()
 		m.loadSave(save)
+		m.swapSave()
 		return true
 	}
 

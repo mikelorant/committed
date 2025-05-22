@@ -657,32 +657,16 @@ func TestModel(t *testing.T) {
 			},
 		},
 		{
-			name: "snapshot_load_from_new_to_amend",
+			name: "snapshot_restore_from_new_to_amend",
 			args: args{
 				state: func(s *commit.State) {
-					s.Snapshot.Summary = "amend"
+					s.Snapshot.Summary = "summary"
 					s.Snapshot.Amend = true
+					s.Snapshot.Restore = true
 				},
 				model: func(m ui.Model) ui.Model {
 					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyEnter}))
 					m, _ = ToModel(uitest.SendString(m, "new"), nil)
-					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'l'}, Alt: true}))
-					return m
-				},
-			},
-			want: want{},
-		},
-		{
-			name: "snapshot_load_from_new_to_amend_to_new",
-			args: args{
-				state: func(s *commit.State) {
-					s.Snapshot.Summary = "amend"
-					s.Snapshot.Amend = true
-				},
-				model: func(m ui.Model) ui.Model {
-					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyEnter}))
-					m, _ = ToModel(uitest.SendString(m, "new"), nil)
-					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'l'}, Alt: true}))
 					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}, Alt: true}))
 					return m
 				},
@@ -690,11 +674,30 @@ func TestModel(t *testing.T) {
 			want: want{},
 		},
 		{
-			name: "snapshot_load_from_amend_to_new",
+			name: "snapshot_restore_from_new_to_amend_to_new",
 			args: args{
 				state: func(s *commit.State) {
-					s.Repository.Head.Message = "summary"
+					s.Snapshot.Summary = "summary"
 					s.Snapshot.Amend = true
+					s.Snapshot.Restore = true
+				},
+				model: func(m ui.Model) ui.Model {
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyEnter}))
+					m, _ = ToModel(uitest.SendString(m, "new"), nil)
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}, Alt: true}))
+					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}, Alt: true}))
+					return m
+				},
+			},
+			want: want{},
+		},
+		{
+			name: "snapshot_restore_amend_from_amend_to_new",
+			args: args{
+				state: func(s *commit.State) {
+					s.Snapshot.Summary = "summary"
+					s.Snapshot.Amend = true
+					s.Snapshot.Restore = true
 					s.Options.Amend = true
 				},
 				model: func(m ui.Model) ui.Model {
@@ -706,11 +709,12 @@ func TestModel(t *testing.T) {
 			},
 		},
 		{
-			name: "snapshot_load_from_amend_to_new_to_amend",
+			name: "snapshot_restore_amend_from_amend_to_new_to_amend",
 			args: args{
 				state: func(s *commit.State) {
-					s.Repository.Head.Message = "amend"
+					s.Snapshot.Summary = "summary"
 					s.Snapshot.Amend = true
+					s.Snapshot.Restore = true
 					s.Options.Amend = true
 				},
 				model: func(m ui.Model) ui.Model {
