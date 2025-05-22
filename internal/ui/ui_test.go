@@ -371,7 +371,6 @@ func TestModel(t *testing.T) {
 							Name:  "John Doe",
 							Email: "john.doe@example.com",
 						},
-						Amend: true,
 					}
 
 					assert.Equal(t, &req, m.Request)
@@ -400,7 +399,6 @@ func TestModel(t *testing.T) {
 							Name:  "John Doe",
 							Email: "john.doe@example.com",
 						},
-						Amend: true,
 					}
 
 					assert.Equal(t, &req, m.Request)
@@ -431,7 +429,6 @@ func TestModel(t *testing.T) {
 							Name:  "John Doe",
 							Email: "john.doe@example.com",
 						},
-						Amend: true,
 					}
 
 					assert.Equal(t, &req, m.Request)
@@ -460,7 +457,6 @@ func TestModel(t *testing.T) {
 							Name:  "John Doe",
 							Email: "john.doe@example.com",
 						},
-						Amend: true,
 					}
 
 					assert.Equal(t, &req, m.Request)
@@ -490,7 +486,6 @@ func TestModel(t *testing.T) {
 							Name:  "John Doe",
 							Email: "jdoe@example.org",
 						},
-						Amend: true,
 					}
 
 					assert.Equal(t, &req, m.Request)
@@ -595,7 +590,6 @@ func TestModel(t *testing.T) {
 							Name:  "John Doe",
 							Email: "john.doe@example.com",
 						},
-						Amend: true,
 					}
 
 					assert.Equal(t, &req, m.Request)
@@ -627,7 +621,6 @@ func TestModel(t *testing.T) {
 							Name:  "John Doe",
 							Email: "john.doe@example.com",
 						},
-						Amend: true,
 					}
 					assert.Equal(t, &req, m.Request)
 				},
@@ -638,7 +631,6 @@ func TestModel(t *testing.T) {
 			args: args{
 				state: func(s *commit.State) {
 					s.Repository.Head.Message = ":art: summary\n\nbody\n"
-					s.Options.Amend = false
 				},
 				model: func(m ui.Model) ui.Model {
 					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}, Alt: true}))
@@ -652,7 +644,6 @@ func TestModel(t *testing.T) {
 			args: args{
 				state: func(s *commit.State) {
 					s.Repository.Head.Message = ":art: summary\n\nbody\n"
-					s.Options.Amend = false
 				},
 				model: func(m ui.Model) ui.Model {
 					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyEnter}))
@@ -671,7 +662,6 @@ func TestModel(t *testing.T) {
 				state: func(s *commit.State) {
 					s.Snapshot.Summary = "amend"
 					s.Snapshot.Amend = true
-					s.Options.Amend = false
 				},
 				model: func(m ui.Model) ui.Model {
 					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyEnter}))
@@ -688,7 +678,6 @@ func TestModel(t *testing.T) {
 				state: func(s *commit.State) {
 					s.Snapshot.Summary = "amend"
 					s.Snapshot.Amend = true
-					s.Options.Amend = false
 				},
 				model: func(m ui.Model) ui.Model {
 					m, _ = ToModel(m.Update(tea.KeyMsg{Type: tea.KeyEnter}))
@@ -799,6 +788,7 @@ func TestModel(t *testing.T) {
 func testState() commit.State {
 	return commit.State{
 		Placeholders: commit.Placeholders{
+			Hash:    "1",
 			Summary: "placeholder",
 			Body:    "placeholder",
 		},
@@ -838,9 +828,6 @@ func testState() commit.State {
 			},
 		},
 		Theme: theme.New(theme.Default(config.ColourAdaptive)),
-		Options: commit.Options{
-			Amend: true,
-		},
 	}
 }
 
