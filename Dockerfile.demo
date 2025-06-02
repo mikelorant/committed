@@ -7,6 +7,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
     apt-get update && \
     apt-get install --yes \
       git
+ADD https://github.com/samuelngs/apple-emoji-linux/releases/download/v18.4/AppleColorEmoji.ttf /usr/share/fonts/apple/
+RUN sed -i '/Noto Color Emoji/d' /usr/share/fontconfig/conf.avail/60-generic.conf
 COPY --from=committed /usr/local/bin/committed /usr/local/bin/
 RUN git config --global user.email "john.doe@example.com" && \
     git config --global user.name "John Doe" && \
